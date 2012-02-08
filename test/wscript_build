@@ -6,4 +6,4 @@ bld.program(
     features = 'cxx',
     source   = ['fifi_tests.cpp'] + bld.path.ant_glob('src/*.cpp'),
     target   = 'fifi_tests',
-    use      = ['gtest', 'fifi'])
+    use      = ['gtest', 'fifi_includes', 'boost_includes'])
