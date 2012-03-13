@@ -133,8 +133,8 @@ namespace fifi
         // Again we have to do a bit of trickery, since we do not have a good
         // way to handle negative numbers when subtracting them we do the following
         // we realize the inverse element of power representation must be
-        // inverse exponent = (2^W - 1) - exponent since inverse exponent + exponent = 2^W - 1
-        // and order mod 2^W - 1 = 0
+        // inverse exponent = (2^W - 1) - exponent since
+        // inverse exponent + exponent = 2^W - 1 and order mod 2^W - 1 = 0
 
         // Get inverse of denominator
         two = Field::max_value - two;
