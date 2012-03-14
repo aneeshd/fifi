@@ -7,7 +7,7 @@ import os
 import waflib.extras.wurftools as wt
 
 APPNAME = 'fifi'
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 
 wt.add_dependency('boost', 'git://github.com/steinwurf/external-boost.git',
                   '1.1.0-boost_1_48_0')
