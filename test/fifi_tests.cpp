@@ -8,7 +8,7 @@
 
 GTEST_API_ int main(int argc, char **argv)
 {
-  srand((uint32_t)time(0));
+    srand((uint32_t)time(0));
     
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
