@@ -87,11 +87,11 @@ namespace fifi
     inline typename simple_online<Field>::value_type
     simple_online<Field>::multiply(value_type element_one, value_type element_two) const
     {
-        if(element_one == 0 || element_two == 0)
+        if((element_one == 0) || (element_two == 0))
             return 0;
 
-        bool high_bit_flag = 0;
-        bool low_bit_flag = 0;
+        value_type high_bit_flag = 0;
+        value_type low_bit_flag = 0;
 
         value_type high_bit_mask = 1 << (Field::degree - 1);
 
@@ -101,7 +101,7 @@ namespace fifi
         {
             low_bit_flag = element_two & 0x1;
 
-            if( low_bit_flag )
+            if( low_bit_flag != 0 )
             {
                 result ^= element_one;
             }
@@ -111,7 +111,7 @@ namespace fifi
             element_one <<= 1;
             element_two >>= 1;
 
-            if( high_bit_flag )
+            if( high_bit_flag != 0 )
             {
                 element_one ^= Field::prime;
             }
