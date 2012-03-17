@@ -69,7 +69,7 @@ namespace fifi
 
         c = c >= prime2325::prime ? c - prime2325::prime : c;
 
-        return c;
+        return (value_type)c;
     }
 
     template<>
@@ -101,7 +101,7 @@ namespace fifi
 
         x = x < 0 ? (x + prime2325::prime) : x;
 
-        return x;
+        return (value_type)x;
     }
 
     template<>
@@ -119,7 +119,7 @@ namespace fifi
         int64_t sum = element_one + element_two;
         sum = sum < prime2325::prime ? sum : sum - prime2325::prime;
 
-        return sum;
+        return (value_type)sum;
     }
 
     template<>
@@ -129,7 +129,7 @@ namespace fifi
         int64_t sum = element_one - element_two;
         sum = sum < 0 ? sum + prime2325::prime : sum;
 
-        return sum;
+        return (value_type)sum;
     }
 
 //    template<>
