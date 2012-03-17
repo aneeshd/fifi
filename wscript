@@ -3,7 +3,7 @@
 
 import os
 
-# Necessary since we override different Contexts 
+# Necessary since we override different Contexts
 import waflib.extras.wurftools as wt
 
 APPNAME = 'fifi'
@@ -53,7 +53,7 @@ def build(bld):
 
 
     bld.recurse('test')
-    #bld.recurse('benchmark/basic_operations')
+    bld.recurse('benchmark/basic_operations')
     #bld.recurse('benchmark/arithmetic')
-    
-    
+
+
