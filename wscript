@@ -6,7 +6,7 @@ import os
 import waflib.extras.bundle_dependency as bundle
 
 APPNAME = 'fifi'
-VERSION = '1.0.1'
+VERSION = '1.0.2'
 
 bundle.add_dependency('boost', 'git://github.com/steinwurf/external-boost.git',
                       '1.1.2-boost_1_48_0')
