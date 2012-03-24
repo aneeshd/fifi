@@ -87,7 +87,7 @@ struct run
 
 template<class Field>
 void invoke_run(const std::string &name,
-                uint64_t elements, long double target_time,
+                uint32_t elements, long double target_time,
                 const typename run<Field>::function &function)
 {
     std::cout << "running " << name << std::endl;
@@ -125,12 +125,12 @@ void invoke_run(const std::string &name,
         warmup.next_iteration();
     }
 
-    uint32_t needed_iterations = warmup.iterations(target_time);
+    uint64_t needed_iterations = warmup.iterations(target_time);
 
     boost::timer::cpu_timer timer;
     timer.start();
 
-    for(uint32_t j = 0; j < needed_iterations; ++j)
+    for(uint64_t j = 0; j < needed_iterations; ++j)
     {
         function(field, pr, pa, pb, elements);
     }
@@ -154,7 +154,7 @@ void invoke_run(const std::string &name,
 template<class Field>
 void benchmark(const std::string &name)
 {
-    uint64_t elements = 1400;
+    uint32_t elements = 1400;
     long double time = 5.0;
 
     typedef Field field_type;
