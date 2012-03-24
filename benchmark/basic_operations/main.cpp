@@ -140,7 +140,9 @@ void invoke_run(const std::string &name,
     long double total_sec = sak::seconds_elapsed(timer);
 
     // Amount of data processed
-    long double bytes = needed_iterations * elements * sizeof(value_type);
+    long double bytes = static_cast<long double>(
+        needed_iterations * elements * sizeof(value_type));
+
     long double megs = bytes / 1000000.0;
     long double megs_per_second = megs / total_sec;
 

@@ -53,7 +53,7 @@ struct run
 template<class Field>
 void invoke_dest_op_src(const std::string &name,
                         long double target_time,
-                        uint64_t vectors, uint64_t vector_length,
+                        uint32_t vectors, uint32_t vector_length,
                         const typename run<Field>::dest_op_src &function)
 {
     std::cout << "running " << name << std::endl;
@@ -72,7 +72,7 @@ void invoke_dest_op_src(const std::string &name,
         symbols_one[i].resize(vector_length);
         symbols_two[i].resize(vector_length);
 
-        for(uint64_t j = 0; j < vector_length; ++j)
+        for(uint32_t j = 0; j < vector_length; ++j)
         {
             symbols_one[i][j] = rand() %
                 std::numeric_limits<value_type>::max();
@@ -89,7 +89,7 @@ void invoke_dest_op_src(const std::string &name,
 
     while(!warmup.done())
     {
-        for(uint64_t i = 0; i < vectors; ++i)
+        for(uint32_t i = 0; i < vectors; ++i)
         {
 
             uint32_t index_one = rand() % vectors;
@@ -102,23 +102,21 @@ void invoke_dest_op_src(const std::string &name,
         warmup.next_iteration();
     }
 
-    uint32_t needed_iterations = warmup.iterations(target_time);
+    uint64_t needed_iterations = warmup.iterations(target_time);
 
     std::cout << "Needed iteration: " << needed_iterations << std::endl;
 
     boost::timer::cpu_timer timer;
     timer.start();
 
-    for(uint32_t j = 0; j < needed_iterations; ++j)
+    for(uint64_t j = 0; j < needed_iterations; ++j)
     {
 
-        for(uint64_t i = 0; i < vectors; ++i)
+        for(uint32_t i = 0; i < vectors; ++i)
         {
 
             uint32_t index_one = rand() % vectors;
             uint32_t index_two = rand() % vectors;
-
-//            std::cout << "index one=" << index_one << " index_two=" << index_two << std::endl;
 
             function(field, &(symbols_one[index_one][0]),
                       &(symbols_two[index_two][0]), vector_length);
@@ -133,8 +131,8 @@ void invoke_dest_op_src(const std::string &name,
 
 
     // Amount of data processed
-    long double bytes = needed_iterations * vectors *
-        vector_length * sizeof(value_type);
+    long double bytes = static_cast<long double>(
+        needed_iterations * vectors * vector_length * sizeof(value_type));
 
     long double megs = bytes / 1000000.0;
     long double megs_per_second = megs / total_sec;
@@ -150,7 +148,7 @@ void invoke_dest_op_src(const std::string &name,
 template<class Field>
 void invoke_dest_op_src_const(const std::string &name,
                               long double target_time,
-                              uint64_t vectors, uint64_t vector_length,
+                              uint32_t vectors, uint32_t vector_length,
                               const typename run<Field>::dest_op_src_const &function)
 {
     std::cout << "running " << name << std::endl;
@@ -163,7 +161,7 @@ void invoke_dest_op_src_const(const std::string &name,
     for(uint32_t i = 0; i < symbols.size(); ++i)
     {
         symbols[i].resize(vector_length);
-        for(uint64_t j = 0; j < vector_length; ++j)
+        for(uint32_t j = 0; j < vector_length; ++j)
         {
             symbols[i][j] = rand() %
                 std::numeric_limits<value_type>::max();
@@ -177,7 +175,7 @@ void invoke_dest_op_src_const(const std::string &name,
 
     while(!warmup.done())
     {
-        for(uint64_t i = 0; i < vectors; ++i)
+        for(uint32_t i = 0; i < vectors; ++i)
         {
 
             uint32_t index_one = rand() % vectors;
@@ -193,12 +191,12 @@ void invoke_dest_op_src_const(const std::string &name,
         warmup.next_iteration();
     }
 
-    uint32_t needed_iterations = warmup.iterations(target_time);
+    uint64_t needed_iterations = warmup.iterations(target_time);
 
     boost::timer::cpu_timer timer;
     timer.start();
 
-    for(uint32_t j = 0; j < needed_iterations; ++j)
+    for(uint64_t j = 0; j < needed_iterations; ++j)
     {
 
         for(uint32_t i = 0; i < vectors; ++i)
@@ -223,8 +221,8 @@ void invoke_dest_op_src_const(const std::string &name,
     long double total_sec = sak::seconds_elapsed(timer);
 
     // Amount of data processed
-    long double bytes = needed_iterations * vectors *
-        vector_length * sizeof(value_type);
+    long double bytes = static_cast<long double>(
+        needed_iterations * vectors * vector_length * sizeof(value_type));
 
     long double megs = bytes / 1000000.0;
     long double megs_per_second = megs / total_sec;
@@ -240,7 +238,7 @@ void invoke_dest_op_src_const(const std::string &name,
 template<class Field>
 void invoke_dest_const(const std::string &name,
                        long double target_time,
-                       uint64_t vectors, uint64_t vector_length,
+                       uint32_t vectors, uint32_t vector_length,
                        const typename run<Field>::dest_const &function)
 {
     std::cout << "running " << name << std::endl;
@@ -253,7 +251,7 @@ void invoke_dest_const(const std::string &name,
     for(uint32_t i = 0; i < symbols.size(); ++i)
     {
         symbols[i].resize(vector_length);
-        for(uint64_t j = 0; j < vector_length; ++j)
+        for(uint32_t j = 0; j < vector_length; ++j)
         {
             symbols[i][j] = rand() %
                 std::numeric_limits<value_type>::max();
@@ -267,7 +265,7 @@ void invoke_dest_const(const std::string &name,
 
     while(!warmup.done())
     {
-        for(uint64_t i = 0; i < vectors; ++i)
+        for(uint32_t i = 0; i < vectors; ++i)
         {
 
             uint32_t index = rand() % vectors;
@@ -282,12 +280,12 @@ void invoke_dest_const(const std::string &name,
         warmup.next_iteration();
     }
 
-    uint32_t needed_iterations = warmup.iterations(target_time);
+    uint64_t needed_iterations = warmup.iterations(target_time);
 
     boost::timer::cpu_timer timer;
     timer.start();
 
-    for(uint32_t j = 0; j < needed_iterations; ++j)
+    for(uint64_t j = 0; j < needed_iterations; ++j)
     {
 
         for(uint32_t i = 0; i < vectors; ++i)
@@ -311,8 +309,8 @@ void invoke_dest_const(const std::string &name,
 
 
     // Amount of data processed
-    long double bytes = needed_iterations * vectors *
-        vector_length * sizeof(value_type);
+    long double bytes = static_cast<long double>(
+        needed_iterations * vectors * vector_length * sizeof(value_type));
 
     long double megs = bytes / 1000000.0;
     long double megs_per_second = megs / total_sec;
@@ -328,8 +326,8 @@ void invoke_dest_const(const std::string &name,
 template<class Field>
 void benchmark(const std::string &name)
 {
-    uint64_t vectors = 100;
-    uint64_t vector_length = 1400;
+    uint32_t vectors = 100;
+    uint32_t vector_length = 1400;
 
     long double time = 5.0;
 
