@@ -8,4 +8,5 @@ bld.program(
     target   = 'fifi_basic_operations_benchmarks',
     cxxflags = bld.toolchain_cxx_flags(),
     use      = ['gtest','fifi_includes','boost_includes',
-                'boost_timer', 'boost_system', 'boost_chrono'])
+                'sak_includes', 'boost_timer', 'boost_chrono',
+                'boost_system'])

@@ -1,4 +1,4 @@
-// Copyright Steinwurf APS 2011-2012.
+// Copyright Steinwurf ApS 2011-2012.
 // Distributed under the "STEINWURF RESEARCH LICENSE 1.0".
 // See accompanying file LICENSE_1_0.txt or
 // http://www.steinwurf.dk/licensing
@@ -7,353 +7,211 @@
 #include <fstream>
 #include <vector>
 #include <ctime>
-#include <speedy/time_benchmark.h>
-#include <speedy/result_writer.h>
-#include "../../fifi/simple_online.h"
-#include "../../fifi/full_table.h"
-#include "../../fifi/log_table.h"
-#include "../../fifi/extended_log_table.h"
-#include "../../fifi/optimal_prime.h"
-#include "../../fifi/field_types.h"
 
-using namespace std;
+#include <fifi/simple_online.h>
+#include <fifi/full_table.h>
+#include <fifi/log_table.h>
+#include <fifi/extended_log_table.h>
+#include <fifi/optimal_prime.h>
+#include <fifi/field_types.h>
 
-const static int EXETIME = 2;
-const static int ELEMENTS = 1000000; 
+#include <sak/code_warmup.h>
 
-class ArithmeticTest
+#include <boost/timer/timer.hpp>
+
+
+
+template<class Field>
+void multiply_loop(const Field &field,
+                   typename Field::value_type *pr,
+                   const typename Field::value_type *pa,
+                   const typename Field::value_type *pb,
+                   uint64_t elements)
 {
+    for(uint64_t i = 0; i < elements; ++i)
+    {
+        pr[i] = field.multiply(pa[i], pb[i]);
+    }
+}
 
-public:
-    ArithmeticTest();
+template<class Field>
+void divide_loop(const Field &field,
+                 typename Field::value_type *pr,
+                 const typename Field::value_type *pa,
+                 const typename Field::value_type *pb,
+                 uint64_t elements)
+{
+    for(uint64_t i = 0; i < elements; ++i)
+    {
+        pr[i] = field.divide(pa[i], pb[i]);
+    }
+}
 
-    void run();
-    
-private:
-    speedy::result_writer m_divide_results;
-    speedy::result_writer m_multiply_results;
-    speedy::result_writer m_add_results;
-    speedy::result_writer m_subtract_results;
-    template<class Field> void multiplyData(const std::string &name);
-    template<class Field> void divideData(const std::string &name);
-    template<class Field> void addData(const std::string &name);
-    template<class Field> void subtractData(const std::string &name);
-    /**
-      * ADD ALL THE INVERT ADD, SUBTRACT functions here
-      * we need it just to make sure we never by accident
-      * create a regression.
-      */
+template<class Field>
+void add_loop(const Field &field,
+              typename Field::value_type *pr,
+              const typename Field::value_type *pa,
+              const typename Field::value_type *pb,
+              uint64_t elements)
+{
+    for(uint64_t i = 0; i < elements; ++i)
+    {
+        pr[i] = field.add(pa[i], pb[i]);
+    }
+}
+
+template<class Field>
+void subtract_loop(const Field &field,
+                   typename Field::value_type *pr,
+                   const typename Field::value_type *pa,
+                   const typename Field::value_type *pb,
+                   uint64_t elements)
+{
+    for(uint64_t i = 0; i < elements; ++i)
+    {
+        pr[i] = field.subtract(pa[i], pb[i]);
+    }
+}
 
 
+template<class Field>
+struct run
+{
+    typedef typename Field::value_type value_type;
+    typedef void (*function)(const Field &,
+                             value_type*,
+                             const value_type*,
+                             const value_type*,
+                             uint64_t elements);
 };
 
-ArithmeticTest::ArithmeticTest()
-    : m_divide_results("divide_results.xml"),
-      m_multiply_results("multiply_results.xml"),
-      m_add_results("add_results.xml"),
-      m_subtract_results("subtract_results.xml")
-{
-    srand(time(0));
-}
-
 template<class Field>
-void ArithmeticTest::multiplyData(const std::string &name)
+void invoke_run(const std::string &name,
+                uint64_t elements, long double target_time,
+                const typename run<Field>::function &function)
 {
-    cout << "running " << name << endl;
+    std::cout << "running " << name << std::endl;
     typedef typename Field::value_type value_type;
 
-    int elements = ELEMENTS;
+    std::vector<value_type> a(elements, 0);
+    std::vector<value_type> b(elements, 0);
+    std::vector<value_type> r(elements, 0);
 
-    value_type *a = new value_type[elements];
-    value_type *b = new value_type[elements];
-    value_type *r = new value_type[elements];
-
-    for(int i = 0; i < elements; ++i)
-    {
-        a[i] = rand();
-        b[i] = rand();
-    }
-
-
-    Field field;
-
-    // Warm up
-    for(int i = 0; i < elements; ++i)
-    {
-        r[i] = field.multiply(a[i], b[i]);
-    }
-
-    speedy::time_benchmark benchmark(EXETIME);
-
-    while(!benchmark.done())
-    {
-        benchmark.start();
-        for(;benchmark.running();benchmark.next())
-        {
-            for(int i = 0; i < elements; ++i)
-            {
-                r[i] = field.multiply(a[i], b[i]);
-            }
-        }
-        benchmark.stop();
-    }
-
-
-    //amount of data processed
-    double megs = (elements*sizeof(value_type))/1000000.0;
-    double megs_per_second = megs / benchmark.time_per_iteration();
-
-    m_multiply_results.write(name, megs_per_second);
-
-    delete [] a;
-    delete [] b;
-    delete [] r;
-
-}
-
-template<class Field>
-void ArithmeticTest::divideData(const std::string &name)
-{
-    cout << "running " << name << endl;
-    typedef typename Field::value_type value_type;
-
-    int elements = ELEMENTS;
-
-    value_type *a = new value_type[elements];
-    value_type *b = new value_type[elements];
-    value_type *r = new value_type[elements];
-
-    for(int i = 0; i < elements; ++i)
+    for(uint32_t i = 0; i < elements; ++i)
     {
         a[i] = rand();
         b[i] = rand();
 
-        // Make sure there are only non-zero values in
-        // b[] (the denominator)
-        if(b[i] == 0)
+        // Cannot divide by zero
+        typename run<Field>::function f = &divide_loop<Field>;
+
+        if( function == f && b[i] == 0 )
             b[i] = 1;
     }
 
+    value_type *pa = &a[0];
+    value_type *pb = &b[0];
+    value_type *pr = &r[0];
 
     Field field;
 
     // Warm up
-    for(int i = 0; i < elements; ++i)
+    sak::code_warmup warmup;
+
+    while(!warmup.done())
     {
-        r[i] = field.divide(a[i], b[i]);
+        function(field, pr, pa, pb, elements);
+
+        warmup.next_iteration();
     }
 
-    speedy::time_benchmark benchmark(EXETIME);
+    uint32_t needed_iterations = warmup.iterations(target_time);
 
-    while(!benchmark.done())
+    boost::timer::cpu_timer timer;
+    timer.start();
+
+    for(uint32_t j = 0; j < needed_iterations; ++j)
     {
-        benchmark.start();
-        for(;benchmark.running();benchmark.next())
-        {
-            for(int i = 0; i < elements; ++i)
-            {
-                r[i] = field.divide(a[i], b[i]);
-            }
-        }
-        benchmark.stop();
+        function(field, pr, pa, pb, elements);
     }
 
-    //amount of data processed
-    double megs = (elements*sizeof(value_type))/1000000.0;
-    double megs_per_second = megs / benchmark.time_per_iteration();
+    timer.stop();
 
-    m_divide_results.write(name, megs_per_second);
+    long double total_sec = sak::seconds_elapsed(timer);
 
-    delete a;
-    delete b;
-    delete r;
-    
+    // Amount of data processed
+    long double bytes = needed_iterations * elements * sizeof(value_type);
+    long double megs = bytes / 1000000.0;
+    long double megs_per_second = megs / total_sec;
+
+    std::cout << "Test time " << total_sec << " [s]" << std::endl;
+    std::cout << "MB/s = " << megs_per_second << std::endl;
 
 }
+
+
 
 template<class Field>
-void ArithmeticTest::addData(const std::string &name)
+void benchmark(const std::string &name)
 {
-    cout << "running " << name << endl;
-    typedef typename Field::value_type value_type;
+    uint64_t elements = 1400;
+    long double time = 5.0;
 
-    int elements = ELEMENTS;
+    typedef Field field_type;
 
-    value_type *a = new value_type[elements];
-    value_type *b = new value_type[elements];
-    value_type *r = new value_type[elements];
+    typename run<field_type>::function function;
 
-    for(int i = 0; i < elements; ++i)
-    {
-        a[i] = rand();
-        b[i] = rand();
+    function = &multiply_loop<field_type>;
 
-        // Make sure there are only non-zero values in
-        // b[] (the denominator)
-        if(b[i] == 0)
-            b[i] = 1;
-    }
+    invoke_run<field_type>(
+        name + " multiply", elements, time, function);
 
+    function = &divide_loop<field_type>;
 
-    Field field;
+    invoke_run<field_type>(
+        name + " divide", elements, time, function);
 
-    // Warm up
-    for(int i = 0; i < elements; ++i)
-    {
-        r[i] = field.add(a[i], b[i]);
-    }
+    function = &add_loop<field_type>;
 
-    speedy::time_benchmark benchmark(EXETIME);
+    invoke_run<field_type>(
+        name + " add", elements, time, function);
 
-    while(!benchmark.done())
-    {
-        benchmark.start();
-        for(;benchmark.running();benchmark.next())
-        {
-            for(int i = 0; i < elements; ++i)
-            {
-                r[i] = field.add(a[i], b[i]);
-            }
-        }
-        benchmark.stop();
-    }
+    function = &subtract_loop<field_type>;
 
-    //amount of data processed
-    double megs = (elements*sizeof(value_type))/1000000.0;
-    double megs_per_second = megs / benchmark.time_per_iteration();
-
-    m_add_results.write(name, megs_per_second);
-
-    delete a;
-    delete b;
-    delete r;
-    
-
-}
-
-template<class Field>
-void ArithmeticTest::subtractData(const std::string &name)
-{
-    cout << "running " << name << endl;
-    typedef typename Field::value_type value_type;
-
-    int elements = ELEMENTS;
-
-    value_type *a = new value_type[elements];
-    value_type *b = new value_type[elements];
-    value_type *r = new value_type[elements];
-
-    for(int i = 0; i < elements; ++i)
-    {
-        a[i] = rand();
-        b[i] = rand();
-
-        // Make sure there are only non-zero values in
-        // b[] (the denominator)
-        if(b[i] == 0)
-            b[i] = 1;
-    }
-
-
-    Field field;
-
-    // Warm up
-    for(int i = 0; i < elements; ++i)
-    {
-        r[i] = field.subtract(a[i], b[i]);
-    }
-
-    speedy::time_benchmark benchmark(EXETIME);
-
-    while(!benchmark.done())
-    {
-        benchmark.start();
-        for(;benchmark.running();benchmark.next())
-        {
-            for(int i = 0; i < elements; ++i)
-            {
-                r[i] = field.subtract(a[i], b[i]);
-            }
-        }
-        benchmark.stop();
-    }
-
-    //amount of data processed
-    double megs = (elements*sizeof(value_type))/1000000.0;
-    double megs_per_second = megs / benchmark.time_per_iteration();
-
-    m_subtract_results.write(name, megs_per_second);
-
-    delete a;
-    delete b;
-    delete r;
-    
-
+    invoke_run<field_type>(
+        name + " subtract", elements, time, function);
 }
 
 
-
-
-void ArithmeticTest::run()
-{
-    multiplyData<fifi::simple_online<fifi::binary8> >("Sim. Online Multi. Binary8");
-
-    divideData<fifi::simple_online<fifi::binary8> >("Sim. Online Divide Binary8");
-
-    addData<fifi::simple_online<fifi::binary8> >("Sim. Online Add Binary8");
-
-    subtractData<fifi::simple_online<fifi::binary8> >("Sim. Online Subtract Binary8");
-
-//    multiplyData<fifi::simple_online<fifi::binary16> >("Sim. Online Multi. Binary16");
-
-//    divideData<fifi::simple_online<fifi::binary16> >("Sim. Online Divide Binary16");
-
-    multiplyData<fifi::full_table<fifi::binary8> >("Full Table Multi. Binary8");
-
-    divideData<fifi::full_table<fifi::binary8> >("Full Table Divide Binary8");
-
-    addData<fifi::full_table<fifi::binary8> >("Full Table Add Binary8");
-
-    subtractData<fifi::full_table<fifi::binary8> >("Full Table Subtract Binary8");
-
-    multiplyData<fifi::log_table<fifi::binary8> >("Log Table Multi. Binary8");
-
-    divideData<fifi::log_table<fifi::binary8> >("Log Table Divide Binary8");
-
-    addData<fifi::log_table<fifi::binary8> >("Log Table Add Binary8");
-
-    subtractData<fifi::log_table<fifi::binary8> >("Log Table Subtract Binary8");
-
-//    multiplyData<fifi::log_table<fifi::binary16> >("Log Table Multi. Binary16");
-
-//    divideData<fifi::log_table<fifi::binary16> >("Log Table Divide Binary16");
-
-//    multiplyData<fifi::extended_log_table<fifi::binary8> >("Ext. Log Table Multi. Binary8");
-
-//    divideData<fifi::extended_log_table<fifi::binary8> >("Ext. Log Table Divide Binary8");
-
-//    multiplyData<fifi::extended_log_table<fifi::binary16> >("Ext. Log Table Multi. Binary16");
-
-//    divideData<fifi::extended_log_table<fifi::binary16> >("Ext. Log Table Divide Binary16");
-
-    multiplyData<fifi::optimal_prime<fifi::prime2325> >("Opt. Prime Multi. Prime2325");
-
-    divideData<fifi::optimal_prime<fifi::prime2325> >("Opt. Prime Divide Prime2325");
-
-    addData<fifi::optimal_prime<fifi::prime2325> >("Opt. Prime Add Prime2325");
-
-    subtractData<fifi::optimal_prime<fifi::prime2325> >("Opt. Prime Subtract Prime2325");
-}
 
 int main()
 {
-    ArithmeticTest test;
-    
-    for(int i = 0; i < 2; ++i)
-    {
-	test.run();
-	std::cout << "Interation " << i << std::endl;
-    
-    }
+    srand(static_cast<uint32_t>(time(0)));
 
+    benchmark< fifi::simple_online<fifi::binary8> >(
+        "Simple Online Binary8");
+
+    benchmark< fifi::simple_online<fifi::binary16> >(
+        "Simple Online Binary16");
+
+    benchmark< fifi::full_table<fifi::binary8> >(
+        "Full Table Binary8");
+
+    benchmark<fifi::log_table<fifi::binary8> >(
+        "Log Table Binary8");
+
+    benchmark<fifi::log_table<fifi::binary16> >(
+        "Log Table Binary16");
+
+    benchmark<fifi::extended_log_table<fifi::binary8> >(
+        "Extended Log Table Binary8");
+
+    benchmark<fifi::extended_log_table<fifi::binary16> >(
+        "Extended Log Table Binary16");
+
+    benchmark<fifi::optimal_prime<fifi::prime2325> >(
+        "Optimal Prime Prime2325");
+
+    return 0;
 }
+
