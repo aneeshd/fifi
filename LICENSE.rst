@@ -2,7 +2,7 @@ STEINWURF RESEARCH LICENSE
 ==========================
 
 Version 1.0
-Copyright (c) Steinwurf APS and its licensors. 2011-2012. All rights reserved.
+Copyright (c) Steinwurf ApS and its licensors. 2011-2012. All rights reserved.
 
 I. DEFINITIONS
 --------------
