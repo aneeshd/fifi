@@ -3,6 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#ifndef FIFI_LOG_TABLE_H
 #define FIFI_LOG_TABLE_H
 
 #include <algorithm>
@@ -17,7 +18,7 @@
 namespace fifi
 {
     // Produces an extended log table for multiplication
-    // and division. 
+    // and division.
     template<class Field>
     class log_table : public binary_extension_field<Field>
     {
@@ -36,7 +37,7 @@ namespace fifi
 
         // Constructor
         log_table();
-                
+
         // Performs the field multiplication
         // @param element_one, the first field element
         // @param element_one, the second field element
@@ -55,7 +56,7 @@ namespace fifi
         value_type invert(value_type element) const;
 
     public:
-        
+
         // The Log table
         std::vector<value_type> m_log;
 
@@ -158,7 +159,7 @@ namespace fifi
         power = Field::max_value - power;
 
         return m_antilog[power];
-    }    
+    }
 }
 
 #endif

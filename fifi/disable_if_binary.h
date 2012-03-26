@@ -3,6 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#ifndef FIFI_DISABLE_IF_BINARY_H
 #define FIFI_DISABLE_IF_BINARY_H
 
 #include <boost/utility/enable_if.hpp>
@@ -21,7 +22,7 @@ namespace fifi
     //     {
     //         ...
     //     }
-    //    
+    //
     template<class Field>
     struct disable_if_binary : public boost::disable_if<is_binary<Field> >
     { };

@@ -3,6 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#ifndef FIFI_FULL_TABLE_H
 #define FIFI_FULL_TABLE_H
 
 #include <algorithm>
@@ -19,14 +20,14 @@
 
 namespace fifi
 {
-    
+
     // Produces a full lookup table of the multiplication and division operations.
     // The full look-up table works fine for the 2^8 binary extension field.
     // However, for higher field sizes it will most likely not work due to the very
     // high memory requirements.
     template<class Field>
     class full_table : public binary_extension_field<Field>
-    {        
+    {
     public:
 
         // Typedef of the data type used for each field element
@@ -34,12 +35,12 @@ namespace fifi
 
         // Typedef of the field type used
         typedef Field field_type;
-        
+
     public:
 
         // Constructor
         full_table();
-        
+
         // Performs the field multiplication
         // @param element_one, the first field element
         // @param element_one, the second field element
@@ -56,7 +57,7 @@ namespace fifi
         // @param element, the field element to be inverted
         // @return the result after inversion
         value_type invert(value_type element) const;
-        
+
     public:
 
         // The multiplication table.

@@ -3,6 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#ifndef FIFI_FIELD_TYPES_H
 #define FIFI_FIELD_TYPES_H
 
 #include <stdint.h>
@@ -12,22 +13,22 @@
 namespace fifi
 {
 
-    
+
     // The binary field, containing the two elements {0,1}
     // We do not provide the degree() function since this is
     // not an extension field.
     struct binary
     {
-        
+
         // The data type used for each element
         typedef uint8_t value_type;
-        
+
         // Pointer to a value_type
         typedef value_type* value_ptr;
-        
+
         // Reference to a value_type
         typedef value_type& value_ref;
-        
+
         // The data type used to hold the order of the field
         // i.e. the number of elements
         typedef uint8_t order_type;
@@ -45,13 +46,13 @@ namespace fifi
 
     // A binary extension field with 2^8 elements
     struct binary8
-    {       
+    {
         // The data type used for each element
         typedef uint8_t value_type;
 
         // Pointer to a value_type
         typedef value_type* value_ptr;
- 
+
         // Reference to a value_type
         typedef value_type& value_ref;
 
@@ -83,13 +84,13 @@ namespace fifi
         // it necessary to reduce an element, if needed
         // only lower bits of the prime is needed.
         const static value_type prime = 29;
-        
+
     };
-    
+
     // A binary extension field with 2^16 elements
     struct binary16
     {
-        
+
         // The data type used for each element
         typedef uint16_t value_type;
 
@@ -130,7 +131,7 @@ namespace fifi
         const static value_type prime = 4107;
 
     };
-    
+
     // A binary extension field with 2^32 elements
     struct binary32
     {
@@ -155,7 +156,7 @@ namespace fifi
         { return 32; }
 
     };
-    
+
     // Prime field 2^32 - 5
     struct prime2325
     {
@@ -185,12 +186,12 @@ namespace fifi
         // The prime number used i.e. (2^32 - 5)
         const static value_type prime = 4294967291U;
     };
-  
+
     // Prime field 2^31 - 1
     struct prime2311
     {
         typedef uint32_t value_type;
-        
+
         // Pointer to a value_type
         typedef value_type* value_ptr;
 

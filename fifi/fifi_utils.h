@@ -3,13 +3,14 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#ifndef FIFI_FIFI_UTILS_H
 #define FIFI_FIFI_UTILS_H
 
 #include "field_types.h"
 
 namespace fifi
 {
-    
+
     // Returns the size in bytes needed to store a certain
     // number of elements
     // @param elements, the number of elements to store
@@ -21,7 +22,7 @@ namespace fifi
 
         return sizeof(typename Field::value_type) * elements;
     }
-    
+
     // size_needed specilization for the binary field
     // @see size_needed()
     template<>
@@ -37,7 +38,7 @@ namespace fifi
                 std::numeric_limits<binary::value_type>::digits) + 1;
     }
 
-    
+
     // Returns the size in field elements needed to store a certain
     // number of bytes
     // @param bytes, the number of bytes to store
@@ -127,7 +128,7 @@ namespace fifi
             elements[array_index] &= ~mask;
         }
     }
-    
+
     // Calculates the bytes needed to store a certain number of
     // finite field elements
     template<uint32_t Elements, class Field>
@@ -136,7 +137,7 @@ namespace fifi
         static const uint32_t size_needed =
             sizeof(typename Field::value_type)*Elements;
     };
-    
+
     template<uint32_t Elements>
     struct elements<Elements, binary>
     {

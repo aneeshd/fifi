@@ -3,6 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#ifndef FIFI_ELEMENT_H
 #define FIFI_ELEMENT_H
 
 namespace fifi

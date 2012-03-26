@@ -3,6 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#ifndef FIFI_EXTENDED_LOG_TABLE_H
 #define FIFI_EXTENDED_LOG_TABLE_H
 
 #include <algorithm>
@@ -17,12 +18,12 @@ namespace fifi
 {
 
     // Produces an extended log table for multiplication
-    // and division. 
+    // and division.
     template<class Field>
     class extended_log_table : public binary_extension_field<Field>
     {
     public:
-        
+
         // Typedef of the data type used for each field element
         typedef typename Field::value_type value_type;
 
@@ -36,7 +37,7 @@ namespace fifi
 
         // Constructor
         extended_log_table();
-        
+
         // Performs the field multiplication
         // @param element_one, the first field element
         // @param element_one, the second field element

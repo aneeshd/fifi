@@ -3,6 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#ifndef FIFI_SIMPLE_ONLINE_H
 #define FIFI_SIMPLE_ONLINE_H
 
 #include <algorithm>

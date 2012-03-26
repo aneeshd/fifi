@@ -3,6 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#ifndef FIFI_ARITHMETICS_H
 #define FIFI_ARITHMETICS_H
 
 #include <boost/shared_ptr.hpp>
@@ -23,7 +24,7 @@
 
 namespace fifi
 {
-    
+
     // Generic version of adding two buffers
     //
     // Provides: dest[i] = dest[i] + src[i]
@@ -41,7 +42,7 @@ namespace fifi
 	assert(dest != 0);
 	assert(src != 0);
 	assert(length > 0);
-        
+
 	for(uint32_t i = 0; i < length; ++i)
 	{
 	    dest[i] = field.add(dest[i], src[i]);
@@ -65,7 +66,7 @@ namespace fifi
 	assert(dest != 0);
 	assert(src != 0);
 	assert(length > 0);
-        
+
 	for(uint32_t i = 0; i < length; ++i)
 	{
 	    dest[i] = field.subtract(dest[i], src[i]);
@@ -89,7 +90,7 @@ namespace fifi
 	assert(dest != 0);
 	assert(src != 0);
 	assert(length > 0);
-        
+
 	for(uint32_t i = 0; i < length; ++i)
 	{
 	    dest[i] = field.multiply(dest[i], src[i]);
@@ -117,9 +118,9 @@ namespace fifi
 
         // This function does not work for the binary field
         // since multiplying with a constant does not behave as
-        // expected (the binary field does a bit-wise AND operation).   
+        // expected (the binary field does a bit-wise AND operation).
         BOOST_STATIC_ASSERT((is_binary<field_type>::value == false));
-        
+
 	for(uint32_t i = 0; i < length; ++i)
 	{
 	    dest[i] = field.multiply(dest[i], constant);
@@ -141,14 +142,14 @@ namespace fifi
 	assert(length > 0);
 
         // Only {0,1} allowed
-	assert(constant == 0 || constant == 1); 
-	
+	assert(constant == 0 || constant == 1);
+
 	if(constant == 0)
         {
             std::fill_n(dest, length, 0);
         }
     }
-    
+
     // Generic version of adding two buffers after multiplying
     // with a constant.
     //
@@ -177,19 +178,19 @@ namespace fifi
         // since the multiply function does not behave correctly
         // so make sure that we do not use it.
         BOOST_STATIC_ASSERT((is_binary<field_type>::value == false));
-        
+
 	if(constant == 0)
 	    return;
 
         typedef typename FieldImpl::value_type value_type;
-        
+
 	for(uint32_t i = 0; i < length; ++i)
 	{
 	    value_type multiplied = field.multiply(src[i], constant);
 	    dest[i] = field.add(dest[i], multiplied);
 	}
     }
-    
+
     // This overload is for the full table implementation where
     // a small optimization is possible when adding two buffers
     // after multiplying with a constant.
@@ -206,12 +207,12 @@ namespace fifi
     //     assert(dest != 0);
     //     assert(src  != 0);
     //     assert(length > 0);
-        
+
     //     // This function does not work for the binary field
     //     // since the multiply function does not behave correctly
     //     // so make sure that we do not use it.
     //     BOOST_STATIC_ASSERT((is_binary<Field>::value == false));
-        
+
     //     if(constant == 0)
     //         return;
 
@@ -229,7 +230,7 @@ namespace fifi
     //         dest[i] = field.add(dest[i], offset[src[i]]);
     //     }
     // }
-    
+
     // The overload is taken for binary fields for the multiply_add(..)
     // functions. Since the binary field only consists of elements {0,1}
     // therefore it only makes sense to do the addition.
@@ -247,8 +248,8 @@ namespace fifi
 	assert(length > 0);
 
         // Only {0,1} allowed
-	assert(constant == 0 || constant == 1); 
-	
+	assert(constant == 0 || constant == 1);
+
 	if(constant == 0) // Do nothing
         {
             return;
@@ -287,12 +288,12 @@ namespace fifi
         // since the multiply function does not behave correctly
         // so make sure that we do not use it.
         BOOST_STATIC_ASSERT((is_binary<field_type>::value == false));
-        
+
 	if(constant == 0)
 	    return;
 
         typedef typename FieldImpl::value_type value_type;
-        
+
 	for(uint32_t i = 0; i < length; ++i)
 	{
 	    value_type multiplied = field.multiply(src[i], constant);
@@ -316,12 +317,12 @@ namespace fifi
 	assert(dest != 0);
 	assert(src != 0);
 	assert(length > 0);
-        
+
         // This function does not work for the binary field
         // since the multiply function does not behave correctly
         // so make sure that we do not use it.
         BOOST_STATIC_ASSERT((is_binary<Field>::value == false));
-        
+
 	if(constant == 0)
 	    return;
 
@@ -357,8 +358,8 @@ namespace fifi
 	assert(length > 0);
 
         // Only {0,1} allowed
-	assert(constant == 0 || constant == 1); 
-	
+	assert(constant == 0 || constant == 1);
+
 	if(constant == 0) // Do nothing
         {
             return;

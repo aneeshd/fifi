@@ -3,6 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#ifndef FIFI_DEFAULT_FIELD_IMPL_H
 #define FIFI_DEFAULT_FIELD_IMPL_H
 
 #include <boost/shared_ptr.hpp>
@@ -15,7 +16,7 @@
 
 namespace fifi
 {
-    
+
     // Choosing the right field implementation is a
     // matter of speed and memory requirements. The
     // default_field_impl choose for each field type

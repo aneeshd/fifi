@@ -3,6 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#ifndef FIFI_OPTIMAL_PRIME_H
 #define FIFI_OPTIMAL_PRIME_H
 
 #include <stdint.h>
@@ -38,7 +39,7 @@ namespace fifi
         // @param denominator, the denominator field element
         // @return the result after division
         value_type invert(value_type element) const;
-        
+
         // Performs the field addition
         // @param element_two, the first field element
         // @param element_two, the second field element

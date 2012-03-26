@@ -3,6 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#ifndef FIFI_FINITE_FIELD_H
 #define FIFI_FINITE_FIELD_H
 
 #include <boost/shared_ptr.hpp>
@@ -24,7 +25,7 @@ namespace fifi
 
     public:
 
-        // Constructor to create a new finite field        
+        // Constructor to create a new finite field
         finite_field();
 
         //  Operator performing the field multiplication
@@ -37,7 +38,7 @@ namespace fifi
         //  @param element, the field element whos inverse we wish to find
         //  @return the inverse element
         value_type divide(value_type numerator, value_type denominator) const;
-        
+
         //  Operator performing the field inversion
         //  @param element, the field element to be inverted
         //  @return the result after inversion
