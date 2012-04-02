@@ -17,53 +17,53 @@
 
 namespace fifi
 {
-    // Produces an extended log table for multiplication
-    // and division.
+    /// Produces an extended log table for multiplication
+    /// and division.
     template<class Field>
     class log_table : public binary_extension_field<Field>
     {
     public:
 
-        // Typedef of the data type used for each field element
+        /// Typedef of the data type used for each field element
         typedef typename Field::value_type value_type;
 
-        // Typedef of the data type used for each field element
+        /// Typedef of the data type used for each field element
         typedef typename Field::order_type order_type;
 
-        // Typedef of the field type used
+        /// Typedef of the field type used
         typedef Field field_type;
 
     public:
 
-        // Constructor
+        /// Constructor
         log_table();
 
-        // Performs the field multiplication
-        // @param element_one, the first field element
-        // @param element_one, the second field element
-        // @return the result after multiplication
+        /// Performs the field multiplication
+        /// @param element_one, the first field element
+        /// @param element_one, the second field element
+        /// @return the result after multiplication
         value_type multiply(value_type element_one, value_type element_two) const;
 
-        // Performs the field division
-        // @param numerator, the numerator field element
-        // @param denominator, the denominator field element
-        // @return the result after division
+        /// Performs the field division
+        /// @param numerator, the numerator field element
+        /// @param denominator, the denominator field element
+        /// @return the result after division
         value_type divide(value_type numerator, value_type denominator) const;
 
-        // Operator performing the field inversion
-        // @param element, the field element to be inverted
-        // @return the result after inversion
+        /// Operator performing the field inversion
+        /// @param element, the field element to be inverted
+        /// @return the result after inversion
         value_type invert(value_type element) const;
 
     public:
 
-        // The Log table
+        /// The Log table
         std::vector<value_type> m_log;
 
-        // The AntiLog table
+        /// The AntiLog table
         std::vector<value_type> m_antilog;
 
-        // Assess to the simple online algorithms
+        /// Assess to the simple online algorithms
         using binary_extension_field<Field>::m_simple_online;
     };
 
@@ -73,7 +73,7 @@ namespace fifi
         m_log.resize(Field::order, '\0');
         m_antilog.resize(Field::order, '\0');
 
-        // inital value corresponds x^0
+        /// inital value corresponds x^0
         value_type power = 1;
 
         for(order_type i = 0; i < Field::order - 1; ++i)

@@ -21,52 +21,52 @@
 namespace fifi
 {
 
-    // Produces a full lookup table of the multiplication and division operations.
-    // The full look-up table works fine for the 2^8 binary extension field.
-    // However, for higher field sizes it will most likely not work due to the very
-    // high memory requirements.
+    /// Produces a full lookup table of the multiplication and division operations.
+    /// The full look-up table works fine for the 2^8 binary extension field.
+    /// However, for higher field sizes it will most likely not work due to the very
+    /// high memory requirements.
     template<class Field>
     class full_table : public binary_extension_field<Field>
     {
     public:
 
-        // Typedef of the data type used for each field element
+        /// Typedef of the data type used for each field element
         typedef typename Field::value_type value_type;
 
-        // Typedef of the field type used
+        /// Typedef of the field type used
         typedef Field field_type;
 
     public:
 
-        // Constructor
+        /// Constructor
         full_table();
 
-        // Performs the field multiplication
-        // @param element_one, the first field element
-        // @param element_one, the second field element
-        // @return the result after multiplication
+        /// Performs the field multiplication
+        /// @param element_one, the first field element
+        /// @param element_one, the second field element
+        /// @return the result after multiplication
         value_type multiply(value_type element_one, value_type element_two) const;
 
-        // Performs the field division
-        // @param numerator, the numerator field element
-        // @param denominator, the denominator field element
-        // @return the result after division
+        /// Performs the field division
+        /// @param numerator, the numerator field element
+        /// @param denominator, the denominator field element
+        /// @return the result after division
         value_type divide(value_type numerator, value_type denominator) const;
 
-        // Operator performing the field inversion
-        // @param element, the field element to be inverted
-        // @return the result after inversion
+        /// Operator performing the field inversion
+        /// @param element, the field element to be inverted
+        /// @return the result after inversion
         value_type invert(value_type element) const;
 
     public:
 
-        // The multiplication table.
+        /// The multiplication table.
         std::vector<value_type> m_multtable;
 
-        // The division table
+        /// The division table
         std::vector<value_type> m_divitable;
 
-        // Assess to the simple online algorithms
+        /// Assess to the simple online algorithms
         using binary_extension_field<Field>::m_simple_online;
     };
 
@@ -112,7 +112,6 @@ namespace fifi
     {
         return divide(1, element);
     }
-
 }
 
 #endif

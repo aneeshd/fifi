@@ -25,14 +25,14 @@
 namespace fifi
 {
 
-    // Generic version of adding two buffers
-    //
-    // Provides: dest[i] = dest[i] + src[i]
-    // @param field, the field implementation
-    // @param dest, the destination element buffer
-    // @param src, the source element buffer
-    // @param length, the size of destination and source buffers
-    //        in value_type elements
+    /// Generic version of adding two buffers
+    /// 
+    /// Provides: dest[i] = dest[i] + src[i]
+    /// @param field, the field implementation
+    /// @param dest, the destination element buffer
+    /// @param src, the source element buffer
+    /// @param length, the size of destination and source buffers
+    ///        in value_type elements
     template<class FieldImpl>
     void add(const FieldImpl &field,
              typename FieldImpl::value_type *dest,
@@ -49,14 +49,14 @@ namespace fifi
 	}
     }
 
-    // Generic version of subtract two buffers
-    //
-    // Provides: dest[i] = dest[i] - src[i]
-    // @param field, the field implementation
-    // @param dest, the destination element buffer
-    // @param src, the source element buffer
-    // @param length, the size of destination and source buffers
-    //        in value_type elements
+    /// Generic version of subtract two buffers
+    /// 
+    /// Provides: dest[i] = dest[i] - src[i]
+    /// @param field, the field implementation
+    /// @param dest, the destination element buffer
+    /// @param src, the source element buffer
+    /// @param length, the size of destination and source buffers
+    ///        in value_type elements
     template<class FieldImpl>
     void subtract(const FieldImpl &field,
                   typename FieldImpl::value_type *dest,
@@ -73,14 +73,14 @@ namespace fifi
 	}
     }
 
-    // Generic version of multiplying two buffers
-    //
-    // Provides: dest[i] = dest[i] * src[i]
-    // @param field, the field implementation
-    // @param dest, the destination element buffer
-    // @param src, the source element buffer
-    // @param length, the size of destination and source buffers
-    //        in value_type elements
+    /// Generic version of multiplying two buffers
+    /// 
+    /// Provides: dest[i] = dest[i] * src[i]
+    /// @param field, the field implementation
+    /// @param dest, the destination element buffer
+    /// @param src, the source element buffer
+    /// @param length, the size of destination and source buffers
+    ///        in value_type elements
     template<class FieldImpl>
     void multiply(const FieldImpl &field,
                   typename FieldImpl::value_type *dest,
@@ -97,14 +97,14 @@ namespace fifi
 	}
     }
 
-    // Generic version of multiplying a buffer with a constant
-    //
-    // Provides: dest[i] = dest[i] * constant
-    // @param field, the field implementation
-    // @param dest, the destination element buffer
-    // @param constant, the constant multiplier
-    // @param length, the size of destination and source buffers
-    //        in value_type elements
+    /// Generic version of multiplying a buffer with a constant
+    /// 
+    /// Provides: dest[i] = dest[i] * constant
+    /// @param field, the field implementation
+    /// @param dest, the destination element buffer
+    /// @param constant, the constant multiplier
+    /// @param length, the size of destination and source buffers
+    ///        in value_type elements
     template<class FieldImpl>
     void multiply_constant(const FieldImpl &field,
                            typename FieldImpl::value_type constant,
@@ -127,11 +127,11 @@ namespace fifi
 	}
     }
 
-    // The overload is taken for binary fields for the multiply_constant(...)
-    // functions. Since the binary field only consists of elements {0,1}
-    // therefore we either zero the buffer or leave it untouched.
-    //
-    // @see generic version of multiply_constant(...) for parameters
+    /// The overload is taken for binary fields for the multiply_constant(...)
+    /// functions. Since the binary field only consists of elements {0,1}
+    /// therefore we either zero the buffer or leave it untouched.
+    /// 
+    /// @see generic version of multiply_constant(...) for parameters
     template<template <class> class FieldImpl>
     void multiply_constant(const FieldImpl<binary> &/*field*/,
                            typename binary::value_type constant,
@@ -150,17 +150,17 @@ namespace fifi
         }
     }
 
-    // Generic version of adding two buffers after multiplying
-    // with a constant.
-    //
-    // Provides: dest[i] = dest[i] + (src[i] * constant)
-    // @param field, the field implementation
-    // @param constant, the constant field value used for
-    //        the multiplication
-    // @param dest, the destination element buffer
-    // @param src, the source element buffer
-    // @param length, the size of destination and source buffers
-    //        in value_type elements
+    /// Generic version of adding two buffers after multiplying
+    /// with a constant.
+    /// 
+    /// Provides: dest[i] = dest[i] + (src[i] * constant)
+    /// @param field, the field implementation
+    /// @param constant, the constant field value used for
+    ///        the multiplication
+    /// @param dest, the destination element buffer
+    /// @param src, the source element buffer
+    /// @param length, the size of destination and source buffers
+    ///        in value_type elements
     template<class FieldImpl>
     void multiply_add(const FieldImpl &field,
                       typename FieldImpl::value_type constant,
@@ -194,7 +194,7 @@ namespace fifi
     // This overload is for the full table implementation where
     // a small optimization is possible when adding two buffers
     // after multiplying with a constant.
-    //
+    // 
     // @see generic version of multiply_add(...) for parameters
     // template<class Field>
     // typename disable_if_binary<Field>::type
@@ -231,11 +231,11 @@ namespace fifi
     //     }
     // }
 
-    // The overload is taken for binary fields for the multiply_add(..)
-    // functions. Since the binary field only consists of elements {0,1}
-    // therefore it only makes sense to do the addition.
-    //
-    // @see generic version of multiply_add(...) for parameters
+    /// The overload is taken for binary fields for the multiply_add(..)
+    /// functions. Since the binary field only consists of elements {0,1}
+    /// therefore it only makes sense to do the addition.
+    ///
+    /// @see generic version of multiply_add(...) for parameters
     template<template<class> class FieldImpl>
     void multiply_add(const FieldImpl<binary> &field,
                       typename binary::value_type constant,
@@ -260,17 +260,17 @@ namespace fifi
         }
     }
 
-    // Generic version of subtracting two buffers after multiplying
-    // with a constant.
-    //
-    // Provides: dest[i] = dest[i] - (src[i] * constant)
-    // @param field, the field implementation
-    // @param constant, the constant field value used for
-    //        the multiplication
-    // @param dest, the destination element buffer
-    // @param src, the source element buffer
-    // @param length, the size of destination and source buffers
-    //        in value_type elements
+    /// Generic version of subtracting two buffers after multiplying
+    /// with a constant.
+    /// 
+    /// Provides: dest[i] = dest[i] - (src[i] * constant)
+    /// @param field, the field implementation
+    /// @param constant, the constant field value used for
+    ///        the multiplication
+    /// @param dest, the destination element buffer
+    /// @param src, the source element buffer
+    /// @param length, the size of destination and source buffers
+    ///        in value_type elements
     template<class FieldImpl>
     void multiply_subtract(const FieldImpl &field,
                            typename FieldImpl::value_type constant,
@@ -301,11 +301,11 @@ namespace fifi
 	}
     }
 
-    // This overload is for the full table implementation where
-    // a small optimization is possible when subtracting two buffers
-    // after multiplying with a constant.
-    //
-    // @see generic version of multiply_subtract(...) for parameters
+    /// This overload is for the full table implementation where
+    /// a small optimization is possible when subtracting two buffers
+    /// after multiplying with a constant.
+    /// 
+    /// @see generic version of multiply_subtract(...) for parameters
     template<class Field>
     typename disable_if_binary<Field>::type
     multiply_subtract(const full_table<Field> &field,
@@ -341,11 +341,11 @@ namespace fifi
 	}
     }
 
-    // The overload is taken for binary fields for the multiply_subtract(..)
-    // functions. Since the binary field only consists of elements {0,1}
-    // therefore it only makes sense to do the subtraction.
-    //
-    // @see generic version of multiply_subtract(...) for parameters
+    /// The overload is taken for binary fields for the multiply_subtract(..)
+    /// functions. Since the binary field only consists of elements {0,1}
+    /// therefore it only makes sense to do the subtraction.
+    /// 
+    /// @see generic version of multiply_subtract(...) for parameters
     template<template<class> class FieldImpl>
     void multiply_subtract(const FieldImpl<binary> &field,
                            typename binary::value_type constant,

@@ -11,8 +11,8 @@
 namespace fifi
 {
 
-     /// A finite field object provides a wrapper around a
-     /// concrete field implementation.
+    /// A finite field object provides a wrapper around a
+    /// concrete field implementation.
     template<class FieldImpl>
     class finite_field
     {

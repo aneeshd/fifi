@@ -13,16 +13,16 @@
 
 namespace fifi
 {
-    // SFINAE class to disable implementations if binary
-    // Can be used e.g. like this:
-    //
-    //     template<class Field>
-    //     typename disable_if_binary<Field>::type
-    //     function(...)
-    //     {
-    //         ...
-    //     }
-    //
+    /// SFINAE class to disable implementations if binary
+    /// Can be used e.g. like this:
+    ///
+    ///     template<class Field>
+    ///     typename disable_if_binary<Field>::type
+    ///     function(...)
+    ///     {
+    ///         ...
+    ///     }
+    /// 
     template<class Field>
     struct disable_if_binary : public boost::disable_if<is_binary<Field> >
     { };
