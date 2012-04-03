@@ -28,10 +28,10 @@ namespace fifi
     /// Generic version of adding two buffers
     /// 
     /// Provides: dest[i] = dest[i] + src[i]
-    /// @param field, the field implementation
-    /// @param dest, the destination element buffer
-    /// @param src, the source element buffer
-    /// @param length, the size of destination and source buffers
+    /// @param field the field implementation
+    /// @param dest the destination element buffer
+    /// @param src the source element buffer
+    /// @param length the size of destination and source buffers
     ///        in value_type elements
     template<class FieldImpl>
     void add(const FieldImpl &field,
@@ -52,10 +52,10 @@ namespace fifi
     /// Generic version of subtract two buffers
     /// 
     /// Provides: dest[i] = dest[i] - src[i]
-    /// @param field, the field implementation
-    /// @param dest, the destination element buffer
-    /// @param src, the source element buffer
-    /// @param length, the size of destination and source buffers
+    /// @param field the field implementation
+    /// @param dest the destination element buffer
+    /// @param src the source element buffer
+    /// @param length the size of destination and source buffers
     ///        in value_type elements
     template<class FieldImpl>
     void subtract(const FieldImpl &field,
@@ -76,10 +76,10 @@ namespace fifi
     /// Generic version of multiplying two buffers
     /// 
     /// Provides: dest[i] = dest[i] * src[i]
-    /// @param field, the field implementation
-    /// @param dest, the destination element buffer
-    /// @param src, the source element buffer
-    /// @param length, the size of destination and source buffers
+    /// @param field the field implementation
+    /// @param dest the destination element buffer
+    /// @param src the source element buffer
+    /// @param length the size of destination and source buffers
     ///        in value_type elements
     template<class FieldImpl>
     void multiply(const FieldImpl &field,
@@ -100,10 +100,10 @@ namespace fifi
     /// Generic version of multiplying a buffer with a constant
     /// 
     /// Provides: dest[i] = dest[i] * constant
-    /// @param field, the field implementation
-    /// @param dest, the destination element buffer
-    /// @param constant, the constant multiplier
-    /// @param length, the size of destination and source buffers
+    /// @param field the field implementation
+    /// @param dest the destination element buffer
+    /// @param constant the constant multiplier
+    /// @param length the size of destination and source buffers
     ///        in value_type elements
     template<class FieldImpl>
     void multiply_constant(const FieldImpl &field,
@@ -154,12 +154,12 @@ namespace fifi
     /// with a constant.
     /// 
     /// Provides: dest[i] = dest[i] + (src[i] * constant)
-    /// @param field, the field implementation
-    /// @param constant, the constant field value used for
+    /// @param field the field implementation
+    /// @param constant the constant field value used for
     ///        the multiplication
-    /// @param dest, the destination element buffer
-    /// @param src, the source element buffer
-    /// @param length, the size of destination and source buffers
+    /// @param dest the destination element buffer
+    /// @param src the source element buffer
+    /// @param length the size of destination and source buffers
     ///        in value_type elements
     template<class FieldImpl>
     void multiply_add(const FieldImpl &field,
@@ -264,12 +264,12 @@ namespace fifi
     /// with a constant.
     /// 
     /// Provides: dest[i] = dest[i] - (src[i] * constant)
-    /// @param field, the field implementation
-    /// @param constant, the constant field value used for
+    /// @param field the field implementation
+    /// @param constant the constant field value used for
     ///        the multiplication
-    /// @param dest, the destination element buffer
-    /// @param src, the source element buffer
-    /// @param length, the size of destination and source buffers
+    /// @param dest the destination element buffer
+    /// @param src the source element buffer
+    /// @param length the size of destination and source buffers
     ///        in value_type elements
     template<class FieldImpl>
     void multiply_subtract(const FieldImpl &field,
