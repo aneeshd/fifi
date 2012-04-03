@@ -11,10 +11,10 @@
 namespace fifi
 {
 
-    // Returns the size in bytes needed to store a certain
-    // number of elements
-    // @param elements, the number of elements to store
-    // @return the size in bytes that need to be stored
+    /// Returns the size in bytes needed to store a certain
+    /// number of elements
+    /// @param elements, the number of elements to store
+    /// @return the size in bytes that need to be stored
     template<class Field>
     inline uint32_t bytes_needed(uint32_t elements)
     {
@@ -23,8 +23,8 @@ namespace fifi
         return sizeof(typename Field::value_type) * elements;
     }
 
-    // size_needed specilization for the binary field
-    // @see size_needed()
+    /// size_needed specilization for the binary field
+    /// @see size_needed()
     template<>
     inline uint32_t bytes_needed<binary>(uint32_t elements)
     {
@@ -39,10 +39,10 @@ namespace fifi
     }
 
 
-    // Returns the size in field elements needed to store a certain
-    // number of bytes
-    // @param bytes, the number of bytes to store
-    // @return the number of field elements that need to be stored
+    /// Returns the size in field elements needed to store a certain
+    /// number of bytes
+    /// @param bytes, the number of bytes to store
+    /// @return the number of field elements that need to be stored
     template<class Field>
     inline uint32_t bytes_to_elements(uint32_t bytes)
     {
@@ -62,24 +62,21 @@ namespace fifi
     //     assert(bytes > 0);
     //     assert(sizeof(binary::value_type) == 1);
     //     assert(std::numeric_limits<binary::value_type>::digits == 8);
-
     //     return bytes;
     // }
 
 
-    // Usefull abstraction functions for accessing field elements if
-    // a mixed binary & other fields implementation is created.
-    // Returns the value of an element at the specific position in the
-    // symbol.
+    /// Usefull abstraction functions for accessing field elements if
+    /// a mixed binary & other fields implementation is created.
+    /// Returns the value of an element at the specific position in the
+    /// symbol.
     template<class Field>
     inline typename Field::value_type get_value(typename Field::value_ptr symbol,
                                                 uint32_t index)
     {
         assert(symbol != 0);
-
-//        typedef typename Field::value_ptr value_ptr;
-//        value_ptr elements = reinterpret_cast<value_ptr>(symbol);
-
+        // typedef typename Field::value_ptr value_ptr;
+        // value_ptr elements = reinterpret_cast<value_ptr>(symbol);
         return symbol[index];
     }
 
@@ -109,7 +106,7 @@ namespace fifi
     inline void set_value<binary>(binary::value_ptr elements, uint32_t index,
                                   binary::value_type value)
     {
-        // @todo: find a better/faster way to do this
+        /// @todo: find a better/faster way to do this
 
         assert(elements != 0);
         assert(value < 2); // only {0,1} allowed
@@ -129,8 +126,8 @@ namespace fifi
         }
     }
 
-    // Calculates the bytes needed to store a certain number of
-    // finite field elements
+    /// Calculates the bytes needed to store a certain number of
+    /// finite field elements
     template<uint32_t Elements, class Field>
     struct elements
     {
@@ -144,7 +141,6 @@ namespace fifi
         static const uint32_t size_needed =
             ((Elements - 1) / std::numeric_limits<binary::value_type>::digits) + 1;
     };
-
 }
 
 #endif

@@ -17,29 +17,29 @@
 namespace fifi
 {
 
-    // Choosing the right field implementation is a
-    // matter of speed and memory requirements. The
-    // default_field_impl choose for each field type
-    // an corresponding implementation which is know
-    // to provide a good trade-off.
+    /// Choosing the right field implementation is a
+    /// matter of speed and memory requirements. The
+    /// default_field_impl choose for each field type
+    /// an corresponding implementation which is know
+    /// to provide a good trade-off.
     template<class Field>
     struct default_field_impl;
 
-    // For the binary field
+    /// For the binary field
     template<>
     struct default_field_impl<binary>
     {
         typedef simple_online<binary> type;
     };
 
-    // For the binary8 field
+    /// For the binary8 field
     template<>
     struct default_field_impl<binary8>
     {
         typedef full_table<binary8> type;
     };
 
-    // For the binary16 field
+    /// For the binary16 field
     template<>
     struct default_field_impl<binary16>
     {

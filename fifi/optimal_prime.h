@@ -16,44 +16,44 @@ namespace fifi
     class optimal_prime
     {
     public:
-        // Typedef of the data type used for each field element
+        /// Typedef of the data type used for each field element
         typedef typename Field::value_type value_type;
 
-        // Typedef of the field type used
+        /// Typedef of the field type used
         typedef Field field_type;
 
     public:
-        // Operator performing the field multiplication
-        // @param element_two, the first field element
-        // @param element_two, the second field element
-        // @return the result after multiplication
+        /// Operator performing the field multiplication
+        /// @param element_one the first field element
+        /// @param element_two the second field element
+        /// @return the result after multiplication
         value_type multiply(value_type element_one, value_type element_two) const;
 
-        // Operator finding the inverse of a field element
-        // @param element, the field element whos inverse we wish to find
-        // @return the inverse element
+        /// Operator performing the field division
+        /// @param numerator the numerator field element
+        /// @param denominator the denominator field element
+        /// @return the result after division
         value_type divide(value_type numerator, value_type denominator) const;
 
-        // Operator performing the field division
-        // @param numerator, the numerator field element
-        // @param denominator, the denominator field element
-        // @return the result after division
+        /// Operator finding the inverse of a field element
+        /// @param element the field element whos inverse we wish to find
+        /// @return the inverse element
         value_type invert(value_type element) const;
 
-        // Performs the field addition
-        // @param element_two, the first field element
-        // @param element_two, the second field element
-        // @return the result after addition
+        /// Performs the field addition
+        /// @param element_one the first field element
+        /// @param element_two the second field element
+        /// @return the result after addition
         value_type add(value_type element_one, value_type element_two) const;
 
-        // Performs the field subtraction
-        // @param element_two, the first field element
-        // @param element_two, the second field element
-        // @return the result after subtraction
+        /// Performs the field subtraction
+        /// @param element_one the first field element
+        /// @param element_two the second field element
+        /// @return the result after subtraction
         value_type subtract(value_type element_one, value_type element_two) const;
     };
 
-    //  Specilization for the (2^32 - 5) prime field
+    /// Specialization for the (2^32 - 5) prime field
     template<>
     inline optimal_prime<prime2325>::value_type optimal_prime<prime2325>::multiply(value_type element_one, value_type element_two) const
     {
@@ -73,6 +73,7 @@ namespace fifi
         return (value_type)c;
     }
 
+    /// Specialization for the (2^32 - 5) prime field
     template<>
     inline optimal_prime<prime2325>::value_type optimal_prime<prime2325>::invert(value_type a) const
     {
@@ -105,6 +106,7 @@ namespace fifi
         return (value_type)x;
     }
 
+    /// Specialization for the (2^32 - 5) prime field
     template<>
     inline optimal_prime<prime2325>::value_type
     optimal_prime<prime2325>::divide(value_type numerator, value_type denominator) const
@@ -113,6 +115,7 @@ namespace fifi
         return multiply(numerator, inverse);
     }
 
+    /// Specialization for the (2^32 - 5) prime field
     template<>
     inline optimal_prime<prime2325>::value_type
     optimal_prime<prime2325>::add(value_type element_one, value_type element_two) const
@@ -123,6 +126,7 @@ namespace fifi
         return (value_type)sum;
     }
 
+    /// Specialization for the (2^32 - 5) prime field
     template<>
     inline optimal_prime<prime2325>::value_type
     optimal_prime<prime2325>::subtract(value_type element_one, value_type element_two) const
@@ -141,14 +145,14 @@ namespace fifi
 //          * Not working
 //          */
 
-//        __asm__("mul %[b];"           // Multiply a and b
-//                "movl %%eax, %%ebx;"  // Move low bits to %ebx
-//                "movl $5, %[b];"      // Save 5 in b's register
-//                "movl %%edx, %%eax;"  // Move high bits to %eax
-//                "mul %[b];"           // Multiply high bits with 5
-//                "addl %%eax, %%ebx;"  // Sum the low order bits
-//                "movl %%edx, %%eax;"  // Move high bits to %eax
-//                "mul %[b];"           // Multiply high bits with 5
+//        __asm__("mul %[b];"           /// Multiply a and b
+//                "movl %%eax, %%ebx;"  /// Move low bits to %ebx
+//                "movl $5, %[b];"      /// Save 5 in b's register
+//                "movl %%edx, %%eax;"  /// Move high bits to %eax
+//                "mul %[b];"           /// Multiply high bits with 5
+//                "addl %%eax, %%ebx;"  /// Sum the low order bits
+//                "movl %%edx, %%eax;"  /// Move high bits to %eax
+//                "mul %[b];"           /// Multiply high bits with 5
 //                "addl %%eax, %%ebx;"
 //                "movl %%ebx, %%eax;"
 //                : [a] "+a" (a)
@@ -157,7 +161,6 @@ namespace fifi
 
 //        return a;
 //    }
-
 }
 
 #endif

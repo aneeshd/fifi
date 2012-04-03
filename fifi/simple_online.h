@@ -24,7 +24,6 @@ namespace fifi
     {
         int degree = 0;
         // Add a check for unsigned or arithmetic shifts
-
         element >>= 1;
 
         while(element > 0)
@@ -36,51 +35,52 @@ namespace fifi
         return degree;
     }
 
-    // Simple online finite field algorithms - computes the results
-    // on the fly without relying on pre-computed look-up tables etc.
+    /// Simple online finite field algorithms - computes the results
+    /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
     class simple_online : public boost::noncopyable
     {
     public:
 
-        // Typedef of the data type used for each field element
+        /// Typedef of the data type used for each field element
         typedef typename Field::value_type value_type;
 
-        // Typedef of the field type used
+        /// Typedef of the field type used
         typedef Field field_type;
 
     public:
 
-        // Constructor
+        /// Constructor
         simple_online()
         {}
 
-        // Operator performing the field multiplication
-        // @param element_one, the first field element
-        // @param element_two, the second field element
-        // @return the result after multiplication
+        /// Operator performing the field multiplication
+        /// @param element_one the first field element
+        /// @param element_two the second field element
+        /// @return the result after multiplication
         value_type multiply(value_type element_one, value_type element_two) const;
 
-        // Operator finding the inverse of a field element
-        // @param element, the field element whos inverse we wish to find
-        // @return the inverse element
+        /// Perform division of two field elements
+        /// @param numerator the element in the numerator
+        /// @param denominator the element in the denominator
+        /// @return the result after division
         value_type divide(value_type numerator, value_type denominator) const;
 
-        // Operator performing the field inversion
-        // @param element, the field element to be inverted
-        // @return the result after inversion
+        /// Operator performing the field inversion
+        /// @param element the field element to be inverted
+        /// @return the result after inversion        
         value_type invert(value_type element) const;
 
-        // Performs the field addition
-        // @param element_one, the first field element
-        // @param element_two, the second field element
-        // @return the result after addition
+        /// Performs the field addition
+        /// @param element_one the first field element
+        /// @param element_two the second field element
+        /// @return the result after addition
         value_type add(value_type element_one, value_type element_two) const;
 
-        // Performs the field subtraction
-        // @param element_one, the first field element
-        // @param element_two, the second field element
-        // @return the result after subtraction
+        /// Performs the field subtraction
+        /// @param element_one the first field element
+        /// @param element_two the second field element
+        /// @return the result after subtraction
         value_type subtract(value_type element_one, value_type element_two) const;
     };
 
@@ -117,7 +117,6 @@ namespace fifi
                 element_one ^= Field::prime;
             }
         }
-
         return result;
     }
 

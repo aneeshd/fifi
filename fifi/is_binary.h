@@ -14,19 +14,17 @@
 namespace fifi
 {
 
-    // Will inherit from true-type if Field equal fifi::binary
-    // Can be used e.g.:
-    //
-    //    if( is_binary<field_type>::value )
-    //    {
-    //        // do something clever
-    //    }
-    //
+    /// Will inherit from true-type if Field equal fifi::binary
+    /// Can be used e.g.:
+    /// 
+    ///    if( is_binary<field_type>::value )
+    ///    {
+    ///        /// do something clever
+    ///    }
+    /// 
     template<class Field>
     struct is_binary : public boost::is_same<Field, fifi::binary>
     { };
-
-
 }
 
 #endif
