@@ -31,18 +31,24 @@ namespace fifi
 
     public:
         /// Construct a zero initialized field element.
-        /// @param field, the field to which the element belongs
+        /// @param field_impl the field to which the element belongs
         element(const field_impl_type &field_impl);
 
         /// Construct a value initialized field element
-        /// @param value, the initial value of the finite field
-        /// @param field, the field to which the element belongs
+        /// @param value the initial value of the finite field
+        /// @param field_impl the field to which the element belongs
         element(value_type value, const field_impl_type &field_impl);
 
-        /// Arithmetic operators for calculating elements
+        /// Addition assignment
         element& operator+=(const element &e);
+
+        /// Substraction assignment
         element& operator-=(const element &e);
+
+        /// Division assignment
         element& operator/=(const element &e);
+
+        /// Multiplication assignment
         element& operator*=(const element &e);
 
         /// Access to the field element

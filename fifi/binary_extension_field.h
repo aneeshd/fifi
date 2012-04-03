@@ -39,19 +39,21 @@ namespace fifi
 
         /// Disable the prime fields
         BOOST_STATIC_ASSERT((boost::is_same<field_type, prime2325>::value == false));
+
+        /// Disable the prime fields
         BOOST_STATIC_ASSERT((boost::is_same<field_type, prime2311>::value == false));
 
     public:
 
         /// Performs the field addition
-        /// @param element_one, the first field element
-        /// @param element_two, the second field element
+        /// @param element_one the first field element
+        /// @param element_two the second field element
         /// @return the result after addition
         value_type add(value_type element_one, value_type element_two) const;
 
         /// Performs the field subtraction
-        /// @param element_one, the first field element
-        /// @param element_two, the second field element
+        /// @param element_one the first field element
+        /// @param element_two the second field element
         /// @return the result after subtraction
         value_type subtract(value_type element_one, value_type element_two) const;
 

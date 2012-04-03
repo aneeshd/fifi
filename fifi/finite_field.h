@@ -11,8 +11,8 @@
 namespace fifi
 {
 
-     /// A finite field object provides a wrapper around a
-     /// concrete field implementation.
+    /// A finite field object provides a wrapper around a
+    /// concrete field implementation.
     template<class FieldImpl>
     class finite_field
     {
@@ -29,30 +29,31 @@ namespace fifi
         finite_field();
 
         ///  Operator performing the field multiplication
-        ///  @param element_one, the first field element
-        ///  @param element_two, the second field element
+        ///  @param element_one the first field element
+        ///  @param element_two the second field element
         ///  @return the result after multiplication
         value_type multiply(value_type element_one, value_type element_two) const;
 
-        ///  Operator finding the inverse of a field element
-        ///  @param element, the field element whos inverse we wish to find
-        ///  @return the inverse element
+        /// Perform division of two field elements
+        /// @param numerator the element in the numerator
+        /// @param denominator the element in the denominator
+        /// @return the result after division
         value_type divide(value_type numerator, value_type denominator) const;
 
         ///  Operator performing the field inversion
-        ///  @param element, the field element to be inverted
+        ///  @param element the field element to be inverted
         ///  @return the result after inversion
         value_type invert(value_type element) const;
 
         ///  Performs the field addition
-        ///  @param element_one, the first field element
-        ///  @param element_two, the second field element
+        ///  @param element_one the first field element
+        ///  @param element_two the second field element
         ///  @return the result after addition
         value_type add(value_type element_one, value_type element_two) const;
 
         ///  Performs the field subtraction
-        ///  @param element_one, the first field element
-        ///  @param element_two, the second field element
+        ///  @param element_one the first field element
+        ///  @param element_two the second field element
         ///  @return the result after subtraction
         value_type subtract(value_type element_one, value_type element_two) const;
 
