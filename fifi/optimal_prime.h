@@ -12,6 +12,9 @@
 namespace fifi
 {
 
+    /// This implemtnation allows finite field arithmetics in the
+    /// prime fields in this case where the characteristic of the
+    /// field is different than two.
     template<class Field>
     class optimal_prime
     {
@@ -55,7 +58,9 @@ namespace fifi
 
     /// Specialization for the (2^32 - 5) prime field
     template<>
-    inline optimal_prime<prime2325>::value_type optimal_prime<prime2325>::multiply(value_type element_one, value_type element_two) const
+    inline optimal_prime<prime2325>::value_type
+    optimal_prime<prime2325>::multiply(value_type element_one,
+                                       value_type element_two) const
     {
         uint64_t c = (uint64_t)element_one * (uint64_t)element_two;
         uint64_t h1 = c >> 32;
@@ -75,7 +80,8 @@ namespace fifi
 
     /// Specialization for the (2^32 - 5) prime field
     template<>
-    inline optimal_prime<prime2325>::value_type optimal_prime<prime2325>::invert(value_type a) const
+    inline optimal_prime<prime2325>::value_type
+    optimal_prime<prime2325>::invert(value_type a) const
     {
         assert(a > 0);
         assert(a < prime2325::prime);
@@ -109,7 +115,8 @@ namespace fifi
     /// Specialization for the (2^32 - 5) prime field
     template<>
     inline optimal_prime<prime2325>::value_type
-    optimal_prime<prime2325>::divide(value_type numerator, value_type denominator) const
+    optimal_prime<prime2325>::divide(value_type numerator,
+                                     value_type denominator) const
     {
         value_type inverse = invert(denominator);
         return multiply(numerator, inverse);
@@ -118,7 +125,8 @@ namespace fifi
     /// Specialization for the (2^32 - 5) prime field
     template<>
     inline optimal_prime<prime2325>::value_type
-    optimal_prime<prime2325>::add(value_type element_one, value_type element_two) const
+    optimal_prime<prime2325>::add(value_type element_one,
+                                  value_type element_two) const
     {
         int64_t sum = element_one + element_two;
         sum = sum < prime2325::prime ? sum : sum - prime2325::prime;
@@ -129,7 +137,8 @@ namespace fifi
     /// Specialization for the (2^32 - 5) prime field
     template<>
     inline optimal_prime<prime2325>::value_type
-    optimal_prime<prime2325>::subtract(value_type element_one, value_type element_two) const
+    optimal_prime<prime2325>::subtract(value_type element_one,
+                                       value_type element_two) const
     {
         int64_t sum = element_one - element_two;
         sum = sum < 0 ? sum + prime2325::prime : sum;
