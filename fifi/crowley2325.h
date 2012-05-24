@@ -17,10 +17,12 @@ namespace fifi
     /// to the 2^32 - 5 prime field.
     struct crowley2325
     {
+        //crowley2325(
+
         /// A chunk of data which belongs to a block
         /// A block may consist of serveral chunks, but
         /// the total size should stay below the max_block_size().
-        typedef std::pair<uint8_t*, uint32_t> chunk;
+        typedef std::pair<const uint8_t*, uint32_t> chunk;
 
         /// @returns the maximum size in bytes a block can be
         uint32_t max_block_size();
@@ -28,6 +30,8 @@ namespace fifi
         /// Adds a data chunk to the block
         /// @param c
         void add_chunk(const chunk &chunk);
+
+        void add_chunk(const uint8_t* data, uint32_t size);
 
         /// Searches for a unused bit prefix which can be used to
         /// pefrom the sub-field mapping

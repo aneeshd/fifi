@@ -9,7 +9,16 @@
 #include <fifi/field_types.h>
 #include <fifi/crowley2325.h>
 
+struct prefix_bitmap
+{
 
+};
+
+
+uint32_t find_prefix(uint32_t dd)
+{
+
+}
 
 TEST(test_crowley2325, max_block_size)
 {
