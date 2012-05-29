@@ -7,4 +7,4 @@ bld.program(
     source   = ['fifi_tests.cpp'] + bld.path.ant_glob('src/*.cpp'),
     target   = 'fifi_tests',
     cxxflags = bld.toolchain_cxx_flags(),
-    use      = ['gtest', 'fifi_includes', 'boost_includes'])
+    use      = ['gtest', 'sak_includes', 'fifi_includes', 'boost_includes'])
