@@ -158,6 +158,10 @@ namespace fifi
     };
 
     /// Prime field 2^32 - 5
+    /// Practical implementations may use the mapping algorithm
+    /// which was proposed by Crowley et al. and which allows an
+    /// efficient mapping of arbitarty binary data
+    /// to the 2^32 - 5 prime field.
     struct prime2325
     {
 
@@ -185,22 +189,54 @@ namespace fifi
 
         /// The prime number used i.e. (2^32 - 5)
         const static value_type prime = 4294967291U;
+
+        /// When use with the Crowley mapping algorithm
+        /// the maximum size in bytes a block can be
+        /// (2^29 - 1) * 4 to get bytes
+        const static uint32_t max_block_size = 2147483644U;
+
+        /// When use with the Crowley mapping algorithm
+        /// the maximum size in bytes a block can be
+        /// 2^29 - 1 data words (where every word is 32 bits).
+        const static uint32_t max_block_length = 536870911U;
+
+        /// @return the length of the prefix in bits needed to ensure
+        ///         that given the block length (i.e. the number of 32 bit
+        ///         values) there exists a bit prefix not available in the
+        ///         data
+        static uint32_t prefix_length(uint32_t block_length);
     };
 
-    /// Prime field 2^31 - 1
-    struct prime2311
+
+    inline uint32_t prime2325::prefix_length(uint32_t block_length)
     {
-        typedef uint32_t value_type;
+        assert(block_length > 0);
+        assert(block_length <= prime2325::max_block_length);
 
-        /// Pointer to a value_type
-        typedef value_type* value_ptr;
+        // In the absence of a log2 function we simply
+        // look for the highest top bit.
+        uint32_t topbit;
+        for(topbit = 31; topbit --> 0;)
+        {
+            if(block_length >> topbit)
+                break;
+        }
 
-        /// Reference to a value_type
-        typedef value_type& value_ref;
+        // How many values can be represented where the most
+        // significant bit is topbit
+        // Create a mask of 0000000..1111..1 where the MSBit
+        // is in the topbit position
+        uint32_t prefix_values = ~(~0 << topbit) + 1;
 
-        /// The prime number used i.e. (2^31 - 1)
-        const static value_type prime = 2147483647;
-    };
+        if(prefix_values > block_length)
+        {
+            return topbit;
+        }
+        else
+        {
+            return topbit + 1;
+        }
+    }
 
 }
 

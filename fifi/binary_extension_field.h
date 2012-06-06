@@ -40,9 +40,6 @@ namespace fifi
         /// Disable the prime fields
         BOOST_STATIC_ASSERT((boost::is_same<field_type, prime2325>::value == false));
 
-        /// Disable the prime fields
-        BOOST_STATIC_ASSERT((boost::is_same<field_type, prime2311>::value == false));
-
     public:
 
         /// Performs the field addition
