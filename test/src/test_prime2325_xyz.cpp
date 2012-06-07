@@ -8,6 +8,7 @@
 #include <fifi/optimal_prime.h>
 #include <fifi/field_types.h>
 #include <fifi/prime2325_bitmap.h>
+#include <fifi/prime2325_binary_search.h>
 
 #include <sak/storage.h>
 
@@ -110,6 +111,36 @@ TEST(test_prime2325, size_needed_bitmap)
     EXPECT_EQ(fifi::prime2325_bitmap::size_needed(254), 32U);
     EXPECT_EQ(fifi::prime2325_bitmap::size_needed(255), 32U);
 }
+
+
+/// Select a random value and set all but that one
+TEST(test_prime2325, find_prefix_binary_search)
+{
+    uint32_t block_size = 255;
+    std::vector<uint32_t> data(block_size);
+
+    uint8_t skip_value = rand() % block_size;
+
+    for(uint32_t i = 0; i < block_size; ++i)
+    {
+        if(i >= skip_value)
+        {
+            data[i] = (i+1) << 24;
+        }
+        else
+        {
+            data[i] = i << 24;
+        }
+    }
+
+    uint32_t missing_prefix = skip_value << 24;
+    fifi::prime2325_binary_search p(block_size, 4);
+
+    uint32_t prefix = p.find_prefix(sak::storage_list(data));
+
+    EXPECT_EQ(missing_prefix, prefix);
+}
+
 
 
 
