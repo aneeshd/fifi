@@ -168,6 +168,12 @@ namespace fifi
                 m_bitmap[index] = m_bitmap[index] | 1 << offset;
             }
 
+        /// Prints the identification of this algorithm
+        void print_info(std::ostream &out)
+            {
+                out << "bitmap, max_block_length=" << m_max_block_length;
+            }
+
         /// The maximum block length in elements of uint32_t
         uint32_t m_max_block_length;
 

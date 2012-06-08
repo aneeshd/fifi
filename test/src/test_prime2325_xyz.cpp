@@ -44,6 +44,8 @@ TEST(test_prime2325, prefix_length)
     EXPECT_EQ(fifi::prime2325::prefix_length(128), 8U);
     EXPECT_EQ(fifi::prime2325::prefix_length(255), 8U);
     EXPECT_EQ(fifi::prime2325::prefix_length(256), 9U);
+    EXPECT_EQ(fifi::prime2325::prefix_length(511), 9U);
+    EXPECT_EQ(fifi::prime2325::prefix_length(512), 10U);
     EXPECT_EQ(fifi::prime2325::prefix_length((1<<29) - 1), 29U);
 }
 
@@ -70,34 +72,104 @@ TEST(test_prime2325, prefix_bitmap)
     EXPECT_TRUE(prefix != 0x02000000U);
 }
 
-/// Select a random value and set all but that one
-TEST(test_prime2325, find_prefix)
+template<class Algorithm>
+void test_find_one_prefix(uint32_t prefix_bits)
 {
-    uint32_t block_size = 255;
-    std::vector<uint32_t> data(block_size);
+    // If we have x bits then 2^x gives us the possible
+    // values then we make block length 2^x - 1, then there
+    // is exactly one missing prefix
+    uint32_t block_length = (1 << prefix_bits) - 1;
 
-    uint8_t skip_value = rand() % block_size;
+    std::vector<uint32_t> data(block_length);
 
-    for(uint32_t i = 0; i < block_size; ++i)
+    uint8_t skip_value = rand() % block_length;
+    uint32_t prefix_length = fifi::prime2325::prefix_length(block_length);
+
+    EXPECT_EQ(prefix_bits, prefix_length);
+
+    uint32_t shift_prefix = 32 - prefix_length;
+
+    for(uint32_t i = 0; i < block_length; ++i)
     {
         if(i >= skip_value)
         {
-            data[i] = (i+1) << 24;
+            data[i] = (i+1) << shift_prefix;
         }
         else
         {
-            data[i] = i << 24;
+            data[i] = i << shift_prefix;
         }
     }
 
-    uint32_t missing_prefix = skip_value << 24;
+    uint32_t missing_prefix = skip_value << shift_prefix;
 
-    fifi::prime2325_bitmap p(block_size);
+    Algorithm p(block_length);
 
     uint32_t prefix = p.find_prefix(sak::storage_list(data));
 
     EXPECT_EQ(missing_prefix, prefix);
 }
+
+void test_find_one_prefix(uint32_t prefix_bits)
+{
+    test_find_one_prefix<fifi::prime2325_bitmap>(prefix_bits);
+    test_find_one_prefix<fifi::prime2325_binary_search>(prefix_bits);
+}
+
+/// Select a random value and set all but that one
+TEST(test_prime2325, find_one_prefix)
+{
+    test_find_one_prefix(7);
+    test_find_one_prefix(8);
+    test_find_one_prefix(9);
+    test_find_one_prefix(10);
+
+    uint32_t bits = (rand() % 20) + 1;
+    test_find_one_prefix(bits);
+}
+
+
+template<class Algorithm>
+void test_find_a_prefix(uint32_t block_length)
+{
+    std::vector<uint32_t> data(block_length);
+
+    for(uint32_t i = 0; i < block_length; ++i)
+    {
+        data[i] = rand();
+    }
+
+    Algorithm p(block_length);
+
+    uint32_t prefix = p.find_prefix(sak::storage_list(data));
+
+    for(uint32_t i = 0; i < block_length; ++i)
+    {
+        EXPECT_TRUE(data[i] != prefix);
+    }
+
+}
+
+
+void test_find_a_prefix(uint32_t block_length)
+{
+    test_find_a_prefix<fifi::prime2325_bitmap>(block_length);
+    test_find_a_prefix<fifi::prime2325_binary_search>(block_length);
+}
+
+
+/// For different block sizes find a prefix
+TEST(test_prime2325, find_a_prefix)
+{
+    test_find_a_prefix(7);
+    test_find_a_prefix(8);
+    test_find_a_prefix(9);
+    test_find_a_prefix(512);
+
+    uint32_t bits = (rand() % 200000) + 1;
+    test_find_a_prefix(bits);
+}
+
 
 /// Tests the size_needed function for the prime2325_bitmap
 TEST(test_prime2325, size_needed_bitmap)
@@ -110,37 +182,52 @@ TEST(test_prime2325, size_needed_bitmap)
     EXPECT_EQ(fifi::prime2325_bitmap::size_needed(128), 32U);
     EXPECT_EQ(fifi::prime2325_bitmap::size_needed(254), 32U);
     EXPECT_EQ(fifi::prime2325_bitmap::size_needed(255), 32U);
+
+    // 512 = need 10 bits = 1024 different field values, this gives
+    // 1024 / 8 = 128 bytes
+    EXPECT_EQ(fifi::prime2325_bitmap::size_needed(512), 128U);
 }
 
-
-/// Select a random value and set all but that one
-TEST(test_prime2325, find_prefix_binary_search)
+/// Tests the size_needed() function for the prime2325_binary_search
+TEST(test_prime2325, binary_search_size_needed)
 {
-    uint32_t block_size = 255;
-    std::vector<uint32_t> data(block_size);
+    // The size needed for the binary search depends on the
+    // block length, the number of passes and the size of the
+    // counter. In the below it is assumed that the counter is
+    // uint32_t if this changes in the future the test has to
+    // be updated
 
-    uint8_t skip_value = rand() % block_size;
+    uint32_t size_of_counter = sizeof(uint32_t);
 
-    for(uint32_t i = 0; i < block_size; ++i)
-    {
-        if(i >= skip_value)
-        {
-            data[i] = (i+1) << 24;
-        }
-        else
-        {
-            data[i] = i << 24;
-        }
-    }
+    // The prefix length for 127 is 7 so space needed will be
+    // 2^ceil(7/k_pass) * sizeof(uint32_t)
+    EXPECT_EQ(fifi::prime2325_binary_search::size_needed(127, 1),
+              128*size_of_counter);
 
-    uint32_t missing_prefix = skip_value << 24;
-    fifi::prime2325_binary_search p(block_size, 4);
+    EXPECT_EQ(fifi::prime2325_binary_search::size_needed(127, 2),
+              16*size_of_counter);
 
-    uint32_t prefix = p.find_prefix(sak::storage_list(data));
+    EXPECT_EQ(fifi::prime2325_binary_search::size_needed(127, 3),
+              8*size_of_counter);
 
-    EXPECT_EQ(missing_prefix, prefix);
+    EXPECT_EQ(fifi::prime2325_binary_search::size_needed(127, 4),
+              4*size_of_counter);
+
+    EXPECT_EQ(fifi::prime2325_binary_search::size_needed(127, 5),
+              4*size_of_counter);
+
+    EXPECT_EQ(fifi::prime2325_binary_search::size_needed(127, 6),
+              4*size_of_counter);
+
+    EXPECT_EQ(fifi::prime2325_binary_search::size_needed(127, 7),
+              2*size_of_counter);
+
+    EXPECT_EQ(fifi::prime2325_binary_search::size_needed(127, 8),
+              2*size_of_counter);
+
+    EXPECT_EQ(fifi::prime2325_binary_search::size_needed(127, 20),
+              2*size_of_counter);
 }
-
 
 
 
