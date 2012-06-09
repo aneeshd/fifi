@@ -38,34 +38,6 @@ namespace fifi
                 std::numeric_limits<binary::value_type>::digits) + 1;
     }
 
-
-    /// Returns the size in field elements needed to store a certain
-    /// number of bytes
-    /// @param bytes, the number of bytes to store
-    /// @return the number of field elements that need to be stored
-    template<class Field>
-    inline uint32_t bytes_to_elements(uint32_t bytes)
-    {
-        assert(bytes > 0);
-
-        uint32_t bytes_per_element = sizeof(typename Field::value_type);
-
-        // Make sure that the number of bytes is a multiple of element size
-        assert( (bytes % bytes_per_element) == 0);
-
-        return bytes / bytes_per_element;
-    }
-
-    // template<>
-    // inline uint32_t bytes_to_elements<binary>(uint32_t bytes)
-    // {
-    //     assert(bytes > 0);
-    //     assert(sizeof(binary::value_type) == 1);
-    //     assert(std::numeric_limits<binary::value_type>::digits == 8);
-    //     return bytes;
-    // }
-
-
     /// Usefull abstraction functions for accessing field elements if
     /// a mixed binary & other fields implementation is created.
     /// Returns the value of an element at the specific position in the
@@ -125,22 +97,6 @@ namespace fifi
             elements[array_index] &= ~mask;
         }
     }
-
-    /// Calculates the bytes needed to store a certain number of
-    /// finite field elements
-    template<uint32_t Elements, class Field>
-    struct elements
-    {
-        static const uint32_t size_needed =
-            sizeof(typename Field::value_type)*Elements;
-    };
-
-    template<uint32_t Elements>
-    struct elements<Elements, binary>
-    {
-        static const uint32_t size_needed =
-            ((Elements - 1) / std::numeric_limits<binary::value_type>::digits) + 1;
-    };
 }
 
 #endif
