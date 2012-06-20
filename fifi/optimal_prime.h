@@ -62,7 +62,9 @@ namespace fifi
     optimal_prime<prime2325>::multiply(value_type element_one,
                                        value_type element_two) const
     {
-        uint64_t c = (uint64_t)element_one * (uint64_t)element_two;
+        uint64_t c = static_cast<uint64_t>(element_one) *
+                     static_cast<uint64_t>(element_two);
+
         uint64_t h1 = c >> 32;
         uint64_t l1 = c & 0xffffffff;
 
@@ -75,7 +77,7 @@ namespace fifi
 
         c = c >= prime2325::prime ? c - prime2325::prime : c;
 
-        return (value_type)c;
+        return static_cast<value_type>(c);
     }
 
     /// Specialization for the (2^32 - 5) prime field

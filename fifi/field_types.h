@@ -6,7 +6,7 @@
 #ifndef FIFI_FIELD_TYPES_H
 #define FIFI_FIELD_TYPES_H
 
-#include <stdint.h>
+#include <cstdint>
 #include <cassert>
 #include <limits>
 
