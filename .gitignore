@@ -1,9 +1,27 @@
-.dependency_config
-.lock*
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Python
+*.pyc
+
+# For projects that use Waf for building: http://code.google.com/p/waf/
+.waf-*
+.lock-*
 build
 bundle_dependencies
-.waf*
-*.s
-*~
-\#*#
-*.out
+
+# Gnu Global tag files
+GPATH
+GRTAGS
+GSYMS
+GTAGS
