@@ -41,6 +41,11 @@ def options(opt):
             git_repository = 'git://github.com/steinwurf/sak.git',
             major_version = 2))
 
+    bundle.add_dependency(opt,
+        resolve.ResolveGitFollowMaster(
+            name = 'cxx-gauge',
+            git_repository = 'git://github.com/steinwurf/cxx-gauge.git'))
+
 
 def configure(conf):
 
@@ -52,7 +57,7 @@ def configure(conf):
         recurse_helper(conf, 'boost')
         recurse_helper(conf, 'gtest')
         recurse_helper(conf, 'sak')
-
+        recurse_helper(conf, 'cxx-gauge')
 
 def build(bld):
 
@@ -63,6 +68,7 @@ def build(bld):
         recurse_helper(bld, 'boost')
         recurse_helper(bld, 'gtest')
         recurse_helper(bld, 'sak')
+        recurse_helper(bld, 'cxx-gauge')
 
         # Only build test and benchmarks when executed from the
         # top-level wscript i.e. not when included as a dependency
