@@ -67,7 +67,7 @@ public:
 };
 
 
-BENCHMARK_F(run_prime2325_bitmap, find_prefix, 5)
+BENCHMARK_F(run_prime2325_bitmap, Prime2325Bitmap, FindPrefix, 5)
 {
 
     gauge::config_set cs = get_current_configuration();
@@ -128,7 +128,7 @@ public:
 };
 
 
-BENCHMARK_F(run_prime2325_binary_search, find_prefix, 5)
+BENCHMARK_F(run_prime2325_binary_search, Prime2325BinarySearch, FindPrefix, 5)
 {
 
     gauge::config_set cs = get_current_configuration();

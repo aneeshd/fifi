@@ -8,4 +8,4 @@ bld.program(
     cxxflags = bld.toolchain_cxx_flags() + ['-std=gnu++0x'],
     use      = ['gtest','fifi_includes','boost_includes',
                 'sak_includes', 'boost_timer', 'boost_system',
-                'boost_chrono'])
+                'boost_chrono', 'gauge'])
