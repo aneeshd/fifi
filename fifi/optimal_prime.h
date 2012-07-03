@@ -54,6 +54,9 @@ namespace fifi
         /// @param element_two the second field element
         /// @return the result after subtraction
         value_type subtract(value_type element_one, value_type element_two) const;
+
+        void add_lots(value_type *dest,
+                      const value_type *src, uint32_t length) const;
     };
 
     /// Specialization for the (2^32 - 5) prime field
@@ -130,8 +133,8 @@ namespace fifi
     optimal_prime<prime2325>::add(value_type element_one,
                                   value_type element_two) const
     {
-        int64_t sum = element_one + element_two;
-        sum = sum < prime2325::prime ? sum : sum - prime2325::prime;
+        int64_t sum = int64_t(element_one) + int64_t(element_two);
+        sum = sum > prime2325::prime ? sum - prime2325::prime : sum;
 
         return (value_type)sum;
     }
@@ -142,7 +145,7 @@ namespace fifi
     optimal_prime<prime2325>::subtract(value_type element_one,
                                        value_type element_two) const
     {
-        int64_t sum = element_one - element_two;
+        int64_t sum = int64_t(element_one) - int64_t(element_two);
         sum = sum < 0 ? sum + prime2325::prime : sum;
 
         return (value_type)sum;
