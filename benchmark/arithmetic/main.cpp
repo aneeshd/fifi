@@ -24,75 +24,110 @@
 #include <gauge/console_printer.h>
 #include <gauge/python_printer.h>
 
-std::vector<uint32_t> setup_lengths()
+/// @return the size of a vector in bytes
+std::vector<uint32_t> setup_sizes()
 {
-    std::vector<uint32_t> lengths = {100, 1000, 2000 };
-    return lengths;
+    std::vector<uint32_t> sizes = {100, 1000, 2000};
+    return sizes;
 }
 
+/// The working set - i.e. how many vectors are in the source
+/// and destination buffers respectively.
+///
+/// @return the number of vectors in each buffer
 std::vector<uint32_t> setup_vectors()
 {
-    std::vector<uint32_t> vectors = {100, 1000, 2000 };
+    std::vector<uint32_t> vectors = {16, 32, 64, 128, 256, 512, 1024 };
     return vectors;
 }
 
+/// The different operations to perform on the two buffers
+/// @return the operations to perform
 std::vector<std::string> setup_operations()
 {
     std::vector<std::string> operations =
         {
-            "linear dest[i] = dest[i] + src[i]",
-            "linear dest[i] = dest[i] - src[i]",
-            "linear dest[i] = dest[i] * src[i]",
-            "linear dest[i] = dest[i] + (constant * src[i])",
-            "linear dest[i] = dest[i] - (constant * src[i])",
-            "linear dest[i] = dest[i] * constant",
-            "random dest[i] = dest[i] + src[i]",
-            "random dest[i] = dest[i] - src[i]",
-            "random dest[i] = dest[i] * src[i]",
-            "random dest[i] = dest[i] + (constant * src[i])",
-            "random dest[i] = dest[i] - (constant * src[i])",
-            "random dest[i] = dest[i] * constant"
+            "dest[i] = dest[i] + src[i]",
+            "dest[i] = dest[i] - src[i]",
+            "dest[i] = dest[i] * src[i]",
+            "dest[i] = dest[i] + (constant * src[i])",
+            "dest[i] = dest[i] - (constant * src[i])",
+            "dest[i] = dest[i] * constant"
         };
 
     return operations;
 }
 
+/// Whether vectors are take from each buffer in a linear or
+/// random pattern
+/// @return the access pattern
+std::vector<std::string> setup_data_access()
+{
+    std::vector<std::string> data_access =
+        {
+            "random",
+            "linear"
+        };
 
+    return data_access;
+}
+
+
+/// Benchmark fixture for the arithmetic benchmark
 template<class FieldImpl>
 class arithmetic_setup : public gauge::time_benchmark
 {
 public:
 
+    /// The field implementation used
     typedef FieldImpl field_impl;
+
+    /// The field type e.g. binary, binary8 etc
     typedef typename field_impl::field_type field_type;
+
+    /// The value type of a field element
     typedef typename field_type::value_type value_type;
 
 public:
 
+    /// Constructor - creates all the benchmark configurations
     arithmetic_setup()
         {
-            std::vector<uint32_t> lengths = setup_lengths();
+            std::vector<uint32_t> sizes = setup_sizes();
             std::vector<uint32_t> vectors = setup_vectors();
             std::vector<std::string> operations = setup_operations();
+            std::vector<std::string> data_access = setup_data_access();
 
-            for(uint32_t i = 0; i < lengths.size(); ++i)
+            for(uint32_t i = 0; i < sizes.size(); ++i)
             {
                 for(uint32_t j = 0; j < vectors.size(); ++j)
                 {
                     for(uint32_t k = 0; k < operations.size(); ++k)
                     {
-                        gauge::config_set cs;
-                        cs.set_value<uint32_t>("vector_length", lengths[i]);
-                        cs.set_value<uint32_t>("vectors", vectors[j]);
-                        cs.set_value<std::string>("operation", operations[k]);
-                        cs.set_value<uint32_t>("element_size", sizeof(value_type));
-                        add_configuration(cs);
+                        for(uint32_t m = 0; m < data_access.size(); ++m)
+                        {
+                            gauge::config_set cs;
+                            cs.set_value<uint32_t>("vector_size", sizes[i]);
+
+                            // Based on the desired vector size (in bytes)
+                            // we calculate the length of the vector in
+                            // field elements
+                            assert((sizes[i] % sizeof(value_type)) == 0);
+                            uint32_t length = sizes[i] / sizeof(value_type);
+
+                            cs.set_value<uint32_t>("vector_length", length);
+                            cs.set_value<uint32_t>("vectors", vectors[j]);
+                            cs.set_value<std::string>("operation", operations[k]);
+                            cs.set_value<std::string>("data_access", data_access[m]);
+                            add_configuration(cs);
+                        }
                     }
                 }
             }
         }
 
-        void setup()
+    /// Prepares the data structures between each run
+    void setup()
         {
             gauge::config_set cs = get_current_configuration();
 
@@ -115,175 +150,160 @@ public:
             }
         }
 
-    // Tests the dest[i] = dest[i] OP src[i] functions
+    /// Tests the dest[i] = dest[i] OP src[i] functions
     template<class Function>
-    void run_linear_binary(Function f)
+    void run_binary(Function f)
         {
             gauge::config_set cs = get_current_configuration();
             uint32_t length = cs.get_value<uint32_t>("vector_length");
             uint32_t vectors = cs.get_value<uint32_t>("vectors");
+            std::string data_access = cs.get_value<std::string>("data_access");
 
-            RUN{
-                for(uint32_t i = 0; i < vectors; ++i)
-                {
-                    f(m_field, &(m_symbols_one[i][0]),
-                      &(m_symbols_two[i][0]), length);
+            if(data_access == "linear")
+            {
+                RUN{
+
+                    for(uint32_t i = 0; i < vectors; ++i)
+                    {
+                        f(m_field, &(m_symbols_one[i][0]),
+                          &(m_symbols_two[i][0]), length);
+                    }
+
                 }
+            }
+            else if(data_access == "random")
+            {
+                RUN{
+
+                    for(uint32_t i = 0; i < vectors; ++i)
+                    {
+                        uint32_t index_one = rand() % vectors;
+                        uint32_t index_two = rand() % vectors;
+
+                        f(m_field, &(m_symbols_one[index_one][0]),
+                          &(m_symbols_two[index_two][0]), length);
+                    }
+
+                }
+            }
+            else
+            {
+                assert(0);
             }
         }
 
-    // Tests the dest[i] = dest[i] OP (src[i] * constant) functions
+    /// Tests the dest[i] = dest[i] OP (src[i] * constant) functions
     template<class Function>
-    void run_linear_binary_constant(Function f)
+    void run_binary_constant(Function f)
         {
             gauge::config_set cs = get_current_configuration();
             uint32_t length = cs.get_value<uint32_t>("vector_length");
             uint32_t vectors = cs.get_value<uint32_t>("vectors");
+            std::string data_access = cs.get_value<std::string>("data_access");
 
             value_type constant = rand() % field_type::max_value;
 
-            RUN{
-                for(uint32_t i = 0; i < vectors; ++i)
-                {
-                    f(m_field, constant, &(m_symbols_one[i][0]),
-                      &(m_symbols_two[i][0]), length);
+            if(data_access == "linear")
+            {
+                // Clock is ticking
+                RUN{
+                    for(uint32_t i = 0; i < vectors; ++i)
+                    {
+                        f(m_field, constant, &(m_symbols_one[i][0]),
+                          &(m_symbols_two[i][0]), length);
+                    }
                 }
+
+            }
+            else if(data_access == "random")
+            {
+                // Clock is ticking
+                RUN{
+                    for(uint32_t i = 0; i < vectors; ++i)
+                    {
+                        uint32_t index_one = rand() % vectors;
+                        uint32_t index_two = rand() % vectors;
+
+                        f(m_field, constant, &(m_symbols_one[index_one][0]),
+                          &(m_symbols_two[index_two][0]), length);
+                    }
+                }
+
+            }
+            else
+            {
+                assert(0);
             }
         }
 
-    // Tests the dest[i] = dest[i] * constant functions
+    /// Tests the dest[i] = dest[i] * constant functions
     template<class Function>
-    void run_linear_unary_constant(Function f)
+    void run_unary_constant(Function f)
         {
             gauge::config_set cs = get_current_configuration();
             uint32_t length = cs.get_value<uint32_t>("vector_length");
             uint32_t vectors = cs.get_value<uint32_t>("vectors");
+            std::string data_access = cs.get_value<std::string>("data_access");
 
             value_type constant = rand() % field_type::max_value;
 
-            RUN{
-                for(uint32_t i = 0; i < vectors; ++i)
-                {
-                    f(m_field, constant, &(m_symbols_one[i][0]), length);
+            if(data_access == "linear")
+            {
+
+                RUN{
+                    for(uint32_t i = 0; i < vectors; ++i)
+                    {
+                        f(m_field, constant, &(m_symbols_one[i][0]), length);
+                    }
                 }
+            }
+            else if(data_access == "random")
+            {
+                RUN{
+                    for(uint32_t i = 0; i < vectors; ++i)
+                    {
+                        uint32_t index = rand() % vectors;
+
+                        f(m_field, constant, &(m_symbols_one[index][0]), length);
+                    }
+                }
+
+            }
+            else
+            {
+                assert(0);
             }
         }
 
-        // Tests the dest[i] = dest[i] OP src[i] functions
-    template<class Function>
-    void run_random_binary(Function f)
-        {
-            gauge::config_set cs = get_current_configuration();
-            uint32_t length = cs.get_value<uint32_t>("vector_length");
-            uint32_t vectors = cs.get_value<uint32_t>("vectors");
-
-            RUN{
-                for(uint32_t i = 0; i < vectors; ++i)
-                {
-                    uint32_t index_one = rand() % vectors;
-                    uint32_t index_two = rand() % vectors;
-
-                    f(m_field, &(m_symbols_one[index_one][0]),
-                      &(m_symbols_two[index_two][0]), length);
-                }
-            }
-        }
-
-    // Tests the dest[i] = dest[i] OP (src[i] * constant) functions
-    template<class Function>
-    void run_random_binary_constant(Function f)
-        {
-            gauge::config_set cs = get_current_configuration();
-            uint32_t length = cs.get_value<uint32_t>("vector_length");
-            uint32_t vectors = cs.get_value<uint32_t>("vectors");
-
-            value_type constant = rand() % field_type::max_value;
-
-            RUN{
-                for(uint32_t i = 0; i < vectors; ++i)
-                {
-                    uint32_t index_one = rand() % vectors;
-                    uint32_t index_two = rand() % vectors;
-
-                    f(m_field, constant, &(m_symbols_one[index_one][0]),
-                      &(m_symbols_two[index_two][0]), length);
-                }
-            }
-        }
-
-    // Tests the dest[i] = dest[i] * constant functions
-    template<class Function>
-    void run_random_unary_constant(Function f)
-        {
-            gauge::config_set cs = get_current_configuration();
-            uint32_t length = cs.get_value<uint32_t>("vector_length");
-            uint32_t vectors = cs.get_value<uint32_t>("vectors");
-
-            value_type constant = rand() % field_type::max_value;
-
-            RUN{
-                for(uint32_t i = 0; i < vectors; ++i)
-                {
-                    uint32_t index = rand() % vectors;
-
-                    f(m_field, constant, &(m_symbols_one[index][0]), length);
-                }
-            }
-        }
-
-
+    /// Starts a new benchmark according to the current configuration
     void benchmark()
         {
             gauge::config_set cs = get_current_configuration();
             std::string operation = cs.get_value<std::string>("operation");
 
-            if(operation == "linear dest[i] = dest[i] + src[i]")
+            if(operation == "dest[i] = dest[i] + src[i]")
             {
-                run_linear_binary(&fifi::add<field_impl>);
+                run_binary(&fifi::add<field_impl>);
             }
-            else if(operation == "linear dest[i] = dest[i] - src[i]")
+            else if(operation == "dest[i] = dest[i] - src[i]")
             {
-                run_linear_binary(&fifi::subtract<field_impl>);
+                run_binary(&fifi::subtract<field_impl>);
             }
-            else if(operation == "linear dest[i] = dest[i] * src[i]")
+            else if(operation == "dest[i] = dest[i] * src[i]")
             {
-                run_linear_binary(&fifi::multiply<field_impl>);
+                run_binary(&fifi::multiply<field_impl>);
             }
-            else if(operation == "linear dest[i] = dest[i] + (constant * src[i])")
+            else if(operation == "dest[i] = dest[i] + (constant * src[i])")
             {
-                run_linear_binary_constant(&fifi::multiply_add<field_impl>);
+                run_binary_constant(&fifi::multiply_add<field_impl>);
             }
-            else if(operation == "linear dest[i] = dest[i] - (constant * src[i])")
+            else if(operation == "dest[i] = dest[i] - (constant * src[i])")
             {
-                run_linear_binary_constant(&fifi::multiply_subtract<field_impl>);
+                run_binary_constant(&fifi::multiply_subtract<field_impl>);
             }
-            else if(operation == "linear dest[i] = dest[i] * constant")
+            else if(operation == "dest[i] = dest[i] * constant")
             {
-                run_linear_unary_constant(&fifi::multiply_constant<field_impl>);
-            }
-            else if(operation == "random dest[i] = dest[i] + src[i]")
-            {
-                run_random_binary(&fifi::add<field_impl>);
-            }
-            else if(operation == "random dest[i] = dest[i] - src[i]")
-            {
-                run_random_binary(&fifi::subtract<field_impl>);
-            }
-            else if(operation == "random dest[i] = dest[i] * src[i]")
-            {
-                run_random_binary(&fifi::multiply<field_impl>);
-            }
-            else if(operation == "random dest[i] = dest[i] + (constant * src[i])")
-            {
-                run_random_binary_constant(&fifi::multiply_add<field_impl>);
-            }
-            else if(operation == "random dest[i] = dest[i] - (constant * src[i])")
-            {
-                run_random_binary_constant(&fifi::multiply_subtract<field_impl>);
-            }
-            else if(operation == "random dest[i] = dest[i] * constant")
-            {
-                run_random_unary_constant(&fifi::multiply_constant<field_impl>);
+                run_unary_constant(&fifi::multiply_constant<field_impl>);
             }
             else
             {
@@ -293,9 +313,13 @@ public:
 
 protected:
 
+    /// The field implementation
     field_impl m_field;
 
+    /// The first buffer of vectors
     std::vector< std::vector<value_type> > m_symbols_one;
+
+    /// The second buffer of vectors
     std::vector< std::vector<value_type> > m_symbols_two;
 
 };
@@ -375,247 +399,6 @@ BENCHMARK_F(setup_optimal_prime2325, Arithmetic, OptimalPrime2325, 5)
 }
 
 
-
-
-
-
-// // Tests the dest[i] = dest[i] OP (src[i] * constant) funcions
-// // Where OP can be +,-,*
-// template<class Field>
-// void invoke_dest_op_src_const(const std::string &name,
-//                               long double target_time,
-//                               uint32_t vectors, uint32_t vector_length,
-//                               const typename run<Field>::dest_op_src_const &function)
-// {
-//     std::cout << "running " << name << std::endl;
-
-//     typedef typename Field::value_type value_type;
-
-//     std::vector< std::vector<value_type> > symbols;
-//     symbols.resize(vectors);
-
-//     for(uint32_t i = 0; i < symbols.size(); ++i)
-//     {
-//         symbols[i].resize(vector_length);
-//         for(uint32_t j = 0; j < vector_length; ++j)
-//         {
-//             symbols[i][j] = rand() %
-//                 std::numeric_limits<value_type>::max();
-//         }
-//     }
-
-//     Field field;
-
-//     // Warm up
-//     sak::code_warmup warmup;
-
-//     while(!warmup.done())
-//     {
-//         for(uint32_t i = 0; i < vectors; ++i)
-//         {
-
-//             uint32_t index_one = rand() % vectors;
-//             uint32_t index_two = rand() % vectors;
-
-//             value_type constant = rand() %
-//                 std::numeric_limits<value_type>::max();
-
-//             function(field, constant, &(symbols[index_one][0]),
-//                      &(symbols[index_two][0]), vector_length);
-//         }
-
-//         warmup.next_iteration();
-//     }
-
-//     uint64_t needed_iterations = warmup.iterations(target_time);
-
-//     boost::timer::cpu_timer timer;
-//     timer.start();
-
-//     for(uint64_t j = 0; j < needed_iterations; ++j)
-//     {
-
-//         for(uint32_t i = 0; i < vectors; ++i)
-//         {
-
-//             uint32_t index_one = rand() % vectors;
-//             uint32_t index_two = rand() % vectors;
-
-//             value_type constant = rand() %
-//                 std::numeric_limits<value_type>::max();
-
-
-//             function(field, constant, &(symbols[index_one][0]),
-//                       &(symbols[index_two][0]), vector_length);
-
-//         }
-
-//     }
-
-//     timer.stop();
-
-//     long double total_sec = sak::seconds_elapsed(timer);
-
-//     // Amount of data processed
-//     long double bytes = static_cast<long double>(
-//         needed_iterations * vectors * vector_length * sizeof(value_type));
-
-//     long double megs = bytes / 1000000.0;
-//     long double megs_per_second = megs / total_sec;
-
-//     std::cout << "Test time " << total_sec << " [s]" << std::endl;
-//     std::cout << "MB/s = " << megs_per_second << std::endl;
-
-// }
-
-
-// // Tests the dest[i] = dest[i] * constant functions
-// // Where OP can be +,-,*
-// template<class Field>
-// void invoke_dest_const(const std::string &name,
-//                        long double target_time,
-//                        uint32_t vectors, uint32_t vector_length,
-//                        const typename run<Field>::dest_const &function)
-// {
-//     std::cout << "running " << name << std::endl;
-
-//     typedef typename Field::value_type value_type;
-
-//     std::vector< std::vector<value_type> > symbols;
-//     symbols.resize(vectors);
-
-//     for(uint32_t i = 0; i < symbols.size(); ++i)
-//     {
-//         symbols[i].resize(vector_length);
-//         for(uint32_t j = 0; j < vector_length; ++j)
-//         {
-//             symbols[i][j] = rand() %
-//                 std::numeric_limits<value_type>::max();
-//         }
-//     }
-
-//     Field field;
-
-//     // Warm up
-//     sak::code_warmup warmup;
-
-//     while(!warmup.done())
-//     {
-//         for(uint32_t i = 0; i < vectors; ++i)
-//         {
-
-//             uint32_t index = rand() % vectors;
-
-//             value_type constant = rand() %
-//                 std::numeric_limits<value_type>::max();
-
-//             function(field, constant, &(symbols[index][0]),
-//                      vector_length);
-//         }
-
-//         warmup.next_iteration();
-//     }
-
-//     uint64_t needed_iterations = warmup.iterations(target_time);
-
-//     boost::timer::cpu_timer timer;
-//     timer.start();
-
-//     for(uint64_t j = 0; j < needed_iterations; ++j)
-//     {
-
-//         for(uint32_t i = 0; i < vectors; ++i)
-//         {
-
-//             uint32_t index = rand() % vectors;
-
-//             value_type constant = rand() %
-//                 std::numeric_limits<value_type>::max();
-
-//             function(field, constant, &(symbols[index][0]),
-//                      vector_length);
-
-//         }
-
-//     }
-
-//     timer.stop();
-
-//     long double total_sec = sak::seconds_elapsed(timer);
-
-
-//     // Amount of data processed
-//     long double bytes = static_cast<long double>(
-//         needed_iterations * vectors * vector_length * sizeof(value_type));
-
-//     long double megs = bytes / 1000000.0;
-//     long double megs_per_second = megs / total_sec;
-
-//     std::cout << "Test time " << total_sec << " [s]" << std::endl;
-//     std::cout << "MB/s = " << megs_per_second << std::endl;
-
-// }
-
-
-// // Helper function used to invoke the different arithmetic
-// // operations for each field implementation.
-// template<class Field>
-// void benchmark(const std::string &name)
-// {
-//     uint32_t vectors = 100;
-//     uint32_t vector_length = 1400;
-
-//     long double time = 5.0;
-
-//     typedef Field field_type;
-
-//     {
-//         typename run<field_type>::dest_op_src function;
-
-//         function = &fifi::add<field_type>;
-
-//         invoke_dest_op_src<field_type>(
-//             name + " add", time, vectors, vector_length, function);
-
-//         function = &fifi::subtract<field_type>;
-
-//         invoke_dest_op_src<field_type>(
-//             name + " subtract", time, vectors, vector_length, function);
-
-//         function = &fifi::multiply<field_type>;
-
-//         invoke_dest_op_src<field_type>(
-//             name + " multiply", time, vectors, vector_length, function);
-//     }
-
-//     {
-
-//         typename run<field_type>::dest_op_src_const function;
-
-//         function = &fifi::multiply_add<field_type>;
-
-//         invoke_dest_op_src_const<field_type>(
-//             name + " multiply_add", time, vectors, vector_length, function);
-
-//         function = &fifi::multiply_subtract<field_type>;
-
-//         invoke_dest_op_src_const<field_type>(
-//             name + " multiply_subtract", time, vectors, vector_length, function);
-//     }
-
-//     {
-
-//         typename run<field_type>::dest_const function;
-
-//         function = &fifi::multiply_constant<field_type>;
-
-//         invoke_dest_const<field_type>(
-//             name + " multiply_constant", time, vectors, vector_length, function);
-
-//     }
-
-// }
-
 int main(int argc, const char* argv[])
 {
 
@@ -627,30 +410,6 @@ int main(int argc, const char* argv[])
         std::make_shared<gauge::python_printer>("out.py"));
 
     gauge::runner::run_benchmarks(argc, argv);
-
-    // benchmark< fifi::simple_online<fifi::binary8> >(
-    //     "Simple Online Binary8");
-
-    // benchmark< fifi::simple_online<fifi::binary16> >(
-    //     "Simple Online Binary16");
-
-    // benchmark< fifi::full_table<fifi::binary8> >(
-    //     "Full Table Binary8");
-
-    // benchmark<fifi::log_table<fifi::binary8> >(
-    //     "Log Table Binary8");
-
-    // benchmark<fifi::log_table<fifi::binary16> >(
-    //     "Log Table Binary16");
-
-    // benchmark<fifi::extended_log_table<fifi::binary8> >(
-    //     "Extended Log Table Binary8");
-
-    // benchmark<fifi::extended_log_table<fifi::binary16> >(
-    //     "Extended Log Table Binary16");
-
-    // benchmark<fifi::optimal_prime<fifi::prime2325> >(
-    //     "Optimal Prime Prime2325");
 
     return 0;
 }
