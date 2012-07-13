@@ -27,7 +27,7 @@
 /// @return the size of a vector in bytes
 std::vector<uint32_t> setup_sizes()
 {
-    std::vector<uint32_t> sizes = {100, 1000, 2000};
+    std::vector<uint32_t> sizes = {1400};//{100, 1400, 2000};
     return sizes;
 }
 
@@ -134,13 +134,19 @@ public:
             uint32_t length = cs.get_value<uint32_t>("vector_length");
             uint32_t vectors = cs.get_value<uint32_t>("vectors");
 
-            m_symbols_one.resize(vectors);
-            m_symbols_two.resize(vectors);
+            if(vectors != m_symbols_one.size())
+            {
+                m_symbols_one.resize(vectors);
+                m_symbols_two.resize(vectors);
+            }
 
             for(uint32_t j = 0; j < vectors; ++j)
             {
-                m_symbols_one[j].resize(length);
-                m_symbols_two[j].resize(length);
+                if(length != m_symbols_one[j].size())
+                {
+                    m_symbols_one[j].resize(length);
+                    m_symbols_two[j].resize(length);
+                }
 
                 for(uint32_t i = 0; i < length; ++i)
                 {
@@ -148,6 +154,7 @@ public:
                     m_symbols_two[j][i] = rand();
                 }
             }
+
         }
 
     /// Tests the dest[i] = dest[i] OP src[i] functions
@@ -201,12 +208,13 @@ public:
             uint32_t vectors = cs.get_value<uint32_t>("vectors");
             std::string data_access = cs.get_value<std::string>("data_access");
 
-            value_type constant = rand() % field_type::max_value;
-
             if(data_access == "linear")
             {
                 // Clock is ticking
                 RUN{
+
+                    value_type constant = rand() % field_type::max_value;
+
                     for(uint32_t i = 0; i < vectors; ++i)
                     {
                         f(m_field, constant, &(m_symbols_one[i][0]),
@@ -219,6 +227,9 @@ public:
             {
                 // Clock is ticking
                 RUN{
+
+                    value_type constant = rand() % field_type::max_value;
+
                     for(uint32_t i = 0; i < vectors; ++i)
                     {
                         uint32_t index_one = rand() % vectors;
@@ -245,12 +256,13 @@ public:
             uint32_t vectors = cs.get_value<uint32_t>("vectors");
             std::string data_access = cs.get_value<std::string>("data_access");
 
-            value_type constant = rand() % field_type::max_value;
-
             if(data_access == "linear")
             {
 
                 RUN{
+
+                    value_type constant = rand() % field_type::max_value;
+
                     for(uint32_t i = 0; i < vectors; ++i)
                     {
                         f(m_field, constant, &(m_symbols_one[i][0]), length);
@@ -260,6 +272,9 @@ public:
             else if(data_access == "random")
             {
                 RUN{
+
+                    value_type constant = rand() % field_type::max_value;
+
                     for(uint32_t i = 0; i < vectors; ++i)
                     {
                         uint32_t index = rand() % vectors;
