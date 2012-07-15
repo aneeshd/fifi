@@ -4,6 +4,12 @@ News for fifi
 This file lists the major changes between versions. For a more detailed list
 of every change, see the Git log.
 
+tbd (master)
+------------
+* Switched c++11 compiler flag on per default
+* Adding optimal prime field
+* Moving benchmarks to the gauge tool
+
 2.0.0
 -----
 * Updated the Waf build system to handle dependencies better. The new tools
