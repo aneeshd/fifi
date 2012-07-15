@@ -316,34 +316,29 @@ namespace fifi
     /// after multiplying with a constant.
     ///
     /// @see generic version of multiply_subtract(...) for parameters
-    template<class Field>
-    inline typename disable_if_binary<Field>::type
-    multiply_subtract(const full_table<Field> &field,
-                      typename Field::value_type constant,
-                      typename Field::value_type * __restrict dest,
-                      const typename Field::value_type * __restrict src,
+    template<>
+    inline void
+    multiply_subtract(const full_table<binary8> &field,
+                      full_table<binary8>::value_type constant,
+                      full_table<binary8>::value_type * __restrict dest,
+                      const full_table<binary8>::value_type * __restrict src,
                       uint32_t length)
     {
 	assert(dest != 0);
 	assert(src != 0);
 	assert(length > 0);
 
-        // This function does not work for the binary field
-        // since the multiply function does not behave correctly
-        // so make sure that we do not use it.
-        BOOST_STATIC_ASSERT((is_binary<Field>::value == false));
-
 	if(constant == 0)
 	    return;
 
-        typedef typename Field::value_type value_type;
+        typedef full_table<binary8>::value_type value_type;
 
         // In the multiplication table the constant is used to indentify
         // the row number. Therefore the constant is used as an offset,
         // and all possible results can then be accessed on the following
         // number of indices indices.
         const value_type *offset =
-            &field.m_multtable[(constant << Field::degree)];
+            &field.m_multtable[(constant << binary8::degree)];
 
 	for(uint32_t i = 0; i < length; ++i)
 	{

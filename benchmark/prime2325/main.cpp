@@ -29,7 +29,11 @@ std::vector<uint32_t> block_lengths()
 
 std::vector<uint32_t> k_values()
 {
-    std::vector<uint32_t> k = {1, 2, 3, 4};
+    std::vector<uint32_t> k;
+    k.push_back(1);
+    k.push_back(2);
+    k.push_back(3);
+    k.push_back(4);
     return k;
 }
 
