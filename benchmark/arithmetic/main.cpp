@@ -27,7 +27,10 @@
 /// @return the size of a vector in bytes
 std::vector<uint32_t> setup_sizes()
 {
-    std::vector<uint32_t> sizes {100, 1400, 2000};
+    std::vector<uint32_t> sizes;
+    sizes.push_back(100);
+    sizes.push_back(1400);
+    sizes.push_back(2000);
     return sizes;
 }
 
@@ -37,7 +40,15 @@ std::vector<uint32_t> setup_sizes()
 /// @return the number of vectors in each buffer
 std::vector<uint32_t> setup_vectors()
 {
-    std::vector<uint32_t> vectors {16, 32, 64, 128, 256, 512, 1024 };
+    std::vector<uint32_t> vectors;
+    vectors.push_back(16);
+    vectors.push_back(32);
+    vectors.push_back(64);
+    vectors.push_back(128);
+    vectors.push_back(256);
+    vectors.push_back(512);
+    vectors.push_back(1024);
+
     return vectors;
 }
 
@@ -45,15 +56,13 @@ std::vector<uint32_t> setup_vectors()
 /// @return the operations to perform
 std::vector<std::string> setup_operations()
 {
-    std::vector<std::string> operations
-        {
-            "dest[i] = dest[i] + src[i]",
-            "dest[i] = dest[i] - src[i]",
-            "dest[i] = dest[i] * src[i]",
-            "dest[i] = dest[i] + (constant * src[i])",
-            "dest[i] = dest[i] - (constant * src[i])",
-            "dest[i] = dest[i] * constant"
-        };
+    std::vector<std::string> operations;
+    operations.push_back("dest[i] = dest[i] + src[i]");
+    operations.push_back("dest[i] = dest[i] - src[i]");
+    operations.push_back("dest[i] = dest[i] * src[i]");
+    operations.push_back("dest[i] = dest[i] + (constant * src[i])");
+    operations.push_back("dest[i] = dest[i] - (constant * src[i])");
+    operations.push_back("dest[i] = dest[i] * constant");
 
     return operations;
 }
@@ -63,11 +72,9 @@ std::vector<std::string> setup_operations()
 /// @return the access pattern
 std::vector<std::string> setup_data_access()
 {
-    std::vector<std::string> data_access
-        {
-            "random",
-            "linear"
-        };
+    std::vector<std::string> data_access;
+    data_access.push_back("random");
+    data_access.push_back("linear");
 
     return data_access;
 }
