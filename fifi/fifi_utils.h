@@ -11,6 +11,22 @@
 namespace fifi
 {
 
+    /// Returns the number of value_type elements needed to store
+    /// a certain number of bytes
+    /// @param bytes, the number of bytes to store
+    /// @return the number of field elements that need to be stored
+    template<class Field>
+    inline uint32_t elements_needed(uint32_t bytes)
+    {
+        assert(bytes > 0);
+
+        uint32_t bytes_per_element = sizeof(typename Field::value_type);
+
+        // Make sure that the number of bytes is a multiple of element size
+        assert( (bytes % bytes_per_element) == 0);
+        return bytes / bytes_per_element;
+    }
+
     /// Returns the size in bytes needed to store a certain
     /// number of elements
     /// @param elements, the number of elements to store
