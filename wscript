@@ -35,16 +35,11 @@ def options(opt):
             git_repository = 'git://github.com/steinwurf/external-boost.git',
             major_version = 1))
 
-    # bundle.add_dependency(opt,
-    #     resolve.ResolveGitMajorVersion(
-    #         name = 'sak',
-    #         git_repository = 'git://github.com/steinwurf/sak.git',
-    #         major_version = 2))
-
     bundle.add_dependency(opt,
-        resolve.ResolveGitFollowMaster(
+        resolve.ResolveGitMajorVersion(
             name = 'sak',
-            git_repository = 'git://github.com/steinwurf/sak.git'))
+            git_repository = 'git://github.com/steinwurf/sak.git',
+            major_version = 3))
 
     bundle.add_dependency(opt,
         resolve.ResolveGitFollowMaster(
