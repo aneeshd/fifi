@@ -22,23 +22,12 @@
 
 std::vector<uint32_t> setup_lengths()
 {
-    std::vector<uint32_t> lengths = {100, 1000, 2000 };
+    std::vector<uint32_t> lengths;
+    lengths.push_back(100);
+    lengths.push_back(1000);
+    lengths.push_back(2000);
     return lengths;
 }
-
-
-// std::vector<std::string> setup_operations()
-// {
-//     std::vector<std::string> operations =
-//         {
-//             "multiply",
-//             "divide",
-//             "add",
-//             "subtract"
-//         };
-
-//     return operations;
-// }
 
 
 
