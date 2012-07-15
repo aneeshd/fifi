@@ -35,10 +35,11 @@ namespace fifi
     /// @param length the size of destination and source buffers
     ///        in value_type elements
     template<class FieldImpl>
-    inline void add(const FieldImpl &field,
-                    typename FieldImpl::value_type *dest,
-                    const typename FieldImpl::value_type *src,
-                    uint32_t length)
+    inline void
+    add(const FieldImpl &field,
+        typename FieldImpl::value_type * __restrict dest,
+        const typename FieldImpl::value_type * __restrict src,
+        uint32_t length)
     {
 	assert(dest != 0);
 	assert(src != 0);
@@ -46,7 +47,9 @@ namespace fifi
 
 	for(uint32_t i = 0; i < length; ++i)
 	{
-	    dest[i] = field.add(dest[i], src[i]);
+            typename FieldImpl::value_type a = dest[i];
+            typename FieldImpl::value_type b = src[i];
+	    dest[i] = field.add(a, b);
 	}
     }
 
@@ -59,10 +62,11 @@ namespace fifi
     /// @param length the size of destination and source buffers
     ///        in value_type elements
     template<class FieldImpl>
-    inline void subtract(const FieldImpl &field,
-                         typename FieldImpl::value_type *dest,
-                         const typename FieldImpl::value_type *src,
-                         uint32_t length)
+    inline void
+    subtract(const FieldImpl &field,
+             typename FieldImpl::value_type * __restrict dest,
+             const typename FieldImpl::value_type * __restrict src,
+             uint32_t length)
     {
 	assert(dest != 0);
 	assert(src != 0);
@@ -83,10 +87,11 @@ namespace fifi
     /// @param length the size of destination and source buffers
     ///        in value_type elements
     template<class FieldImpl>
-    inline void multiply(const FieldImpl &field,
-                         typename FieldImpl::value_type *dest,
-                         const typename FieldImpl::value_type *src,
-                         uint32_t length)
+    inline void
+    multiply(const FieldImpl &field,
+             typename FieldImpl::value_type * __restrict dest,
+             const typename FieldImpl::value_type * __restrict src,
+             uint32_t length)
     {
 	assert(dest != 0);
 	assert(src != 0);
@@ -107,10 +112,11 @@ namespace fifi
     /// @param length the size of destination and source buffers
     ///        in value_type elements
     template<class FieldImpl>
-    inline void multiply_constant(const FieldImpl &field,
-                                  typename FieldImpl::value_type constant,
-                                  typename FieldImpl::value_type *dest,
-                                  uint32_t length)
+    inline void
+    multiply_constant(const FieldImpl &field,
+                      typename FieldImpl::value_type constant,
+                      typename FieldImpl::value_type *dest,
+                      uint32_t length)
     {
 	assert(dest != 0);
 	assert(length > 0);
@@ -134,10 +140,11 @@ namespace fifi
     ///
     /// @see generic version of multiply_constant(...) for parameters
     template<template <class> class FieldImpl>
-    inline void multiply_constant(const FieldImpl<binary> &/*field*/,
-                                  typename binary::value_type constant,
-                                  typename binary::value_type *dest,
-                                  uint32_t length)
+    inline void
+    multiply_constant(const FieldImpl<binary> &/*field*/,
+                      typename binary::value_type constant,
+                      typename binary::value_type *dest,
+                      uint32_t length)
     {
 	assert(dest != 0);
 	assert(length > 0);
@@ -163,11 +170,12 @@ namespace fifi
     /// @param length the size of destination and source buffers
     ///        in value_type elements
     template<class FieldImpl>
-    inline void multiply_add(const FieldImpl &field,
-                             typename FieldImpl::value_type constant,
-                             typename FieldImpl::value_type *dest,
-                             const typename FieldImpl::value_type *src,
-                             uint32_t length)
+    inline void
+    multiply_add(const FieldImpl &field,
+                 typename FieldImpl::value_type constant,
+                 typename FieldImpl::value_type * __restrict dest,
+                 const typename FieldImpl::value_type * __restrict src,
+                 uint32_t length)
     {
 	assert(dest != 0);
 	assert(src != 0);
@@ -240,8 +248,8 @@ namespace fifi
     template<template<class> class FieldImpl>
     inline void multiply_add(const FieldImpl<binary> &field,
                              typename binary::value_type constant,
-                             typename binary::value_type *dest,
-                             const typename binary::value_type *src,
+                             typename binary::value_type * __restrict dest,
+                             const typename binary::value_type * __restrict src,
                              uint32_t length)
     {
 	assert(dest != 0);
@@ -273,11 +281,12 @@ namespace fifi
     /// @param length the size of destination and source buffers
     ///        in value_type elements
     template<class FieldImpl>
-    inline void multiply_subtract(const FieldImpl &field,
-                                  typename FieldImpl::value_type constant,
-                                  typename FieldImpl::value_type *dest,
-                                  const typename FieldImpl::value_type *src,
-                                  uint32_t length)
+    inline void
+    multiply_subtract(const FieldImpl &field,
+                      typename FieldImpl::value_type constant,
+                      typename FieldImpl::value_type * __restrict dest,
+                      const typename FieldImpl::value_type * __restrict src,
+                      uint32_t length)
     {
 	assert(dest != 0);
 	assert(src != 0);
@@ -311,8 +320,8 @@ namespace fifi
     inline typename disable_if_binary<Field>::type
     multiply_subtract(const full_table<Field> &field,
                       typename Field::value_type constant,
-                      typename Field::value_type *dest,
-                      const typename Field::value_type *src,
+                      typename Field::value_type * __restrict dest,
+                      const typename Field::value_type * __restrict src,
                       uint32_t length)
     {
 	assert(dest != 0);
@@ -348,11 +357,12 @@ namespace fifi
     ///
     /// @see generic version of multiply_subtract(...) for parameters
     template<template<class> class FieldImpl>
-    inline void multiply_subtract(const FieldImpl<binary> &field,
-                           typename binary::value_type constant,
-                           typename binary::value_type *dest,
-                           const typename binary::value_type *src,
-                           uint32_t length)
+    inline void
+    multiply_subtract(const FieldImpl<binary> &field,
+                      typename binary::value_type constant,
+                      typename binary::value_type * __restrict dest,
+                      const typename binary::value_type * __restrict src,
+                      uint32_t length)
     {
 	assert(dest != 0);
 	assert(src != 0);
