@@ -27,7 +27,7 @@
 /// @return the size of a vector in bytes
 std::vector<uint32_t> setup_sizes()
 {
-    std::vector<uint32_t> sizes = {1400};//{100, 1400, 2000};
+    std::vector<uint32_t> sizes {100, 1400, 2000};
     return sizes;
 }
 
@@ -37,7 +37,7 @@ std::vector<uint32_t> setup_sizes()
 /// @return the number of vectors in each buffer
 std::vector<uint32_t> setup_vectors()
 {
-    std::vector<uint32_t> vectors = {16, 32, 64, 128, 256, 512, 1024 };
+    std::vector<uint32_t> vectors {16, 32, 64, 128, 256, 512, 1024 };
     return vectors;
 }
 
@@ -45,7 +45,7 @@ std::vector<uint32_t> setup_vectors()
 /// @return the operations to perform
 std::vector<std::string> setup_operations()
 {
-    std::vector<std::string> operations =
+    std::vector<std::string> operations
         {
             "dest[i] = dest[i] + src[i]",
             "dest[i] = dest[i] - src[i]",
@@ -63,7 +63,7 @@ std::vector<std::string> setup_operations()
 /// @return the access pattern
 std::vector<std::string> setup_data_access()
 {
-    std::vector<std::string> data_access =
+    std::vector<std::string> data_access
         {
             "random",
             "linear"
