@@ -13,6 +13,7 @@
 #include "simple_online.h"
 #include "full_table.h"
 #include "extended_log_table.h"
+#include "optimal_prime.h"
 
 namespace fifi
 {
@@ -45,6 +46,14 @@ namespace fifi
     {
         typedef extended_log_table<binary16> type;
     };
+
+    /// For the binary16 field
+    template<>
+    struct default_field_impl<prime2325>
+    {
+        typedef optimal_prime<prime2325> type;
+    };
+
 
 }
 
