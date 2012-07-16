@@ -54,7 +54,7 @@ TEST(test_optimal_prime, prime2325randCheck)
 {
     fifi::optimal_prime<fifi::prime2325> optimal;
 
-    int elements = 1000;
+    int elements = 10000;
 
     for(int i = 0; i < elements; ++i)
     {
