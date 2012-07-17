@@ -316,35 +316,35 @@ namespace fifi
     /// after multiplying with a constant.
     ///
     /// @see generic version of multiply_subtract(...) for parameters
-    template<>
-    inline void
-    multiply_subtract(const full_table<binary8> &field,
-                      full_table<binary8>::value_type constant,
-                      full_table<binary8>::value_type * __restrict dest,
-                      const full_table<binary8>::value_type * __restrict src,
-                      uint32_t length)
-    {
-	assert(dest != 0);
-	assert(src != 0);
-	assert(length > 0);
+    // template<>
+    // inline void
+    // multiply_subtract(const full_table<binary8> &field,
+    //                   full_table<binary8>::value_type constant,
+    //                   full_table<binary8>::value_type * __restrict dest,
+    //                   const full_table<binary8>::value_type * __restrict src,
+    //                   uint32_t length)
+    // {
+    //     assert(dest != 0);
+    //     assert(src != 0);
+    //     assert(length > 0);
 
-	if(constant == 0)
-	    return;
+    //     if(constant == 0)
+    //         return;
 
-        typedef full_table<binary8>::value_type value_type;
+    //     typedef full_table<binary8>::value_type value_type;
 
-        // In the multiplication table the constant is used to indentify
-        // the row number. Therefore the constant is used as an offset,
-        // and all possible results can then be accessed on the following
-        // number of indices indices.
-        const value_type *offset =
-            &field.m_multtable[(constant << binary8::degree)];
+    //     // In the multiplication table the constant is used to indentify
+    //     // the row number. Therefore the constant is used as an offset,
+    //     // and all possible results can then be accessed on the following
+    //     // number of indices indices.
+    //     const value_type *offset =
+    //         &field.m_multtable[(constant << binary8::degree)];
 
-	for(uint32_t i = 0; i < length; ++i)
-	{
-	    dest[i] = field.subtract(dest[i], offset[src[i]]);
-	}
-    }
+    //     for(uint32_t i = 0; i < length; ++i)
+    //     {
+    //         dest[i] = field.subtract(dest[i], offset[src[i]]);
+    //     }
+    // }
 
     /// The overload is taken for binary fields for the multiply_subtract(..)
     /// functions. Since the binary field only consists of elements {0,1}
