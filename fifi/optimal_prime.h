@@ -55,8 +55,6 @@ namespace fifi
         /// @return the result after subtraction
         value_type subtract(value_type element_one, value_type element_two) const;
 
-        void add_lots(value_type *dest,
-                      const value_type *src, uint32_t length) const;
     };
 
     /// Specialization for the (2^32 - 5) prime field
@@ -151,30 +149,6 @@ namespace fifi
         return (value_type)sum;
     }
 
-//    template<>
-//    optimal_prime<prime2325>::value_type optimal_prime<prime2325>::multiplyASM(optimal_prime<prime2325>::value_type a, optimal_prime<prime2325>::value_type b)
-//    {
-
-//        /**
-//          * Not working
-//          */
-
-//        __asm__("mul %[b];"           /// Multiply a and b
-//                "movl %%eax, %%ebx;"  /// Move low bits to %ebx
-//                "movl $5, %[b];"      /// Save 5 in b's register
-//                "movl %%edx, %%eax;"  /// Move high bits to %eax
-//                "mul %[b];"           /// Multiply high bits with 5
-//                "addl %%eax, %%ebx;"  /// Sum the low order bits
-//                "movl %%edx, %%eax;"  /// Move high bits to %eax
-//                "mul %[b];"           /// Multiply high bits with 5
-//                "addl %%eax, %%ebx;"
-//                "movl %%ebx, %%eax;"
-//                : [a] "+a" (a)
-//                : [b] "r" (b)
-//                : "cc", "ebx", "%edx");
-
-//        return a;
-//    }
 }
 
 #endif
