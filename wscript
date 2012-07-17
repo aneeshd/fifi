@@ -42,9 +42,10 @@ def options(opt):
             major_version = 3))
 
     bundle.add_dependency(opt,
-        resolve.ResolveGitFollowMaster(
+        resolve.ResolveGitMajorVersion(
             name = 'gauge',
-            git_repository = 'git://github.com/steinwurf/cxx-gauge.git'))
+            git_repository = 'git://github.com/steinwurf/cxx-gauge.git',
+            major_version = 1))
 
 
 def configure(conf):
