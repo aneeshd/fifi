@@ -195,8 +195,8 @@ namespace fifi
 
 	for(uint32_t i = 0; i < length; ++i)
 	{
-	    value_type multiplied = field.multiply(src[i], constant);
-	    dest[i] = field.add(dest[i], multiplied);
+	    value_type multiplied = field.multiply(constant, src[i]);
+	    dest[i] = field.add(multiplied, dest[i]);
 	}
     }
 
@@ -205,40 +205,36 @@ namespace fifi
     // after multiplying with a constant.
     //
     // @see generic version of multiply_add(...) for parameters
-    // template<class Field>
-    // typename disable_if_binary<Field>::type
-    // multiply_add(const full_table<Field> &field,
-    //     	 typename Field::value_type constant,
-    //     	 typename Field::value_type *dest,
-    //     	 const typename Field::value_type *src,
-    //     	 uint32_t length)
-    // {
-    //     assert(dest != 0);
-    //     assert(src  != 0);
-    //     assert(length > 0);
+    template<>
+    inline void
+    multiply_add(const full_table<binary8> &field,
+        	 full_table<binary8>::value_type constant,
+        	 full_table<binary8>::value_type * __restrict dest,
+        	 const full_table<binary8>::value_type * __restrict src,
+        	 uint32_t length)
+    {
+        assert(dest != 0);
+        assert(src  != 0);
+        assert(length > 0);
 
-    //     // This function does not work for the binary field
-    //     // since the multiply function does not behave correctly
-    //     // so make sure that we do not use it.
-    //     BOOST_STATIC_ASSERT((is_binary<Field>::value == false));
+        if(constant == 0)
+            return;
 
-    //     if(constant == 0)
-    //         return;
+        typedef full_table<binary8>::value_type value_type;
 
-    //     typedef typename Field::value_type value_type;
+        // In the multiplication table the constant is used to indentify
+        // the row number. Therefore the constant is used as an offset,
+        // and all possible results can then be accessed on the following
+        // number of indices indices.
+        const value_type *offset =
+            &field.m_multtable[(constant << binary8::degree)];
 
-    //     // In the multiplication table the constant is used to indentify
-    //     // the row number. Therefore the constant is used as an offset,
-    //     // and all possible results can then be accessed on the following
-    //     // number of indices indices.
-    //     const value_type *offset =
-    //         &field.m_multtable[(constant << Field::degree)];
-
-    //     for(uint32_t i = 0; i < length; ++i)
-    //     {
-    //         dest[i] = field.add(dest[i], offset[src[i]]);
-    //     }
-    // }
+        for(uint32_t i = 0; i < length; ++i)
+        {
+            value_type v = offset[src[i]];
+            dest[i] = field.add(v, dest[i]);
+        }
+    }
 
     /// The overload is taken for binary fields for the multiply_add(..)
     /// functions. Since the binary field only consists of elements {0,1}
@@ -306,8 +302,8 @@ namespace fifi
 
 	for(uint32_t i = 0; i < length; ++i)
 	{
-	    value_type multiplied = field.multiply(src[i], constant);
-	    dest[i] = field.subtract(dest[i], multiplied);
+	    value_type multiplied = field.multiply(constant, src[i]);
+	    dest[i] = field.subtract(multiplied, dest[i]);
 	}
     }
 
@@ -316,35 +312,36 @@ namespace fifi
     /// after multiplying with a constant.
     ///
     /// @see generic version of multiply_subtract(...) for parameters
-    // template<>
-    // inline void
-    // multiply_subtract(const full_table<binary8> &field,
-    //                   full_table<binary8>::value_type constant,
-    //                   full_table<binary8>::value_type * __restrict dest,
-    //                   const full_table<binary8>::value_type * __restrict src,
-    //                   uint32_t length)
-    // {
-    //     assert(dest != 0);
-    //     assert(src != 0);
-    //     assert(length > 0);
+    template<>
+    inline void
+    multiply_subtract(const full_table<binary8> &field,
+                      full_table<binary8>::value_type constant,
+                      full_table<binary8>::value_type * __restrict dest,
+                      const full_table<binary8>::value_type * __restrict src,
+                      uint32_t length)
+    {
+        assert(dest != 0);
+        assert(src != 0);
+        assert(length > 0);
 
-    //     if(constant == 0)
-    //         return;
+        if(constant == 0)
+            return;
 
-    //     typedef full_table<binary8>::value_type value_type;
+        typedef full_table<binary8>::value_type value_type;
 
-    //     // In the multiplication table the constant is used to indentify
-    //     // the row number. Therefore the constant is used as an offset,
-    //     // and all possible results can then be accessed on the following
-    //     // number of indices indices.
-    //     const value_type *offset =
-    //         &field.m_multtable[(constant << binary8::degree)];
+        // In the multiplication table the constant is used to indentify
+        // the row number. Therefore the constant is used as an offset,
+        // and all possible results can then be accessed on the following
+        // number of indices indices.
+        const value_type *offset =
+            &field.m_multtable[(constant << binary8::degree)];
 
-    //     for(uint32_t i = 0; i < length; ++i)
-    //     {
-    //         dest[i] = field.subtract(dest[i], offset[src[i]]);
-    //     }
-    // }
+        for(uint32_t i = 0; i < length; ++i)
+        {
+            value_type v = offset[src[i]];
+            dest[i] = field.subtract(v, dest[i]);
+        }
+    }
 
     /// The overload is taken for binary fields for the multiply_subtract(..)
     /// functions. Since the binary field only consists of elements {0,1}
