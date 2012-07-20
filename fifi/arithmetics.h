@@ -67,10 +67,32 @@ namespace fifi
 	for(uint32_t i = 0; i < length; ++i)
 	{
 	    dest[i] = dest[i] + src[i];
-            dest[i] = dest[i] >= prime2325::prime ?
-                dest[i] - prime2325::prime : dest[i];
-	}
 
+            // Conditional move version
+            //dest[i] = dest[i] >= prime2325::prime ?
+            //    dest[i] - prime2325::prime : dest[i];
+
+            // The line below does the following:
+            // prime2325::prime > dest[i] becomes:
+            //
+            //     1 if prime is larger
+            //     0 if prime is smaller or equal
+            //
+            // If that means the (prime2325::prime > dest[i]) - 1 becomes:
+            //
+            //     0 or 0x00000000 if prime is larger
+            //     -1 or 0xffffffff if the prime is smaller or equal
+            //
+            // This mask is then used to determine whether the subtraction
+            // with the prime statement is in effect of not
+            //
+            // Our measurements show that this branch-less version
+            // yields a significant performance gain over both the
+            // branched and conditional move versions
+            dest[i] = dest[i] + (
+                (-prime2325::prime) & ((prime2325::prime > dest[i]) - 1));
+
+	}
     }
 
     /// Generic version of subtract two buffers
@@ -232,25 +254,25 @@ namespace fifi
 	assert(src != 0);
 	assert(length > 0);
 
-        //static optimal_prime<prime2325>::value_type d[1400];
+        static optimal_prime<prime2325>::value_type d[1400];
 
 	if(constant == 0)
 	    return;
 
         typedef optimal_prime<prime2325>::value_type value_type;
 
-        value_type d;
+        //value_type d;
 
 	for(uint32_t i = 0; i < length; ++i)
 	{
-	    //d[i] = field.multiply(constant, src[i]);
+	    d[i] = field.multiply(constant, src[i]);
 
-            d = field.multiply(constant, src[i]);
-            dest[i] = dest[i] + d;
-            dest[i] = dest[i] >= prime2325::prime ? dest[i] - prime2325::prime : dest[i];
+            //d = field.multiply(constant, src[i]);
+            //dest[i] = dest[i] + d;
+            //dest[i] = dest[i] >= prime2325::prime ? dest[i] - prime2325::prime : dest[i];
 	}
 
-        //add(field, dest, d, length);
+        add(field, dest, d, length);
 
     }
 
