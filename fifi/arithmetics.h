@@ -53,6 +53,26 @@ namespace fifi
 	}
     }
 
+    template<>
+    inline void
+    add(const optimal_prime<prime2325> &/*field*/,
+        optimal_prime<prime2325>::value_type * __restrict dest,
+        const optimal_prime<prime2325>::value_type * __restrict src,
+        uint32_t length)
+    {
+	assert(dest != 0);
+	assert(src != 0);
+	assert(length > 0);
+
+	for(uint32_t i = 0; i < length; ++i)
+	{
+	    dest[i] = dest[i] + src[i];
+            dest[i] = dest[i] >= prime2325::prime ?
+                dest[i] - prime2325::prime : dest[i];
+	}
+
+    }
+
     /// Generic version of subtract two buffers
     ///
     /// Provides: dest[i] = dest[i] - src[i]
@@ -199,6 +219,42 @@ namespace fifi
 	    dest[i] = field.add(multiplied, dest[i]);
 	}
     }
+
+    template<>
+    inline void
+    multiply_add(const optimal_prime<prime2325> &field,
+                 optimal_prime<prime2325>::value_type constant,
+                 optimal_prime<prime2325>::value_type * __restrict dest,
+                 const optimal_prime<prime2325>::value_type * __restrict src,
+                 uint32_t length)
+    {
+	assert(dest != 0);
+	assert(src != 0);
+	assert(length > 0);
+
+        //static optimal_prime<prime2325>::value_type d[1400];
+
+	if(constant == 0)
+	    return;
+
+        typedef optimal_prime<prime2325>::value_type value_type;
+
+        value_type d;
+
+	for(uint32_t i = 0; i < length; ++i)
+	{
+	    //d[i] = field.multiply(constant, src[i]);
+
+            d = field.multiply(constant, src[i]);
+            dest[i] = dest[i] + d;
+            dest[i] = dest[i] >= prime2325::prime ? dest[i] - prime2325::prime : dest[i];
+	}
+
+        //add(field, dest, d, length);
+
+    }
+
+
 
     // This overload is for the full table implementation where
     // a small optimization is possible when adding two buffers

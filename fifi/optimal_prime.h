@@ -132,7 +132,7 @@ namespace fifi
                                   value_type element_two) const
     {
         int64_t sum = int64_t(element_one) + int64_t(element_two);
-        sum = sum > prime2325::prime ? sum - prime2325::prime : sum;
+        sum = sum >= prime2325::prime ? sum - prime2325::prime : sum;
 
         return (value_type)sum;
     }
