@@ -61,6 +61,26 @@ extern const uint32_t expected_divide_binary16_size;
 extern const expected_result_1<fifi::binary16> expected_invert_binary16[];
 extern const uint32_t expected_invert_binary16_size;
 
+// Multiply prime2325
+extern const expected_result_2<fifi::prime2325> expected_multiply_prime2325[];
+extern const uint32_t expected_multiply_prime2325_size;
+
+// Divide prime2325
+extern const expected_result_2<fifi::prime2325> expected_divide_prime2325[];
+extern const uint32_t expected_divide_prime2325_size;
+
+// Add prime2325
+extern const expected_result_2<fifi::prime2325> expected_add_prime2325[];
+extern const uint32_t expected_add_prime2325_size;
+
+// Subtract prime2325
+extern const expected_result_2<fifi::prime2325> expected_subtract_prime2325[];
+extern const uint32_t expected_subtract_prime2325_size;
+
+
+
+
+
 
 #endif
 

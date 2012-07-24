@@ -18,20 +18,20 @@ void test_multiply_add()
 {
     // Test whether the multipy_add function computes the
     // correct results
-    
+
     typedef typename FieldImpl::value_type value_type;
     typedef typename FieldImpl::field_type field_type;
-    
+
     FieldImpl impl;
 
     uint32_t length = 100;
-    
+
     value_type *dest = new value_type[length];
     value_type *src  = new value_type[length];
 
     value_type *dest_copy = new value_type[length];
     value_type *src_copy  = new value_type[length];
-    
+
     for(uint32_t i = 0; i < length; ++i)
     {
 	dest[i] = rand() % field_type::order;
@@ -40,7 +40,7 @@ void test_multiply_add()
 
     memcpy(dest_copy, dest, sizeof(value_type)*length);
     memcpy(src_copy, src, sizeof(value_type)*length);
-    
+
     value_type coefficient = rand() % field_type::order;
 
     fifi::multiply_add(impl, coefficient, dest, src, length);
@@ -53,7 +53,7 @@ void test_multiply_add()
 
 	ASSERT_EQ(result, dest[i]);
     }
-    
+
     delete [] dest;
     delete [] src;
     delete [] dest_copy;
@@ -65,20 +65,20 @@ void test_multiply_subtract()
 {
     // Test whether the multipy_add function computes the
     // correct results
-    
+
     typedef typename FieldImpl::value_type value_type;
     typedef typename FieldImpl::field_type field_type;
-    
+
     FieldImpl impl;
 
     uint32_t length = 100;
-    
+
     value_type *dest = new value_type[length];
     value_type *src  = new value_type[length];
 
     value_type *dest_copy = new value_type[length];
     value_type *src_copy  = new value_type[length];
-    
+
     for(uint32_t i = 0; i < length; ++i)
     {
 	dest[i] = rand() % field_type::order;
@@ -87,7 +87,7 @@ void test_multiply_subtract()
 
     memcpy(dest_copy, dest, sizeof(value_type)*length);
     memcpy(src_copy, src, sizeof(value_type)*length);
-    
+
     value_type coefficient = rand() % field_type::order;
 
     fifi::multiply_subtract(impl, coefficient, dest, src, length);
@@ -100,7 +100,7 @@ void test_multiply_subtract()
 
 	ASSERT_EQ(result, dest[i]);
     }
-    
+
     delete [] dest;
     delete [] src;
     delete [] dest_copy;
@@ -113,7 +113,7 @@ TEST(test_arithmetics, MultiplyAdd)
     test_multiply_add< fifi::simple_online<fifi::binary> >();
     test_multiply_add< fifi::simple_online<fifi::binary8> >();
     test_multiply_add< fifi::simple_online<fifi::binary16> >();
-    
+
     test_multiply_add< fifi::full_table<fifi::binary8> >();
 
     test_multiply_add< fifi::log_table<fifi::binary8> >();
@@ -122,7 +122,9 @@ TEST(test_arithmetics, MultiplyAdd)
     test_multiply_add< fifi::extended_log_table<fifi::binary8> >();
     test_multiply_add< fifi::extended_log_table<fifi::binary16> >();
 
-    // Just also run the default fields 
+    test_multiply_add< fifi::optimal_prime<fifi::prime2325> >();
+
+    // Just also run the default fields
     test_multiply_add< fifi::default_field_impl<fifi::binary>::type >();
     test_multiply_add< fifi::default_field_impl<fifi::binary8>::type >();
     test_multiply_add< fifi::default_field_impl<fifi::binary16>::type >();
@@ -135,7 +137,7 @@ TEST(test_arithmetics, MultiplySubtract)
     test_multiply_subtract< fifi::simple_online<fifi::binary> >();
     test_multiply_subtract< fifi::simple_online<fifi::binary8> >();
     test_multiply_subtract< fifi::simple_online<fifi::binary16> >();
-    
+
     test_multiply_subtract< fifi::full_table<fifi::binary8> >();
 
     test_multiply_subtract< fifi::log_table<fifi::binary8> >();
@@ -144,7 +146,10 @@ TEST(test_arithmetics, MultiplySubtract)
     test_multiply_subtract< fifi::extended_log_table<fifi::binary8> >();
     test_multiply_subtract< fifi::extended_log_table<fifi::binary16> >();
 
-    // Just also run the default fields 
+    test_multiply_subtract< fifi::optimal_prime<fifi::prime2325> >();
+
+
+    // Just also run the default fields
     test_multiply_subtract< fifi::default_field_impl<fifi::binary>::type >();
     test_multiply_subtract< fifi::default_field_impl<fifi::binary8>::type >();
     test_multiply_subtract< fifi::default_field_impl<fifi::binary16>::type >();

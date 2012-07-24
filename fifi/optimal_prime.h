@@ -89,30 +89,31 @@ namespace fifi
         assert(a > 0);
         assert(a < prime2325::prime);
 
-        int64_t x0 = 1;
-        int64_t x1 = 0;
+        int64_t q  = 0;
 
-        value_type b = prime2325::prime;
-        int64_t x = 0;
-        value_type q = 0;
-        value_type r = 0;
+        int64_t x  = 0;
+        int64_t x0 = 0;
+        int64_t x1 = 1;
 
-        while(a != 1)
+        int64_t r  = 0;
+        int64_t r0 = prime2325::prime;
+        int64_t r1 = a;
+
+        while(r1 != 1)
         {
-            q = b / a;
-            r = b - (q * a);
+            q = r0 / r1;
+            r = r0 - (q * r1);
+            x = x0 - (q * x1);
 
-            b = a;
-            a = r;
-            x = x1 - x0*q;
-
-            x1 = x0;
-            x0 = x;
+            r0 = r1;
+            r1 = r;
+            x0 = x1;
+            x1 = x;
         }
 
-        x = x < 0 ? (x + prime2325::prime) : x;
+        x1 = x1 < 0 ? (x1 + prime2325::prime) : x1;
 
-        return (value_type)x;
+        return static_cast<value_type>(x1);
     }
 
     /// Specialization for the (2^32 - 5) prime field
@@ -132,7 +133,12 @@ namespace fifi
                                   value_type element_two) const
     {
         int64_t sum = int64_t(element_one) + int64_t(element_two);
-        sum = sum >= prime2325::prime ? sum - prime2325::prime : sum;
+
+        sum = sum + (
+                (-prime2325::prime) & ((prime2325::prime > sum) - 1));
+
+
+//        sum = sum >= prime2325::prime ? sum - prime2325::prime : sum;
 
         return (value_type)sum;
     }

@@ -28,7 +28,7 @@
 std::vector<uint32_t> setup_sizes()
 {
     std::vector<uint32_t> sizes;
-    sizes.push_back(100);
+    //sizes.push_back(100);
     sizes.push_back(1400);
     sizes.push_back(2000);
     return sizes;
@@ -102,6 +102,34 @@ public:
         {
             std::vector<uint32_t> sizes = setup_sizes();
             std::vector<uint32_t> vectors = setup_vectors();
+
+            // We make one pool with random data as source for the
+            // computations
+            uint32_t max_size =
+                *std::max_element(sizes.begin(), sizes.end());
+
+            assert((max_size % sizeof(value_type)) == 0);
+            uint32_t max_length = max_size / sizeof(value_type);
+
+            uint32_t max_vectors =
+                *std::max_element(vectors.begin(), vectors.end());
+
+            m_random_symbols_one.resize(max_vectors);
+            m_random_symbols_two.resize(max_vectors);
+
+            for(uint32_t j = 0; j < max_vectors; ++j)
+            {
+                m_random_symbols_one[j].resize(max_length);
+                m_random_symbols_two[j].resize(max_length);
+
+                for(uint32_t i = 0; i < max_length; ++i)
+                {
+                    m_random_symbols_one[j][i] = rand();
+                    m_random_symbols_two[j][i] = rand();
+                }
+            }
+
+            // Now add all the configurations
             std::vector<std::string> operations = setup_operations();
             std::vector<std::string> data_access = setup_data_access();
 
@@ -155,11 +183,13 @@ public:
                     m_symbols_two[j].resize(length);
                 }
 
-                for(uint32_t i = 0; i < length; ++i)
-                {
-                    m_symbols_one[j][i] = rand();
-                    m_symbols_two[j][i] = rand();
-                }
+                std::copy_n(&m_random_symbols_one[j][0],
+                            length,
+                            &m_symbols_one[j][0]);
+
+                std::copy_n(&m_random_symbols_two[j][0],
+                            length,
+                            &m_symbols_two[j][0]);
             }
 
         }
@@ -343,6 +373,13 @@ protected:
 
     /// The second buffer of vectors
     std::vector< std::vector<value_type> > m_symbols_two;
+
+    /// Random data for the first buffer of symbols
+    std::vector< std::vector<value_type> > m_random_symbols_one;
+
+    /// Random data for the second buffer of symbols
+    std::vector< std::vector<value_type> > m_random_symbols_two;
+
 
 };
 

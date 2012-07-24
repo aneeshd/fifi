@@ -60,13 +60,28 @@ namespace fifi
         const optimal_prime<prime2325>::value_type * __restrict src,
         uint32_t length)
     {
-	assert(dest != 0);
-	assert(src != 0);
-	assert(length > 0);
+        assert(dest != 0);
+        assert(src != 0);
+        assert(length > 0);
 
-	for(uint32_t i = 0; i < length; ++i)
-	{
-	    dest[i] = dest[i] + src[i];
+        for(uint32_t i = 0; i < length; ++i)
+        {
+            dest[i] = dest[i] + src[i];
+
+            // If dest[i] >= src[i] the we did not have a 32 bit overflow
+            //
+            //     1 if no overflow
+            //     0 if overflow
+            //
+            // This means that (dest[i] >= src[i]) - 1 becomes:
+            //
+            //     0 or 0x00000000 if no overflow
+            //     -1 or 0xffffffff if overflow
+            //
+            // An overflow is equivalent to a mod 2^32 since
+            // we are working 2^32 - 5 we simply add 5 to
+            // compensate
+            dest[i] = dest[i] + (5 & ((dest[i] >= src[i]) - 1));
 
             // Conditional move version
             //dest[i] = dest[i] >= prime2325::prime ?
@@ -92,7 +107,7 @@ namespace fifi
             dest[i] = dest[i] + (
                 (-prime2325::prime) & ((prime2325::prime > dest[i]) - 1));
 
-	}
+        }
     }
 
     /// Generic version of subtract two buffers
@@ -235,11 +250,14 @@ namespace fifi
 
         typedef typename FieldImpl::value_type value_type;
 
+        value_type multiplied;
+
 	for(uint32_t i = 0; i < length; ++i)
 	{
-	    value_type multiplied = field.multiply(constant, src[i]);
+	    multiplied = field.multiply(constant, src[i]);
 	    dest[i] = field.add(multiplied, dest[i]);
 	}
+
     }
 
     template<>
@@ -254,21 +272,22 @@ namespace fifi
 	assert(src != 0);
 	assert(length > 0);
 
-        static optimal_prime<prime2325>::value_type d[1400];
+        static optimal_prime<prime2325>::value_type d[2000];
+        //static optimal_prime<prime2325>::value_type d_mul[2000];
 
 	if(constant == 0)
 	    return;
 
         typedef optimal_prime<prime2325>::value_type value_type;
 
-        //value_type d;
-
 	for(uint32_t i = 0; i < length; ++i)
 	{
 	    d[i] = field.multiply(constant, src[i]);
 
-            //d = field.multiply(constant, src[i]);
-            //dest[i] = dest[i] + d;
+            //d[] = field.multiply(constant, src[i]);
+            //dest[i] = dest[i] + d[0];
+            //dest[i] = dest[i] + (
+            //    (-prime2325::prime) & ((prime2325::prime > dest[i]) - 1));
             //dest[i] = dest[i] >= prime2325::prime ? dest[i] - prime2325::prime : dest[i];
 	}
 
@@ -381,7 +400,7 @@ namespace fifi
 	for(uint32_t i = 0; i < length; ++i)
 	{
 	    value_type multiplied = field.multiply(constant, src[i]);
-	    dest[i] = field.subtract(multiplied, dest[i]);
+	    dest[i] = field.subtract(dest[i], multiplied);
 	}
     }
 

@@ -13,9 +13,7 @@ inline uint32_t dimension_of(T (&)[N])
 }
 
 
-//
 // Multiply binary8
-//
 const expected_result_2<fifi::binary8> expected_multiply_binary8[] =
 {
     // arg1, arg2, result
@@ -45,13 +43,11 @@ const expected_result_2<fifi::binary8> expected_multiply_binary8[] =
     { 110, 253, 232 }
 };
 
-const uint32_t expected_multiply_binary8_size = dimension_of(expected_multiply_binary8);
+const uint32_t expected_multiply_binary8_size =
+    dimension_of(expected_multiply_binary8);
 
 
-
-//
 // Divide binary8
-//
 const expected_result_2<fifi::binary8> expected_divide_binary8[] =
 {
     // arg1, arg2, result
@@ -80,12 +76,11 @@ const expected_result_2<fifi::binary8> expected_divide_binary8[] =
     { 110, 253, 52  }
 };
 
-const uint32_t expected_divide_binary8_size = dimension_of(expected_divide_binary8);
+const uint32_t expected_divide_binary8_size =
+    dimension_of(expected_divide_binary8);
 
 
-//
 // Invert binary8
-//
 const expected_result_1<fifi::binary8> expected_invert_binary8[] =
 {
     // arg1, result
@@ -111,18 +106,11 @@ const expected_result_1<fifi::binary8> expected_invert_binary8[] =
     { 255, 253 }
 };
 
-const uint32_t expected_invert_binary8_size = dimension_of(expected_invert_binary8);
+const uint32_t expected_invert_binary8_size =
+    dimension_of(expected_invert_binary8);
 
 
-
-
-
-
-
-
-//
 // Multiply binary16
-//
 const expected_result_2<fifi::binary16> expected_multiply_binary16[] =
 {
     // arg1, arg2, result
@@ -152,12 +140,11 @@ const expected_result_2<fifi::binary16> expected_multiply_binary16[] =
     { 110, 253, 9478  }
 };
 
-const uint32_t expected_multiply_binary16_size = dimension_of(expected_multiply_binary16);
+const uint32_t expected_multiply_binary16_size =
+    dimension_of(expected_multiply_binary16);
 
 
-//
 // Divide binary16
-//
 const expected_result_2<fifi::binary16> expected_divide_binary16[] =
 {
     // arg1, arg2, result
@@ -186,13 +173,11 @@ const expected_result_2<fifi::binary16> expected_divide_binary16[] =
     { 110, 253, 825   }
 };
 
-const uint32_t expected_divide_binary16_size = dimension_of(expected_divide_binary16);
+const uint32_t expected_divide_binary16_size =
+    dimension_of(expected_divide_binary16);
 
 
-
-//
 // Invert binary16
-//
 const expected_result_1<fifi::binary16> expected_invert_binary16[] =
 {
     // arg1, result
@@ -218,8 +203,143 @@ const expected_result_1<fifi::binary16> expected_invert_binary16[] =
     { 255, 7372  }
 };
 
-const uint32_t expected_invert_binary16_size = dimension_of(expected_invert_binary16);
+const uint32_t expected_invert_binary16_size =
+    dimension_of(expected_invert_binary16);
 
+
+// Multiply prime2325
+const expected_result_2<fifi::prime2325> expected_multiply_prime2325[] =
+{
+    // arg1,       arg2,        result
+    { 0U,          0U,          0U          },
+    { 4294967290U, 1U,          4294967290U },
+    { 4294967290U, 2U,          4294967289U },
+    { 4294967290U, 4294967290U, 1U          },
+    { 3301510135U, 2380300242U, 3460816498U },
+    { 2747836187U, 606517521U,  4005335094U },
+    { 4071004727U, 3893610017U, 3098938562U },
+    { 3216464703U, 2321361148U, 2159784831U },
+    { 3948329266U, 1846670630U, 2958898160U },
+    { 549534826U,  3692094631U, 3813011302U },
+    { 890246292U,  3115294715U, 3374921530U },
+    { 4057832578U, 783228777U,  1061113545U },
+    { 366785572U,  3273833947U, 1357321858U },
+    { 484124441U,  2513732051U, 2038062075U },
+    { 3916985401U, 2885578550U, 3986996714U },
+    { 8961698U,    1454316048U, 2844647930U },
+    { 1923821210U, 4910817U,    1727198145U },
+    { 628824443U,  2882587157U, 2414550839U },
+    { 1921500106U, 1581124167U, 2064202209U },
+    { 1241752606U, 2682856520U, 1016247841U },
+    { 2865873554U, 4023346111U, 1390523154U },
+    { 714307256U,  4017788735U, 2552564636U },
+    { 1135999486U, 2298616897U, 2948135396U },
+    { 1516764886U, 2487733786U, 1221426309U },
+    { 2755140095U, 3176782815U, 3071678684U },
+    { 2898832361U, 3285799624U, 205888686U  },
+    { 1319528055U, 3213225118U, 472935279U  },
+    { 1501780748U, 772682526U,  464840319U  },
+    { 591588585U,  2298808855U, 2016341846U },
+    { 3791215484U, 823219598U,  3413971131U },
+    { 188377222U,  2440371958U, 1837383177U }
+
+};
+
+const uint32_t expected_multiply_prime2325_size =
+    dimension_of(expected_multiply_prime2325);
+
+// Divide prime2325
+const expected_result_2<fifi::prime2325> expected_divide_prime2325[] =
+{
+    // arg1,       arg2,        result
+    { 4294967290U, 1U,          4294967290U },
+    { 4294967290U, 2U,          2147483645U },
+    { 1U,          4294967290U, 4294967290U },
+    { 2U,          4294967290U, 4294967289U },
+    { 4294967290U, 4294967290U, 1U          },
+    { 3170796863U, 1056595135U, 2349732681U },
+    { 3846022732U, 2429951133U, 2542996908U },
+    { 1190843567U, 1126933466U, 3113318947U },
+    { 4188684512U, 871209300U,  4103154428U },
+    { 3235144123U, 393597417U,  3381961331U },
+    { 1336522198U, 1280630940U, 91488717U   },
+    { 2639979264U, 1669621279U, 3855275193U },
+    { 4031746231U, 1150048672U, 2067171649U },
+    { 1078074232U, 1671507801U, 2817715425U },
+    { 2622046040U, 209860049U,  1117407655U },
+    { 4026952922U, 589957415U,  1126790683U },
+    { 623898484U,  59902254U,   1708820736U },
+    { 1380709308U, 3151385314U, 4242837144U },
+    { 4161263482U, 1084683978U, 57951883U   },
+    { 2019008287U, 1889765579U, 2374943388U },
+    { 2271514114U, 542032264U,  2085796361U },
+    { 163139403U,  1828949500U, 2835205604U }
+};
+
+const uint32_t expected_divide_prime2325_size =
+    dimension_of(expected_divide_prime2325);
+
+const expected_result_2<fifi::prime2325> expected_add_prime2325[] =
+{
+    // arg1,       arg2,        result
+    { 0U,          0U,          0U          },
+    { 4294967290U, 1U,          0U          },
+    { 4294967290U, 2U,          1U          },
+    { 4294967290U, 4294967290U, 4294967289U },
+    { 3549012440U, 3097460608U, 2351505757U },
+    { 1304171116U, 2058347943U, 3362519059U },
+    { 2761881503U, 3727769459U, 2194683671U },
+    { 416764808U,  2952672146U, 3369436954U },
+    { 2228876704U, 3769080616U, 1702990029U },
+    { 3393423153U, 2569499151U, 1667955013U },
+    { 2721360764U, 3099915689U, 1526309162U },
+    { 3733613168U, 4250233244U, 3688879121U },
+    { 13775737U,   3832303341U, 3846079078U },
+    { 3275759048U, 318206772U,  3593965820U },
+    { 954547203U,  3403230939U, 62810851U   },
+    { 3860097427U, 3766812989U, 3331943125U },
+    { 3164597666U, 249577394U,  3414175060U },
+    { 2699559732U, 4130167990U, 2534760431U },
+    { 1997027658U, 1158755251U, 3155782909U },
+    { 3562900696U, 433428U,     3563334124U },
+    { 2780503337U, 508086692U,  3288590029U }
+
+};
+
+const uint32_t expected_add_prime2325_size =
+    dimension_of(expected_add_prime2325);
+
+
+const expected_result_2<fifi::prime2325> expected_subtract_prime2325[] =
+{
+    // arg1,       arg2,        result
+    { 0U,          0U,          0U          },
+    { 4294967290U, 1U,          4294967289U },
+    { 4294967290U, 2U,          4294967288U },
+    { 1U,          4294967290U, 2U          },
+    { 2U,          4294967290U, 3U          },
+    { 4294967290U, 4294967290U, 0U          },
+    { 2021566441U, 1563544409U, 458022032U  },
+    { 1376464298U, 3719246614U, 1952184975U },
+    { 1646681944U, 2090570642U, 3851078593U },
+    { 1718415100U, 3764394937U, 2248987454U },
+    { 1555616877U, 417999038U,  1137617839U },
+    { 3448691623U, 2270397823U, 1178293800U },
+    { 3267843829U, 3990959519U, 3571851601U },
+    { 4181356062U, 2914712094U, 1266643968U },
+    { 2486487802U, 4101049708U, 2680405385U },
+    { 2313466124U, 1242826905U, 1070639219U },
+    { 3850830140U, 4242429948U, 3903367483U },
+    { 815150013U,  2783628454U, 2326488850U },
+    { 3601154686U, 238248285U,  3362906401U },
+    { 2279203252U, 2364542188U, 4209628355U },
+    { 3007334859U, 2068575905U, 938758954U  },
+    { 1591755985U, 760357706U,  831398279U  },
+    { 1111197069U, 3288497105U, 2117667255U }
+};
+
+const uint32_t expected_subtract_prime2325_size =
+    dimension_of(expected_subtract_prime2325);
 
 
 
