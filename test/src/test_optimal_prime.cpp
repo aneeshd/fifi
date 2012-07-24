@@ -33,13 +33,6 @@ TEST(test_optimal_prime, divide)
     for(uint32_t i = 0; i < size; ++i)
     {
 	expected_result_2<fifi::prime2325> res = expected_divide_prime2325[i];
-
-        if(optimal.divide(res.arg1, res.arg2) != res.result)
-        {
-            std::cout << "ARG1 = " << res.arg1 << " ARG2 = " << res.arg2 << " RES = " << res.result << std::endl;
-            std::cout << "GOT = " << optimal.divide(res.arg1, res.arg2) << std::endl;
-        }
-
 	EXPECT_EQ(optimal.divide(res.arg1, res.arg2), res.result);
     }
 
@@ -70,6 +63,21 @@ TEST(test_optimal_prime, subtract)
     {
 	expected_result_2<fifi::prime2325> res = expected_subtract_prime2325[i];
 	EXPECT_EQ(optimal.subtract(res.arg1, res.arg2), res.result);
+    }
+
+}
+
+
+TEST(test_optimal_prime, invert)
+{
+    fifi::optimal_prime<fifi::prime2325> optimal;
+
+    uint32_t size = expected_invert_prime2325_size;
+
+    for(uint32_t i = 0; i < size; ++i)
+    {
+	expected_result_1<fifi::prime2325> res = expected_invert_prime2325[i];
+	EXPECT_EQ(optimal.invert(res.arg1), res.result);
     }
 
 }

@@ -57,7 +57,12 @@ namespace fifi
 
     };
 
-    /// Specialization for the (2^32 - 5) prime field
+    /// Specialization for the (2^32 - 5) prime field. Multiplication is
+    /// based on a clever way of doing modulo. See:
+    ///
+    ///   S. B. Mohan  and  B. S. Adiga, Electronics  “Fast algorithms for
+    ///   implementing rsa public key cryptosystem" Electronics  Letters,
+    ///   vol.  21, 1985.
     template<>
     inline optimal_prime<prime2325>::value_type
     optimal_prime<prime2325>::multiply(value_type element_one,
@@ -81,7 +86,13 @@ namespace fifi
         return static_cast<value_type>(c);
     }
 
-    /// Specialization for the (2^32 - 5) prime field
+    /// Specialization for the (2^32 - 5) prime field. This algorithm
+    /// used a modified version of the Extended Euclidean algorithm,
+    /// which essentially solves the a*x + b*y = gcd(a,b) in this case
+    /// b = 2^32 - 5 which is a prime therefore we know that gcd(a,b) = 1
+    /// also since we do all calculations mod 2^32 - 5 we see that b*y
+    /// must become 0. Therefore we are left with calculating a*x = 1
+    /// in which case x must be the inverse of a.
     template<>
     inline optimal_prime<prime2325>::value_type
     optimal_prime<prime2325>::invert(value_type a) const
@@ -101,10 +112,12 @@ namespace fifi
 
         while(r1 != 1)
         {
+            // Compute the next remainder
             q = r0 / r1;
             r = r0 - (q * r1);
             x = x0 - (q * x1);
 
+            // Store the results
             r0 = r1;
             r1 = r;
             x0 = x1;
@@ -116,7 +129,9 @@ namespace fifi
         return static_cast<value_type>(x1);
     }
 
-    /// Specialization for the (2^32 - 5) prime field
+    /// Specialization for the (2^32 - 5) prime field. In this
+    /// case division is simply implemented using multiplication
+    /// with the inverse.
     template<>
     inline optimal_prime<prime2325>::value_type
     optimal_prime<prime2325>::divide(value_type numerator,
@@ -136,9 +151,6 @@ namespace fifi
 
         sum = sum + (
                 (-prime2325::prime) & ((prime2325::prime > sum) - 1));
-
-
-//        sum = sum >= prime2325::prime ? sum - prime2325::prime : sum;
 
         return (value_type)sum;
     }

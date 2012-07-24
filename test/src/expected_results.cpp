@@ -13,6 +13,13 @@ inline uint32_t dimension_of(T (&)[N])
 }
 
 
+const expected_result_2<fifi::binary8> multiply_results<fifi::binary8>::m_results[] =
+{
+    { 1, 2, 3 }
+};
+
+
+
 // Multiply binary8
 const expected_result_2<fifi::binary8> expected_multiply_binary8[] =
 {
@@ -78,6 +85,104 @@ const expected_result_2<fifi::binary8> expected_divide_binary8[] =
 
 const uint32_t expected_divide_binary8_size =
     dimension_of(expected_divide_binary8);
+
+// Add binary8
+//
+// Computed using the following Matlab script:
+//
+//     m = 8
+//     n = 2^m - 1
+//     max = 20
+//
+//     for j = 0:max
+//       v1 = uint8(rand(1) * n);
+//       v2 = uint8(rand(1) * n);
+//
+//       gf1 = gf(v1, m);
+//       gf2 = gf(v2, m);
+//
+//       xgf = gf1 + gf2;
+//
+//       str = sprintf('{ %4d, %4d, %4d }', uint8(gf1.x), uint8(gf2.x), uint8(xgf.x));
+//       disp(str)
+//     end
+const expected_result_2<fifi::binary8> expected_add_binary8[] =
+{
+    // arg1, arg2, result
+    {  194,  135,   69 },
+    {  163,   53,  150 },
+    {   97,  200,  169 },
+    {  174,  118,  216 },
+    {  145,  203,   90 },
+    {   15,  154,  149 },
+    {   13,  106,  103 },
+    {   78,  223,  145 },
+    {    4,  196,  192 },
+    {  248,  252,    4 },
+    {  201,  112,  185 },
+    {  127,   55,   72 },
+    {  164,   82,  246 },
+    {  245,  185,   76 },
+    {  105,  190,  215 },
+    {   68,  112,   52 },
+    {  238,  174,   64 },
+    {   54,  214,  224 },
+    {  160,   34,  130 },
+    {   53,  155,  174 },
+    {  161,   94,  255 }
+};
+
+const uint32_t expected_add_binary8_size =
+    dimension_of(expected_add_binary8);
+
+// Subtract binary8
+//
+// Computed using the following Matlab script:
+//
+//     m = 8
+//     n = 2^m - 1
+//     max = 20
+//
+//     for j = 0:max
+//       v1 = uint8(rand(1) * n);
+//       v2 = uint8(rand(1) * n);
+//
+//       gf1 = gf(v1, m);
+//       gf2 = gf(v2, m);
+//
+//       xgf = gf1 - gf2;
+//
+//       str = sprintf('{ %4d, %4d, %4d }', uint8(gf1.x), uint8(gf2.x), uint8(xgf.x));
+//       disp(str)
+//     end
+const expected_result_2<fifi::binary8> expected_subtract_binary8[] =
+{
+    // arg1, arg2, result
+    {  147,  115,  224 },
+    {   11,    7,   12 },
+    {   80,    3,   83 },
+    {   98,  174,  204 },
+    {   24,    9,   17 },
+    {  156,  155,    7 },
+    {    4,    4,    0 },
+    {   48,  150,  166 },
+    {   15,   94,   81 },
+    {  161,  183,   22 },
+    {  177,   21,  164 },
+    {  116,  113,    5 },
+    {   90,   39,  125 },
+    {  172,  178,   30 },
+    {  186,  122,  192 },
+    {  141,   31,  146 },
+    {  115,  183,  196 },
+    {  228,   70,  162 },
+    {   65,  221,  156 },
+    {   59,  205,  246 },
+    {  232,   59,  211 }
+};
+
+const uint32_t expected_subtract_binary8_size =
+    dimension_of(expected_subtract_binary8);
 
 
 // Invert binary8
@@ -176,6 +281,109 @@ const expected_result_2<fifi::binary16> expected_divide_binary16[] =
 const uint32_t expected_divide_binary16_size =
     dimension_of(expected_divide_binary16);
 
+// Add binary16
+//
+// Computed using the following Matlab script:
+//
+//     m = 16
+//     n = 2^m - 1
+//     prime = 69643
+//     max = 20
+//
+//     for j = 0:max
+//       v1 = uint16(rand(1) * n);
+//       v2 = uint16(rand(1) * n);
+//
+//       gf1 = gf(v1, m, prime);
+//       gf2 = gf(v2, m, prime);
+//
+//       xgf = gf1 + gf2;
+//
+//       str = sprintf('{ %6dU, %6dU, %6dU }', ...
+//                     uint16(gf1.x), uint16(gf2.x), ...
+//                     uint16(xgf.x));
+//       disp(str)
+//     end
+const expected_result_2<fifi::binary16> expected_add_binary16[] =
+{
+    // arg1, arg2, result
+    {  11335U,  64208U,  54935U },
+    {  17789U,  16536U,   1509U },
+    {  57392U,  48319U,  23695U },
+    {   8947U,    770U,   8689U },
+    {  58582U,  13051U,  54829U },
+    {  19577U,  43348U,  58669U },
+    {  18639U,  30751U,  12496U },
+    {   4245U,  64771U,  60822U },
+    {  38193U,  27754U,  63835U },
+    {  33784U,  21886U,  54918U },
+    {  28371U,  14808U,  22283U },
+    {  37998U,  49831U,  22217U },
+    {  34722U,  41977U,   9307U },
+    {  13701U,  24891U,  21694U },
+    {  51335U,  44619U,  26316U },
+    {  30218U,  37213U,  59223U },
+    {  52049U,   3879U,  50294U },
+    {  39509U,   3294U,  38539U },
+    {  27222U,  19988U,   9282U },
+    {  57302U,    984U,  56334U },
+    {  50328U,  63624U,  15376U }
+};
+
+const uint32_t expected_add_binary16_size =
+    dimension_of(expected_add_binary16);
+
+// Subtract binary16
+//
+// Computed using the following Matlab script:
+//
+//     m = 16
+//     n = 2^m - 1
+//     prime = 69643
+//     max = 20
+//
+//     for j = 0:max
+//       v1 = uint16(rand(1) * n);
+//       v2 = uint16(rand(1) * n);
+//
+//       gf1 = gf(v1, m, prime);
+//       gf2 = gf(v2, m, prime);
+//
+//       xgf = gf1 - gf2;
+//
+//       str = sprintf('{ %6dU, %6dU, %6dU }', ...
+//                     uint16(gf1.x), uint16(gf2.x), ...
+//                     uint16(xgf.x));
+//       disp(str)
+//     end
+const expected_result_2<fifi::binary16> expected_subtract_binary16[] =
+{
+    // arg1,    arg2,    result
+    {  47030U,  45394U,   1764U },
+    {   5510U,  29776U,  25046U },
+    {  28955U,  23150U,  11125U },
+    {  10067U,  44278U,  35749U },
+    {  45823U,  47677U,   2242U },
+    {  31351U,  36362U,  62589U },
+    {   7933U,  29540U,  28057U },
+    {  46915U,  58512U,  21459U },
+    {  17898U,  16696U,   1234U },
+    {  56727U,  15227U,  59116U },
+    {  52747U,  59532U,   9863U },
+    {  15197U,  15683U,   1566U },
+    {   3261U,   5137U,   6316U },
+    {  41996U,  12510U,  38098U },
+    {  55303U,  11397U,  62594U },
+    {  11193U,  65161U,  54576U },
+    {  28822U,  22285U,  10139U },
+    {  20592U,  23925U,   3333U },
+    {  25771U,  38766U,  62405U },
+    {   7848U,   2499U,   5995U },
+    {  30054U,  57007U,  43977U }
+};
+
+const uint32_t expected_subtract_binary16_size =
+    dimension_of(expected_subtract_binary16);
 
 // Invert binary16
 const expected_result_1<fifi::binary16> expected_invert_binary16[] =
@@ -340,6 +548,37 @@ const expected_result_2<fifi::prime2325> expected_subtract_prime2325[] =
 
 const uint32_t expected_subtract_prime2325_size =
     dimension_of(expected_subtract_prime2325);
+
+// Invert prime2325
+const expected_result_1<fifi::prime2325> expected_invert_prime2325[] =
+{
+    // arg1,       result
+    {          1U,          1U },
+    {          2U, 2147483646U },
+    { 4294967290U, 4294967290U },
+    { 1909520067U,  527117708U },
+    { 1879748638U, 4180067651U },
+    { 3909187862U, 1505740374U },
+    { 3795789800U,  915126934U },
+    { 2001693299U, 2659441565U },
+    { 2832328698U, 1639852349U },
+    { 1444146446U,  811575873U },
+    { 1353929616U, 2406667616U },
+    { 1351905135U, 4218730939U },
+    { 3319742702U, 2900579629U },
+    { 4175463158U, 2780563524U },
+    { 3477593642U, 2778157346U },
+    { 2037479732U,  770197497U },
+    { 2399533030U,  403603339U },
+    { 1630048742U, 3481329838U },
+    {  272572125U, 1887955081U },
+    { 2968542519U, 2207640096U }
+};
+
+const uint32_t expected_invert_prime2325_size =
+    dimension_of(expected_invert_prime2325);
+
+
 
 
 

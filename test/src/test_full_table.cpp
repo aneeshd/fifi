@@ -25,7 +25,6 @@ TEST(test_full_table, binary8multiply)
 
 }
 
-
 TEST(test_full_table, binary8divide)
 {
     fifi::full_table<fifi::binary8> fulltable;
@@ -34,12 +33,39 @@ TEST(test_full_table, binary8divide)
 
     for(uint32_t i = 0; i < size; ++i)
     {
-	expected_result_2<fifi::binary8> res = expected_divide_binary8[i];	
+	expected_result_2<fifi::binary8> res = expected_divide_binary8[i];
 	EXPECT_EQ(fulltable.divide(res.arg1, res.arg2), res.result);
     }
-    
+
 }
 
+TEST(test_full_table, binary8add)
+{
+    fifi::full_table<fifi::binary8> fulltable;
+
+    uint32_t size = expected_add_binary8_size;
+
+    for(uint32_t i = 0; i < size; ++i)
+    {
+	expected_result_2<fifi::binary8> res = expected_add_binary8[i];
+	EXPECT_EQ(fulltable.add(res.arg1, res.arg2), res.result);
+    }
+
+}
+
+TEST(test_full_table, binary8subtract)
+{
+    fifi::full_table<fifi::binary8> fulltable;
+
+    uint32_t size = expected_subtract_binary8_size;
+
+    for(uint32_t i = 0; i < size; ++i)
+    {
+	expected_result_2<fifi::binary8> res = expected_subtract_binary8[i];
+	EXPECT_EQ(fulltable.subtract(res.arg1, res.arg2), res.result);
+    }
+
+}
 
 TEST(test_full_table, binary8invert)
 {
@@ -47,7 +73,7 @@ TEST(test_full_table, binary8invert)
     fifi::full_table<fifi::binary8> fulltable;
 
     uint32_t size = expected_invert_binary8_size;
-    
+
     for(uint32_t i = 0; i < size; ++i)
     {
 	expected_result_1<fifi::binary8> res = expected_invert_binary8[i];
@@ -55,7 +81,6 @@ TEST(test_full_table, binary8invert)
     }
 
 }
-
 
 TEST(test_full_table, binary8randCheck)
 {
