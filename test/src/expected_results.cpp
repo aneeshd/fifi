@@ -13,15 +13,8 @@ inline uint32_t dimension_of(T (&)[N])
 }
 
 
-const expected_result_2<fifi::binary8> multiply_results<fifi::binary8>::m_results[] =
-{
-    { 1, 2, 3 }
-};
-
-
-
-// Multiply binary8
-const expected_result_2<fifi::binary8> expected_multiply_binary8[] =
+const expected_result_2<fifi::binary8>
+multiply_results<fifi::binary8>::m_results[] =
 {
     // arg1, arg2, result
     { 0,   0,   0   },
@@ -50,12 +43,12 @@ const expected_result_2<fifi::binary8> expected_multiply_binary8[] =
     { 110, 253, 232 }
 };
 
-const uint32_t expected_multiply_binary8_size =
-    dimension_of(expected_multiply_binary8);
+const uint32_t multiply_results<fifi::binary8>::m_size =
+    dimension_of(multiply_results<fifi::binary8>::m_results);
 
 
-// Divide binary8
-const expected_result_2<fifi::binary8> expected_divide_binary8[] =
+const expected_result_2<fifi::binary8>
+divide_results<fifi::binary8>::m_results[] =
 {
     // arg1, arg2, result
     { 0,   2,   0   },
@@ -83,8 +76,8 @@ const expected_result_2<fifi::binary8> expected_divide_binary8[] =
     { 110, 253, 52  }
 };
 
-const uint32_t expected_divide_binary8_size =
-    dimension_of(expected_divide_binary8);
+const uint32_t divide_results<fifi::binary8>::m_size =
+    dimension_of(divide_results<fifi::binary8>::m_results);
 
 // Add binary8
 //
@@ -106,7 +99,8 @@ const uint32_t expected_divide_binary8_size =
 //       str = sprintf('{ %4d, %4d, %4d }', uint8(gf1.x), uint8(gf2.x), uint8(xgf.x));
 //       disp(str)
 //     end
-const expected_result_2<fifi::binary8> expected_add_binary8[] =
+const expected_result_2<fifi::binary8>
+add_results<fifi::binary8>::m_results[] =
 {
     // arg1, arg2, result
     {  194,  135,   69 },
@@ -132,8 +126,9 @@ const expected_result_2<fifi::binary8> expected_add_binary8[] =
     {  161,   94,  255 }
 };
 
-const uint32_t expected_add_binary8_size =
-    dimension_of(expected_add_binary8);
+const uint32_t add_results<fifi::binary8>::m_size =
+    dimension_of(add_results<fifi::binary8>::m_results);
+
 
 // Subtract binary8
 //
@@ -152,10 +147,13 @@ const uint32_t expected_add_binary8_size =
 //
 //       xgf = gf1 - gf2;
 //
-//       str = sprintf('{ %4d, %4d, %4d }', uint8(gf1.x), uint8(gf2.x), uint8(xgf.x));
+//       str = sprintf('{ %4d, %4d, %4d }', ...
+//                     uint8(gf1.x), uint8(gf2.x), ...
+//                     uint8(xgf.x));
 //       disp(str)
 //     end
-const expected_result_2<fifi::binary8> expected_subtract_binary8[] =
+const expected_result_2<fifi::binary8>
+subtract_results<fifi::binary8>::m_results[] =
 {
     // arg1, arg2, result
     {  147,  115,  224 },
@@ -181,12 +179,13 @@ const expected_result_2<fifi::binary8> expected_subtract_binary8[] =
     {  232,   59,  211 }
 };
 
-const uint32_t expected_subtract_binary8_size =
-    dimension_of(expected_subtract_binary8);
+const uint32_t subtract_results<fifi::binary8>::m_size =
+    dimension_of(subtract_results<fifi::binary8>::m_results);
 
 
 // Invert binary8
-const expected_result_1<fifi::binary8> expected_invert_binary8[] =
+const expected_result_1<fifi::binary8>
+invert_results<fifi::binary8>::m_results[] =
 {
     // arg1, result
     { 1,   1   },
@@ -211,12 +210,13 @@ const expected_result_1<fifi::binary8> expected_invert_binary8[] =
     { 255, 253 }
 };
 
-const uint32_t expected_invert_binary8_size =
-    dimension_of(expected_invert_binary8);
+const uint32_t invert_results<fifi::binary8>::m_size =
+    dimension_of(invert_results<fifi::binary8>::m_results);
 
 
-// Multiply binary16
-const expected_result_2<fifi::binary16> expected_multiply_binary16[] =
+
+const expected_result_2<fifi::binary16>
+multiply_results<fifi::binary16>::m_results[] =
 {
     // arg1, arg2, result
     { 0,   0,   0     },
@@ -245,12 +245,13 @@ const expected_result_2<fifi::binary16> expected_multiply_binary16[] =
     { 110, 253, 9478  }
 };
 
-const uint32_t expected_multiply_binary16_size =
-    dimension_of(expected_multiply_binary16);
+const uint32_t multiply_results<fifi::binary16>::m_size =
+    dimension_of(multiply_results<fifi::binary16>::m_results);
 
 
-// Divide binary16
-const expected_result_2<fifi::binary16> expected_divide_binary16[] =
+
+const expected_result_2<fifi::binary16>
+divide_results<fifi::binary16>::m_results[] =
 {
     // arg1, arg2, result
     { 0,   2,   0     },
@@ -278,8 +279,9 @@ const expected_result_2<fifi::binary16> expected_divide_binary16[] =
     { 110, 253, 825   }
 };
 
-const uint32_t expected_divide_binary16_size =
-    dimension_of(expected_divide_binary16);
+const uint32_t divide_results<fifi::binary16>::m_size =
+    dimension_of(divide_results<fifi::binary16>::m_results);
+
 
 // Add binary16
 //
@@ -304,7 +306,8 @@ const uint32_t expected_divide_binary16_size =
 //                     uint16(xgf.x));
 //       disp(str)
 //     end
-const expected_result_2<fifi::binary16> expected_add_binary16[] =
+const expected_result_2<fifi::binary16>
+add_results<fifi::binary16>::m_results[] =
 {
     // arg1, arg2, result
     {  11335U,  64208U,  54935U },
@@ -330,8 +333,10 @@ const expected_result_2<fifi::binary16> expected_add_binary16[] =
     {  50328U,  63624U,  15376U }
 };
 
-const uint32_t expected_add_binary16_size =
-    dimension_of(expected_add_binary16);
+const uint32_t add_results<fifi::binary16>::m_size =
+    dimension_of(add_results<fifi::binary16>::m_results);
+
+
 
 // Subtract binary16
 //
@@ -356,7 +361,8 @@ const uint32_t expected_add_binary16_size =
 //                     uint16(xgf.x));
 //       disp(str)
 //     end
-const expected_result_2<fifi::binary16> expected_subtract_binary16[] =
+const expected_result_2<fifi::binary16>
+subtract_results<fifi::binary16>::m_results[] =
 {
     // arg1,    arg2,    result
     {  47030U,  45394U,   1764U },
@@ -382,11 +388,14 @@ const expected_result_2<fifi::binary16> expected_subtract_binary16[] =
     {  30054U,  57007U,  43977U }
 };
 
-const uint32_t expected_subtract_binary16_size =
-    dimension_of(expected_subtract_binary16);
+const uint32_t subtract_results<fifi::binary16>::m_size =
+    dimension_of(subtract_results<fifi::binary16>::m_results);
+
+
 
 // Invert binary16
-const expected_result_1<fifi::binary16> expected_invert_binary16[] =
+const expected_result_1<fifi::binary16>
+invert_results<fifi::binary16>::m_results[] =
 {
     // arg1, result
     { 1,   1     },
@@ -411,12 +420,14 @@ const expected_result_1<fifi::binary16> expected_invert_binary16[] =
     { 255, 7372  }
 };
 
-const uint32_t expected_invert_binary16_size =
-    dimension_of(expected_invert_binary16);
+const uint32_t invert_results<fifi::binary16>::m_size =
+    dimension_of(invert_results<fifi::binary16>::m_results);
 
 
-// Multiply prime2325
-const expected_result_2<fifi::prime2325> expected_multiply_prime2325[] =
+
+
+const expected_result_2<fifi::prime2325>
+multiply_results<fifi::prime2325>::m_results[] =
 {
     // arg1,       arg2,        result
     { 0U,          0U,          0U          },
@@ -450,14 +461,15 @@ const expected_result_2<fifi::prime2325> expected_multiply_prime2325[] =
     { 591588585U,  2298808855U, 2016341846U },
     { 3791215484U, 823219598U,  3413971131U },
     { 188377222U,  2440371958U, 1837383177U }
-
 };
 
-const uint32_t expected_multiply_prime2325_size =
-    dimension_of(expected_multiply_prime2325);
+const uint32_t multiply_results<fifi::prime2325>::m_size =
+    dimension_of(multiply_results<fifi::prime2325>::m_results);
 
-// Divide prime2325
-const expected_result_2<fifi::prime2325> expected_divide_prime2325[] =
+
+
+const expected_result_2<fifi::prime2325>
+divide_results<fifi::prime2325>::m_results[] =
 {
     // arg1,       arg2,        result
     { 4294967290U, 1U,          4294967290U },
@@ -484,10 +496,13 @@ const expected_result_2<fifi::prime2325> expected_divide_prime2325[] =
     { 163139403U,  1828949500U, 2835205604U }
 };
 
-const uint32_t expected_divide_prime2325_size =
-    dimension_of(expected_divide_prime2325);
 
-const expected_result_2<fifi::prime2325> expected_add_prime2325[] =
+const uint32_t divide_results<fifi::prime2325>::m_size =
+    dimension_of(divide_results<fifi::prime2325>::m_results);
+
+
+const expected_result_2<fifi::prime2325>
+add_results<fifi::prime2325>::m_results[] =
 {
     // arg1,       arg2,        result
     { 0U,          0U,          0U          },
@@ -514,11 +529,13 @@ const expected_result_2<fifi::prime2325> expected_add_prime2325[] =
 
 };
 
-const uint32_t expected_add_prime2325_size =
-    dimension_of(expected_add_prime2325);
+const uint32_t add_results<fifi::prime2325>::m_size =
+    dimension_of(add_results<fifi::prime2325>::m_results);
 
 
-const expected_result_2<fifi::prime2325> expected_subtract_prime2325[] =
+
+const expected_result_2<fifi::prime2325>
+subtract_results<fifi::prime2325>::m_results[] =
 {
     // arg1,       arg2,        result
     { 0U,          0U,          0U          },
@@ -546,11 +563,13 @@ const expected_result_2<fifi::prime2325> expected_subtract_prime2325[] =
     { 1111197069U, 3288497105U, 2117667255U }
 };
 
-const uint32_t expected_subtract_prime2325_size =
-    dimension_of(expected_subtract_prime2325);
+const uint32_t subtract_results<fifi::prime2325>::m_size =
+    dimension_of(subtract_results<fifi::prime2325>::m_results);
+
 
 // Invert prime2325
-const expected_result_1<fifi::prime2325> expected_invert_prime2325[] =
+const expected_result_1<fifi::prime2325>
+invert_results<fifi::prime2325>::m_results[] =
 {
     // arg1,       result
     {          1U,          1U },
@@ -575,11 +594,8 @@ const expected_result_1<fifi::prime2325> expected_invert_prime2325[] =
     { 2968542519U, 2207640096U }
 };
 
-const uint32_t expected_invert_prime2325_size =
-    dimension_of(expected_invert_prime2325);
-
-
-
+const uint32_t invert_results<fifi::prime2325>::m_size =
+    dimension_of(invert_results<fifi::prime2325>::m_results);
 
 
 

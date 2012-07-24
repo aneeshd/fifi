@@ -12,89 +12,30 @@
 
 TEST(test_full_table, binary8multiply)
 {
-
-    fifi::full_table<fifi::binary8> fulltable;
-
-    uint32_t size = expected_multiply_binary8_size;
-
-    for(uint32_t i = 0; i < size; ++i)
-    {
-	expected_result_2<fifi::binary8> res = expected_multiply_binary8[i];
-	EXPECT_EQ(fulltable.multiply(res.arg1, res.arg2), res.result);
-    }
-
+    check_results_multiply<fifi::full_table<fifi::binary8> >();
 }
 
 TEST(test_full_table, binary8divide)
 {
-    fifi::full_table<fifi::binary8> fulltable;
-
-    uint32_t size = expected_divide_binary8_size;
-
-    for(uint32_t i = 0; i < size; ++i)
-    {
-	expected_result_2<fifi::binary8> res = expected_divide_binary8[i];
-	EXPECT_EQ(fulltable.divide(res.arg1, res.arg2), res.result);
-    }
-
+    check_results_divide<fifi::full_table<fifi::binary8> >();
 }
 
 TEST(test_full_table, binary8add)
 {
-    fifi::full_table<fifi::binary8> fulltable;
-
-    uint32_t size = expected_add_binary8_size;
-
-    for(uint32_t i = 0; i < size; ++i)
-    {
-	expected_result_2<fifi::binary8> res = expected_add_binary8[i];
-	EXPECT_EQ(fulltable.add(res.arg1, res.arg2), res.result);
-    }
-
+    check_results_add<fifi::full_table<fifi::binary8> >();
 }
 
 TEST(test_full_table, binary8subtract)
 {
-    fifi::full_table<fifi::binary8> fulltable;
-
-    uint32_t size = expected_subtract_binary8_size;
-
-    for(uint32_t i = 0; i < size; ++i)
-    {
-	expected_result_2<fifi::binary8> res = expected_subtract_binary8[i];
-	EXPECT_EQ(fulltable.subtract(res.arg1, res.arg2), res.result);
-    }
-
+    check_results_subtract<fifi::full_table<fifi::binary8> >();
 }
 
 TEST(test_full_table, binary8invert)
 {
-
-    fifi::full_table<fifi::binary8> fulltable;
-
-    uint32_t size = expected_invert_binary8_size;
-
-    for(uint32_t i = 0; i < size; ++i)
-    {
-	expected_result_1<fifi::binary8> res = expected_invert_binary8[i];
-	EXPECT_EQ(fulltable.invert(res.arg1), res.result);
-    }
-
+    check_results_invert<fifi::full_table<fifi::binary8> >();
 }
 
 TEST(test_full_table, binary8randCheck)
 {
-    fifi::full_table<fifi::binary8> fulltable;
-
-    int elements = 100;
-
-    for(int i = 0; i < elements; ++i)
-    {
-        fifi::binary8::value_type v = rand() % fifi::binary8::order;
-
-        if(v == 0)
-            ++v;
-
-        EXPECT_EQ( fulltable.multiply(v, fulltable.divide(1, v)), 1);
-    }
+    check_random<fifi::full_table<fifi::binary8> >();
 }
