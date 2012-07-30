@@ -30,7 +30,7 @@ std::vector<uint32_t> setup_sizes()
     std::vector<uint32_t> sizes;
     //sizes.push_back(100);
     sizes.push_back(1400);
-    sizes.push_back(2000);
+    //sizes.push_back(2000);
     return sizes;
 }
 
@@ -59,10 +59,10 @@ std::vector<std::string> setup_operations()
     std::vector<std::string> operations;
     operations.push_back("dest[i] = dest[i] + src[i]");
     operations.push_back("dest[i] = dest[i] - src[i]");
-//    operations.push_back("dest[i] = dest[i] * src[i]");
+    operations.push_back("dest[i] = dest[i] * src[i]");
     operations.push_back("dest[i] = dest[i] + (constant * src[i])");
     operations.push_back("dest[i] = dest[i] - (constant * src[i])");
-//    operations.push_back("dest[i] = dest[i] * constant");
+    operations.push_back("dest[i] = dest[i] * constant");
 
     return operations;
 }
@@ -116,6 +116,8 @@ public:
 
             m_random_symbols_one.resize(max_vectors);
             m_random_symbols_two.resize(max_vectors);
+
+            m_temp.resize(max_length);
 
             for(uint32_t j = 0; j < max_vectors; ++j)
             {
@@ -255,7 +257,7 @@ public:
                     for(uint32_t i = 0; i < vectors; ++i)
                     {
                         f(m_field, constant, &(m_symbols_one[i][0]),
-                          &(m_symbols_two[i][0]), length);
+                          &(m_symbols_two[i][0]), &m_temp[0], length);
                     }
                 }
 
@@ -273,7 +275,7 @@ public:
                         uint32_t index_two = rand() % vectors;
 
                         f(m_field, constant, &(m_symbols_one[index_one][0]),
-                          &(m_symbols_two[index_two][0]), length);
+                          &(m_symbols_two[index_two][0]), &m_temp[0], length);
                     }
                 }
 
@@ -380,6 +382,8 @@ protected:
     /// Random data for the second buffer of symbols
     std::vector< std::vector<value_type> > m_random_symbols_two;
 
+    /// Temp buffer required for composite algorithms
+    std::vector<value_type> m_temp;
 
 };
 

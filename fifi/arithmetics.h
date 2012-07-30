@@ -110,6 +110,7 @@ namespace fifi
         }
     }
 
+
     /// Generic version of subtract two buffers
     ///
     /// Provides: dest[i] = dest[i] - src[i]
@@ -134,6 +135,41 @@ namespace fifi
 	    dest[i] = field.subtract(dest[i], src[i]);
 	}
     }
+
+    template<>
+    inline void
+    subtract(const optimal_prime<prime2325> &/*field*/,
+             optimal_prime<prime2325>::value_type * __restrict dest,
+             const optimal_prime<prime2325>::value_type * __restrict src,
+             uint32_t length)
+    {
+        assert(dest != 0);
+        assert(src != 0);
+        assert(length > 0);
+
+        for(uint32_t i = 0; i < length; ++i)
+        {
+            // If dest[i] >= src[i] then we will not have an underflow
+            //
+            //     1 if no underflow
+            //     0 if underflow
+            //
+            // This means that (dest[i] >= src[i]) - 1 becomes:
+            //
+            //     0 or 0x00000000 if no underflow
+            //     -1 or 0xffffffff if underflow
+            //
+            // An underflow is equivalent to a mod 2^32 since
+            // we are working 2^32 - 5 we simply subtract 5 to
+            // compensate
+            dest[i] = (dest[i] - src[i]) + (-5 & ((dest[i] >= src[i]) - 1));
+
+            // Different from addition there is no way we can end up
+            // above the prime so we don't have to do anything else
+        }
+    }
+
+
 
     /// Generic version of multiplying two buffers
     ///
@@ -191,6 +227,7 @@ namespace fifi
 	}
     }
 
+
     /// The overload is taken for binary fields for the multiply_constant(...)
     /// functions. Since the binary field only consists of elements {0,1}
     /// therefore we either zero the buffer or leave it untouched.
@@ -232,10 +269,12 @@ namespace fifi
                  typename FieldImpl::value_type constant,
                  typename FieldImpl::value_type * __restrict dest,
                  const typename FieldImpl::value_type * __restrict src,
+                 typename FieldImpl::value_type * __restrict temp,
                  uint32_t length)
     {
 	assert(dest != 0);
 	assert(src != 0);
+        assert(temp != 0);
 	assert(length > 0);
 
         typedef typename FieldImpl::field_type field_type;
@@ -250,12 +289,11 @@ namespace fifi
 
         typedef typename FieldImpl::value_type value_type;
 
-        value_type multiplied;
 
-	for(uint32_t i = 0; i < length; ++i)
-	{
-	    multiplied = field.multiply(constant, src[i]);
-	    dest[i] = field.add(multiplied, dest[i]);
+        for(uint32_t i = 0; i < length; ++i)
+        {
+            value_type d = field.multiply(constant, src[i]);
+	    dest[i] = field.add(dest[i], d);
 	}
 
     }
@@ -266,36 +304,27 @@ namespace fifi
                  optimal_prime<prime2325>::value_type constant,
                  optimal_prime<prime2325>::value_type * __restrict dest,
                  const optimal_prime<prime2325>::value_type * __restrict src,
+                 optimal_prime<prime2325>::value_type * __restrict temp,
                  uint32_t length)
     {
-	assert(dest != 0);
-	assert(src != 0);
-	assert(length > 0);
+        assert(dest != 0);
+        assert(src != 0);
+        assert(temp != 0);
+        assert(length > 0);
 
-        static optimal_prime<prime2325>::value_type d[2000];
-        //static optimal_prime<prime2325>::value_type d_mul[2000];
-
-	if(constant == 0)
-	    return;
+        if(constant == 0)
+            return;
 
         typedef optimal_prime<prime2325>::value_type value_type;
 
-	for(uint32_t i = 0; i < length; ++i)
-	{
-	    d[i] = field.multiply(constant, src[i]);
+        for(uint32_t i = 0; i < length; ++i)
+        {
+            temp[i] = field.multiply(constant, src[i]);
+        }
 
-            //d[] = field.multiply(constant, src[i]);
-            //dest[i] = dest[i] + d[0];
-            //dest[i] = dest[i] + (
-            //    (-prime2325::prime) & ((prime2325::prime > dest[i]) - 1));
-            //dest[i] = dest[i] >= prime2325::prime ? dest[i] - prime2325::prime : dest[i];
-	}
-
-        add(field, dest, d, length);
+        add(field, dest, temp, length);
 
     }
-
-
 
     // This overload is for the full table implementation where
     // a small optimization is possible when adding two buffers
@@ -308,6 +337,7 @@ namespace fifi
         	 full_table<binary8>::value_type constant,
         	 full_table<binary8>::value_type * __restrict dest,
         	 const full_table<binary8>::value_type * __restrict src,
+                 full_table<binary8>::value_type * /*__restrict temp*/,
         	 uint32_t length)
     {
         assert(dest != 0);
@@ -343,6 +373,7 @@ namespace fifi
                              typename binary::value_type constant,
                              typename binary::value_type * __restrict dest,
                              const typename binary::value_type * __restrict src,
+                             typename binary::value_type * /*__restrict temp*/,
                              uint32_t length)
     {
 	assert(dest != 0);
@@ -379,10 +410,12 @@ namespace fifi
                       typename FieldImpl::value_type constant,
                       typename FieldImpl::value_type * __restrict dest,
                       const typename FieldImpl::value_type * __restrict src,
+                      typename FieldImpl::value_type * __restrict temp,
                       uint32_t length)
     {
 	assert(dest != 0);
 	assert(src != 0);
+        assert(temp != 0);
 	assert(length > 0);
 
         typedef typename FieldImpl::field_type field_type;
@@ -397,11 +430,39 @@ namespace fifi
 
         typedef typename FieldImpl::value_type value_type;
 
-	for(uint32_t i = 0; i < length; ++i)
+        for(uint32_t i = 0; i < length; ++i)
 	{
-	    value_type multiplied = field.multiply(constant, src[i]);
-	    dest[i] = field.subtract(dest[i], multiplied);
+	    value_type m = field.multiply(constant, src[i]);
+	    dest[i] = field.subtract(dest[i], m);
 	}
+    }
+
+    template<>
+    inline void
+    multiply_subtract(const optimal_prime<prime2325> &field,
+                      optimal_prime<prime2325>::value_type constant,
+                      optimal_prime<prime2325>::value_type * __restrict dest,
+                      const optimal_prime<prime2325>::value_type * __restrict src,
+                      optimal_prime<prime2325>::value_type * __restrict temp,
+                      uint32_t length)
+    {
+        assert(dest != 0);
+        assert(src != 0);
+        assert(temp != 0);
+        assert(length > 0);
+
+        if(constant == 0)
+            return;
+
+        typedef optimal_prime<prime2325>::value_type value_type;
+
+        for(uint32_t i = 0; i < length; ++i)
+        {
+            temp[i] = field.multiply(constant, src[i]);
+        }
+
+        subtract(field, dest, temp, length);
+
     }
 
     /// This overload is for the full table implementation where
@@ -415,6 +476,7 @@ namespace fifi
                       full_table<binary8>::value_type constant,
                       full_table<binary8>::value_type * __restrict dest,
                       const full_table<binary8>::value_type * __restrict src,
+                      full_table<binary8>::value_type * /*__restrict temp*/,
                       uint32_t length)
     {
         assert(dest != 0);
@@ -451,6 +513,7 @@ namespace fifi
                       typename binary::value_type constant,
                       typename binary::value_type * __restrict dest,
                       const typename binary::value_type * __restrict src,
+                      typename binary::value_type * /*__restrict temp*/,
                       uint32_t length)
     {
 	assert(dest != 0);

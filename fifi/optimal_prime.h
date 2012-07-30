@@ -71,19 +71,20 @@ namespace fifi
         uint64_t c = static_cast<uint64_t>(element_one) *
                      static_cast<uint64_t>(element_two);
 
-        uint64_t h1 = c >> 32;
-        uint64_t l1 = c & 0xffffffff;
+        uint32_t l1 = c & 0xffffffff;
+        c = c >> 32;
+        c = c * 5;
 
-        c = h1 * 5;
-        uint64_t h2 = c >> 32;
-        uint64_t l2 = c & 0xffffffff;
+        uint32_t l2 = c & 0xffffffff;
+        c = c >> 32;
+        c = c * 5;
 
-        c = h2 * 5;
         c = c + l1 + l2;
 
         c = c >= prime2325::prime ? c - prime2325::prime : c;
 
         return static_cast<value_type>(c);
+
     }
 
     /// Specialization for the (2^32 - 5) prime field. This algorithm
@@ -147,12 +148,14 @@ namespace fifi
     optimal_prime<prime2325>::add(value_type element_one,
                                   value_type element_two) const
     {
-        int64_t sum = int64_t(element_one) + int64_t(element_two);
+        element_one = element_one + element_two;
+        element_one = element_one + (5 & ((element_one >= element_two) - 1));
 
-        sum = sum + (
-                (-prime2325::prime) & ((prime2325::prime > sum) - 1));
 
-        return (value_type)sum;
+        element_one = element_one + (
+                (-prime2325::prime) & ((prime2325::prime > element_one) - 1));
+
+        return element_one;
     }
 
     /// Specialization for the (2^32 - 5) prime field
@@ -161,10 +164,10 @@ namespace fifi
     optimal_prime<prime2325>::subtract(value_type element_one,
                                        value_type element_two) const
     {
-        int64_t sum = int64_t(element_one) - int64_t(element_two);
-        sum = sum < 0 ? sum + prime2325::prime : sum;
-
-        return (value_type)sum;
+        // Se explanation for the funny business below in arithmetics.h
+        // specialization of subtract for optimal_prime<prime2325>
+        return (element_one - element_two)
+            + (-5 & ((element_one >= element_two) - 1));
     }
 
 }
