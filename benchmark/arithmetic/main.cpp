@@ -57,12 +57,12 @@ std::vector<uint32_t> setup_vectors()
 std::vector<std::string> setup_operations()
 {
     std::vector<std::string> operations;
-    operations.push_back("dest[i] = dest[i] + src[i]");
-    operations.push_back("dest[i] = dest[i] - src[i]");
-    operations.push_back("dest[i] = dest[i] * src[i]");
+//    operations.push_back("dest[i] = dest[i] + src[i]");
+//    operations.push_back("dest[i] = dest[i] - src[i]");
+//    operations.push_back("dest[i] = dest[i] * src[i]");
     operations.push_back("dest[i] = dest[i] + (constant * src[i])");
     operations.push_back("dest[i] = dest[i] - (constant * src[i])");
-    operations.push_back("dest[i] = dest[i] * constant");
+//    operations.push_back("dest[i] = dest[i] * constant");
 
     return operations;
 }
