@@ -9,6 +9,7 @@ tbd (master)
 * Switched c++11 compiler flag on per default
 * Adding optimal prime field
 * Moving benchmarks to the gauge tool
+* Moved fifi headers to the sub-directory src
 
 2.0.0
 -----

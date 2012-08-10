@@ -81,8 +81,8 @@ def build(bld):
         bld.recurse('benchmark/prime2325')
 
     # Export own includes
-    bld(includes = '.',
-        export_includes = '.',
+    bld(includes = './src',
+        export_includes = './src',
         name = 'fifi_includes')
 
 
