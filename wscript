@@ -62,6 +62,32 @@ def configure(conf):
         recurse_helper(conf, 'sak')
         recurse_helper(conf, 'gauge')
 
+def test_set_exit_code(bld):
+    """
+    Sets the exit code of the script on error
+
+    Issue #1194 in the waf project this code should be removed
+    if the code gets merged into the waf project
+
+    If any of the tests fail waf will exit with that exit code.
+    This is useful if you have an automated build system which need
+    to report on errors from the tests.
+    You may use it like this:
+        def build(bld):
+            bld(features='cxx cxxprogram test', source='main.c', target='app')
+            from waflib.Tools import waf_unit_test
+            bld.add_post_fun(waf_unit_test.set_exit_code)
+    """
+    lst = getattr(bld, 'utest_results', [])
+    for (f, code, out, err) in lst:
+        if code:
+            msg = []
+            if out:
+                msg.append('stdout:%s%s' % (os.linesep, out.decode('utf-8')))
+            if err:
+                msg.append('stderr:%s%s' % (os.linesep, err.decode('utf-8')))
+            bld.fatal(os.linesep.join(msg))
+
 def build(bld):
 
     if bld.is_toplevel():
@@ -84,6 +110,7 @@ def build(bld):
 
         from waflib.Tools import waf_unit_test
         bld.add_post_fun(waf_unit_test.summary)
+        bld.add_post_fun(test_set_exit_code)
 
     # Export own includes
     bld(includes = './src',
