@@ -19,7 +19,7 @@
 std::vector<uint32_t> block_lengths()
 {
     std::vector<uint32_t> l;
-    for(uint32_t b = 1000; b < 3750000; b += 100000)
+    for(uint32_t b = 1000; b < 3750000; b += 500000)
     {
         l.push_back(b);
     }
@@ -70,7 +70,6 @@ public:
     std::vector<uint32_t> m_block;
 };
 
-
 BENCHMARK_F(run_prime2325_bitmap, Prime2325Bitmap, FindPrefix, 5)
 {
 
@@ -88,10 +87,6 @@ BENCHMARK_F(run_prime2325_bitmap, Prime2325Bitmap, FindPrefix, 5)
 
     (void)prefix;
 }
-
-
-
-
 
 /// This test shows how you can create configurations
 /// for the benchmarks. This could be different string
@@ -131,7 +126,6 @@ public:
     std::vector<uint32_t> m_block;
 };
 
-
 BENCHMARK_F(run_prime2325_binary_search, Prime2325BinarySearch, FindPrefix, 5)
 {
 
@@ -150,10 +144,6 @@ BENCHMARK_F(run_prime2325_binary_search, Prime2325BinarySearch, FindPrefix, 5)
 
     (void)prefix;
 }
-
-
-
-
 
 int main(int argc, const char* argv[])
 {
