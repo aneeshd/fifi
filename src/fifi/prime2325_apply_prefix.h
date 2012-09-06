@@ -11,8 +11,13 @@
 namespace fifi
 {
 
+    /// Overload for applying a prefix to a storage object
+    /// @param first iterator to the beginning of the storage
+    /// @param last iterator to the end of the storage
+    /// @param prefix to apply
     template<class StorageIterator>
-    inline void apply_prefix(StorageIterator first, StorageIterator last,
+    inline void apply_prefix(StorageIterator first,
+                             StorageIterator last,
                              uint32_t prefix)
     {
         while(first != last)
@@ -38,7 +43,7 @@ namespace fifi
 
     /// Applies a prefix to a storage sequence
     /// @param sequence a storage sequence @see sak::storage_list
-    /// @return an unused prefix
+    /// @param prefix to apply
     template<class StorageSequence>
     inline void apply_prefix(StorageSequence sequence, uint32_t prefix)
     {

@@ -17,6 +17,7 @@ def recurse_helper(ctx, name):
 
 def options(opt):
 
+    opt.load('waf_unit_test')
     opt.load('toolchain_cxx')
     opt.load('dependency_bundle')
 
@@ -52,6 +53,7 @@ def configure(conf):
 
     if conf.is_toplevel():
 
+        conf.load('waf_unit_test')
         conf.load('toolchain_cxx')
         conf.load('dependency_bundle')
 
@@ -79,6 +81,9 @@ def build(bld):
         bld.recurse('benchmark/basic_operations')
         bld.recurse('benchmark/arithmetic')
         bld.recurse('benchmark/prime2325')
+
+        from waflib.Tools import waf_unit_test
+        bld.add_post_fun(waf_unit_test.summary)
 
     # Export own includes
     bld(includes = './src',
