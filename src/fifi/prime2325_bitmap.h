@@ -7,7 +7,7 @@
 #define FIFI_PRIME_2325_BITMAP_H
 
 #include "field_types.h"
-#include <sak/storage.h>
+#include <sak/storage.hpp>
 
 namespace fifi
 {

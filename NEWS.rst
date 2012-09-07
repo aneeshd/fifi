@@ -12,6 +12,7 @@ tbd (master)
 * Moved fifi headers to the sub-directory src
 * Upgraded to waf 1.7.2 and using waf unit tests tool (for automatically
   running unit tests during a build).
+* Switched to sak version 4.x.y
 
 2.0.0
 -----

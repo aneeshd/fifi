@@ -10,7 +10,7 @@
 #include <fifi/prime2325_bitmap.h>
 #include <fifi/prime2325_binary_search.h>
 
-#include <sak/storage.h>
+#include <sak/storage.hpp>
 
 #include <cmath>
 #include <stdexcept>
