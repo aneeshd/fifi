@@ -34,7 +34,7 @@ def options(opt):
         resolve.ResolveGitMajorVersion(
             name = 'boost',
             git_repository = 'git://github.com/steinwurf/external-boost.git',
-            major_version = 1))
+            major_version = 2))
 
     bundle.add_dependency(opt,
         resolve.ResolveGitMajorVersion(

@@ -29,7 +29,6 @@ std::vector<uint32_t> setup_sizes()
 {
     std::vector<uint32_t> sizes;
     sizes.push_back(100);
-    sizes.push_back(1400);
     sizes.push_back(2000);
     return sizes;
 }
@@ -42,12 +41,9 @@ std::vector<uint32_t> setup_vectors()
 {
     std::vector<uint32_t> vectors;
     vectors.push_back(16);
-    vectors.push_back(32);
     vectors.push_back(64);
     vectors.push_back(128);
-    vectors.push_back(256);
     vectors.push_back(512);
-    vectors.push_back(1024);
 
     return vectors;
 }
