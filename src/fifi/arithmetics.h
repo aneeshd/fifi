@@ -104,8 +104,8 @@ namespace fifi
             // Our measurements show that this branch-less version
             // yields a significant performance gain over both the
             // branched and conditional move versions
-            dest[i] = dest[i] + (
-                (-prime2325::prime) & ((prime2325::prime > dest[i]) - 1));
+            dest[i] = dest[i] -
+                (prime2325::prime & ((prime2325::prime > dest[i]) - 1));
 
         }
     }
