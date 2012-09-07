@@ -152,8 +152,8 @@ namespace fifi
         element_one = element_one + (5 & ((element_one >= element_two) - 1));
 
 
-        element_one = element_one + (
-                (-prime2325::prime) & ((prime2325::prime > element_one) - 1));
+        element_one = element_one + (-
+            (prime2325::prime & ((prime2325::prime > element_one) - 1)));
 
         return element_one;
     }
