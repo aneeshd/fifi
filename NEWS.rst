@@ -10,6 +10,8 @@ tbd (master)
 * Adding optimal prime field
 * Moving benchmarks to the gauge tool
 * Moved fifi headers to the sub-directory src
+* Upgraded to waf 1.7.2 and using waf unit tests tool (for automatically
+  running unit tests during a build).
 
 2.0.0
 -----
