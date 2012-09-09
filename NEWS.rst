@@ -6,6 +6,9 @@ of every change, see the Git log.
 
 tbd (master)
 ------------
+
+3.0.0
+-----
 * Switched c++11 compiler flag on per default
 * Adding optimal prime field
 * Moving benchmarks to the gauge tool
