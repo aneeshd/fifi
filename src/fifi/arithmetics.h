@@ -146,7 +146,6 @@ namespace fifi
         assert(dest != 0);
         assert(src != 0);
         assert(length > 0);
-        assert((length % sizeof(prime2325::value_type)) == 0);
 
         for(uint32_t i = 0; i < length; ++i)
         {
