@@ -25,6 +25,20 @@ TEST(TestFifiUtils, bytes_needed)
     EXPECT_EQ(fifi::bytes_needed<fifi::binary16>(743), 1486U);
 }
 
+
+TEST(TestFifiUtils, elements_needed)
+{
+    EXPECT_EQ(fifi::elements_needed<fifi::binary>(1), 1U);
+    EXPECT_EQ(fifi::elements_needed<fifi::binary>(2), 2U);
+    EXPECT_EQ(fifi::elements_needed<fifi::binary8>(1), 1U);
+    EXPECT_EQ(fifi::elements_needed<fifi::binary8>(2), 2U);
+    EXPECT_EQ(fifi::elements_needed<fifi::binary16>(2), 1U);
+    EXPECT_EQ(fifi::elements_needed<fifi::binary16>(4), 2U);
+    EXPECT_EQ(fifi::elements_needed<fifi::prime2325>(4), 1U);
+    EXPECT_EQ(fifi::elements_needed<fifi::prime2325>(8), 2U);
+}
+
+
 TEST(TestFifiUtils, set_value)
 {
     uint8_t test[2] = {0,0};
