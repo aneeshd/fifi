@@ -146,6 +146,7 @@ namespace fifi
         assert(dest != 0);
         assert(src != 0);
         assert(length > 0);
+        assert((length % sizeof(prime2325::value_type)) == 0);
 
         for(uint32_t i = 0; i < length; ++i)
         {
@@ -162,7 +163,7 @@ namespace fifi
             // An underflow is equivalent to a mod 2^32 since
             // we are working 2^32 - 5 we simply subtract 5 to
             // compensate
-            dest[i] = (dest[i] - src[i]) + (-5 & ((dest[i] >= src[i]) - 1));
+            dest[i] = (dest[i] - src[i]) - (5 & ((dest[i] >= src[i]) - 1));
 
             // Different from addition there is no way we can end up
             // above the prime so we don't have to do anything else
