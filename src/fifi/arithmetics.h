@@ -43,6 +43,8 @@ namespace fifi
     {
 	assert(dest != 0);
 	assert(src != 0);
+        // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)src) & 15) == 0); // Check alignment
 	assert(length > 0);
 
 	for(uint32_t i = 0; i < length; ++i)
@@ -62,6 +64,8 @@ namespace fifi
     {
         assert(dest != 0);
         assert(src != 0);
+        // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)src) & 15) == 0); // Check alignment
         assert(length > 0);
 
         for(uint32_t i = 0; i < length; ++i)
@@ -128,6 +132,8 @@ namespace fifi
     {
 	assert(dest != 0);
 	assert(src != 0);
+        // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)src) & 15) == 0); // Check alignment
 	assert(length > 0);
 
 	for(uint32_t i = 0; i < length; ++i)
@@ -145,6 +151,8 @@ namespace fifi
     {
         assert(dest != 0);
         assert(src != 0);
+        // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)src) & 15) == 0); // Check alignment
         assert(length > 0);
 
         for(uint32_t i = 0; i < length; ++i)
@@ -188,6 +196,8 @@ namespace fifi
     {
 	assert(dest != 0);
 	assert(src != 0);
+        // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)src) & 15) == 0); // Check alignment
 	assert(length > 0);
 
 	for(uint32_t i = 0; i < length; ++i)
@@ -212,6 +222,7 @@ namespace fifi
                       uint32_t length)
     {
 	assert(dest != 0);
+        // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
 	assert(length > 0);
 
         typedef typename FieldImpl::field_type field_type;
@@ -241,6 +252,7 @@ namespace fifi
                       uint32_t length)
     {
 	assert(dest != 0);
+        // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
 	assert(length > 0);
 
         // Only {0,1} allowed
@@ -275,6 +287,9 @@ namespace fifi
 	assert(dest != 0);
 	assert(src != 0);
         assert(temp != 0);
+        // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)src) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)temp) & 15) == 0); // Check alignment
 	assert(length > 0);
 
         typedef typename FieldImpl::field_type field_type;
@@ -310,6 +325,9 @@ namespace fifi
         assert(dest != 0);
         assert(src != 0);
         assert(temp != 0);
+        // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)src) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)temp) & 15) == 0); // Check alignment
         assert(length > 0);
 
         if(constant == 0)
@@ -342,6 +360,8 @@ namespace fifi
     {
         assert(dest != 0);
         assert(src  != 0);
+        // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)src) & 15) == 0); // Check alignment
         assert(length > 0);
 
         if(constant == 0)
@@ -378,6 +398,8 @@ namespace fifi
     {
 	assert(dest != 0);
 	assert(src  != 0);
+        // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)src) & 15) == 0); // Check alignment
 	assert(length > 0);
 
         // Only {0,1} allowed
@@ -416,6 +438,9 @@ namespace fifi
 	assert(dest != 0);
 	assert(src != 0);
         assert(temp != 0);
+        // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)src) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)temp) & 15) == 0); // Check alignment
 	assert(length > 0);
 
         typedef typename FieldImpl::field_type field_type;
@@ -449,6 +474,9 @@ namespace fifi
         assert(dest != 0);
         assert(src != 0);
         assert(temp != 0);
+        // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)src) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)temp) & 15) == 0); // Check alignment
         assert(length > 0);
 
         if(constant == 0)
@@ -481,6 +509,8 @@ namespace fifi
     {
         assert(dest != 0);
         assert(src != 0);
+        // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)src) & 15) == 0); // Check alignment
         assert(length > 0);
 
         if(constant == 0)
@@ -518,6 +548,8 @@ namespace fifi
     {
 	assert(dest != 0);
 	assert(src != 0);
+        // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
+        // assert((((uintptr_t)src) & 15) == 0); // Check alignment
 	assert(length > 0);
 
         // Only {0,1} allowed

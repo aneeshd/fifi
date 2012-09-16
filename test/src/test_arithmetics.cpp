@@ -21,19 +21,26 @@ public:
     typedef typename FieldImpl::value_type value_type;
     typedef typename FieldImpl::field_type field_type;
 
-    test_arithmetics()
-        : m_length(100)
+    /// @param length the length of the data buffers
+    /// @param start_offset the start offset into the data buffers this
+    ///        allows us to ensure that the functions work even in cases
+    ///        where the addresses are not aligned on any specific memory
+    ///        addresses
+    test_arithmetics(uint32_t length, uint32_t start_offset)
+        : m_length(length),
+          m_start_offset(start_offset),
+          m_data_length(length + start_offset)
         {
-            m_dest.resize(m_length);
-            m_temp.resize(m_length);
-            m_src.resize(m_length);
-            m_dest_check.resize(m_length);
-            m_src_check.resize(m_length);
+            m_dest.resize(m_data_length);
+            m_temp.resize(m_data_length);
+            m_src.resize(m_data_length);
+            m_dest_check.resize(m_data_length);
+            m_src_check.resize(m_data_length);
         }
 
     void setup()
         {
-            for(uint32_t i = 0; i < m_length; ++i)
+            for(uint32_t i = 0; i < m_data_length; ++i)
             {
                 value_type d = rand() % field_type::order;
                 value_type s = rand() % field_type::order;
@@ -50,17 +57,21 @@ public:
         {
             setup();
 
-            fifi::add(m_impl, &m_dest[0], &m_src[0], m_length);
+            fifi::add(m_impl,
+                      &m_dest[0] + m_start_offset,
+                      &m_src[0]  + m_start_offset, m_length);
 
             // Now we verify that we have computed:
             // dest[i] = dest[i] + src[i]
             for(uint32_t i = 0; i < m_length; ++i)
             {
                 value_type result =
-                    m_impl.add(m_dest_check[i], m_src_check[i]);
+                    m_impl.add(m_dest_check[i + m_start_offset],
+                               m_src_check[i + m_start_offset]);
 
-                ASSERT_EQ(result, m_dest[i]);
+                ASSERT_EQ(result, m_dest[i + m_start_offset]);
             }
+
         }
 
 
@@ -68,16 +79,20 @@ public:
         {
             setup();
 
-            fifi::subtract(m_impl, &m_dest[0], &m_src[0], m_length);
+            fifi::subtract(m_impl,
+                           &m_dest[0] + m_start_offset,
+                           &m_src[0] + m_start_offset,
+                           m_length);
 
             // Now we verify that we have computed:
             // dest[i] = dest[i] + src[i]
             for(uint32_t i = 0; i < m_length; ++i)
             {
                 value_type result =
-                    m_impl.subtract(m_dest_check[i], m_src_check[i]);
+                    m_impl.subtract(m_dest_check[i + m_start_offset],
+                                    m_src_check[i + m_start_offset]);
 
-                ASSERT_EQ(result, m_dest[i]);
+                ASSERT_EQ(result, m_dest[i + m_start_offset]);
             }
         }
 
@@ -85,16 +100,20 @@ public:
         {
             setup();
 
-            fifi::multiply(m_impl, &m_dest[0], &m_src[0], m_length);
+            fifi::multiply(m_impl,
+                           &m_dest[0] + m_start_offset,
+                           &m_src[0] + m_start_offset,
+                           m_length);
 
             // Now we verify that we have computed:
             // dest[i] = dest[i] + src[i]
             for(uint32_t i = 0; i < m_length; ++i)
             {
                 value_type result =
-                    m_impl.multiply(m_dest_check[i], m_src_check[i]);
+                    m_impl.multiply(m_dest_check[i + m_start_offset],
+                                    m_src_check[i + m_start_offset]);
 
-                ASSERT_EQ(result, m_dest[i]);
+                ASSERT_EQ(result, m_dest[i + m_start_offset]);
             }
         }
 
@@ -105,16 +124,20 @@ public:
 
             value_type coefficient = rand() % field_type::order;
 
-            fifi::multiply_constant(m_impl, coefficient, &m_dest[0], m_length);
+            fifi::multiply_constant(m_impl,
+                                    coefficient,
+                                    &m_dest[0] + m_start_offset,
+                                    m_length);
 
             // Now we verify that we have computed:
             // dest[i] = dest[i] + src[i]
             for(uint32_t i = 0; i < m_length; ++i)
             {
                 value_type result =
-                    m_impl.multiply(coefficient, m_dest_check[i]);
+                    m_impl.multiply(coefficient,
+                                    m_dest_check[i + m_start_offset]);
 
-                ASSERT_EQ(result, m_dest[i]);
+                ASSERT_EQ(result, m_dest[i + m_start_offset]);
             }
         }
 
@@ -126,20 +149,24 @@ public:
             value_type coefficient = rand() % field_type::order;
 
             fifi::multiply_add(m_impl, coefficient,
-                               &m_dest[0], &m_src[0],
-                               &m_temp[0], m_length);
+                               &m_dest[0] + m_start_offset,
+                               &m_src[0] + m_start_offset,
+                               &m_temp[0] + m_start_offset,
+                               m_length);
 
             // Now we verify that we have computed:
             // dest[i] = dest[i] + (src[i]*c)
             for(uint32_t i = 0; i < m_length; ++i)
             {
                 value_type multiplied =
-                    m_impl.multiply(m_src_check[i], coefficient);
+                    m_impl.multiply(m_src_check[i + m_start_offset],
+                                    coefficient);
 
                 value_type result =
-                    m_impl.add(m_dest_check[i], multiplied);
+                    m_impl.add(m_dest_check[i + m_start_offset],
+                               multiplied);
 
-                ASSERT_EQ(result, m_dest[i]);
+                ASSERT_EQ(result, m_dest[i + m_start_offset]);
             }
         }
 
@@ -151,20 +178,24 @@ public:
             value_type coefficient = rand() % field_type::order;
 
             fifi::multiply_subtract(m_impl, coefficient,
-                                    &m_dest[0], &m_src[0],
-                                    &m_temp[0], m_length);
+                                    &m_dest[0] + m_start_offset,
+                                    &m_src[0] + m_start_offset,
+                                    &m_temp[0] + m_start_offset,
+                                    m_length);
 
             // Now we verify that we have computed:
             // dest[i] = dest[i] + (src[i]*c)
             for(uint32_t i = 0; i < m_length; ++i)
             {
                 value_type multiplied =
-                    m_impl.multiply(m_src_check[i], coefficient);
+                    m_impl.multiply(m_src_check[i + m_start_offset],
+                                    coefficient);
 
                 value_type result =
-                    m_impl.subtract(m_dest_check[i], multiplied);
+                    m_impl.subtract(m_dest_check[i + m_start_offset],
+                                    multiplied);
 
-                ASSERT_EQ(result, m_dest[i]);
+                ASSERT_EQ(result, m_dest[i + m_start_offset]);
             }
         }
 
@@ -173,6 +204,8 @@ public:
 private:
 
     uint32_t m_length;
+    uint32_t m_start_offset;
+    uint32_t m_data_length;
 
     std::vector<value_type> m_dest;
     std::vector<value_type> m_src;
@@ -186,9 +219,9 @@ private:
 };
 
 template<class FieldImpl>
-void test_functions()
+void test_functions(uint32_t length, uint32_t start_offset)
 {
-    test_arithmetics<FieldImpl> s;
+    test_arithmetics<FieldImpl> s(length, start_offset);
     s.test_add();
     s.test_subtract();
     s.test_multiply_add();
@@ -197,28 +230,60 @@ void test_functions()
     s.test_multiply_constant();
 }
 
+void test_functions(uint32_t length, uint32_t start_offset)
+{
+    test_functions<fifi::simple_online<fifi::binary> >(
+        length, start_offset);
+
+    test_functions< fifi::simple_online<fifi::binary8> >(
+        length, start_offset);
+
+    test_functions< fifi::simple_online<fifi::binary16> >(
+        length, start_offset);
+
+    test_functions< fifi::full_table<fifi::binary8> >(
+        length, start_offset);
+
+    test_functions< fifi::log_table<fifi::binary8> >(
+        length, start_offset);
+
+    test_functions< fifi::log_table<fifi::binary16> >(
+        length, start_offset);
+
+    test_functions< fifi::extended_log_table<fifi::binary8> >(
+        length, start_offset);
+
+    test_functions< fifi::extended_log_table<fifi::binary16> >(
+        length, start_offset);
+
+    test_functions< fifi::optimal_prime<fifi::prime2325> >(
+        length, start_offset);
+
+    // Just also run the default fields
+    test_functions< fifi::default_field_impl<fifi::binary>::type >(
+        length, start_offset);
+
+    test_functions< fifi::default_field_impl<fifi::binary8>::type >(
+        length, start_offset);
+
+    test_functions< fifi::default_field_impl<fifi::binary16>::type >(
+        length, start_offset);
+}
+
 
 TEST(test_arithmetics, RunFunctions)
 {
-    test_functions<fifi::simple_online<fifi::binary> >();
-    test_functions< fifi::simple_online<fifi::binary8> >();
-    test_functions< fifi::simple_online<fifi::binary16> >();
+    for(uint32_t i = 0; i <= 16; ++i)
+    {
+        test_functions(100, i);
+    }
 
-    test_functions< fifi::full_table<fifi::binary8> >();
+    uint32_t data_length = (rand() % 1000) + 1;
+    for(uint32_t i = 0; i <= 16; ++i)
+    {
+        test_functions(data_length, i);
+    }
 
-    test_functions< fifi::log_table<fifi::binary8> >();
-    test_functions< fifi::log_table<fifi::binary16> >();
-
-    test_functions< fifi::extended_log_table<fifi::binary8> >();
-    test_functions< fifi::extended_log_table<fifi::binary16> >();
-
-    test_functions< fifi::optimal_prime<fifi::prime2325> >();
-
-
-    // Just also run the default fields
-    test_functions< fifi::default_field_impl<fifi::binary>::type >();
-    test_functions< fifi::default_field_impl<fifi::binary8>::type >();
-    test_functions< fifi::default_field_impl<fifi::binary16>::type >();
 }
 
 
