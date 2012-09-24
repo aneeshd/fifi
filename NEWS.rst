@@ -6,6 +6,11 @@ of every change, see the Git log.
 
 tbd (master)
 ------------
+* tbd
+
+4.0.0
+----
+* Using .hpp extension instead of .h
 
 3.0.0
 -----
