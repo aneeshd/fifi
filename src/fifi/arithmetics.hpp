@@ -3,19 +3,19 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_ARITHMETICS_H
-#define FIFI_ARITHMETICS_H
+#ifndef FIFI_ARITHMETICS_HPP
+#define FIFI_ARITHMETICS_HPP
 
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
 
-#include "field_types.h"
-#include "log_table.h"
-#include "extended_log_table.h"
-#include "full_table.h"
-#include "is_binary.h"
-#include "optimal_prime.h"
-#include "disable_if_binary.h"
+#include "field_types.hpp"
+#include "log_table.hpp"
+#include "extended_log_table.hpp"
+#include "full_table.hpp"
+#include "is_binary.hpp"
+#include "optimal_prime.hpp"
+#include "disable_if_binary.hpp"
 
 // Certain applications e.g. Error Correcting Codes (ECC)
 // perform specific compound operations. These operations

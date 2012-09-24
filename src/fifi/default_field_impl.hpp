@@ -3,17 +3,17 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_DEFAULT_FIELD_IMPL_H
-#define FIFI_DEFAULT_FIELD_IMPL_H
+#ifndef FIFI_DEFAULT_FIELD_IMPL_HPP
+#define FIFI_DEFAULT_FIELD_IMPL_HPP
 
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
 
-#include "field_types.h"
-#include "simple_online.h"
-#include "full_table.h"
-#include "extended_log_table.h"
-#include "optimal_prime.h"
+#include "field_types.hpp"
+#include "simple_online.hpp"
+#include "full_table.hpp"
+#include "extended_log_table.hpp"
+#include "optimal_prime.hpp"
 
 namespace fifi
 {

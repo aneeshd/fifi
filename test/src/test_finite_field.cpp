@@ -3,22 +3,20 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <gtest/gtest.h>
-
-#include <fifi/finite_field.h>
-#include <fifi/simple_online.h>
-#include <fifi/full_table.h>
-#include <fifi/extended_log_table.h>
-#include <fifi/log_table.h>
-#include <fifi/optimal_prime.h>
-
 #include <boost/type_traits.hpp>
 
+#include <gtest/gtest.h>
+
+#include <fifi/finite_field.hpp>
+#include <fifi/simple_online.hpp>
+#include <fifi/full_table.hpp>
+#include <fifi/extended_log_table.hpp>
+#include <fifi/log_table.hpp>
+#include <fifi/optimal_prime.hpp>
 
 template<class FiniteField>
 void finite_field_construct_helper(FiniteField &finite_field)
 {
-
     typedef typename FiniteField::field_type field_type;
     typedef typename FiniteField::field_impl field_impl;
     typedef typename FiniteField::value_type value_type;
@@ -28,8 +26,6 @@ void finite_field_construct_helper(FiniteField &finite_field)
     value_type two = 54;
 
     value_type res;
-
-
     res = finite_field.multiply(one, two);
 
     // The binary field does not support divide and invert
@@ -119,3 +115,4 @@ TEST(test_finite_field, Optimal_Prime_Prime2325)
     fifi::finite_field<field_type> finite_field;
     finite_field_construct_helper(finite_field);
 }
+

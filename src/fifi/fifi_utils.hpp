@@ -3,14 +3,13 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_FIFI_UTILS_H
-#define FIFI_FIFI_UTILS_H
+#ifndef FIFI_FIFI_UTILS_HPP
+#define FIFI_FIFI_UTILS_HPP
 
-#include "field_types.h"
+#include "field_types.hpp"
 
 namespace fifi
 {
-
     /// Returns the number of value_type elements needed to store
     /// a certain number of bytes
     /// @param bytes, the number of bytes to store

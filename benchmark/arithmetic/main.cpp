@@ -10,19 +10,19 @@
 #include <cmath>
 #include <stdexcept>
 
-#include <fifi/arithmetics.h>
-#include <fifi/fifi_utils.h>
+#include <gauge/gauge.hpp>
+#include <gauge/console_printer.hpp>
+#include <gauge/python_printer.hpp>
 
-#include <fifi/simple_online.h>
-#include <fifi/full_table.h>
-#include <fifi/log_table.h>
-#include <fifi/extended_log_table.h>
-#include <fifi/optimal_prime.h>
-#include <fifi/field_types.h>
+#include <fifi/arithmetics.hpp>
+#include <fifi/fifi_utils.hpp>
+#include <fifi/simple_online.hpp>
+#include <fifi/full_table.hpp>
+#include <fifi/log_table.hpp>
+#include <fifi/extended_log_table.hpp>
+#include <fifi/optimal_prime.hpp>
+#include <fifi/field_types.hpp>
 
-#include <gauge/gauge.h>
-#include <gauge/console_printer.h>
-#include <gauge/python_printer.h>
 
 /// @return the size of a vector in bytes
 std::vector<uint32_t> setup_sizes()

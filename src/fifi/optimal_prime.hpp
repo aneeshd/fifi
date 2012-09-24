@@ -3,15 +3,15 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_OPTIMAL_PRIME_H
-#define FIFI_OPTIMAL_PRIME_H
+#ifndef FIFI_OPTIMAL_PRIME_HPP
+#define FIFI_OPTIMAL_PRIME_HPP
 
 #include <stdint.h>
-#include "field_types.h"
+
+#include "field_types.hpp"
 
 namespace fifi
 {
-
     /// This implemtnation allows finite field arithmetics in the
     /// prime fields in this case where the characteristic of the
     /// field is different than two.

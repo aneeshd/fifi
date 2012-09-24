@@ -9,12 +9,12 @@
 #include <ctime>
 #include <cmath>
 
-#include <fifi/prime2325_binary_search.h>
-#include <fifi/prime2325_bitmap.h>
+#include <gauge/gauge.hpp>
+#include <gauge/console_printer.hpp>
+#include <gauge/python_printer.hpp>
 
-#include <gauge/gauge.h>
-#include <gauge/console_printer.h>
-#include <gauge/python_printer.h>
+#include <fifi/prime2325_binary_search.hpp>
+#include <fifi/prime2325_bitmap.hpp>
 
 std::vector<uint32_t> block_lengths()
 {

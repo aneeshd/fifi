@@ -5,15 +5,14 @@
 
 #include <gtest/gtest.h>
 
-#include <fifi/finite_field.h>
-#include <fifi/simple_online.h>
-#include <fifi/full_table.h>
-#include <fifi/extended_log_table.h>
-#include <fifi/log_table.h>
-#include <fifi/optimal_prime.h>
-#include <fifi/element.h>
-
-#include <fifi/is_binary.h>
+#include <fifi/finite_field.hpp>
+#include <fifi/simple_online.hpp>
+#include <fifi/full_table.hpp>
+#include <fifi/extended_log_table.hpp>
+#include <fifi/log_table.hpp>
+#include <fifi/optimal_prime.hpp>
+#include <fifi/element.hpp>
+#include <fifi/is_binary.hpp>
 
 template<class FiniteField>
 void element_construct_helper(FiniteField &finite_field)
@@ -40,10 +39,10 @@ void element_construct_helper(FiniteField &finite_field)
 
     e3 = e1 * e2;
     e3 *= e2;
-        
+
     if(e2.value() == 0)
         e2 += fifi::element<FiniteField>(1, finite_field);
-    
+
     // Since the binary field operates on vectors
     // of elements and not single bits it is not
     // compatible with this test. Example:

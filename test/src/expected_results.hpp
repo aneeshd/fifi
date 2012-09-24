@@ -3,11 +3,12 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_TEST_EXPECTED_RESULTS_H
-#define FIFI_TEST_EXPECTED_RESULTS_H
+#ifndef FIFI_TEST_EXPECTED_RESULTS_HPP
+#define FIFI_TEST_EXPECTED_RESULTS_HPP
 
 #include <cstdlib>
-#include <fifi/field_types.h>
+
+#include <fifi/field_types.hpp>
 
 // The expected result of an arithmetic operation
 // e.g. result == operation(arg1, arg2).

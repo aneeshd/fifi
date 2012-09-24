@@ -3,8 +3,8 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_FULL_TABLE_H
-#define FIFI_FULL_TABLE_H
+#ifndef FIFI_FULL_TABLE_HPP
+#define FIFI_FULL_TABLE_HPP
 
 #include <algorithm>
 #include <cmath>
@@ -15,12 +15,11 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-#include "simple_online.h"
-#include "binary_extension_field.h"
+#include "simple_online.hpp"
+#include "binary_extension_field.hpp"
 
 namespace fifi
 {
-
     /// Produces a full lookup table of the multiplication and division operations.
     /// The full look-up table works fine for the 2^8 binary extension field.
     /// However, for higher field sizes it will most likely not work due to the very

@@ -5,10 +5,10 @@
 
 #include <gtest/gtest.h>
 
-#include <fifi/extended_log_table.h>
-#include <fifi/field_types.h>
+#include <fifi/extended_log_table.hpp>
+#include <fifi/field_types.hpp>
 
-#include "expected_results.h"
+#include "expected_results.hpp"
 
 TEST(test_extended_log_table, binary8multiply)
 {

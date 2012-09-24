@@ -3,27 +3,26 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_IS_PRIME2325_H
-#define FIFI_IS_PRIME2325_H
+#ifndef FIFI_IS_BINARY_HPP
+#define FIFI_IS_BINARY_HPP
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-#include "field_types.h"
+#include "field_types.hpp"
 
 namespace fifi
 {
-
-    /// Will inherit from true-type if Field equal fifi::prime2325
+    /// Will inherit from true-type if Field equal fifi::binary
     /// Can be used e.g.:
     ///
-    ///    if( is_prime2325<field_type>::value )
+    ///    if( is_binary<field_type>::value )
     ///    {
     ///        /// do something clever
     ///    }
     ///
     template<class Field>
-    struct is_prime2325 : public boost::is_same<Field, fifi::prime2325>
+    struct is_binary : public boost::is_same<Field, fifi::binary>
     { };
 }
 

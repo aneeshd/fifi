@@ -3,10 +3,10 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_PRIME2325_APPLY_PREFIX_H
-#define FIFI_PRIME2325_APPLY_PREFIX_H
+#ifndef FIFI_PRIME2325_APPLY_PREFIX_HPP
+#define FIFI_PRIME2325_APPLY_PREFIX_HPP
 
-#include "field_types.h"
+#include "field_types.hpp"
 
 namespace fifi
 {

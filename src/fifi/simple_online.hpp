@@ -3,8 +3,8 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_SIMPLE_ONLINE_H
-#define FIFI_SIMPLE_ONLINE_H
+#ifndef FIFI_SIMPLE_ONLINE_HPP
+#define FIFI_SIMPLE_ONLINE_HPP
 
 #include <algorithm>
 #include <cmath>
@@ -14,11 +14,10 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_unsigned.hpp>
 
-#include "field_types.h"
+#include "field_types.hpp"
 
 namespace fifi
 {
-
     template<class Field>
     int find_degree(typename Field::value_type element)
     {
@@ -68,7 +67,7 @@ namespace fifi
 
         /// Operator performing the field inversion
         /// @param element the field element to be inverted
-        /// @return the result after inversion        
+        /// @return the result after inversion
         value_type invert(value_type element) const;
 
         /// Performs the field addition

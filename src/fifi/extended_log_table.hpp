@@ -3,16 +3,16 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_EXTENDED_LOG_TABLE_H
-#define FIFI_EXTENDED_LOG_TABLE_H
+#ifndef FIFI_EXTENDED_LOG_TABLE_HPP
+#define FIFI_EXTENDED_LOG_TABLE_HPP
 
 #include <algorithm>
 #include <cmath>
 #include <cassert>
 #include <stdint.h>
 
-#include "simple_online.h"
-#include "binary_extension_field.h"
+#include "simple_online.hpp"
+#include "binary_extension_field.hpp"
 
 namespace fifi
 {

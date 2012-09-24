@@ -3,17 +3,17 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <gtest/gtest.h>
+#include <cmath>
+#include <stdexcept>
 
-#include <fifi/optimal_prime.h>
-#include <fifi/field_types.h>
-#include <fifi/prime2325_bitmap.h>
-#include <fifi/prime2325_binary_search.h>
+#include <gtest/gtest.h>
 
 #include <sak/storage.hpp>
 
-#include <cmath>
-#include <stdexcept>
+#include <fifi/optimal_prime.hpp>
+#include <fifi/field_types.hpp>
+#include <fifi/prime2325_bitmap.hpp>
+#include <fifi/prime2325_binary_search.hpp>
 
 void print_bits_header()
 {
@@ -228,6 +228,4 @@ TEST(test_prime2325, binary_search_size_needed)
     EXPECT_EQ(fifi::prime2325_binary_search::size_needed(127, 20),
               2*size_of_counter);
 }
-
-
 

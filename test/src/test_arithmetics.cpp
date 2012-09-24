@@ -5,13 +5,13 @@
 
 #include <gtest/gtest.h>
 
-#include <fifi/simple_online.h>
-#include <fifi/full_table.h>
-#include <fifi/log_table.h>
-#include <fifi/extended_log_table.h>
-#include <fifi/field_types.h>
-#include <fifi/arithmetics.h>
-#include <fifi/default_field_impl.h>
+#include <fifi/simple_online.hpp>
+#include <fifi/full_table.hpp>
+#include <fifi/log_table.hpp>
+#include <fifi/extended_log_table.hpp>
+#include <fifi/field_types.hpp>
+#include <fifi/arithmetics.hpp>
+#include <fifi/default_field_impl.hpp>
 
 template<class FieldImpl>
 class test_arithmetics

@@ -3,7 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include "expected_results.h"
+#include "expected_results.hpp"
 
 // Small helper function to get the size of the arrays
 template<class T, uint32_t N>
@@ -11,7 +11,6 @@ inline uint32_t dimension_of(T (&)[N])
 {
     return N;
 }
-
 
 const expected_result_2<fifi::binary8>
 multiply_results<fifi::binary8>::m_results[] =

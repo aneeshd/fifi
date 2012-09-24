@@ -3,8 +3,8 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_FINITE_FIELD_H
-#define FIFI_FINITE_FIELD_H
+#ifndef FIFI_FINITE_FIELD_HPP
+#define FIFI_FINITE_FIELD_HPP
 
 #include <boost/shared_ptr.hpp>
 

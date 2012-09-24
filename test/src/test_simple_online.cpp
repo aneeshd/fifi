@@ -5,10 +5,10 @@
 
 #include <gtest/gtest.h>
 
-#include <fifi/simple_online.h>
-#include <fifi/field_types.h>
+#include <fifi/simple_online.hpp>
+#include <fifi/field_types.hpp>
 
-#include "expected_results.h"
+#include "expected_results.hpp"
 
 TEST(test_simple_online, binary8fieldDegree)
 {
@@ -75,3 +75,4 @@ TEST(test_simple_online, binary16randCheck)
 {
     check_random<fifi::simple_online<fifi::binary16> >();
 }
+

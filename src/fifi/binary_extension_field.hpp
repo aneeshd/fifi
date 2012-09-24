@@ -3,8 +3,8 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_BINARY_EXTENSION_FIELD_H
-#define FIFI_BINARY_EXTENSION_FIELD_H
+#ifndef FIFI_BINARY_EXTENSION_FIELD_HPP
+#define FIFI_BINARY_EXTENSION_FIELD_HPP
 
 #include <algorithm>
 #include <cmath>
@@ -15,7 +15,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-#include "simple_online.h"
+#include "simple_online.hpp"
 
 namespace fifi
 {

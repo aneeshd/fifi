@@ -3,15 +3,15 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_PRIME_2325_BITMAP_H
-#define FIFI_PRIME_2325_BITMAP_H
+#ifndef FIFI_PRIME_2325_BITMAP_HPP
+#define FIFI_PRIME_2325_BITMAP_HPP
 
-#include "field_types.h"
 #include <sak/storage.hpp>
+
+#include "field_types.hpp"
 
 namespace fifi
 {
-
     /// Bitmap algorithm for finding the an unused bit prefix
     /// within a block of data, using the prefix we may map
     /// arbitrary data to the 2^32 - 5 prime field a approach

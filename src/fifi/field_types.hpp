@@ -3,8 +3,8 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_FIELD_TYPES_H
-#define FIFI_FIELD_TYPES_H
+#ifndef FIFI_FIELD_TYPES_HPP
+#define FIFI_FIELD_TYPES_HPP
 
 #include <cstdint>
 #include <cassert>
@@ -12,8 +12,6 @@
 
 namespace fifi
 {
-
-
     /// The binary field, containing the two elements {0,1}
     /// We do not provide the degree() function since this is
     /// not an extension field.

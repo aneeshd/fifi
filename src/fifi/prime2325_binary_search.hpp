@@ -3,15 +3,15 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_PRIME_2325_BINARY_SEARCH_H
-#define FIFI_PRIME_2325_BINARY_SEARCH_H
+#ifndef FIFI_PRIME_2325_BINARY_SEARCH_HPP
+#define FIFI_PRIME_2325_BINARY_SEARCH_HPP
 
-#include "field_types.h"
 #include <sak/storage.hpp>
+
+#include "field_types.hpp"
 
 namespace fifi
 {
-
     /// Binary search algorithms for finding an unused bit
     /// prefix in arbitrary binary data. The algorithms can
     /// search for the prefix using k passes. When k = 2 the
