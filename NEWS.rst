@@ -8,6 +8,10 @@ tbd (master)
 ------------
 * tbd
 
+4.0.1
+-----
+* Removing benchmarks from the automatic unit test runner.
+
 4.0.0
 ----
 * Using .hpp extension instead of .h

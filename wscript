@@ -4,7 +4,7 @@
 import os
 
 APPNAME = 'fifi'
-VERSION = '4.0.0'
+VERSION = '4.0.1'
 
 
 def recurse_helper(ctx, name):
