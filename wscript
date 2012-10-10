@@ -40,7 +40,7 @@ def options(opt):
         resolve.ResolveGitMajorVersion(
             name = 'sak',
             git_repository = 'git://github.com/steinwurf/sak.git',
-            major_version = 4))
+            major_version = 5))
 
     bundle.add_dependency(opt,
         resolve.ResolveGitMajorVersion(
