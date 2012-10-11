@@ -8,6 +8,10 @@ tbd (master)
 ------------
 * tbd
 
+5.0.0
+-----
+* Upgrade to sak version 6.x.y
+
 4.0.1
 -----
 * Removing benchmarks from the automatic unit test runner.
