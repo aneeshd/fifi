@@ -64,7 +64,7 @@ TEST(test_prime2325, prefix_bitmap)
     EXPECT_EQ(p.m_mapping_bits, 32U);
     EXPECT_EQ(p.m_shift_prefix, 24U);
 
-    uint32_t prefix = p.find_prefix(sak::storage_list(data));
+    uint32_t prefix = p.find_prefix(sak::storage(data));
 
     // Our data contains three values
     EXPECT_TRUE(prefix != 0x00000000U);
@@ -105,7 +105,7 @@ void test_find_one_prefix(uint32_t prefix_bits)
 
     Algorithm p(block_length);
 
-    uint32_t prefix = p.find_prefix(sak::storage_list(data));
+    uint32_t prefix = p.find_prefix(sak::storage(data));
 
     EXPECT_EQ(missing_prefix, prefix);
 }
@@ -141,7 +141,7 @@ void test_find_a_prefix(uint32_t block_length)
 
     Algorithm p(block_length);
 
-    uint32_t prefix = p.find_prefix(sak::storage_list(data));
+    uint32_t prefix = p.find_prefix(sak::storage(data));
 
     for(uint32_t i = 0; i < block_length; ++i)
     {

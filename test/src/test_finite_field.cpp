@@ -52,6 +52,8 @@ void finite_field_construct_helper(FiniteField &finite_field)
     res = field_reference.add(one, two);
     res = field_reference.subtract(one, two);
 
+    (void)res; // quiet "set but not used" warning
+
     ASSERT_TRUE(true);
 }
 

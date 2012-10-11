@@ -82,7 +82,7 @@ BENCHMARK_F(run_prime2325_bitmap, Prime2325Bitmap, FindPrefix, 5)
     volatile uint32_t prefix = 0;
     // This is where the clock runs
     RUN{
-        prefix = bitmap_search.find_prefix(sak::storage_list(m_block));
+        prefix = bitmap_search.find_prefix(sak::storage(m_block));
     }
 
     (void)prefix;
@@ -139,7 +139,7 @@ BENCHMARK_F(run_prime2325_binary_search, Prime2325BinarySearch, FindPrefix, 5)
     volatile uint32_t prefix = 0;
     // This is where the clock runs
     RUN{
-        prefix = search.find_prefix(sak::storage_list(m_block));
+        prefix = search.find_prefix(sak::storage(m_block));
     }
 
     (void)prefix;
