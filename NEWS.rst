@@ -8,6 +8,10 @@ tbd (master)
 ------------
 * tbd
 
+6.0.0
+-----
+* Bump sak to version 7
+
 5.0.0
 -----
 * Upgrade to sak version 6.x.y
