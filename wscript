@@ -16,12 +16,15 @@ def recurse_helper(ctx, name):
 
 def options(opt):
 
-    opt.load('waf_unit_test_v2')
-    opt.load('toolchain_cxx')
-    opt.load('dependency_bundle')
+    import waflib.extras.wurf_dependency_bundle as bundle
+    import waflib.extras.wurf_dependency_resolve as resolve
+    import waflib.extras.wurf_configure_output
 
-    import waflib.extras.dependency_bundle as bundle
-    import waflib.extras.dependency_resolve as resolve
+    bundle.add_dependency(opt,
+        resolve.ResolveGitMajorVersion(
+            name='waf-tools',
+            git_repository = 'git://github.com/steinwurf/external-waf-tools.git',
+            major_version = 1))
 
     bundle.add_dependency(opt,
         resolve.ResolveGitMajorVersion(
@@ -33,13 +36,13 @@ def options(opt):
         resolve.ResolveGitMajorVersion(
             name = 'boost',
             git_repository = 'git://github.com/steinwurf/external-boost.git',
-            major_version = 2))
+            major_version = 4))
 
     bundle.add_dependency(opt,
         resolve.ResolveGitMajorVersion(
             name = 'sak',
             git_repository = 'git://github.com/steinwurf/sak.git',
-            major_version = 7))
+            major_version = 8))
 
     bundle.add_dependency(opt,
         resolve.ResolveGitMajorVersion(
@@ -47,14 +50,18 @@ def options(opt):
             git_repository = 'git://github.com/steinwurf/cxx-gauge.git',
             major_version = 2))
 
+    opt.load('wurf_dependency_bundle')
+    opt.load('wurf_tools')
 
 def configure(conf):
 
     if conf.is_toplevel():
 
-        conf.load('waf_unit_test_v2')
-        conf.load('toolchain_cxx')
-        conf.load('dependency_bundle')
+        conf.load('wurf_dependency_bundle')
+        conf.load('wurf_tools')
+
+        conf.load_external_tool('mkspec', 'wurf_cxx_mkspec_tool')
+        conf.load_external_tool('runners', 'wurf_runner')
 
         recurse_helper(conf, 'boost')
         recurse_helper(conf, 'gtest')
@@ -63,9 +70,14 @@ def configure(conf):
 
 def build(bld):
 
+    bld(includes = './src',
+        export_includes = './src',
+        name = 'fifi_includes')
+
     if bld.is_toplevel():
 
-        bld.load('dependency_bundle')
+        bld.load('wurf_dependency_bundle')
+
 
         recurse_helper(bld, 'boost')
         recurse_helper(bld, 'gtest')
@@ -80,15 +92,6 @@ def build(bld):
         bld.recurse('benchmark/basic_operations')
         bld.recurse('benchmark/arithmetic')
         bld.recurse('benchmark/prime2325')
-
-        from waflib.extras import waf_unit_test_v2
-        bld.add_post_fun(waf_unit_test_v2.summary)
-        bld.add_post_fun(waf_unit_test_v2.set_exit_code)
-
-    # Export own includes
-    bld(includes = './src',
-        export_includes = './src',
-        name = 'fifi_includes')
 
 
 
