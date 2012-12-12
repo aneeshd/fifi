@@ -6,7 +6,6 @@ bld.program(
     features = 'cxx',
     source   = ['main.cpp'],
     target   = 'fifi_basic_operations_benchmarks',
-    cxxflags = bld.toolchain_cxx_flags(),
     use      = ['gtest','fifi_includes','boost_includes',
                 'sak_includes', 'boost_timer', 'boost_chrono',
                 'boost_system', 'gauge'])

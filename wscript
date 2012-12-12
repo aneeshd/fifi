@@ -30,7 +30,7 @@ def options(opt):
         resolve.ResolveGitMajorVersion(
             name = 'gtest',
             git_repository = 'git://github.com/steinwurf/external-gtest.git',
-            major_version = 1))
+            major_version = 2))
 
     bundle.add_dependency(opt,
         resolve.ResolveGitMajorVersion(
@@ -48,7 +48,7 @@ def options(opt):
         resolve.ResolveGitMajorVersion(
             name = 'gauge',
             git_repository = 'git://github.com/steinwurf/cxx-gauge.git',
-            major_version = 2))
+            major_version = 4))
 
     opt.load('wurf_dependency_bundle')
     opt.load('wurf_tools')
