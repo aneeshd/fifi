@@ -8,6 +8,10 @@ tbd (master)
 ------------
 * tbd
 
+7.0.0
+-----
+* Updating to use new external waf tools
+
 6.0.0
 -----
 * Bump sak to version 7
