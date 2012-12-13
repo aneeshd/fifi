@@ -40,7 +40,7 @@ namespace fifi
 
         /// Performs the field multiplication
         /// @param element_one the first field element
-        /// @param element_one the second field element
+        /// @param element_two the second field element
         /// @return the result after multiplication
         value_type multiply(value_type element_one, value_type element_two) const;
 

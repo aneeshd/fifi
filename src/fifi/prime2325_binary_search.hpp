@@ -12,17 +12,14 @@
 
 namespace fifi
 {
-    /// Binary search algorithms for finding an unused bit
-    /// prefix in arbitrary binary data. The algorithms can
-    /// search for the prefix using k passes. When k = 2 the
-    /// algorithms will have to pass over the entire block of
-    /// data twice, when k = 3 the algorithms will pass over the
-    /// data three times etc. This requires additional time,
-    /// however the larger k is the smaller the memory consumption
-    /// becomes.
-    /// Using the found prefix we may map arbitrary data to
-    /// the 2^32 - 5 prime field an approach which was suggested
-    /// by Crowley et al.
+    /// Binary search algorithms for finding an unused bit prefix in arbitrary
+    /// binary data. The algorithms can search for the prefix using k passes.
+    /// When k = 2 the algorithms will have to pass over the entire block of
+    /// data twice, when k = 3 the algorithms will pass over the data three
+    /// times etc. This requires additional time, however the larger k is the
+    /// smaller the memory consumption becomes.
+    /// Using the found prefix we may map arbitrary data to the 2^32 - 5 prime
+    /// field an approach which was suggested by Crowley et al.
     struct prime2325_binary_search
     {
         /// The data type used for the bitmap
@@ -30,11 +27,10 @@ namespace fifi
 
         /// Create a new binary search object
         ///
-        /// @param max_block_size denotes the largest block size in bytes
+        /// @param max_block_length denotes the largest block size in bytes
         ///        that can be searched using this algorithm.
-        /// @param k_pass denotes the number times to iterate over the
-        ///        data. The larger k_pass the less memory but more
-        ///        computations are needed.
+        /// @param k_pass denotes the number times to iterate over the data. The
+        ///        larger k_pass the less memory but more computations are needed.
         prime2325_binary_search(uint32_t max_block_length, uint32_t k_pass = 2)
             : m_max_block_length(max_block_length),
               m_max_block_size(m_max_block_length * 4),
@@ -61,8 +57,8 @@ namespace fifi
                 // I.e. so we get 00000....0001111 if m_k_pass_bits = 4
                 m_shift_mask.resize(m_k_pass, 0);
 
-                // We only look at values that match our already found
-                // prefix, this mask
+                // We only look at values that match our already found prefix,
+                // this mask
                 // For k = 0, mask = 00000000000...0000000000
                 // For k = 1, mask = 11110000000...0000000000
                 // For k = 2, maks = 11111111000...0000000000
@@ -72,16 +68,15 @@ namespace fifi
                 // The number of bits inspected in the k'th step
                 m_k_pass_bits.resize(m_k_pass, 0);
 
-                // If we do two passes and the prefix length is odd
-                // we do both small and large shifts e.g. for
-                // 2 passes with a prefix length of 5 we have a shift
-                // of 3 and a shift of 2
+                // If we do two passes and the prefix length is odd we do both
+                // small and large shifts e.g. for 2 passes with a prefix length
+                // of 5 we have a shift of 3 and a shift of 2
                 uint32_t large_shifts = ((prefix_bits - 1) / m_k_pass) + 1;
                 uint32_t small_shifts = prefix_bits / m_k_pass;
 
-                // Since large shift is one larger than small shifts we
-                // can see how many large we need by checking how many
-                // bits are covered by small_shifts
+                // Since large shift is one larger than small shifts we can see
+                // how many large we need by checking how many bits are covered
+                // by small_shifts
                 uint32_t number_large_shifts =
                     prefix_bits - m_k_pass * small_shifts;
 
@@ -173,9 +168,8 @@ namespace fifi
         /// Iterates through the bitmap looking for the unused prefix
         /// @param k denotes the current pass this controls where in the
         ///        prefix the bit pattern found should be placed
-        /// @param prefix contains the so far found prefix and will
-        ///        contain an updated prefix after inspecting the
-        ///        buckets
+        /// @param prefix contains the so far found prefix and will contain an
+        ///        updated prefix after inspecting the buckets
         /// @return returns true if the final prefix was found otherwise false
         bool update_prefix(uint32_t k, uint32_t *prefix) const
             {
@@ -193,9 +187,8 @@ namespace fifi
                 }
 
                 // Update the prefix value
-                // Example if the top 4 bits have been determined
-                // and we now look for the next 4 bits in an 8 bit
-                // prefix:
+                // Example if the top 4 bits have been determined and we now
+                // look for the next 4 bits in an 8 bit prefix:
                 //
                 // b31 b30 b29 b28 ? ? ? ? 0 0 0 0 0 0 .... 0 0 0 0
                 uint32_t shift_prefix = m_shift_prefix[k];
@@ -208,8 +201,8 @@ namespace fifi
         /// Updates the bucket counters using the values in the storage.
         /// @param first iterator to a storage object
         /// @param last iterator to the last storage object
-        /// @param k, the current pass
-        /// @param prefix, the current prefix
+        /// @param k the current pass
+        /// @param prefix the current prefix
         template<class StorageIterator>
         void update_buckets(StorageIterator first, StorageIterator last,
                             uint32_t k, uint32_t prefix)
@@ -225,8 +218,7 @@ namespace fifi
 
                 while(first != last)
                 {
-                    // Size must be multiple of 4 bytes due to the field
-                    // 2^32 - 5
+                    // Size must be multiple of 4 bytes due to the field 2^32-5
                     assert((first->m_size % 4) == 0);
 
                     uint32_t block_size = first->m_size / 4;
@@ -281,14 +273,11 @@ namespace fifi
         /// prefix values
         std::vector<uint32_t> m_prefix_mask;
 
-        /// The bitmap storing info about whether a
-        /// specific prefix has been found
+        /// The bitmap storing info about whether a specific prefix was found
         std::vector<counter_type> m_buckets;
 
     };
-
 }
 
 #endif
-
 

@@ -12,10 +12,9 @@
 
 namespace fifi
 {
-    /// Bitmap algorithm for finding the an unused bit prefix
-    /// within a block of data, using the prefix we may map
-    /// arbitrary data to the 2^32 - 5 prime field a approach
-    /// which was suggested by Crowley et al.
+    /// Bitmap algorithm for finding the an unused bit prefix within a block of
+    /// data, using the prefix we may map arbitrary data to the 2^32 - 5 prime
+    /// field a approach which was suggested by Crowley et al.
     struct prime2325_bitmap
     {
         /// The data type used for the bitmap
@@ -23,8 +22,8 @@ namespace fifi
 
         /// Create a new prefix bitmap
         ///
-        /// @param max_block_size denotes the largest block size in bytes
-        ///        that can be searched using this algorithm.
+        /// @param max_block_length denotes the largest block size in bytes that
+        ///can be searched using this algorithm.
         prime2325_bitmap(uint32_t max_block_length)
             : m_max_block_length(max_block_length),
               m_max_block_size(m_max_block_length * 4)
@@ -37,17 +36,15 @@ namespace fifi
                 uint32_t max_prefix_bits =
                     prime2325::prefix_length(m_max_block_length);
 
-                // The amount we have to shift the prefix to get the prefix
-                // value:
+                // The amount to shift the prefix to get the prefix value:
                 //
                 // | b31 b30 b29 b28 b27  ... b1 b0 |
                 //    ^               ^
                 //    '-   prefix    -'
                 //          value
                 //
-                // In the above example we have 5 prefix bits so
-                // we need to shift it down 32 - 5 = 27 bits to get
-                // the numeric prefix value
+                // In the above example we have 5 prefix bits so we need to
+                // shift it down 32-5 = 27 bits to get the numeric prefix value
 
                 m_shift_prefix = 32 - max_prefix_bits;
 
@@ -63,9 +60,8 @@ namespace fifi
                 m_bitmap.resize(bitmap_elements);
             }
 
-        /// @return the size in bytes needed for the bitmap depending on
-        ///         the block length i.e. the number of 32-bit integers
-        ///         in the block.
+        /// @return the size in bytes needed for the bitmap depending on the
+        /// block length i.e. the number of 32-bit integers in the block.
         static uint32_t size_needed(uint32_t block_length)
             {
                 assert(block_length > 0);
@@ -109,8 +105,7 @@ namespace fifi
                 // Update the bitmap
                 while(first != last)
                 {
-                    // Size must be multiple of 4 bytes due to the field
-                    // 2^32 - 5
+                    // Size must be multiple of 4 bytes due to the field 2^32-5
                     assert((first->m_size % 4) == 0);
 
                     uint32_t block_size = first->m_size / 4;
@@ -155,8 +150,7 @@ namespace fifi
                 return false;
             }
 
-        /// Updates the bitmap so that it reflects that the value has
-        /// been found
+        /// Updates the bitmap so that it reflects that the value has been found
         void update_bitmap(uint32_t value)
             {
                 // We use a 32 bit data type for the base value
@@ -186,12 +180,9 @@ namespace fifi
         /// The amount we need to shift the prefix
         uint32_t m_shift_prefix;
 
-        /// The bitmap storing info about whether a
-        /// specific prefix has been found
+        /// The bitmap storing info about whether a specific prefix was found
         std::vector<mapping_type> m_bitmap;
-
     };
-
 }
 
 #endif
