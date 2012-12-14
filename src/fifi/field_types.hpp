@@ -133,6 +133,7 @@ namespace fifi
     /// A binary extension field with 2^32 elements
     struct binary32
     {
+        /// value type typedef
         typedef uint32_t value_type;
 
         /// Pointer to a value_type
@@ -141,15 +142,19 @@ namespace fifi
         /// Reference to a value_type
         typedef value_type& value_ref;
 
+        /// @return the max value
         static value_type max_value()
         { return 4294967295U; }
 
+        /// @return the min value
         static value_type min_value()
         { return 0; }
 
+        /// @return the order
         static uint64_t order()
         { return 4294967296ULL; }
 
+        /// @return the degree
         static uint32_t degree()
         { return 32; }
 
@@ -211,8 +216,7 @@ namespace fifi
         assert(block_length > 0);
         assert(block_length <= prime2325::max_block_length);
 
-        // In the absence of a log2 function we simply
-        // look for the highest top bit.
+        // In the absence of a log2 function we look for the highest top bit.
         uint32_t topbit;
         for(topbit = 31; topbit --> 0;)
         {
@@ -220,10 +224,9 @@ namespace fifi
                 break;
         }
 
-        // How many values can be represented where the most
-        // significant bit is topbit
-        // Create a mask of 0000000..1111..1 where the MSBit
-        // is in the topbit position
+        // How many values can be represented where the most significant bit is
+        // topbit.  Create a mask of 0000000..1111..1 where the MSBit is in the
+        // topbit position
         uint32_t prefix_values = ~(~0 << topbit) + 1;
 
         if(prefix_values > block_length)

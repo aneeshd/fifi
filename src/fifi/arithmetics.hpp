@@ -17,11 +17,9 @@
 #include "optimal_prime.hpp"
 #include "disable_if_binary.hpp"
 
-// Certain applications e.g. Error Correcting Codes (ECC)
-// perform specific compound operations. These operations
-// can for certain field implementations be implemented
-// faster or smarter. This file provides commonly used
-// operations.
+// Certain applications e.g. Error Correcting Codes (ECC) perform specific
+// compound operations. These operations can for certain field implementations
+// be implemented faster or smarter. This file provides commonly used operations.
 
 namespace fifi
 {
@@ -41,18 +39,18 @@ namespace fifi
         const typename FieldImpl::value_type * __restrict src,
         uint32_t length)
     {
-	assert(dest != 0);
-	assert(src != 0);
+        assert(dest != 0);
+        assert(src != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
         // assert((((uintptr_t)src) & 15) == 0); // Check alignment
-	assert(length > 0);
+        assert(length > 0);
 
-	for(uint32_t i = 0; i < length; ++i)
-	{
+        for(uint32_t i = 0; i < length; ++i)
+        {
             typename FieldImpl::value_type a = dest[i];
             typename FieldImpl::value_type b = src[i];
-	    dest[i] = field.add(a, b);
-	}
+            dest[i] = field.add(a, b);
+        }
     }
 
     template<>
@@ -130,16 +128,16 @@ namespace fifi
              const typename FieldImpl::value_type * __restrict src,
              uint32_t length)
     {
-	assert(dest != 0);
-	assert(src != 0);
+        assert(dest != 0);
+        assert(src != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
         // assert((((uintptr_t)src) & 15) == 0); // Check alignment
-	assert(length > 0);
+        assert(length > 0);
 
-	for(uint32_t i = 0; i < length; ++i)
-	{
-	    dest[i] = field.subtract(dest[i], src[i]);
-	}
+        for(uint32_t i = 0; i < length; ++i)
+        {
+            dest[i] = field.subtract(dest[i], src[i]);
+        }
     }
 
     template<>
@@ -177,8 +175,6 @@ namespace fifi
         }
     }
 
-
-
     /// Generic version of multiplying two buffers
     ///
     /// Provides: dest[i] = dest[i] * src[i]
@@ -194,16 +190,16 @@ namespace fifi
              const typename FieldImpl::value_type * __restrict src,
              uint32_t length)
     {
-	assert(dest != 0);
-	assert(src != 0);
+        assert(dest != 0);
+        assert(src != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
         // assert((((uintptr_t)src) & 15) == 0); // Check alignment
-	assert(length > 0);
+        assert(length > 0);
 
-	for(uint32_t i = 0; i < length; ++i)
-	{
-	    dest[i] = field.multiply(dest[i], src[i]);
-	}
+        for(uint32_t i = 0; i < length; ++i)
+        {
+            dest[i] = field.multiply(dest[i], src[i]);
+        }
     }
 
     /// Generic version of multiplying a buffer with a constant
@@ -221,9 +217,9 @@ namespace fifi
                       typename FieldImpl::value_type *dest,
                       uint32_t length)
     {
-	assert(dest != 0);
+        assert(dest != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
-	assert(length > 0);
+        assert(length > 0);
 
         typedef typename FieldImpl::field_type field_type;
 
@@ -232,10 +228,10 @@ namespace fifi
         // expected (the binary field does a bit-wise AND operation).
         BOOST_STATIC_ASSERT((is_binary<field_type>::value == false));
 
-	for(uint32_t i = 0; i < length; ++i)
-	{
-	    dest[i] = field.multiply(dest[i], constant);
-	}
+        for(uint32_t i = 0; i < length; ++i)
+        {
+            dest[i] = field.multiply(dest[i], constant);
+        }
     }
 
 
@@ -251,14 +247,14 @@ namespace fifi
                       typename binary::value_type *dest,
                       uint32_t length)
     {
-	assert(dest != 0);
+        assert(dest != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
-	assert(length > 0);
+        assert(length > 0);
 
         // Only {0,1} allowed
-	assert(constant == 0 || constant == 1);
+        assert(constant == 0 || constant == 1);
 
-	if(constant == 0)
+        if(constant == 0)
         {
             std::fill_n(dest, length, 0);
         }
@@ -284,13 +280,13 @@ namespace fifi
                  typename FieldImpl::value_type * __restrict temp,
                  uint32_t length)
     {
-	assert(dest != 0);
-	assert(src != 0);
+        assert(dest != 0);
+        assert(src != 0);
         assert(temp != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
         // assert((((uintptr_t)src) & 15) == 0); // Check alignment
         // assert((((uintptr_t)temp) & 15) == 0); // Check alignment
-	assert(length > 0);
+        assert(length > 0);
 
         typedef typename FieldImpl::field_type field_type;
 
@@ -299,8 +295,8 @@ namespace fifi
         // so make sure that we do not use it.
         BOOST_STATIC_ASSERT((is_binary<field_type>::value == false));
 
-	if(constant == 0)
-	    return;
+        if(constant == 0)
+            return;
 
         typedef typename FieldImpl::value_type value_type;
 
@@ -308,8 +304,8 @@ namespace fifi
         for(uint32_t i = 0; i < length; ++i)
         {
             value_type d = field.multiply(constant, src[i]);
-	    dest[i] = field.add(dest[i], d);
-	}
+            dest[i] = field.add(dest[i], d);
+        }
 
     }
 
@@ -352,11 +348,11 @@ namespace fifi
     template<>
     inline void
     multiply_add(const full_table<binary8> &field,
-        	 full_table<binary8>::value_type constant,
-        	 full_table<binary8>::value_type * __restrict dest,
-        	 const full_table<binary8>::value_type * __restrict src,
+                 full_table<binary8>::value_type constant,
+                 full_table<binary8>::value_type * __restrict dest,
+                 const full_table<binary8>::value_type * __restrict src,
                  full_table<binary8>::value_type * /*__restrict temp*/,
-        	 uint32_t length)
+                 uint32_t length)
     {
         assert(dest != 0);
         assert(src  != 0);
@@ -396,16 +392,16 @@ namespace fifi
                              typename binary::value_type * /*__restrict temp*/,
                              uint32_t length)
     {
-	assert(dest != 0);
-	assert(src  != 0);
+        assert(dest != 0);
+        assert(src  != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
         // assert((((uintptr_t)src) & 15) == 0); // Check alignment
-	assert(length > 0);
+        assert(length > 0);
 
         // Only {0,1} allowed
-	assert(constant == 0 || constant == 1);
+        assert(constant == 0 || constant == 1);
 
-	if(constant == 0) // Do nothing
+        if(constant == 0) // Do nothing
         {
             return;
         }
@@ -435,13 +431,13 @@ namespace fifi
                       typename FieldImpl::value_type * __restrict temp,
                       uint32_t length)
     {
-	assert(dest != 0);
-	assert(src != 0);
+        assert(dest != 0);
+        assert(src != 0);
         assert(temp != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
         // assert((((uintptr_t)src) & 15) == 0); // Check alignment
         // assert((((uintptr_t)temp) & 15) == 0); // Check alignment
-	assert(length > 0);
+        assert(length > 0);
 
         typedef typename FieldImpl::field_type field_type;
 
@@ -450,16 +446,16 @@ namespace fifi
         // so make sure that we do not use it.
         BOOST_STATIC_ASSERT((is_binary<field_type>::value == false));
 
-	if(constant == 0)
-	    return;
+        if(constant == 0)
+            return;
 
         typedef typename FieldImpl::value_type value_type;
 
         for(uint32_t i = 0; i < length; ++i)
-	{
-	    value_type m = field.multiply(constant, src[i]);
-	    dest[i] = field.subtract(dest[i], m);
-	}
+        {
+            value_type m = field.multiply(constant, src[i]);
+            dest[i] = field.subtract(dest[i], m);
+        }
     }
 
     template<>
@@ -546,16 +542,16 @@ namespace fifi
                       typename binary::value_type * /*__restrict temp*/,
                       uint32_t length)
     {
-	assert(dest != 0);
-	assert(src != 0);
+        assert(dest != 0);
+        assert(src != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
         // assert((((uintptr_t)src) & 15) == 0); // Check alignment
-	assert(length > 0);
+        assert(length > 0);
 
         // Only {0,1} allowed
-	assert(constant == 0 || constant == 1);
+        assert(constant == 0 || constant == 1);
 
-	if(constant == 0) // Do nothing
+        if(constant == 0) // Do nothing
         {
             return;
         }

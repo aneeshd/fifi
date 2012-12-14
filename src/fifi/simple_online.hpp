@@ -53,33 +53,19 @@ namespace fifi
         simple_online()
         {}
 
-        /// Operator performing the field multiplication
-        /// @param element_one the first field element
-        /// @param element_two the second field element
-        /// @return the result after multiplication
+        /// @copydoc finite_field::multiply()
         value_type multiply(value_type element_one, value_type element_two) const;
 
-        /// Perform division of two field elements
-        /// @param numerator the element in the numerator
-        /// @param denominator the element in the denominator
-        /// @return the result after division
+        /// @copydoc finite_field::divide()
         value_type divide(value_type numerator, value_type denominator) const;
 
-        /// Operator performing the field inversion
-        /// @param element the field element to be inverted
-        /// @return the result after inversion
+        /// @copydoc finite_field::invert()
         value_type invert(value_type element) const;
 
-        /// Performs the field addition
-        /// @param element_one the first field element
-        /// @param element_two the second field element
-        /// @return the result after addition
+        /// @copydoc finite_field::add()
         value_type add(value_type element_one, value_type element_two) const;
 
-        /// Performs the field subtraction
-        /// @param element_one the first field element
-        /// @param element_two the second field element
-        /// @return the result after subtraction
+        /// @copydoc finite_field::subtract()
         value_type subtract(value_type element_one, value_type element_two) const;
     };
 
@@ -191,6 +177,7 @@ namespace fifi
         return element_one ^ element_two;
     }
 
+    /// @copydoc simple_online::multiply()
     template<>
     inline simple_online<binary>::value_type
     simple_online<binary>::multiply(value_type element_one, value_type element_two) const
@@ -198,6 +185,7 @@ namespace fifi
         return element_one & element_two;
     }
 
+    /// @copydoc simple_online::divide()
     template<>
     inline simple_online<binary>::value_type
     simple_online<binary>::divide(value_type numerator, value_type denominator) const
@@ -213,6 +201,7 @@ namespace fifi
         return numerator & denominator;
     }
 
+    /// @copydoc simple_online::invert()
     template<>
     inline simple_online<binary>::value_type
     simple_online<binary>::invert(value_type element) const
