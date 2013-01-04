@@ -38,21 +38,13 @@ namespace fifi
         /// Constructor
         extended_log_table();
 
-        /// Performs the field multiplication
-        /// @param element_one the first field element
-        /// @param element_two the second field element
-        /// @return the result after multiplication
+        /// @copydoc finite_field::multiply()
         value_type multiply(value_type element_one, value_type element_two) const;
 
-        /// Performs the field division
-        /// @param numerator the numerator field element
-        /// @param denominator the denominator field element
-        /// @return the result after division
+        /// @copydoc finite_field::divide()
         value_type divide(value_type numerator, value_type denominator) const;
 
-        /// Operator performing the field inversion
-        /// @param element the field element to be inverted
-        /// @return the result after inversion
+        /// @copydoc finite_field::invert()
         value_type invert(value_type element) const;
 
     public:
