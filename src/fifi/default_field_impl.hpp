@@ -28,6 +28,7 @@ namespace fifi
     template<>
     struct default_field_impl<binary>
     {
+        /// default field implementation type
         typedef simple_online<binary> type;
     };
 
@@ -35,6 +36,7 @@ namespace fifi
     template<>
     struct default_field_impl<binary8>
     {
+        /// default field implementation type
         typedef full_table<binary8> type;
     };
 
@@ -42,6 +44,7 @@ namespace fifi
     template<>
     struct default_field_impl<binary16>
     {
+        /// default field implementation type
         typedef extended_log_table<binary16> type;
     };
 
@@ -49,9 +52,9 @@ namespace fifi
     template<>
     struct default_field_impl<prime2325>
     {
+        /// default field implementation type
         typedef optimal_prime<prime2325> type;
     };
-
 
 }
 

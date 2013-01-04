@@ -60,6 +60,7 @@ namespace fifi
                 m_bitmap.resize(bitmap_elements);
             }
 
+        /// @param block_length the length of a block
         /// @return the size in bytes needed for the bitmap depending on the
         /// block length i.e. the number of 32-bit integers in the block.
         static uint32_t size_needed(uint32_t block_length)
