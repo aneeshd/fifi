@@ -26,33 +26,19 @@ namespace fifi
         typedef Field field_type;
 
     public:
-        /// Operator performing the field multiplication
-        /// @param element_one the first field element
-        /// @param element_two the second field element
-        /// @return the result after multiplication
+        /// @copydoc finite_field::multiply()
         value_type multiply(value_type element_one, value_type element_two) const;
 
-        /// Operator performing the field division
-        /// @param numerator the numerator field element
-        /// @param denominator the denominator field element
-        /// @return the result after division
+        /// @copydoc finite_field::divide()
         value_type divide(value_type numerator, value_type denominator) const;
 
-        /// Operator finding the inverse of a field element
-        /// @param element the field element whos inverse we wish to find
-        /// @return the inverse element
+        /// @copydoc finite_field::invert()
         value_type invert(value_type element) const;
 
-        /// Performs the field addition
-        /// @param element_one the first field element
-        /// @param element_two the second field element
-        /// @return the result after addition
+        /// @copydoc finite_field::add()
         value_type add(value_type element_one, value_type element_two) const;
 
-        /// Performs the field subtraction
-        /// @param element_one the first field element
-        /// @param element_two the second field element
-        /// @return the result after subtraction
+        /// @copydoc finite_field::subtract()
         value_type subtract(value_type element_one, value_type element_two) const;
 
     };
@@ -63,6 +49,7 @@ namespace fifi
     ///   S. B. Mohan  and  B. S. Adiga, Electronics  “Fast algorithms for
     ///   implementing rsa public key cryptosystem" Electronics  Letters,
     ///   vol.  21, 1985.
+    /// @copydoc optimal_prime::multiply()
     template<>
     inline optimal_prime<prime2325>::value_type
     optimal_prime<prime2325>::multiply(value_type element_one,
@@ -87,19 +74,19 @@ namespace fifi
 
     }
 
-    /// Specialization for the (2^32 - 5) prime field. This algorithm
-    /// used a modified version of the Extended Euclidean algorithm,
-    /// which essentially solves the a*x + b*y = gcd(a,b) in this case
-    /// b = 2^32 - 5 which is a prime therefore we know that gcd(a,b) = 1
-    /// also since we do all calculations mod 2^32 - 5 we see that b*y
-    /// must become 0. Therefore we are left with calculating a*x = 1
-    /// in which case x must be the inverse of a.
+    /// Specialization for the (2^32 - 5) prime field. This algorithm used a
+    /// modified version of the Extended Euclidean algorithm, which essentially
+    /// solves the a*x + b*y = gcd(a,b) in this case b = 2^32 - 5 which is a
+    /// prime therefore we know that gcd(a,b) = 1 also since we do all
+    /// calculations mod 2^32 - 5 we see that b*y must become 0. We are left
+    /// with calculating a*x = 1 in which case x must be the inverse of a.
+    /// @copydoc optimal_prime::invert()
     template<>
     inline optimal_prime<prime2325>::value_type
-    optimal_prime<prime2325>::invert(value_type a) const
+    optimal_prime<prime2325>::invert(value_type element) const
     {
-        assert(a > 0);
-        assert(a < prime2325::prime);
+        assert(element > 0);
+        assert(element < prime2325::prime);
 
         int64_t q  = 0;
 
@@ -109,7 +96,7 @@ namespace fifi
 
         int64_t r  = 0;
         int64_t r0 = prime2325::prime;
-        int64_t r1 = a;
+        int64_t r1 = element;
 
         while(r1 != 1)
         {
@@ -130,9 +117,9 @@ namespace fifi
         return static_cast<value_type>(x1);
     }
 
-    /// Specialization for the (2^32 - 5) prime field. In this
-    /// case division is simply implemented using multiplication
-    /// with the inverse.
+    /// Specialization for the (2^32 - 5) prime field. In this case division is
+    /// simply implemented using multiplication with the inverse.
+    /// @copydoc optimal_prime::divide()
     template<>
     inline optimal_prime<prime2325>::value_type
     optimal_prime<prime2325>::divide(value_type numerator,
@@ -143,6 +130,7 @@ namespace fifi
     }
 
     /// Specialization for the (2^32 - 5) prime field
+    /// @copydoc optimal_prime::add()
     template<>
     inline optimal_prime<prime2325>::value_type
     optimal_prime<prime2325>::add(value_type element_one,
@@ -159,6 +147,7 @@ namespace fifi
     }
 
     /// Specialization for the (2^32 - 5) prime field
+    /// @copydoc optimal_prime::subtract()
     template<>
     inline optimal_prime<prime2325>::value_type
     optimal_prime<prime2325>::subtract(value_type element_one,

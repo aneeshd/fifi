@@ -42,24 +42,18 @@ namespace fifi
 
     public:
 
-        /// Performs the field addition
-        /// @param element_one the first field element
-        /// @param element_two the second field element
-        /// @return the result after addition
+        /// @copydoc finite_field::add()
         value_type add(value_type element_one, value_type element_two) const;
 
-        /// Performs the field subtraction
-        /// @param element_one the first field element
-        /// @param element_two the second field element
-        /// @return the result after subtraction
+        /// @copydoc finite_field::subtract()
         value_type subtract(value_type element_one, value_type element_two) const;
 
     public:
 
-        /// Access to the simple online algorithms. These are
-        /// use for the initialization of the lookup table and for the
-        /// addition and subtraction operations since those are the same
-        /// in both the binary and binary extension fields
+        /// Access to the simple online algorithms. These are use for the
+        /// initialization of the lookup table and for the addition and
+        /// subtraction operations since those are the same in both the binary
+        /// and binary extension fields
         simple_online<field_type> m_simple_online;
 
     };

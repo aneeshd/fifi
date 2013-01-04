@@ -11,16 +11,23 @@
 namespace fifi
 {
 
-    /// A finite field object provides a wrapper around a
-    /// concrete field implementation.
+    /// A finite field object provides a wrapper around a concrete field
+    /// implementation.
     template<class FieldImpl>
     class finite_field
     {
     public:
 
+        /// field implementation typedef
         typedef FieldImpl field_impl;
+
+        /// field implementation shared pointer typedef
         typedef boost::shared_ptr<field_impl> impl_type;
+
+        /// field type typedef
         typedef typename field_impl::field_type field_type;
+
+        /// value type typedef
         typedef typename field_type::value_type value_type;
 
     public:
