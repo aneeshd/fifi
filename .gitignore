@@ -15,6 +15,7 @@
 *.pyc
 
 # For projects that use Waf for building: http://code.google.com/p/waf/
+waf-*
 .waf-*
 .lock-*
 build
@@ -25,3 +26,18 @@ GPATH
 GRTAGS
 GSYMS
 GTAGS
+
+# Emacs temp / auto save
+\#*#
+*~
+
+# Visual Studio ignore
+*.bat
+*.sln
+*.suo
+*.user
+*.ncb
+*.sdf
+*.opensdf
+*.log
+VSProjects
