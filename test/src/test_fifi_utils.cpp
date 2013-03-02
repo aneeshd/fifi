@@ -64,14 +64,22 @@ TEST(TestFifiUtils, get_value)
     uint8_t test[2] = {0,0};
 
     fifi::set_value<fifi::binary>(&test[0],7,1);
-    EXPECT_EQ(fifi::get_value<fifi::binary>(&test[0],7),1U);
+    EXPECT_EQ(fifi::get_value<fifi::binary>(&test[0], 7), 1U);
 
-    uint8_t test_8[2] = {0,0};
+    const uint8_t *test_const = test;
+    EXPECT_EQ(fifi::get_value<fifi::binary>(&test_const[0], 7), 1U);
 
-    fifi::set_value<fifi::binary8>(&test_8[0],0,43U);
-    EXPECT_EQ(fifi::get_value<fifi::binary8>(&test_8[0],0),43U);
+    uint8_t test8[2] = {0,0};
 
-    fifi::set_value<fifi::binary8>(&test_8[0],1,183);
-    EXPECT_EQ(fifi::get_value<fifi::binary8>(&test_8[0],1),183U);
+    fifi::set_value<fifi::binary8>(&test8[0], 0, 43U);
+    EXPECT_EQ(fifi::get_value<fifi::binary8>(&test8[0], 0), 43U);
+
+    fifi::set_value<fifi::binary8>(&test8[0], 1, 183);
+    EXPECT_EQ(fifi::get_value<fifi::binary8>(&test8[0], 1), 183U);
+
+    const uint8_t *test8_const = &test8[0];
+    EXPECT_EQ(fifi::get_value<fifi::binary8>(&test8_const[0],1), 183U);
 }
+
+
 

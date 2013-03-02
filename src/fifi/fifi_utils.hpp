@@ -59,20 +59,17 @@ namespace fifi
     /// symbol.
     template<class Field>
     inline typename Field::value_type
-    get_value(const typename Field::value_ptr symbol, uint32_t index)
+    get_value(const typename Field::value_type *elements, uint32_t index)
     {
-        assert(symbol != 0);
-        return symbol[index];
+        assert(elements != 0);
+        return elements[index];
     }
 
     template<>
     inline binary::value_type
-    get_value<binary>(const binary::value_ptr symbol, uint32_t index)
+    get_value<binary>(const binary::value_type *elements, uint32_t index)
     {
-        assert(symbol != 0);
-
-        typedef binary::value_ptr value_ptr;
-        value_ptr elements = reinterpret_cast<value_ptr>(symbol);
+        assert(elements != 0);
 
         uint32_t array_index =
             index / std::numeric_limits<binary::value_type>::digits;
