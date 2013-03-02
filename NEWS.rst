@@ -6,7 +6,7 @@ of every change, see the Git log.
 
 tbd (master)
 ------------
-* tbd
+* Updating waf to version 1.7.9 and start using the wurf_install_path tool.
 
 7.0.0
 -----
