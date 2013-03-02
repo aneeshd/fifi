@@ -58,25 +58,27 @@ namespace fifi
     /// Returns the value of an element at the specific position in the
     /// symbol.
     template<class Field>
-    inline typename Field::value_type get_value(typename Field::value_ptr symbol,
-                                                uint32_t index)
+    inline typename Field::value_type
+    get_value(const typename Field::value_ptr symbol, uint32_t index)
     {
         assert(symbol != 0);
-        // typedef typename Field::value_ptr value_ptr;
-        // value_ptr elements = reinterpret_cast<value_ptr>(symbol);
         return symbol[index];
     }
 
     template<>
-    inline binary::value_type get_value<binary>(uint8_t *symbol, uint32_t index)
+    inline binary::value_type
+    get_value<binary>(const binary::value_ptr symbol, uint32_t index)
     {
         assert(symbol != 0);
 
         typedef binary::value_ptr value_ptr;
         value_ptr elements = reinterpret_cast<value_ptr>(symbol);
 
-        uint32_t array_index = index / std::numeric_limits<binary::value_type>::digits;
-        uint32_t offset = index % std::numeric_limits<binary::value_type>::digits;
+        uint32_t array_index =
+            index / std::numeric_limits<binary::value_type>::digits;
+
+        uint32_t offset =
+            index % std::numeric_limits<binary::value_type>::digits;
 
         return (elements[array_index] >> offset) & 0x1;
     }
