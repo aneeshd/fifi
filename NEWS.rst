@@ -7,6 +7,7 @@ of every change, see the Git log.
 tbd (master)
 ------------
 * Updating waf to version 1.7.9 and start using the wurf_install_path tool.
+* Rename default_field_impl.hpp to default_field.hpp
 
 7.0.0
 -----

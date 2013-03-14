@@ -11,7 +11,7 @@
 #include <fifi/extended_log_table.hpp>
 #include <fifi/field_types.hpp>
 #include <fifi/arithmetics.hpp>
-#include <fifi/default_field_impl.hpp>
+#include <fifi/default_field.hpp>
 
 template<class FieldImpl>
 void test_alignment(uint32_t length, uint32_t start_offset)
@@ -85,13 +85,13 @@ void test_alignment(uint32_t length, uint32_t start_offset)
         length, start_offset);
 
     // Just also run the default fields
-    test_alignment< fifi::default_field_impl<fifi::binary>::type >(
+    test_alignment< fifi::default_field<fifi::binary>::type >(
         length, start_offset);
 
-    test_alignment< fifi::default_field_impl<fifi::binary8>::type >(
+    test_alignment< fifi::default_field<fifi::binary8>::type >(
         length, start_offset);
 
-    test_alignment< fifi::default_field_impl<fifi::binary16>::type >(
+    test_alignment< fifi::default_field<fifi::binary16>::type >(
         length, start_offset);
 }
 
