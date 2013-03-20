@@ -81,5 +81,31 @@ TEST(TestFifiUtils, get_value)
     EXPECT_EQ(fifi::get_value<fifi::binary8>(&test8_const[0],1), 183U);
 }
 
+TEST(TestFifiUtils, swap_values)
+{
+    uint8_t test[2] = { 0x00, 0xff };
 
+    for (uint32_t i = 0; i < 8; ++i)
+    {
+        fifi::swap_values<fifi::binary>(&test[0], i, i+8);
+    }
+
+    EXPECT_EQ(test[0], 0xff);
+    EXPECT_EQ(test[1], 0x00);
+
+    const uint8_t *test_const = &test[0];
+    EXPECT_EQ(test_const[0], 0xff);
+    EXPECT_EQ(test_const[1], 0x00);
+
+    
+    uint8_t test8[2] = { 0x00, 0xff };
+    
+    fifi::swap_values<fifi::binary8>(&test8[0], 0, 1);
+    EXPECT_EQ(test8[0], 0xff);
+    EXPECT_EQ(test8[1], 0x00);
+
+    const uint8_t *test8_const = &test8[0];
+    EXPECT_EQ(test8_const[0], 0xff);
+    EXPECT_EQ(test8_const[1], 0x00);
+}
 

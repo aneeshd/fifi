@@ -111,6 +111,20 @@ namespace fifi
             elements[array_index] &= ~mask;
         }
     }
+
+    template<class Field>
+    inline void swap_values(typename Field::value_ptr elements, uint32_t index1,
+                            uint32_t index2)
+    {
+        assert(elements != 0);
+
+        typename Field::value_type value1 = get_value<Field>(elements, index1);
+        typename Field::value_type value2 = get_value<Field>(elements, index2);
+
+        set_value<Field>(elements, index1, value2);
+        set_value<Field>(elements, index2, value1);
+    }
+
 }
 
 #endif
