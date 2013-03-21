@@ -3,6 +3,11 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+/// @file fifi_utils.hpp
+/// \brief utility functions
+/// 
+/// Utility functions
+
 #ifndef FIFI_FIFI_UTILS_HPP
 #define FIFI_FIFI_UTILS_HPP
 
@@ -12,7 +17,7 @@ namespace fifi
 {
     /// Returns the number of value_type elements needed to store
     /// a certain number of bytes
-    /// @param bytes, the number of bytes to store
+    /// @param bytes the number of bytes to store
     /// @return the number of field elements that need to be stored
     template<class Field>
     inline uint32_t elements_needed(uint32_t bytes)
@@ -28,7 +33,7 @@ namespace fifi
 
     /// Returns the size in bytes needed to store a certain
     /// number of elements
-    /// @param elements, the number of elements to store
+    /// @param elements the number of elements to store
     /// @return the size in bytes that need to be stored
     template<class Field>
     inline uint32_t bytes_needed(uint32_t elements)
@@ -57,6 +62,9 @@ namespace fifi
     /// a mixed binary & other fields implementation is created.
     /// Returns the value of an element at the specific position in the
     /// symbol.
+    /// @param elements elements to get value from 
+    /// @param index index of element to access
+    /// @return the value of the element at specified index
     template<class Field>
     inline typename Field::value_type
     get_value(const typename Field::value_type *elements, uint32_t index)
@@ -65,6 +73,7 @@ namespace fifi
         return elements[index];
     }
 
+    /// get_value specilization for the binary field
     template<>
     inline binary::value_type
     get_value<binary>(const binary::value_type *elements, uint32_t index)
@@ -80,6 +89,11 @@ namespace fifi
         return (elements[array_index] >> offset) & 0x1;
     }
 
+    /// Usefull abstraction function for assigning field elements a specific
+    /// value.
+    /// @param elements elements to manipulate
+    /// @param index index of element
+    /// @param value value to assign element
     template<class Field>
     inline void set_value(typename Field::value_ptr elements, uint32_t index,
                           typename Field::value_type value)
@@ -88,6 +102,7 @@ namespace fifi
         elements[index] = value;
     }
 
+    /// set_value specilization for the binary field
     template<>
     inline void set_value<binary>(binary::value_ptr elements, uint32_t index,
                                   binary::value_type value)
@@ -112,6 +127,9 @@ namespace fifi
         }
     }
 
+    /// Usefull abstraction function for swapping two field elements
+    /// @param elements, elements to manipulate
+    /// @param index1,index2 indexes of elements to swap
     template<class Field>
     inline void swap_values(typename Field::value_ptr elements, uint32_t index1,
                             uint32_t index2)
