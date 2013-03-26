@@ -23,7 +23,7 @@ namespace fifi
         /// Create a new prefix bitmap
         ///
         /// @param max_block_length denotes the largest block size in bytes that
-        ///can be searched using this algorithm.
+        ///        can be searched using this algorithm.
         prime2325_bitmap(uint32_t max_block_length)
             : m_max_block_length(max_block_length),
               m_max_block_size(m_max_block_length * 4)
@@ -175,7 +175,7 @@ namespace fifi
         /// The maximum block size in bytes
         uint32_t m_max_block_size;
 
-        /// The bits in the
+        // The number of bits in the mapping type
         uint32_t m_mapping_bits;
 
         /// The amount we need to shift the prefix

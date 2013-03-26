@@ -14,6 +14,7 @@
 #include <fifi/field_types.hpp>
 #include <fifi/prime2325_bitmap.hpp>
 #include <fifi/prime2325_binary_search.hpp>
+#include <fifi/prime2325_apply_prefix.hpp>
 
 void print_bits_header()
 {
@@ -129,38 +130,63 @@ TEST(test_prime2325, find_one_prefix)
 }
 
 
+
 template<class Algorithm>
-void test_find_a_prefix(uint32_t block_length)
+void test_find_a_prefix(std::vector<uint32_t> data)
 {
-    std::vector<uint32_t> data(block_length);
-
-    for(uint32_t i = 0; i < block_length; ++i)
-    {
-        data[i] = rand();
-    }
-
+    uint32_t block_length = data.size();
     Algorithm p(block_length);
 
     uint32_t prefix = p.find_prefix(sak::storage(data));
 
+    // Check that the prefix does not appear in the data
     for(uint32_t i = 0; i < block_length; ++i)
     {
         EXPECT_TRUE(data[i] != prefix);
     }
 
+    // Apply the prefix and test that all values are below the prime
+    fifi::apply_prefix(sak::storage(data), ~prefix);
+
+    // Check that all values are below the prefix
+    for(uint32_t i = 0; i < block_length; ++i)
+    {
+        EXPECT_TRUE(data[i] < fifi::prime2325::prime);
+    }
+
+
 }
+
 
 
 void test_find_a_prefix(uint32_t block_length)
 {
-    test_find_a_prefix<fifi::prime2325_bitmap>(block_length);
-    test_find_a_prefix<fifi::prime2325_binary_search>(block_length);
+    {
+        std::vector<uint32_t> data(block_length);
+
+        for(uint32_t i = 0; i < block_length; ++i)
+        {
+            data[i] = rand();
+        }
+
+        test_find_a_prefix<fifi::prime2325_bitmap>(data);
+        test_find_a_prefix<fifi::prime2325_binary_search>(data);
+    }
+
+    {
+        std::vector<uint32_t> data(block_length, 0xffffffffU);
+
+        test_find_a_prefix<fifi::prime2325_bitmap>(data);
+        test_find_a_prefix<fifi::prime2325_binary_search>(data);
+    }
+
 }
 
 
 /// For different block sizes find a prefix
 TEST(test_prime2325, find_a_prefix)
 {
+
     test_find_a_prefix(7);
     test_find_a_prefix(8);
     test_find_a_prefix(9);
