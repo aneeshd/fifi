@@ -4,8 +4,12 @@ News for fifi
 This file lists the major changes between versions. For a more detailed list
 of every change, see the Git log.
 
-tbd (master)
-------------
+Latest
+------
+* tbd
+
+8.0.0
+-----
 * Updating waf to version 1.7.9 and start using the wurf_install_path tool.
 * Rename default_field_impl.hpp to default_field.hpp
 
