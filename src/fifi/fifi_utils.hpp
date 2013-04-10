@@ -58,6 +58,21 @@ namespace fifi
                 std::numeric_limits<binary::value_type>::digits) + 1;
     }
 
+    /// Returns the number of field elements that the bytes can accommodate
+    /// @param bytes the number of bytes to accommodate the field elements
+    template<class Field>
+    inline uint32_t field_elements_contained(uint32_t bytes)
+    {
+        return elements_needed<Field>(bytes);
+    }
+
+    /// field_elements_included specilization for the binary field
+    template<>
+    inline uint32_t field_elements_contained<binary>(uint32_t bytes)
+    {
+        return 8*bytes;
+    }
+
     /// Usefull abstraction functions for accessing field elements if
     /// a mixed binary & other fields implementation is created.
     /// Returns the value of an element at the specific position in the

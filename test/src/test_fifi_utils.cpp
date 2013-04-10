@@ -39,6 +39,19 @@ TEST(TestFifiUtils, elements_needed)
 }
 
 
+TEST(TestFifiUtils, field_elements_contained)
+{
+    EXPECT_EQ(fifi::field_elements_contained<fifi::binary>(1), 8U);
+    EXPECT_EQ(fifi::field_elements_contained<fifi::binary>(2), 16U);
+    EXPECT_EQ(fifi::field_elements_contained<fifi::binary8>(1), 1U);
+    EXPECT_EQ(fifi::field_elements_contained<fifi::binary8>(2), 2U);
+    EXPECT_EQ(fifi::field_elements_contained<fifi::binary16>(2), 1U);
+    EXPECT_EQ(fifi::field_elements_contained<fifi::binary16>(4), 2U);
+    EXPECT_EQ(fifi::field_elements_contained<fifi::prime2325>(4), 1U);
+    EXPECT_EQ(fifi::field_elements_contained<fifi::prime2325>(8), 2U);
+}
+
+
 TEST(TestFifiUtils, set_value)
 {
     uint8_t test[2] = {0,0};
