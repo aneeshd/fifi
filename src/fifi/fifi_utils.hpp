@@ -16,9 +16,10 @@
 namespace fifi
 {
 
+    // Anonymous namespace only visible within this file
     namespace
     {
-        /// Ceiling for integer division
+        /// Ceiling for integer division - ceil(x/y)
         inline uint32_t div_ceil(uint32_t numerator, uint32_t denominator)
         {
             assert(numerator > 0);
@@ -26,28 +27,6 @@ namespace fifi
 
             return ((numerator - 1) / denominator) + 1;
         }
-    }
-
-    /// Returns the minimum size in bytes required to accommodate a certain
-    /// number of field elements
-    /// @param elements the number of field elements 
-    /// @return the size in bytes needed to store the field elements
-    template<class Field>
-    inline uint32_t elements_to_size(uint32_t elements)
-    {
-        assert(elements > 0);
-
-        return elements*sizeof(typename Field::value_type);
-    }
-
-    /// elements_to_size specilization for the binary field
-    /// @see elements_to_size(uint32_t)
-    template<>
-    inline uint32_t elements_to_size<binary>(uint32_t elements)
-    {
-        assert(elements > 0);
-
-        return div_ceil(elements, binary::digits);
     }
 
     /// Returns the number of value_type elements needed to store a certain
@@ -70,6 +49,19 @@ namespace fifi
         assert(elements > 0);
 
         return div_ceil(elements, binary::digits);
+    }
+
+    /// Returns the minimum size in bytes required to accommodate a certain
+    /// number of field elements
+    /// @param elements the number of field elements 
+    /// @return the size in bytes needed to store the field elements
+    template<class Field>
+    inline uint32_t elements_to_size(uint32_t elements)
+    {
+        assert(elements > 0);
+
+        return elements_to_length<Field>(elements)*
+               sizeof(typename Field::value_type);
     }
 
     /// Returns the number of value_type elements needed to store
