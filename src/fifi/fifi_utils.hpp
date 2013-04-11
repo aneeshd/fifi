@@ -16,12 +16,51 @@
 /// @todo uncomment and remove all old functions during kodo update
 namespace fifi
 {
+
+    /// Returns the minimum size in bytes required to accommodate a certain
+    /// number of field elements
+    /// @param elements the number of field elements 
+    /// @return the size in bytes needed to store the field elements
+    template<class Field>
+    inline uint32_t elements_size(uint32_t elements)
+    {
+        assert(elements > 0);
+
+        return elements*sizeof(typename Field::value_type);
+    }
+
+    /// elements_size specilization for the binary field
+    /// @see elements_size(uint32_t)
+    template<>
+    inline uint32_t elements_size<binary>(uint32_t elements)
+    {
+        assert(elements > 0);
+
+        /// @todo is the statement below true in the scenario below
+        // ceil(x/y) = ((x - 1) / y) + 1
+        return ((elements * sizeof(typename binary::value_type) -1) /
+               std::numeric_limits<binary::value_type>::digits) + 1;
+    }
+
+    /// Returns the number of value_type elements needed to store a certain
+    /// number of field elements
+    /// @todo Does this function make sense?
+    /// @param elements the number of field elements
+    /// @return the number of value_type elements needed
+    template<class Field>
+    inline uint32_t elements_length(uint32_t elements)
+    {
+        assert(elements > 0);
+
+        return elements;
+    }
+
     /// Returns the number of value_type elements needed to store
     /// a certain number of bytes
     /// @param bytes the number of bytes to store
-    /// @return the number of field elements that need to be stored
+    /// @return the number of value_type elements needed to store
     template<class Field>
-    inline uint32_t elements_needed(uint32_t bytes)
+    inline uint32_t size_to_length(uint32_t bytes)
     {
         assert(bytes > 0);
 
@@ -33,45 +72,65 @@ namespace fifi
     }
 
     /// Returns the size in bytes needed to store a certain
-    /// number of elements
-    /// @param elements the number of elements to store
-    /// @return the size in bytes that need to be stored
+    /// number of value_type elements
+    /// @param length the number of value_type elements to store
+    /// @return the size in bytes needed to store the value_type elements
     template<class Field>
-    inline uint32_t bytes_needed(uint32_t elements)
+    inline uint32_t length_to_size(uint32_t length)
     {
-        assert(elements > 0);
+        assert(length > 0);
 
-        return sizeof(typename Field::value_type) * elements;
+        return sizeof(typename Field::value_type) * length;
     }
 
-    /// size_needed specilization for the binary field
-    /// @see size_needed()
+    /// length_to_size specilization for the binary field
+    /// @see length_to_size(uint32_t)
     template<>
-    inline uint32_t bytes_needed<binary>(uint32_t elements)
+    inline uint32_t length_to_size<binary>(uint32_t length)
     {
-        assert(elements > 0);
+        assert(length > 0);
 
         // Note: std::numeric_limits<value_type>::digits
         // returns the number of bits in the template parameter
 
         // ceil(x/y) = ((x - 1) / y) + 1
-        return ((elements - 1) /
+        return ((length - 1) /
                 std::numeric_limits<binary::value_type>::digits) + 1;
     }
 
-    /// Returns the number of field elements that the bytes can accommodate
-    /// @param bytes the number of bytes to accommodate the field elements
+    /// Returns the number of field elements that can fit within a certain
+    /// number of bytes
+    /// @param bytes the number of bytes to store the field elements
+    /// @return the number of field elements stored within the bytes 
     template<class Field>
-    inline uint32_t field_elements_contained(uint32_t bytes)
+    inline uint32_t size_to_elements(uint32_t bytes)
     {
-        return elements_needed<Field>(bytes);
+        assert(bytes > 0);
+
+        return size_to_length<Field>(bytes);
     }
 
-    /// field_elements_included specilization for the binary field
+    /// size_to_elements specilization for the binary field
+    /// @see size_to_elements(uint32_t)
     template<>
-    inline uint32_t field_elements_contained<binary>(uint32_t bytes)
+    inline uint32_t size_to_elements<binary>(uint32_t bytes)
     {
+        assert(bytes > 0);
+
         return bytes*std::numeric_limits<binary::value_type>::digits;
+    }
+
+    /// Returns the number of field elements needed to store a certain
+    /// number of value_type elements
+    /// @todo Does this function make sense?
+    /// @param length the number of value_type elements
+    /// @return the number of field elements needed
+    template<class Field>
+    inline uint32_t length_to_elements(uint32_t length)
+    {
+        assert(length > 0);
+
+        return length;
     }
 
     /// Usefull abstraction functions for accessing field elements if
@@ -157,129 +216,6 @@ namespace fifi
 
         set_value<Field>(elements, index1, value2);
         set_value<Field>(elements, index2, value1);
-    }
-
-
-
-    /// Returns the minimum size in bytes required to accommodate a certain
-    /// number of field elements
-    /// @param elements the number of field elements 
-    /// @return the size in bytes needed to store the field elements
-    template<class Field>
-    inline uint32_t elements_size(uint32_t elements)
-    {
-        assert(elements > 0);
-
-        return elements*sizeof(typename Field::value_type);
-    }
-
-    /// elements_size specilization for the binary field
-    /// @see elements_size(uint32_t)
-    template<>
-    inline uint32_t elements_size<binary>(uint32_t elements)
-    {
-        assert(elements > 0);
-
-        /// @todo is the statement below true in the scenario below
-        // ceil(x/y) = ((x - 1) / y) + 1
-        return ((elements * sizeof(typename binary::value_type) -1) /
-               std::numeric_limits<binary::value_type>::digits) + 1;
-    }
-
-
-    /// Returns the number of value_type elements needed to store a certain
-    /// number of field elements
-    /// @todo Does this function make sense?
-    /// @param elements the number of field elements
-    /// @return the number of value_type elements needed
-    template<class Field>
-    inline uint32_t elements_length(uint32_t elements)
-    {
-        assert(elements > 0);
-
-        return elements;
-    }
-
-
-    /// Returns the number of value_type elements needed to store
-    /// a certain number of bytes
-    /// @param bytes the number of bytes to store
-    /// @return the number of value_type elements needed to store
-    template<class Field>
-    inline uint32_t size_to_length(uint32_t bytes)
-    {
-        assert(bytes > 0);
-
-        uint32_t bytes_per_element = sizeof(typename Field::value_type);
-
-        // Make sure that the number of bytes is a multiple of element size
-        assert( (bytes % bytes_per_element) == 0);
-        return bytes / bytes_per_element;
-    }
-
-
-    /// Returns the size in bytes needed to store a certain
-    /// number of value_type elements
-    /// @param length the number of value_type elements to store
-    /// @return the size in bytes needed to store the value_type elements
-    template<class Field>
-    inline uint32_t length_to_size(uint32_t length)
-    {
-        assert(length > 0);
-
-        return sizeof(typename Field::value_type) * length;
-    }
-
-    /// length_to_size specilization for the binary field
-    /// @see length_to_size(uint32_t)
-    template<>
-    inline uint32_t length_to_size<binary>(uint32_t length)
-    {
-        assert(length > 0);
-
-        // Note: std::numeric_limits<value_type>::digits
-        // returns the number of bits in the template parameter
-
-        // ceil(x/y) = ((x - 1) / y) + 1
-        return ((length - 1) /
-                std::numeric_limits<binary::value_type>::digits) + 1;
-    }
-
-
-    /// Returns the number of field elements that can fit within a certain
-    /// number of bytes
-    /// @param bytes the number of bytes to store the field elements
-    /// @return the number of field elements stored within the bytes 
-    template<class Field>
-    inline uint32_t size_to_elements(uint32_t bytes)
-    {
-        assert(bytes > 0);
-
-        return size_to_length<Field>(bytes);
-    }
-
-    /// size_to_elements specilization for the binary field
-    /// @see size_to_elements(uint32_t)
-    template<>
-    inline uint32_t size_to_elements<binary>(uint32_t bytes)
-    {
-        assert(bytes > 0);
-
-        return bytes*std::numeric_limits<binary::value_type>::digits;
-    }
-
-
-    /// Returns the number of field elements needed to store a certain
-    /// number of value_type elements
-    /// @todo Does this function make sense?
-    /// @param length the number of value_type elements
-    /// @return the number of field elements needed
-    template<class Field>
-    inline uint32_t length_to_elements(uint32_t length)
-    {
-        assert(length > 0);
-
-        return length;
     }
 
 }
