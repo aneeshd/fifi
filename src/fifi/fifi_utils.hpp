@@ -13,7 +13,6 @@
 
 #include "field_types.hpp"
 
-/// @todo uncomment and remove all old functions during kodo update
 namespace fifi
 {
 
@@ -38,13 +37,12 @@ namespace fifi
 
         /// @todo is the statement below true in the scenario below
         // ceil(x/y) = ((x - 1) / y) + 1
-        return ((elements * sizeof(typename binary::value_type) -1) /
+        return ((elements * sizeof(typename binary::value_type) - 1) /
                std::numeric_limits<binary::value_type>::digits) + 1;
     }
 
     /// Returns the number of value_type elements needed to store a certain
     /// number of field elements
-    /// @todo Does this function make sense?
     /// @param elements the number of field elements
     /// @return the number of value_type elements needed
     template<class Field>
@@ -58,7 +56,7 @@ namespace fifi
     /// Returns the number of value_type elements needed to store
     /// a certain number of bytes
     /// @param bytes the number of bytes to store
-    /// @return the number of value_type elements needed to store
+    /// @return the number of value_type elements that need to be stored
     template<class Field>
     inline uint32_t size_to_length(uint32_t bytes)
     {
@@ -122,7 +120,6 @@ namespace fifi
 
     /// Returns the number of field elements needed to store a certain
     /// number of value_type elements
-    /// @todo Does this function make sense?
     /// @param length the number of value_type elements
     /// @return the number of field elements needed
     template<class Field>
