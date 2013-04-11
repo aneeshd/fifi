@@ -39,6 +39,9 @@ namespace fifi
         /// The field order i.e. number of field elements
         const static order_type order = 2;
 
+        /// The number of bits in a value_type
+        const static uint32_t digits = std::numeric_limits<value_type>::digits;
+
     };
 
     /// A binary extension field with 2^8 elements

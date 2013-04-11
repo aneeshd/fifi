@@ -16,29 +16,38 @@
 namespace fifi
 {
 
+    namespace
+    {
+        /// Ceiling for integer division
+        inline uint32_t div_ceil(uint32_t numerator, uint32_t denominator)
+        {
+            assert(numerator > 0);
+            assert(denominator > 0);
+
+            return ((numerator - 1) / denominator) + 1;
+        }
+    }
+
     /// Returns the minimum size in bytes required to accommodate a certain
     /// number of field elements
     /// @param elements the number of field elements 
     /// @return the size in bytes needed to store the field elements
     template<class Field>
-    inline uint32_t elements_size(uint32_t elements)
+    inline uint32_t elements_to_size(uint32_t elements)
     {
         assert(elements > 0);
 
         return elements*sizeof(typename Field::value_type);
     }
 
-    /// elements_size specilization for the binary field
-    /// @see elements_size(uint32_t)
+    /// elements_to_size specilization for the binary field
+    /// @see elements_to_size(uint32_t)
     template<>
-    inline uint32_t elements_size<binary>(uint32_t elements)
+    inline uint32_t elements_to_size<binary>(uint32_t elements)
     {
         assert(elements > 0);
 
-        /// @todo is the statement below true in the scenario below
-        // ceil(x/y) = ((x - 1) / y) + 1
-        return ((elements * sizeof(typename binary::value_type) - 1) /
-               std::numeric_limits<binary::value_type>::digits) + 1;
+        return div_ceil(elements, binary::digits);
     }
 
     /// Returns the number of value_type elements needed to store a certain
@@ -46,11 +55,21 @@ namespace fifi
     /// @param elements the number of field elements
     /// @return the number of value_type elements needed
     template<class Field>
-    inline uint32_t elements_length(uint32_t elements)
+    inline uint32_t elements_to_length(uint32_t elements)
     {
         assert(elements > 0);
 
         return elements;
+    }
+
+    /// elements_to_length specilization for the binary field
+    /// @see elements_to_length(uint32_t)
+    template<>
+    inline uint32_t elements_to_length<binary>(uint32_t elements)
+    {
+        assert(elements > 0);
+
+        return div_ceil(elements, binary::digits);
     }
 
     /// Returns the number of value_type elements needed to store
@@ -78,7 +97,7 @@ namespace fifi
     {
         assert(length > 0);
 
-        return sizeof(typename Field::value_type) * length;
+        return length * sizeof(typename Field::value_type);
     }
 
     /// length_to_size specilization for the binary field
@@ -88,12 +107,9 @@ namespace fifi
     {
         assert(length > 0);
 
-        // Note: std::numeric_limits<value_type>::digits
-        // returns the number of bits in the template parameter
+        // Note: binary::digits returns the number of bits in its value_type
 
-        // ceil(x/y) = ((x - 1) / y) + 1
-        return ((length - 1) /
-                std::numeric_limits<binary::value_type>::digits) + 1;
+        return div_ceil(length, binary::digits);
     }
 
     /// Returns the number of field elements that can fit within a certain
@@ -115,7 +131,7 @@ namespace fifi
     {
         assert(bytes > 0);
 
-        return bytes*std::numeric_limits<binary::value_type>::digits;
+        return bytes*binary::digits;
     }
 
     /// Returns the number of field elements needed to store a certain
@@ -128,6 +144,16 @@ namespace fifi
         assert(length > 0);
 
         return length;
+    }
+
+    /// length_to_elements specilization for the binary field
+    /// @see length_to_elements(uint32_t)
+    template<>
+    inline uint32_t length_to_elements<binary>(uint32_t length)
+    {
+        assert(length > 0);
+
+        return length*binary::digits;
     }
 
     /// Usefull abstraction functions for accessing field elements if
@@ -153,10 +179,10 @@ namespace fifi
         assert(elements != 0);
 
         uint32_t array_index =
-            index / std::numeric_limits<binary::value_type>::digits;
+            index / binary::digits;
 
         uint32_t offset =
-            index % std::numeric_limits<binary::value_type>::digits;
+            index % binary::digits;
 
         return (elements[array_index] >> offset) & 0x1;
     }

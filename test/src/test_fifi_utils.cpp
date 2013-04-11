@@ -10,28 +10,38 @@
 #include <fifi/fifi_utils.hpp>
 
 
-TEST(TestFifiUtils, elements_size)
+TEST(TestFifiUtils, elements_to_size)
 {
-    EXPECT_EQ(fifi::elements_size<fifi::binary>(1), 1U);
-    EXPECT_EQ(fifi::elements_size<fifi::binary>(7), 1U);
-    EXPECT_EQ(fifi::elements_size<fifi::binary>(8), 1U);
-    EXPECT_EQ(fifi::elements_size<fifi::binary>(9), 2U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary>(1), 1U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary>(7), 1U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary>(8), 1U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary>(9), 2U);
 
-    EXPECT_EQ(fifi::elements_size<fifi::binary8>(1), 1U);
-    EXPECT_EQ(fifi::elements_size<fifi::binary8>(9), 9U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary8>(1), 1U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary8>(9), 9U);
 
-    EXPECT_EQ(fifi::elements_size<fifi::binary16>(5), 10U);
-    EXPECT_EQ(fifi::elements_size<fifi::binary16>(13), 26U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary16>(5), 10U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary16>(13), 26U);
 
-    /// @todo What is expected here?
-    //EXPECT_EQ(fifi::elements_size<fifi::prime2325>(2), U);
-    //EXPECT_EQ(fifi::elements_size<fifi::prime2325>(3), U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::prime2325>(2), 8U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::prime2325>(3), 12U);
 }
 
-/// @todo uncomment if makes sanse or delete if not
-//TEST(TestFifiUtils, elements_length)
-//{
-//}
+TEST(TestFifiUtils, elements_to_length)
+{
+    EXPECT_EQ(fifi::elements_to_length<fifi::binary>(7), 1U);
+    EXPECT_EQ(fifi::elements_to_length<fifi::binary>(8), 1U);
+    EXPECT_EQ(fifi::elements_to_length<fifi::binary>(9), 2U);
+
+    EXPECT_EQ(fifi::elements_to_length<fifi::binary8>(1), 1U);
+    EXPECT_EQ(fifi::elements_to_length<fifi::binary8>(9), 9U);
+
+    EXPECT_EQ(fifi::elements_to_length<fifi::binary16>(1), 1U);
+    EXPECT_EQ(fifi::elements_to_length<fifi::binary16>(9), 9U);
+
+    EXPECT_EQ(fifi::elements_to_length<fifi::prime2325>(1), 1U);
+    EXPECT_EQ(fifi::elements_to_length<fifi::prime2325>(9), 9U);
+}
 
 TEST(TestFifiUtils, size_to_length)
 {
@@ -76,10 +86,20 @@ TEST(TestFifiUtils, size_to_elements)
     EXPECT_EQ(fifi::size_to_elements<fifi::prime2325>(8), 2U);
 }
 
-/// @todo uncomment if makes sanse or delete if not
-//TEST(TestFifiUtils, length_to_elements)
-//{
-//}
+TEST(TestFifiUtils, length_to_elements)
+{
+    EXPECT_EQ(fifi::length_to_elements<fifi::binary>(1), 8U);
+    EXPECT_EQ(fifi::length_to_elements<fifi::binary>(9), 72U);
+
+    EXPECT_EQ(fifi::length_to_elements<fifi::binary8>(1), 1U);
+    EXPECT_EQ(fifi::length_to_elements<fifi::binary8>(9), 9U);
+
+    EXPECT_EQ(fifi::length_to_elements<fifi::binary16>(1), 1U);
+    EXPECT_EQ(fifi::length_to_elements<fifi::binary16>(9), 9U);
+
+    EXPECT_EQ(fifi::length_to_elements<fifi::prime2325>(1), 1U);
+    EXPECT_EQ(fifi::length_to_elements<fifi::prime2325>(9), 9U);
+}
 
 TEST(TestFifiUtils, set_value)
 {
