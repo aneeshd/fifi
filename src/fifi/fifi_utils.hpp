@@ -48,7 +48,7 @@ namespace fifi
     {
         assert(elements > 0);
 
-        return elements_to_length<Field>(elements)*Field::bytes_per_value;
+        return elements_to_length<Field>(elements)*sizeof(typename Field::value_type);
     }
 
     /// Returns the number of value_type elements needed to store
@@ -60,9 +60,11 @@ namespace fifi
     {
         assert(bytes > 0);
 
+        uint32_t bytes_per_value = sizeof(typename Field::value_type);
+
         // Make sure that the number of bytes is a multiple of element size
-        assert( (bytes % Field::bytes_per_value) == 0);
-        return bytes / Field::bytes_per_value;
+        assert( (bytes % bytes_per_value) == 0);
+        return bytes / bytes_per_value;
     }
 
     /// Returns the size in bytes needed to store a certain
@@ -74,7 +76,7 @@ namespace fifi
     {
         assert(length > 0);
 
-        return length * Field::bytes_per_value;
+        return length * sizeof(typename Field::value_type);
     }
 
     /// Returns the number of field elements needed to store a certain

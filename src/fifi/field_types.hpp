@@ -42,10 +42,6 @@ namespace fifi
         const static uint32_t bits_per_value =
             std::numeric_limits<value_type>::digits;
 
-        /// The number of bytes in a value_type
-        const static uint32_t bytes_per_value =
-            sizeof(value_type);
-
     };
 
     /// A binary extension field with 2^8 elements
@@ -85,14 +81,6 @@ namespace fifi
         /// the field. Our algorithms should manage whether it it necessary to
         /// reduce an element, if needed only lower bits of the prime is needed.
         const static value_type prime = 29;
-
-        /// The number of bits in a value_type
-        const static uint32_t bits_per_value =
-            std::numeric_limits<value_type>::digits;
-
-        /// The number of bytes in a value_type
-        const static uint32_t bytes_per_value =
-            sizeof(value_type);
 
     };
 
@@ -135,13 +123,6 @@ namespace fifi
         /// reduce an element, if needed only lower bits of the prime is needed.
         const static value_type prime = 4107;
 
-        /// The number of bits in a value_type
-        const static uint32_t bits_per_value =
-            std::numeric_limits<value_type>::digits;
-
-        /// The number of bytes in a value_type
-        const static uint32_t bytes_per_value =
-            sizeof(value_type);
     };
 
     /// A binary extension field with 2^32 elements
@@ -172,13 +153,6 @@ namespace fifi
         static uint32_t degree()
         { return 32; }
 
-        /// The number of bits in a value_type
-        const static uint32_t bits_per_value =
-            std::numeric_limits<value_type>::digits;
-
-        /// The number of bytes in a value_type
-        const static uint32_t bytes_per_value =
-            sizeof(value_type);
     };
 
     /// Prime field 2^32 - 5
@@ -228,13 +202,6 @@ namespace fifi
         ///         exists a bit prefix not available in the data
         static uint32_t prefix_length(uint32_t block_length);
 
-        /// The number of bits in a value_type
-        const static uint32_t bits_per_value =
-            std::numeric_limits<value_type>::digits;
-
-        /// The number of bytes in a value_type
-        const static uint32_t bytes_per_value =
-            sizeof(value_type);
     };
 
 
