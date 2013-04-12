@@ -8,6 +8,14 @@ Latest
 ------
 * tbd
 
+9.0.0
+-----
+* Updated/added new functions to fifi_utils.hpp for converting between
+  lengths, sizes and elements.
+* Bumped sak to version 10
+* Added project generator tool which allows Visual Studio solutions to be
+  generated.
+
 8.0.0
 -----
 * Updating waf to version 1.7.9 and start using the wurf_install_path tool.
