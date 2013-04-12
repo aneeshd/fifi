@@ -9,35 +9,111 @@
 #include <fifi/finite_field.hpp>
 #include <fifi/fifi_utils.hpp>
 
-TEST(TestFifiUtils, bytes_needed)
+
+TEST(TestFifiUtils, elements_to_size)
 {
-    EXPECT_EQ(fifi::bytes_needed<fifi::binary>(1), 1U);
-    EXPECT_EQ(fifi::bytes_needed<fifi::binary>(7), 1U);
-    EXPECT_EQ(fifi::bytes_needed<fifi::binary>(12), 2U);
-    EXPECT_EQ(fifi::bytes_needed<fifi::binary>(345), 44U);
-    EXPECT_EQ(fifi::bytes_needed<fifi::binary>(1024), 128U);
-    EXPECT_EQ(fifi::bytes_needed<fifi::binary>(1025), 129U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary>(1), 1U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary>(7), 1U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary>(8), 1U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary>(9), 2U);
 
-    EXPECT_EQ(fifi::bytes_needed<fifi::binary8>(7), 7U);
-    EXPECT_EQ(fifi::bytes_needed<fifi::binary8>(71), 71U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary8>(1), 1U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary8>(9), 9U);
 
-    EXPECT_EQ(fifi::bytes_needed<fifi::binary16>(7), 14U);
-    EXPECT_EQ(fifi::bytes_needed<fifi::binary16>(743), 1486U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary16>(5), 10U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::binary16>(13), 26U);
+
+    EXPECT_EQ(fifi::elements_to_size<fifi::prime2325>(2), 8U);
+    EXPECT_EQ(fifi::elements_to_size<fifi::prime2325>(3), 12U);
 }
 
-
-TEST(TestFifiUtils, elements_needed)
+TEST(TestFifiUtils, elements_to_length)
 {
-    EXPECT_EQ(fifi::elements_needed<fifi::binary>(1), 1U);
-    EXPECT_EQ(fifi::elements_needed<fifi::binary>(2), 2U);
-    EXPECT_EQ(fifi::elements_needed<fifi::binary8>(1), 1U);
-    EXPECT_EQ(fifi::elements_needed<fifi::binary8>(2), 2U);
-    EXPECT_EQ(fifi::elements_needed<fifi::binary16>(2), 1U);
-    EXPECT_EQ(fifi::elements_needed<fifi::binary16>(4), 2U);
-    EXPECT_EQ(fifi::elements_needed<fifi::prime2325>(4), 1U);
-    EXPECT_EQ(fifi::elements_needed<fifi::prime2325>(8), 2U);
+    EXPECT_EQ(fifi::elements_to_length<fifi::binary>(7), 1U);
+    EXPECT_EQ(fifi::elements_to_length<fifi::binary>(8), 1U);
+    EXPECT_EQ(fifi::elements_to_length<fifi::binary>(9), 2U);
+
+    EXPECT_EQ(fifi::elements_to_length<fifi::binary8>(1), 1U);
+    EXPECT_EQ(fifi::elements_to_length<fifi::binary8>(9), 9U);
+
+    EXPECT_EQ(fifi::elements_to_length<fifi::binary16>(1), 1U);
+    EXPECT_EQ(fifi::elements_to_length<fifi::binary16>(9), 9U);
+
+    EXPECT_EQ(fifi::elements_to_length<fifi::prime2325>(1), 1U);
+    EXPECT_EQ(fifi::elements_to_length<fifi::prime2325>(9), 9U);
 }
 
+TEST(TestFifiUtils, size_to_length)
+{
+    EXPECT_EQ(fifi::size_to_length<fifi::binary>(1), 1U);
+    EXPECT_EQ(fifi::size_to_length<fifi::binary>(2), 2U);
+    EXPECT_EQ(fifi::size_to_length<fifi::binary8>(1), 1U);
+    EXPECT_EQ(fifi::size_to_length<fifi::binary8>(2), 2U);
+    EXPECT_EQ(fifi::size_to_length<fifi::binary16>(2), 1U);
+    EXPECT_EQ(fifi::size_to_length<fifi::binary16>(4), 2U);
+    EXPECT_EQ(fifi::size_to_length<fifi::prime2325>(4), 1U);
+    EXPECT_EQ(fifi::size_to_length<fifi::prime2325>(8), 2U);
+}
+
+TEST(TestFifiUtils, length_to_size)
+{
+    /*
+    EXPECT_EQ(fifi::length_to_size<fifi::binary>(1), 1U);
+    EXPECT_EQ(fifi::length_to_size<fifi::binary>(7), 1U);
+    EXPECT_EQ(fifi::length_to_size<fifi::binary>(12), 2U);
+    EXPECT_EQ(fifi::length_to_size<fifi::binary>(345), 44U);
+    EXPECT_EQ(fifi::length_to_size<fifi::binary>(1024), 128U);
+    EXPECT_EQ(fifi::length_to_size<fifi::binary>(1025), 129U);
+
+    EXPECT_EQ(fifi::length_to_size<fifi::binary8>(7), 7U);
+    EXPECT_EQ(fifi::length_to_size<fifi::binary8>(71), 71U);
+
+    EXPECT_EQ(fifi::length_to_size<fifi::binary16>(7), 14U);
+    EXPECT_EQ(fifi::length_to_size<fifi::binary16>(743), 1486U);
+
+    EXPECT_EQ(fifi::length_to_size<fifi::prime2325>(2), 8U);
+    EXPECT_EQ(fifi::length_to_size<fifi::prime2325>(3), 12U);
+    */
+
+    EXPECT_EQ(fifi::length_to_size<fifi::binary>(1), 1U);
+    EXPECT_EQ(fifi::length_to_size<fifi::binary>(3), 3U);
+
+    EXPECT_EQ(fifi::length_to_size<fifi::binary8>(1), 1U);
+    EXPECT_EQ(fifi::length_to_size<fifi::binary8>(3), 3U);
+
+    EXPECT_EQ(fifi::length_to_size<fifi::binary16>(1), 2U);
+    EXPECT_EQ(fifi::length_to_size<fifi::binary16>(3), 6U);
+
+    EXPECT_EQ(fifi::length_to_size<fifi::prime2325>(1), 4U);
+    EXPECT_EQ(fifi::length_to_size<fifi::prime2325>(3), 12U);
+}
+
+TEST(TestFifiUtils, size_to_elements)
+{
+    EXPECT_EQ(fifi::size_to_elements<fifi::binary>(1), 8U);
+    EXPECT_EQ(fifi::size_to_elements<fifi::binary>(2), 16U);
+    EXPECT_EQ(fifi::size_to_elements<fifi::binary8>(1), 1U);
+    EXPECT_EQ(fifi::size_to_elements<fifi::binary8>(2), 2U);
+    EXPECT_EQ(fifi::size_to_elements<fifi::binary16>(2), 1U);
+    EXPECT_EQ(fifi::size_to_elements<fifi::binary16>(4), 2U);
+    EXPECT_EQ(fifi::size_to_elements<fifi::prime2325>(4), 1U);
+    EXPECT_EQ(fifi::size_to_elements<fifi::prime2325>(8), 2U);
+}
+
+TEST(TestFifiUtils, length_to_elements)
+{
+    EXPECT_EQ(fifi::length_to_elements<fifi::binary>(1), 8U);
+    EXPECT_EQ(fifi::length_to_elements<fifi::binary>(9), 72U);
+
+    EXPECT_EQ(fifi::length_to_elements<fifi::binary8>(1), 1U);
+    EXPECT_EQ(fifi::length_to_elements<fifi::binary8>(9), 9U);
+
+    EXPECT_EQ(fifi::length_to_elements<fifi::binary16>(1), 1U);
+    EXPECT_EQ(fifi::length_to_elements<fifi::binary16>(9), 9U);
+
+    EXPECT_EQ(fifi::length_to_elements<fifi::prime2325>(1), 1U);
+    EXPECT_EQ(fifi::length_to_elements<fifi::prime2325>(9), 9U);
+}
 
 TEST(TestFifiUtils, set_value)
 {

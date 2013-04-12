@@ -329,8 +329,6 @@ namespace fifi
         if(constant == 0)
             return;
 
-        typedef optimal_prime<prime2325>::value_type value_type;
-
         for(uint32_t i = 0; i < length; ++i)
         {
             temp[i] = field.multiply(constant, src[i]);
@@ -477,8 +475,6 @@ namespace fifi
 
         if(constant == 0)
             return;
-
-        typedef optimal_prime<prime2325>::value_type value_type;
 
         for(uint32_t i = 0; i < length; ++i)
         {

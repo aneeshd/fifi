@@ -3,8 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_FIELD_TYPES_HPP
-#define FIFI_FIELD_TYPES_HPP
+#pragma once
 
 #include <cstdint>
 #include <cassert>
@@ -38,6 +37,10 @@ namespace fifi
 
         /// The field order i.e. number of field elements
         const static order_type order = 2;
+
+        /// The number of bits in a value_type
+        const static uint32_t bits_per_value =
+            std::numeric_limits<value_type>::digits;
 
     };
 
@@ -198,6 +201,7 @@ namespace fifi
         ///         the block length (i.e. the number of 32 bit values) there
         ///         exists a bit prefix not available in the data
         static uint32_t prefix_length(uint32_t block_length);
+
     };
 
 
@@ -230,6 +234,4 @@ namespace fifi
     }
 
 }
-
-#endif
 
