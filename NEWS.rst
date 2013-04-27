@@ -6,7 +6,7 @@ of every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Minor: Updated to waf-tools 2
 
 9.0.0
 -----
