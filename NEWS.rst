@@ -4,9 +4,10 @@ News for fifi
 This file lists the major changes between versions. For a more detailed list
 of every change, see the Git log.
 
-Latest
+9.1.0
 ------
 * Minor: Updated to waf-tools 2
+* Bugfix: Include <cstdlib> instead of <cmath> to use std::abs(int)
 
 9.0.0
 -----
