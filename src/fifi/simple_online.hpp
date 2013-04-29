@@ -6,8 +6,8 @@
 #ifndef FIFI_SIMPLE_ONLINE_HPP
 #define FIFI_SIMPLE_ONLINE_HPP
 
-#include <algorithm>
-#include <cmath>
+#include <cstdlib>
+#include <limits>
 #include <cassert>
 
 #include <boost/noncopyable.hpp>

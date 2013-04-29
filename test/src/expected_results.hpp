@@ -80,7 +80,7 @@ inline void check_results_multiply()
 
     for(uint32_t i = 0; i < size; ++i)
     {
-	expected_result_2<field_type> res =
+        expected_result_2<field_type> res =
             multiply_results<field_type>::m_results[i];
 
         EXPECT_EQ(field.multiply(res.arg1, res.arg2), res.result);
@@ -131,7 +131,7 @@ inline void check_results_divide()
 
     for(uint32_t i = 0; i < size; ++i)
     {
-	expected_result_2<field_type> res =
+        expected_result_2<field_type> res =
             divide_results<field_type>::m_results[i];
 
         EXPECT_EQ(field.divide(res.arg1, res.arg2), res.result);
@@ -182,7 +182,7 @@ inline void check_results_add()
 
     for(uint32_t i = 0; i < size; ++i)
     {
-	expected_result_2<field_type> res =
+        expected_result_2<field_type> res =
             add_results<field_type>::m_results[i];
 
         EXPECT_EQ(field.add(res.arg1, res.arg2), res.result);
@@ -232,7 +232,7 @@ inline void check_results_subtract()
 
     for(uint32_t i = 0; i < size; ++i)
     {
-	expected_result_2<field_type> res =
+        expected_result_2<field_type> res =
             subtract_results<field_type>::m_results[i];
 
         EXPECT_EQ(field.subtract(res.arg1, res.arg2), res.result);
@@ -282,7 +282,7 @@ inline void check_results_invert()
 
     for(uint32_t i = 0; i < size; ++i)
     {
-	expected_result_1<field_type> res =
+        expected_result_1<field_type> res =
             invert_results<field_type>::m_results[i];
 
         EXPECT_EQ(field.invert(res.arg1), res.result);
@@ -310,6 +310,4 @@ inline void check_random()
     }
 }
 
-
 #endif
-
