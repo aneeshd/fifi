@@ -4,10 +4,14 @@ News for fifi
 This file lists the major changes between versions. For a more detailed list
 of every change, see the Git log.
 
+Latest
+------
+* Minor: Updated to gauge version 5.x.y
+
 9.1.0
 ------
-* Minor: Updated to waf-tools 2
-* Bugfix: Include <cstdlib> instead of <cmath> to use std::abs(int)
+* Minor: Updated to waf-tools version 2.x.y
+* Bug: Include <cstdlib> instead of <cmath> to use std::abs(int)
 
 9.0.0
 -----
