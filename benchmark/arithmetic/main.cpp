@@ -12,7 +12,7 @@
 
 #include <gauge/gauge.hpp>
 #include <gauge/console_printer.hpp>
-#include <gauge/python_printer.hpp>
+#include <gauge/csv_printer.hpp>
 
 #include <fifi/arithmetics.hpp>
 #include <fifi/fifi_utils.hpp>
@@ -157,6 +157,38 @@ public:
                 }
             }
         }
+
+    void get_options(gauge::po::variables_map& options)
+    {
+        auto size = options["size"].as<std::vector<uint32_t> >();
+        auto vectors = options["vectors"].as<std::vector<uint32_t> >();
+        auto operations = options["operations"].as<std::vector<std::string> >();
+        auto access = options["access"].as<std::vector<std::string> >();
+
+        assert(size.size() > 0);
+        assert(vectors.size() > 0);
+        assert(operations.size() > 0);
+        assert(access.size() > 0);
+
+        for(const auto& s : size)
+        {
+            for(const auto& v : vectors)
+            {
+                for(const auto& o : operations)
+                {
+                    for(const auto& a : access)
+                    {
+                        gauge::config_set cs;
+                        cs.set_value<uint32_t>("symbols", symbols[i]);
+                        cs.set_value<uint32_t>("symbol_size", symbol_size[j]);
+                        cs.set_value<std::string>("type", types[u]);
+
+                        add_configuration(cs);
+                    }
+                }
+            }
+        }
+    }
 
     /// Prepares the data structures between each run
     void setup()
@@ -382,6 +414,69 @@ protected:
 
 };
 
+
+/// Using this macro we may specify options. For specifying options
+/// we use the boost program options library. So you may additional
+/// details on how to do it in the manual for that library.
+BENCHMARK_OPTION(arithmetic_options)
+{
+    gauge::po::options_description options;
+
+    std::vector<uint32_t> size;
+    size.push_back(100);
+    size.push_back(2000);
+
+    auto default_size =
+        gauge::po::value<std::vector<uint32_t> >()->default_value(
+            size, "")->multitoken();
+
+    std::vector<uint32_t> vectors;
+    vectors.push_back(16);
+    vectors.push_back(64);
+    vectors.push_back(128);
+    vectors.push_back(512);
+
+    auto default_vectors =
+        gauge::po::value<std::vector<uint32_t> >()->default_value(
+            vectors, "")->multitoken();
+
+    std::vector<std::string> operations;
+    operations.push_back("dest[i] = dest[i] + src[i]");
+    operations.push_back("dest[i] = dest[i] - src[i]");
+    operations.push_back("dest[i] = dest[i] * src[i]");
+    operations.push_back("dest[i] = dest[i] + (constant * src[i])");
+    operations.push_back("dest[i] = dest[i] - (constant * src[i])");
+    operations.push_back("dest[i] = dest[i] * constant");
+
+    auto default_operations =
+        gauge::po::value<std::vector<std::string> >()->default_value(
+            operations, "")->multitoken();
+
+    std::vector<std::string> access;
+    access.push_back("random");
+    access.push_back("linear");
+
+    auto default_access =
+        gauge::po::value<std::vector<std::string> >()->default_value(
+            access, "")->multitoken();
+
+    options.add_options()
+        ("size", default_size, "Set the size of a vector in bytes");
+
+    options.add_options()
+        ("vectors", default_symbol_size, "Set the number of vectors to "
+                                         "perform the operations on");
+
+    options.add_options()
+        ("operations", default_types, "Set operations type");
+
+    options.add_options()
+        ("access", default_access, "Set the data access pattern");
+
+
+    gauge::runner::instance().register_options(options);
+}
+
 // typedef arithmetic_setup< fifi::simple_online<fifi::binary> >
 //     setup_simple_online_binary;
 
@@ -461,11 +556,12 @@ int main(int argc, const char* argv[])
 {
 
     srand(static_cast<uint32_t>(time(0)));
+
     gauge::runner::instance().printers().push_back(
         std::make_shared<gauge::console_printer>());
 
     gauge::runner::instance().printers().push_back(
-        std::make_shared<gauge::python_printer>("out.py"));
+        std::make_shared<gauge::csv_printer>());
 
     gauge::runner::run_benchmarks(argc, argv);
 
