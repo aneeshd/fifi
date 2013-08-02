@@ -13,6 +13,7 @@
 #include <gauge/gauge.hpp>
 #include <gauge/console_printer.hpp>
 #include <gauge/csv_printer.hpp>
+#include <gauge/python_printer.hpp>
 
 #include <fifi/arithmetics.hpp>
 #include <fifi/fifi_utils.hpp>
@@ -482,6 +483,10 @@ int main(int argc, const char* argv[])
 
     gauge::runner::instance().printers().push_back(
         std::make_shared<gauge::csv_printer>());
+
+    gauge::runner::instance().printers().push_back(
+        std::make_shared<gauge::python_printer>());
+
 
     gauge::runner::run_benchmarks(argc, argv);
 

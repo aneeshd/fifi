@@ -3,7 +3,7 @@
 
 
 bld.program(
-    features = 'cxx',
+    features = 'cxx benchmark',
     source   = ['main.cpp'],
     target   = 'fifi_basic_operations_benchmarks',
     use      = ['gtest','fifi_includes','boost_includes',
