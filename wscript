@@ -99,9 +99,9 @@ def build(bld):
         # in a recurse call
 
         bld.recurse('test')
-        bld.recurse('benchmark/basic_operations')
+        #bld.recurse('benchmark/basic_operations')
         bld.recurse('benchmark/arithmetic')
-        bld.recurse('benchmark/prime2325')
+        #bld.recurse('benchmark/prime2325')
 
 
 
