@@ -48,7 +48,13 @@ def options(opt):
         resolve.ResolveGitMajorVersion(
             name = 'gauge',
             git_repository = 'github.com/steinwurf/cxx-gauge.git',
-            major_version = 5))
+            major_version = 6))
+
+    bundle.add_dependency(opt,
+        resolve.ResolveGitMajorVersion(
+            name = 'tables',
+            git_repository = 'github.com/steinwurf/tables.git',
+            major_version = 4))
 
     opt.load('wurf_dependency_bundle')
     opt.load('wurf_tools')
@@ -69,6 +75,7 @@ def configure(conf):
         recurse_helper(conf, 'gtest')
         recurse_helper(conf, 'sak')
         recurse_helper(conf, 'gauge')
+        recurse_helper(conf, 'tables')
 
 def build(bld):
 
@@ -85,15 +92,16 @@ def build(bld):
         recurse_helper(bld, 'gtest')
         recurse_helper(bld, 'sak')
         recurse_helper(bld, 'gauge')
+        recurse_helper(bld, 'tables')
 
         # Only build test and benchmarks when executed from the
         # top-level wscript i.e. not when included as a dependency
         # in a recurse call
 
         bld.recurse('test')
-        #bld.recurse('benchmark/basic_operations')
+        bld.recurse('benchmark/basic_operations')
         bld.recurse('benchmark/arithmetic')
-        #bld.recurse('benchmark/prime2325')
+        bld.recurse('benchmark/prime2325')
 
 
 
