@@ -6,7 +6,7 @@ of every change, see the Git log.
 
 Latest
 ------
-* Minor: Updated to gauge version 5.x.y
+* Major: Updated to gauge version 6.x.y
 * Minor: Updated to waf 1.7.10
 
 9.1.0
