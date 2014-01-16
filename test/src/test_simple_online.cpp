@@ -9,7 +9,6 @@
 #include <fifi/field_types.hpp>
 
 #include "expected_results.hpp"
-#include "multiply_results.hpp"
 
 template<class Field>
 void test_simple_online()

@@ -5,21 +5,30 @@
 
 #pragma once
 
+#include "final.hpp"
 #include "field_types.hpp"
-#include "binary_extension_field.hpp"
+#include "simple_online_layer.hpp"
 #include "polynomial_degree.hpp"
 
 namespace fifi
 {
-    struct dummy {};
+    // struct dummy {};
 
-    /// Simple online finite field algorithms - computes the results
-    /// on the fly without relying on pre-computed look-up tables etc.
+    // /// Simple online finite field algorithms - computes the results
+    // /// on the fly without relying on pre-computed look-up tables etc.
+    // template<class Field>
+    // class simple_online :
+    //     public simp<Field,
+    //            polynomial_degree<Field, dummy> >
+    // { };
+
     template<class Field>
     class simple_online :
-        public binary_extension_field<Field,
-               polynomial_degree<Field, dummy> >
+        public simple_online_layer<Field,
+               polynomial_degree<Field,
+               final<Field> > >
     { };
+
 
 }
 

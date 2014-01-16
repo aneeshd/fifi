@@ -13,7 +13,7 @@ namespace fifi
     /// Simple online finite field algorithms - computes the results
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field, class Super>
-    class binary_extension_field : public Super
+    class simple_online_layer : public Super
     {
     public:
 

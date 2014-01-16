@@ -162,7 +162,7 @@ inline void check_results_divide()
         expected_result_binary<field_type> res =
             divide_results<field_type>::m_results[i];
 
-        EXPECT_EQ(field.divide(res.arg1, res.arg2), res.result);
+        EXPECT_EQ(field.divide(res.m_input1, res.m_input2), res.m_result);
     }
 }
 
@@ -225,7 +225,7 @@ inline void check_results_add()
         expected_result_binary<field_type> res =
             add_results<field_type>::m_results[i];
 
-        EXPECT_EQ(field.add(res.arg1, res.arg2), res.result);
+        EXPECT_EQ(field.add(res.m_input1, res.m_input2), res.m_result);
     }
 }
 
@@ -288,7 +288,7 @@ inline void check_results_subtract()
         expected_result_binary<field_type> res =
             subtract_results<field_type>::m_results[i];
 
-        EXPECT_EQ(field.subtract(res.arg1, res.arg2), res.result);
+        EXPECT_EQ(field.subtract(res.m_input1, res.m_input2), res.m_result);
     }
 }
 
@@ -351,7 +351,7 @@ inline void check_results_invert()
         expected_result_unary<field_type> res =
             invert_results<field_type>::m_results[i];
 
-        EXPECT_EQ(field.invert(res.arg1), res.result);
+        EXPECT_EQ(field.invert(res.m_input1), res.m_result);
     }
 }
 
