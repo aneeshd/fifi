@@ -12,23 +12,15 @@
 
 namespace fifi
 {
-    // struct dummy {};
 
-    // /// Simple online finite field algorithms - computes the results
-    // /// on the fly without relying on pre-computed look-up tables etc.
-    // template<class Field>
-    // class simple_online :
-    //     public simp<Field,
-    //            polynomial_degree<Field, dummy> >
-    // { };
-
+    /// Simple online finite field algorithms - computes the results
+    /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
     class simple_online :
         public simple_online_layer<Field,
                polynomial_degree<Field,
                final<Field> > >
     { };
-
 
 }
 

@@ -7,8 +7,37 @@
 
 #include <cstdint>
 
+#include "fifi_utils.hpp"
+#include "can_pack.hpp"
+
 namespace fifi
 {
+    /// The is_packable is true if the value_type used can contain
+    /// multiple field elements
+    template<class Field>
+    struct is_packable
+    {
+        typedef typename Field::value_type value_type;
+
+        const static bool value =
+            !(Field::max_value == std::numeric_limits<value_type>::max());
+    };
+
+    template<class Field>
+    typename std::enable_if<enable_is_valid_element<Field>::value, bool>::type
+    is_valid_element(typename Field::value_type v)
+    {
+        return v < Field::max_value;
+    }
+
+    template<class Field>
+    typename std::enable_if<!enable_is_valid_element<Field>::value, bool>::type
+    is_valid_element(typename Field::value_type v)
+    {
+        (void) v;
+        return true;
+    }
+
 
     /// Simple online finite field algorithms - computes the results
     /// on the fly without relying on pre-computed look-up tables etc.
@@ -19,6 +48,9 @@ namespace fifi
 
         /// Typedef of the data type used for each field element
         typedef typename Field::value_type value_type;
+
+        /// Typedef of the data type used for each field element
+        typedef typename Field::degree_type degree_type;
 
         /// Typedef of the field type used
         typedef Field field_type;
@@ -34,11 +66,11 @@ namespace fifi
             value_type high_bit_flag = 0;
             value_type low_bit_flag = 0;
 
-            value_type high_bit_mask = 1 << (field_type::degree - 1);
+            value_type high_bit_mask = 1U << (field_type::degree - 1);
 
             value_type result = 0;
 
-            for(unsigned i = 0; i < field_type::degree; ++i)
+            for(degree_type i = 0; i < field_type::degree; ++i)
             {
                 low_bit_flag = element_b & 0x1;
 
@@ -72,6 +104,7 @@ namespace fifi
         value_type invert(value_type element) const
         {
             assert(element != 0);
+            assert(is_valid_element<field_type>(element));
 
             // If element is 1 the inverse is 1, since we had to
             // 'unwrap' the first iteration (see below), we make an
@@ -99,6 +132,9 @@ namespace fifi
             r_large ^= (r_small << j);
             y_large ^= (y_small << j);
 
+            r_large &= field_type::max_value;
+            y_large &= field_type::max_value;
+
             while(r_large != 1)
             {
                 assert(r_large > 1);
@@ -115,6 +151,10 @@ namespace fifi
 
                 r_large ^= (r_small << j);
                 y_large ^= (y_small << j);
+
+                r_large &= field_type::max_value;
+                y_large &= field_type::max_value;
+
             }
 
             return y_large;
@@ -133,6 +173,62 @@ namespace fifi
         }
 
     };
+
+
+    /// Simple online finite field algorithms - computes the results
+    /// on the fly without relying on pre-computed look-up tables etc.
+    template<class Super>
+    class simple_online_layer<binary, Super> : public Super
+    {
+    public:
+
+        /// Typedef of the data type used for each field element
+        typedef binary::value_type value_type;
+
+        /// Typedef of the data type used for each field element
+        typedef binary::degree_type degree_type;
+
+        /// Typedef of the field type used
+        typedef binary field_type;
+
+    public:
+
+        /// @copydoc finite_field::multiply()
+        value_type multiply(value_type element_a, value_type element_b) const
+        {
+            return element_a & element_b;
+        }
+
+        /// @copydoc finite_field::divide()
+        value_type divide(value_type numerator, value_type denominator) const
+        {
+            assert(denominator != 0);
+            return numerator & denominator;
+        }
+
+        /// @copydoc finite_field::invert()
+        value_type invert(value_type element) const
+        {
+            assert(element != 0);
+            return element;
+        }
+
+        /// @copydoc finite_field::add()
+        value_type add(value_type element_a, value_type element_b) const
+        {
+            return element_a ^ element_b;
+        }
+
+        /// @copydoc finite_field::subtract()
+        value_type subtract(value_type element_a, value_type element_b) const
+        {
+            return element_a ^ element_b;
+        }
+
+    };
+
+
+
 
 }
 

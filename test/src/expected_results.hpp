@@ -48,41 +48,6 @@ struct expected_result_binary
 template<class Field>
 struct multiply_results;
 
-/// Specialized struct which contains the multiplication
-/// results for the binary4 field
-template<>
-struct multiply_results<fifi::binary4>
-{
-    static const expected_result_binary<fifi::binary4> m_results[];
-    static const uint32_t m_size;
-};
-
-/// Specialized struct which contains the multiplication
-/// results for the binary8 field
-template<>
-struct multiply_results<fifi::binary8>
-{
-    static const expected_result_binary<fifi::binary8> m_results[];
-    static const uint32_t m_size;
-};
-
-/// Specialized struct which contains the multiplication
-/// results for the binary16 field
-template<>
-struct multiply_results<fifi::binary16>
-{
-    static const expected_result_binary<fifi::binary16> m_results[];
-    static const uint32_t m_size;
-};
-
-/// Specialized struct which contains the multiplication
-/// results for the prime2325 field
-template<>
-struct multiply_results<fifi::prime2325>
-{
-    static const expected_result_binary<fifi::prime2325> m_results[];
-    static const uint32_t m_size;
-};
 
 /// Helper template function which takes a FieldImpl as its
 /// template argument and runs its multiply function
@@ -111,41 +76,6 @@ inline void check_results_multiply()
 template<class Field>
 struct divide_results;
 
-template<>
-struct divide_results<fifi::binary4>
-{
-    static const expected_result_binary<fifi::binary4> m_results[];
-    static const uint32_t m_size;
-};
-
-
-/// Specialized struct which contains the multiplication
-/// results for the binary8 field
-template<>
-struct divide_results<fifi::binary8>
-{
-    static const expected_result_binary<fifi::binary8> m_results[];
-    static const uint32_t m_size;
-};
-
-/// Specialized struct which contains the multiplication
-/// results for the binary16 field
-template<>
-struct divide_results<fifi::binary16>
-{
-    static const expected_result_binary<fifi::binary16> m_results[];
-    static const uint32_t m_size;
-};
-
-/// Specialized struct which contains the multiplication
-/// results for the prime2325 field
-template<>
-struct divide_results<fifi::prime2325>
-{
-    static const expected_result_binary<fifi::prime2325> m_results[];
-    static const uint32_t m_size;
-};
-
 /// Helper template function which takes a FieldImpl as its
 /// template argument and runs its divide function
 template<class FieldImpl>
@@ -172,42 +102,6 @@ inline void check_results_divide()
 
 template<class Field>
 struct add_results;
-
-/// Specialized struct which contains the multiplication
-/// results for the binary4 field
-template<>
-struct add_results<fifi::binary4>
-{
-    static const expected_result_binary<fifi::binary4> m_results[];
-    static const uint32_t m_size;
-};
-
-/// Specialized struct which contains the multiplication
-/// results for the binary8 field
-template<>
-struct add_results<fifi::binary8>
-{
-    static const expected_result_binary<fifi::binary8> m_results[];
-    static const uint32_t m_size;
-};
-
-/// Specialized struct which contains the multiplication
-/// results for the binary16 field
-template<>
-struct add_results<fifi::binary16>
-{
-    static const expected_result_binary<fifi::binary16> m_results[];
-    static const uint32_t m_size;
-};
-
-/// Specialized struct which contains the multiplication
-/// results for the prime2325 field
-template<>
-struct add_results<fifi::prime2325>
-{
-    static const expected_result_binary<fifi::prime2325> m_results[];
-    static const uint32_t m_size;
-};
 
 /// Helper template function which takes a FieldImpl as its
 /// template argument and runs its add function
@@ -236,42 +130,6 @@ inline void check_results_add()
 template<class Field>
 struct subtract_results;
 
-/// Specialized struct which contains the multiplication
-/// results for the binary4 field
-template<>
-struct subtract_results<fifi::binary4>
-{
-    static const expected_result_binary<fifi::binary4> m_results[];
-    static const uint32_t m_size;
-};
-
-/// Specialized struct which contains the multiplication
-/// results for the binary8 field
-template<>
-struct subtract_results<fifi::binary8>
-{
-    static const expected_result_binary<fifi::binary8> m_results[];
-    static const uint32_t m_size;
-};
-
-/// Specialized struct which contains the multiplication
-/// results for the binary16 field
-template<>
-struct subtract_results<fifi::binary16>
-{
-    static const expected_result_binary<fifi::binary16> m_results[];
-    static const uint32_t m_size;
-};
-
-/// Specialized struct which contains the multiplication
-/// results for the prime2325 field
-template<>
-struct subtract_results<fifi::prime2325>
-{
-    static const expected_result_binary<fifi::prime2325> m_results[];
-    static const uint32_t m_size;
-};
-
 /// Helper template function which takes a FieldImpl as its
 /// template argument and runs its subtract function
 template<class FieldImpl>
@@ -298,42 +156,6 @@ inline void check_results_subtract()
 
 template<class Field>
 struct invert_results;
-
-/// Specialized struct which contains the multiplication
-/// results for the binary8 field
-template<>
-struct invert_results<fifi::binary4>
-{
-    static const expected_result_unary<fifi::binary4> m_results[];
-    static const uint32_t m_size;
-};
-
-/// Specialized struct which contains the multiplication
-/// results for the binary8 field
-template<>
-struct invert_results<fifi::binary8>
-{
-    static const expected_result_unary<fifi::binary8> m_results[];
-    static const uint32_t m_size;
-};
-
-/// Specialized struct which contains the multiplication
-/// results for the binary16 field
-template<>
-struct invert_results<fifi::binary16>
-{
-    static const expected_result_unary<fifi::binary16> m_results[];
-    static const uint32_t m_size;
-};
-
-/// Specialized struct which contains the multiplication
-/// results for the prime2325 field
-template<>
-struct invert_results<fifi::prime2325>
-{
-    static const expected_result_unary<fifi::prime2325> m_results[];
-    static const uint32_t m_size;
-};
 
 /// Helper template function which takes a FieldImpl as its
 /// template argument and runs its invert function
@@ -379,5 +201,201 @@ inline void check_random()
         EXPECT_EQ( field.multiply(v, field.divide(1U, v)), 1U);
     }
 }
+
+
+//------------------------------------------------------------------
+// binary4
+//------------------------------------------------------------------
+
+/// Specialized struct which contains the multiplication
+/// results for the binary4 field
+template<>
+struct multiply_results<fifi::binary4>
+{
+    static const expected_result_binary<fifi::binary4> m_results[];
+    static const uint32_t m_size;
+};
+
+template<>
+struct divide_results<fifi::binary4>
+{
+    static const expected_result_binary<fifi::binary4> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized struct which contains the multiplication
+/// results for the binary4 field
+template<>
+struct add_results<fifi::binary4>
+{
+    static const expected_result_binary<fifi::binary4> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized struct which contains the multiplication
+/// results for the binary4 field
+template<>
+struct subtract_results<fifi::binary4>
+{
+    static const expected_result_binary<fifi::binary4> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized struct which contains the multiplication
+/// results for the binary8 field
+template<>
+struct invert_results<fifi::binary4>
+{
+    static const expected_result_unary<fifi::binary4> m_results[];
+    static const uint32_t m_size;
+};
+
+//------------------------------------------------------------------
+// binary8
+//------------------------------------------------------------------
+
+/// Specialized struct which contains the multiplication
+/// results for the binary8 field
+template<>
+struct multiply_results<fifi::binary8>
+{
+    static const expected_result_binary<fifi::binary8> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized struct which contains the multiplication
+/// results for the binary8 field
+template<>
+struct divide_results<fifi::binary8>
+{
+    static const expected_result_binary<fifi::binary8> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized struct which contains the multiplication
+/// results for the binary8 field
+template<>
+struct add_results<fifi::binary8>
+{
+    static const expected_result_binary<fifi::binary8> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized struct which contains the multiplication
+/// results for the binary8 field
+template<>
+struct subtract_results<fifi::binary8>
+{
+    static const expected_result_binary<fifi::binary8> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized struct which contains the multiplication
+/// results for the binary8 field
+template<>
+struct invert_results<fifi::binary8>
+{
+    static const expected_result_unary<fifi::binary8> m_results[];
+    static const uint32_t m_size;
+};
+
+//------------------------------------------------------------------
+// binary16
+//------------------------------------------------------------------
+
+/// Specialized struct which contains the multiplication
+/// results for the binary16 field
+template<>
+struct multiply_results<fifi::binary16>
+{
+    static const expected_result_binary<fifi::binary16> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized struct which contains the multiplication
+/// results for the binary16 field
+template<>
+struct divide_results<fifi::binary16>
+{
+    static const expected_result_binary<fifi::binary16> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized struct which contains the multiplication
+/// results for the binary16 field
+template<>
+struct add_results<fifi::binary16>
+{
+    static const expected_result_binary<fifi::binary16> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized struct which contains the multiplication
+/// results for the binary16 field
+template<>
+struct subtract_results<fifi::binary16>
+{
+    static const expected_result_binary<fifi::binary16> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized struct which contains the multiplication
+/// results for the binary16 field
+template<>
+struct invert_results<fifi::binary16>
+{
+    static const expected_result_unary<fifi::binary16> m_results[];
+    static const uint32_t m_size;
+};
+
+//------------------------------------------------------------------
+// prime2325
+//------------------------------------------------------------------
+
+/// Specialized struct which contains the multiplication
+/// results for the prime2325 field
+template<>
+struct multiply_results<fifi::prime2325>
+{
+    static const expected_result_binary<fifi::prime2325> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized struct which contains the multiplication
+/// results for the prime2325 field
+template<>
+struct divide_results<fifi::prime2325>
+{
+    static const expected_result_binary<fifi::prime2325> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized struct which contains the multiplication
+/// results for the prime2325 field
+template<>
+struct add_results<fifi::prime2325>
+{
+    static const expected_result_binary<fifi::prime2325> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized struct which contains the multiplication
+/// results for the prime2325 field
+template<>
+struct subtract_results<fifi::prime2325>
+{
+    static const expected_result_binary<fifi::prime2325> m_results[];
+    static const uint32_t m_size;
+};
+
+
+/// Specialized struct which contains the multiplication
+/// results for the prime2325 field
+template<>
+struct invert_results<fifi::prime2325>
+{
+    static const expected_result_unary<fifi::prime2325> m_results[];
+    static const uint32_t m_size;
+};
 
 

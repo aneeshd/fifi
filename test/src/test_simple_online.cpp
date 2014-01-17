@@ -14,11 +14,11 @@ template<class Field>
 void test_simple_online()
 {
     check_results_multiply<fifi::simple_online<Field> >();
-    // check_results_invert<fifi::simple_online<Field> >();
-    // check_results_divide<fifi::simple_online<Field> >();
-    // check_results_add<fifi::simple_online<Field> >();
-    // check_results_subtract<fifi::simple_online<Field> >();
-    // check_random<fifi::simple_online<Field> >();
+    check_results_invert<fifi::simple_online<Field> >();
+    check_results_divide<fifi::simple_online<Field> >();
+    check_results_add<fifi::simple_online<Field> >();
+    check_results_subtract<fifi::simple_online<Field> >();
+    check_random<fifi::simple_online<Field> >();
 }
 
 //------------------------------------------------------------------
@@ -36,8 +36,8 @@ void test_simple_online()
 TEST(TestSimpleOnline, api)
 {
     test_simple_online<fifi::binary4>();
-    // test_simple_online<fifi::binary8>();
-    // test_simple_online<fifi::binary16>();
+    test_simple_online<fifi::binary8>();
+    test_simple_online<fifi::binary16>();
 }
 
 // TEST(TestSimpleOnline, binary8multiply)

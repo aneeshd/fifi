@@ -3,11 +3,6 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-/// @file fifi_utils.hpp
-/// \brief utility functions
-/// 
-/// Utility functions
-
 #pragma once
 
 #include <sak/ceil_division.hpp>
@@ -41,14 +36,17 @@ namespace fifi
 
     /// Returns the minimum size in bytes required to accommodate a certain
     /// number of field elements
-    /// @param elements the number of field elements 
+    /// @param elements the number of field elements
     /// @return the size in bytes needed to store the field elements
     template<class Field>
     inline uint32_t elements_to_size(uint32_t elements)
     {
         assert(elements > 0);
 
-        return elements_to_length<Field>(elements)*sizeof(typename Field::value_type);
+        auto length = elements_to_length<Field>(elements);
+        auto bytes_per_value = sizeof(typename Field::value_type);
+
+        return length * bytes_per_value;
     }
 
     /// Returns the number of value_type elements needed to store
@@ -104,7 +102,7 @@ namespace fifi
     /// Returns the number of field elements that can fit within a certain
     /// number of bytes
     /// @param bytes the number of bytes to store the field elements
-    /// @return the number of field elements stored within the bytes 
+    /// @return the number of field elements stored within the bytes
     template<class Field>
     inline uint32_t size_to_elements(uint32_t bytes)
     {
@@ -118,7 +116,7 @@ namespace fifi
     /// a mixed binary & other fields implementation is created.
     /// Returns the value of an element at the specific position in the
     /// symbol.
-    /// @param elements elements to get value from 
+    /// @param elements elements to get value from
     /// @param index index of element to access
     /// @return the value of the element at specified index
     template<class Field>
@@ -151,7 +149,7 @@ namespace fifi
     /// @param index index of element
     /// @param value value to assign element
     template<class Field>
-    inline void set_value(typename Field::value_ptr elements, uint32_t index,
+    inline void set_value(typename Field::value_type* elements, uint32_t index,
                           typename Field::value_type value)
     {
         assert(elements != 0);
@@ -160,11 +158,9 @@ namespace fifi
 
     /// set_value specilization for the binary field
     template<>
-    inline void set_value<binary>(binary::value_ptr elements, uint32_t index,
+    inline void set_value<binary>(binary::value_type* elements, uint32_t index,
                                   binary::value_type value)
     {
-        /// @todo: find a better/faster way to do this
-
         assert(elements != 0);
         assert(value < 2); // only {0,1} allowed
 
@@ -187,7 +183,8 @@ namespace fifi
     /// @param elements, elements to manipulate
     /// @param index1,index2 indexes of elements to swap
     template<class Field>
-    inline void swap_values(typename Field::value_ptr elements, uint32_t index1,
+    inline void swap_values(typename Field::value_type* elements,
+                            uint32_t index1,
                             uint32_t index2)
     {
         assert(elements != 0);
@@ -198,6 +195,30 @@ namespace fifi
         set_value<Field>(elements, index1, value2);
         set_value<Field>(elements, index2, value1);
     }
+
+    /// @todo unit test
+    /// Usefull abstraction function for swapping two field elements
+    /// @param elements, elements to manipulate
+    template<class Field>
+    inline void print_polynomial(
+        std::ostream& out, typename Field::value_type element)
+    {
+        typedef typename Field::degree_type degree_type;
+        assert(0);
+
+    }
+
+    template<class Value>
+    inline void print_bits(std::ostream& out, Value element)
+    {
+        auto bits = std::numeric_limits<Value>::digits;
+
+        for(uint32_t i = bits; i --> 0;)
+        {
+            out << uint32_t((element >> i)&0x1);
+        }
+    }
+
 
 }
 

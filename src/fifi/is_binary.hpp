@@ -3,8 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_IS_BINARY_HPP
-#define FIFI_IS_BINARY_HPP
+#pragma once
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -13,6 +12,7 @@
 
 namespace fifi
 {
+
     /// Will inherit from true-type if Field equal fifi::binary
     /// Can be used e.g.:
     ///
@@ -24,7 +24,7 @@ namespace fifi
     template<class Field>
     struct is_binary : public boost::is_same<Field, fifi::binary>
     { };
+
 }
 
-#endif
 
