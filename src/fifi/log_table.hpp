@@ -15,6 +15,7 @@
 #include "simple_online_layer.hpp"
 #include "log_table_layer.hpp"
 #include "polynomial_degree.hpp"
+#include "binary_arithmetic.hpp"
 
 namespace fifi
 {
@@ -26,15 +27,10 @@ namespace fifi
         public log_table_layer<Field,
                simple_online_layer<Field,
                polynomial_degree<Field,
-               final<Field> > > >
+               binary_arithmetic<
+                   final<Field> > > > >
     { };
 
-    // template<class Field>
-    // class log_table :
-    //     public log_table_layer<Field,
-    //            simple_online_layer<Field,
-    //            polynomial_degree<Field, dummy> > >
-    // { };
 
 }
 

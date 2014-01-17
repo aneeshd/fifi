@@ -8,36 +8,10 @@
 #include <cstdint>
 
 #include "fifi_utils.hpp"
-#include "can_pack.hpp"
+#include "is_valid_element.hpp"
 
 namespace fifi
 {
-    /// The is_packable is true if the value_type used can contain
-    /// multiple field elements
-    template<class Field>
-    struct is_packable
-    {
-        typedef typename Field::value_type value_type;
-
-        const static bool value =
-            !(Field::max_value == std::numeric_limits<value_type>::max());
-    };
-
-    template<class Field>
-    typename std::enable_if<enable_is_valid_element<Field>::value, bool>::type
-    is_valid_element(typename Field::value_type v)
-    {
-        return v < Field::max_value;
-    }
-
-    template<class Field>
-    typename std::enable_if<!enable_is_valid_element<Field>::value, bool>::type
-    is_valid_element(typename Field::value_type v)
-    {
-        (void) v;
-        return true;
-    }
-
 
     /// Simple online finite field algorithms - computes the results
     /// on the fly without relying on pre-computed look-up tables etc.
@@ -160,18 +134,6 @@ namespace fifi
             return y_large;
         }
 
-        /// @copydoc finite_field::add()
-        value_type add(value_type element_a, value_type element_b) const
-        {
-            return element_a ^ element_b;
-        }
-
-        /// @copydoc finite_field::subtract()
-        value_type subtract(value_type element_a, value_type element_b) const
-        {
-            return element_a ^ element_b;
-        }
-
     };
 
 
@@ -211,18 +173,6 @@ namespace fifi
         {
             assert(element != 0);
             return element;
-        }
-
-        /// @copydoc finite_field::add()
-        value_type add(value_type element_a, value_type element_b) const
-        {
-            return element_a ^ element_b;
-        }
-
-        /// @copydoc finite_field::subtract()
-        value_type subtract(value_type element_a, value_type element_b) const
-        {
-            return element_a ^ element_b;
         }
 
     };

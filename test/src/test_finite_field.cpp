@@ -22,8 +22,8 @@ void finite_field_construct_helper(FiniteField &finite_field)
     typedef typename FiniteField::value_type value_type;
 
     // Just two random values
-    value_type one = 128;
-    value_type two = 54;
+    value_type one = rand() % field_type::order;
+    value_type two = rand() % field_type::order;
 
     value_type res;
     res = finite_field.multiply(one, two);

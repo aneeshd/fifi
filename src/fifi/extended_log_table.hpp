@@ -14,6 +14,7 @@
 #include "simple_online_layer.hpp"
 #include "extended_log_table_layer.hpp"
 #include "polynomial_degree.hpp"
+#include "binary_arithmetic.hpp"
 
 namespace fifi
 {
@@ -23,18 +24,9 @@ namespace fifi
         public extended_log_table_layer<Field,
                simple_online_layer<Field,
                polynomial_degree<Field,
-               final<Field> > > >
+               binary_arithmetic<
+               final<Field> > > > >
     { };
-
-
-    // /// Simple online finite field algorithms - computes the results
-    // /// on the fly without relying on pre-computed look-up tables etc.
-    // template<class Field>
-    // class extended_log_table :
-    //     public extended_log_table_layer<Field,
-    //            binary_extension_field<Field,
-    //            polynomial_degree<Field, dummy> > >
-    // { };
 
 }
 

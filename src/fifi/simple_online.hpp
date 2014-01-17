@@ -9,6 +9,7 @@
 #include "field_types.hpp"
 #include "simple_online_layer.hpp"
 #include "polynomial_degree.hpp"
+#include "binary_arithmetic.hpp"
 
 namespace fifi
 {
@@ -19,7 +20,8 @@ namespace fifi
     class simple_online :
         public simple_online_layer<Field,
                polynomial_degree<Field,
-               final<Field> > >
+               binary_arithmetic<
+               final<Field> > > >
     { };
 
 }
