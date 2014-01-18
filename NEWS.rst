@@ -6,11 +6,15 @@ of every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+10.0.0
+------
 * Major: Updated to gauge version 7.x.y
 * Minor: Updated to waf 1.7.10
 
 9.1.0
-------
+-----
 * Minor: Updated to waf-tools version 2.x.y
 * Bug: Include <cstdlib> instead of <cmath> to use std::abs(int)
 
