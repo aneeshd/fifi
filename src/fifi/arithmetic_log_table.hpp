@@ -1,4 +1,4 @@
-// Copyright Steinwurf ApS 2011-2012.
+// Copyright Steinwurf ApS 2011-2014.
 // Distributed under the "STEINWURF RESEARCH LICENSE 1.0".
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
@@ -8,14 +8,16 @@
 #include <algorithm>
 #include <cmath>
 #include <cassert>
-#include <stdint.h>
+#include <cstdint>
 #include <vector>
+
+#include "modulo_sum.hpp"
 
 namespace fifi
 {
     /// Produces an extended log table for multiplication and division.
     template<class Field, class Super>
-    class log_table_layer : public Super
+    class arithmetic_log_table : public Super
     {
     public:
 
@@ -31,7 +33,7 @@ namespace fifi
     public:
 
         /// Constructor
-        log_table_layer()
+        arithmetic_log_table()
         {
             m_log.resize(Field::order, '\0');
             m_antilog.resize(Field::order, '\0');
@@ -52,31 +54,24 @@ namespace fifi
             // This handles the special case where the sum of two
             // exponents hit the maximum value and should be reduced
             // to zero. Instead of doing this we map this entry to
-            // the same entry as if the sum had beem zero.
+            // the same entry as if the sum had been zero.
             m_antilog[Field::max_value] = 1;
 
         }
 
         /// @copydoc finite_field::multiply()
-        value_type multiply(value_type element_one, value_type element_two) const
+        value_type multiply(value_type a, value_type b) const
         {
-            if(element_one == 0 || element_two == 0)
+            assert(is_valid_element<field_type>(a));
+            assert(is_valid_element<field_type>(b));
+
+            if(a == 0 || b == 0)
                 return 0;
 
-            value_type one = m_log[element_one];
-            value_type two = m_log[element_two];
+            value_type one = m_log[a];
+            value_type two = m_log[b];
 
-            // This might be a bit tricky, but what we do here is to
-            // check for an integer overflow. If an overflow has
-            // happened we have to +1 to sum: we may write the sum as
-            // (2^m * h) + l, where h is the high-half of the sum and
-            // l is the low half.  Now we realize that 2^m is
-            // congurent to +1 when working mod (2^m -1) So we may
-            // write (1 * h) + l, now we realize that h must also be 1
-            // since we had an overflow thus: If we had an overflow
-            // all we have to do is to +1 to the sum.
-            value_type sum = one + two;
-            sum = sum < one ? sum + 1 : sum;
+            value_type sum = sum_modulo<field_type>(one, two);
 
             // Notice that we handle the case where sum is equal to
             // 2^m - 1, by remapping this entry in the AntiLog table
@@ -87,6 +82,9 @@ namespace fifi
         /// @copydoc finite_field::divide()
         value_type divide(value_type numerator, value_type denominator) const
         {
+            assert(is_valid_element<field_type>(numerator));
+            assert(is_valid_element<field_type>(denominator));
+
             assert(denominator != 0);
 
             if(numerator == 0)
@@ -106,8 +104,7 @@ namespace fifi
             two = Field::max_value - two;
 
             // Now we may simply multiply like before
-            value_type sum = one + two;
-            sum = sum < one ? sum + 1 : sum;
+            value_type sum = sum_modulo<field_type>(one, two);
 
             // Notice that we handle the case where sum is equal to
             // 2^m - 1, by remapping this entry in the AntiLog table
@@ -116,16 +113,18 @@ namespace fifi
         }
 
         /// @copydoc finite_field::invert()
-        value_type invert(value_type element) const
+        value_type invert(value_type a) const
         {
-            value_type power = m_log[element];
+            assert(is_valid_element<field_type>(a));
+            assert(a != 0);
+
+            value_type power = m_log[a];
 
             // See log_table<Field>::divide
             power = Field::max_value - power;
 
             return m_antilog[power];
         }
-
 
     public:
 

@@ -12,10 +12,9 @@
 #include <vector>
 
 #include "final.hpp"
-#include "simple_online_layer.hpp"
-#include "log_table_layer.hpp"
+#include "arithmetic_simple_online.hpp"
+#include "arithmetic_log_table.hpp"
 #include "polynomial_degree.hpp"
-#include "binary_arithmetic.hpp"
 
 namespace fifi
 {
@@ -24,11 +23,10 @@ namespace fifi
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
     class log_table :
-        public log_table_layer<Field,
-               simple_online_layer<Field,
-               polynomial_degree<Field,
-               binary_arithmetic<
-                   final<Field> > > > >
+        public arithmetic_log_table<Field,
+               arithmetic_simple_online<Field,
+               polynomial_degree<
+               final<Field> > > >
     { };
 
 

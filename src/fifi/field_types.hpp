@@ -42,16 +42,6 @@ namespace fifi
         /// The field order i.e. number of field elements
         const static order_type order = 2;
 
-        /// The field degree
-        const static degree_type degree = 0;
-
-        /// X = 10 We do not need the top bit so we just use:
-        /// X+1 = 3 We do not need the top bit since this bit is not
-        /// representable in the field. Our algorithms should manage
-        /// whether it necessary to reduce an element, if needed only
-        /// lower bits of the prime is needed.
-        const static value_type prime = 2;
-
         /// The number of bits in a value_type
         const static uint32_t bits_per_value =
             std::numeric_limits<value_type>::digits;

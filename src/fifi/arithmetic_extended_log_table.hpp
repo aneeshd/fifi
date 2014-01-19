@@ -1,4 +1,4 @@
-// Copyright Steinwurf ApS 2011-2012.
+// Copyright Steinwurf ApS 2011-2014.
 // Distributed under the "STEINWURF RESEARCH LICENSE 1.0".
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
@@ -8,44 +8,44 @@
 #include <algorithm>
 #include <cmath>
 #include <cassert>
-#include <stdint.h>
+#include <cstdint>
 
 namespace fifi
 {
 
     /// Produces an extended log table for multiplication
     /// and division.
-    template<class Field, class Super>
-    class extended_log_table_layer : public Super
+    template<class Super>
+    class arithmetic_extended_log_table : public Super
     {
     public:
 
-        /// Typedef of the data type used for each field element
-        typedef typename Field::value_type value_type;
+        /// The field type
+        typedef typename Super::field_type field_type;
 
         /// Typedef of the data type used for each field element
-        typedef typename Field::order_type order_type;
+        typedef typename field_type::value_type value_type;
 
-        /// Typedef of the field type used
-        typedef Field field_type;
+        /// Typedef of the data type used for each field element
+        typedef typename field_type::order_type order_type;
 
     public:
 
         /// Constructor
-        extended_log_table_layer()
+        arithmetic_extended_log_table()
         {
-            m_log_data.resize(Field::order, '\0');
-            m_antilog_data.resize((3 * Field::order) - 5, '\0');
+            m_log_data.resize(field_type::order, '\0');
+            m_antilog_data.resize((3 * field_type::order) - 5, '\0');
 
             // Array offsets
             uint32_t low_offset  = 0;
-            uint32_t mid_offset  = low_offset + Field::order - 2;
-            uint32_t high_offset = mid_offset + Field::order - 1;
+            uint32_t mid_offset  = low_offset + field_type::order - 2;
+            uint32_t high_offset = mid_offset + field_type::order - 1;
 
             // inital value corresponds x^0
             value_type power = 1;
 
-            for(order_type i = 0; i < Field::order - 1; ++i)
+            for(order_type i = 0; i < field_type::order - 1; ++i)
             {
                 m_log_data[power] = i;
                 m_antilog_data[mid_offset + i] = power;
@@ -55,7 +55,7 @@ namespace fifi
                 power = Super::multiply(2U, power);
             }
 
-            for(order_type i = 0; i < Field::order - 2; ++i)
+            for(order_type i = 0; i < field_type::order - 2; ++i)
             {
                 m_antilog_data[low_offset  + i] =
                     m_antilog_data[mid_offset + i + 1];
@@ -66,17 +66,20 @@ namespace fifi
 
             // Set the pointers
             m_log = &m_log_data[0];
-            m_antilog = &m_antilog_data[0] + Field::order - 2;
+            m_antilog = &m_antilog_data[0] + field_type::order - 2;
         }
 
         /// @copydoc finite_field::multiply()
-        value_type multiply(value_type element_one, value_type element_two) const
+        value_type multiply(value_type a, value_type b) const
         {
-            if(element_one == 0 || element_two == 0)
+            assert(is_valid_element<field_type>(a));
+            assert(is_valid_element<field_type>(b));
+
+            if(a == 0 || b == 0)
                 return 0;
 
-            value_type one = m_log[element_one];
-            value_type two = m_log[element_two];
+            value_type one = m_log[a];
+            value_type two = m_log[b];
 
             return m_antilog[one + two];
         }
@@ -84,6 +87,9 @@ namespace fifi
         /// @copydoc finite_field::divide()
         value_type divide(value_type numerator, value_type denominator) const
         {
+            assert(is_valid_element<field_type>(numerator));
+            assert(is_valid_element<field_type>(denominator));
+
             assert(denominator != 0);
 
             if(numerator == 0)
@@ -96,9 +102,10 @@ namespace fifi
         }
 
         /// @copydoc finite_field::invert()
-        value_type invert(value_type element) const
+        value_type invert(value_type a) const
         {
-            return divide(1, element);
+            assert(is_valid_element<field_type>(a));
+            return divide(1, a);
         }
 
     public:

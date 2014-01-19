@@ -15,26 +15,30 @@ namespace fifi
 
     /// Simple online finite field algorithms - computes the results
     /// on the fly without relying on pre-computed look-up tables etc.
-    template<class Field, class Super>
-    class simple_online_layer : public Super
+    template<class Super>
+    class general_simple_online : public Super
     {
     public:
 
-        /// Typedef of the data type used for each field element
-        typedef typename Field::value_type value_type;
-
-        /// Typedef of the data type used for each field element
-        typedef typename Field::degree_type degree_type;
-
         /// Typedef of the field type used
-        typedef Field field_type;
+        typedef typename Super::field_type field_type;
+
+        /// Typedef of the data type used for each field element
+        typedef typename Super::value_type value_type;
+
+        /// Typedef of the data type used for each field element
+        typedef typename field_type::degree_type degree_type;
+
 
     public:
 
         /// @copydoc finite_field::multiply()
-        value_type multiply(value_type element_a, value_type element_b) const
+        value_type multiply(value_type a, value_type b) const
         {
-            if((element_a == 0) || (element_b == 0))
+            assert(is_valid_element<field_type>(a));
+            assert(is_valid_element<field_type>(b));
+
+            if((a == 0) || (b == 0))
                 return 0;
 
             value_type high_bit_flag = 0;
@@ -46,21 +50,21 @@ namespace fifi
 
             for(degree_type i = 0; i < field_type::degree; ++i)
             {
-                low_bit_flag = element_b & 0x1;
+                low_bit_flag = b & 0x1;
 
                 if( low_bit_flag != 0 )
                 {
-                    result ^= element_a;
+                    result ^= a;
                 }
 
-                high_bit_flag = element_a & high_bit_mask;
+                high_bit_flag = a & high_bit_mask;
 
-                element_a <<= 1;
-                element_b >>= 1;
+                a <<= 1;
+                b >>= 1;
 
                 if( high_bit_flag != 0 )
                 {
-                    element_a ^= field_type::prime;
+                    a ^= field_type::prime;
                 }
             }
 
@@ -71,23 +75,26 @@ namespace fifi
         /// @copydoc finite_field::divide()
         value_type divide(value_type numerator, value_type denominator) const
         {
+            assert(is_valid_element<field_type>(numerator));
+            assert(is_valid_element<field_type>(denominator));
+
             return multiply(invert(denominator), numerator);
         }
 
         /// @copydoc finite_field::invert()
-        value_type invert(value_type element) const
+        value_type invert(value_type a) const
         {
-            assert(element != 0);
-            assert(is_valid_element<field_type>(element));
+            assert(a != 0); // Zero has no inverse
+            assert(is_valid_element<field_type>(a));
 
             // If element is 1 the inverse is 1, since we had to
             // 'unwrap' the first iteration (see below), we make an
             // explicit check here.
-            if(element == 1)
+            if(a == 1)
                 return 1;
 
             value_type r_large = field_type::prime;
-            value_type r_small = element;
+            value_type r_small = a;
 
             value_type y_large = 0;
             value_type y_small = 1;
@@ -134,51 +141,23 @@ namespace fifi
             return y_large;
         }
 
-    };
-
-
-    /// Simple online finite field algorithms - computes the results
-    /// on the fly without relying on pre-computed look-up tables etc.
-    template<class Super>
-    class simple_online_layer<binary, Super> : public Super
-    {
-    public:
-
-        /// Typedef of the data type used for each field element
-        typedef binary::value_type value_type;
-
-        /// Typedef of the data type used for each field element
-        typedef binary::degree_type degree_type;
-
-        /// Typedef of the field type used
-        typedef binary field_type;
-
-    public:
-
-        /// @copydoc finite_field::multiply()
-        value_type multiply(value_type element_a, value_type element_b) const
+        /// @copydoc finite_field::add()
+        value_type add(value_type a, value_type b) const
         {
-            return element_a & element_b;
+            assert(is_valid_element<field_type>(a));
+            assert(is_valid_element<field_type>(b));
+            return a ^ b;
         }
 
-        /// @copydoc finite_field::divide()
-        value_type divide(value_type numerator, value_type denominator) const
+        /// @copydoc finite_field::subtract()
+        value_type subtract(value_type a, value_type b) const
         {
-            assert(denominator != 0);
-            return numerator & denominator;
-        }
-
-        /// @copydoc finite_field::invert()
-        value_type invert(value_type element) const
-        {
-            assert(element != 0);
-            return element;
+            assert(is_valid_element<field_type>(a));
+            assert(is_valid_element<field_type>(b));
+            return a ^ b;
         }
 
     };
-
-
-
 
 }
 

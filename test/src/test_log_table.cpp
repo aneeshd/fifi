@@ -10,63 +10,22 @@
 
 #include "expected_results.hpp"
 
-TEST(test_log_table,binary8multiply)
+template<class Field>
+inline void test_log_table()
 {
-    check_results_multiply<fifi::log_table<fifi::binary8> >();
+    check_results_multiply<fifi::log_table<Field> >();
+    check_results_invert<fifi::log_table<Field> >();
+    check_results_divide<fifi::log_table<Field> >();
+    check_results_add<fifi::log_table<Field> >();
+    check_results_subtract<fifi::log_table<Field> >();
+    check_random<fifi::log_table<Field> >();
 }
 
-TEST(test_log_table,binary8invert)
+TEST(TestLogTable, api)
 {
-    check_results_invert<fifi::log_table<fifi::binary8> >();
+   test_log_table<fifi::binary4>();
+   test_log_table<fifi::binary8>();
+   test_log_table<fifi::binary16>();
 }
 
-TEST(test_log_table,binary8divide)
-{
-    check_results_divide<fifi::log_table<fifi::binary8> >();
-}
-
-TEST(test_log_table,binary8add)
-{
-    check_results_add<fifi::log_table<fifi::binary8> >();
-}
-
-TEST(test_log_table,binary8subtract)
-{
-    check_results_subtract<fifi::log_table<fifi::binary8> >();
-}
-
-TEST(test_log_table,binary16multiply)
-{
-    check_results_multiply<fifi::log_table<fifi::binary16> >();
-}
-
-TEST(test_log_table,binary16invert)
-{
-    check_results_invert<fifi::log_table<fifi::binary16> >();
-}
-
-TEST(test_log_table,binary16divide)
-{
-    check_results_divide<fifi::log_table<fifi::binary16> >();
-}
-
-TEST(test_log_table,binary16add)
-{
-    check_results_add<fifi::log_table<fifi::binary16> >();
-}
-
-TEST(test_log_table,binary16subtract)
-{
-    check_results_subtract<fifi::log_table<fifi::binary16> >();
-}
-
-TEST(test_log_table,binary8randCheck)
-{
-    check_random<fifi::log_table<fifi::binary8> >();
-}
-
-TEST(test_log_table,binary16randCheck)
-{
-    check_random<fifi::log_table<fifi::binary16> >();
-}
 

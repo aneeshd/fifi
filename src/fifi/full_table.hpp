@@ -5,20 +5,10 @@
 
 #pragma once
 
-#include <algorithm>
-#include <cmath>
-#include <cassert>
-#include <stdint.h>
-#include <vector>
-
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_same.hpp>
-
 #include "final.hpp"
-#include "simple_online_layer.hpp"
-#include "full_table_layer.hpp"
+#include "arithmetic_simple_online.hpp"
+#include "arithmetic_full_table.hpp"
 #include "polynomial_degree.hpp"
-#include "binary_arithmetic.hpp"
 
 namespace fifi
 {
@@ -27,11 +17,10 @@ namespace fifi
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
     class full_table :
-        public full_table_layer<Field,
-               simple_online_layer<Field,
-               polynomial_degree<Field,
-               binary_arithmetic<
-                   final<Field> > > > >
+        public arithmetic_full_table<Field,
+               arithmetic_simple_online<Field,
+               polynomial_degree<
+               final<Field> > > >
     { };
 }
 

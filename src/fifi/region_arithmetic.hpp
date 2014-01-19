@@ -71,7 +71,7 @@ namespace fifi
         }
 
         void multiply_substract(value_type* dest, const value_type* src,
-                          value_type constant, uint32_t length) const
+                                value_type constant, uint32_t length) const
         {
             for(uint32_t i = 0; i < length; ++i)
             {

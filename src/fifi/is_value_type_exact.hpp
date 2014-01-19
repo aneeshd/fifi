@@ -20,18 +20,18 @@ namespace fifi
     /// variables from e.g. binary8 cannot contains illegal values
     /// since the field value requires the entire data type.
     ///
-    /// if(enable_is_valid_element<fifi::binary4>::value)
+    /// if(fifi::is_value_type_exact<fifi::binary4>::value)
     /// {
     ///     std::cout << "fifi::binary4 should be checked" << std::endl;
     /// }
     ///
     template<class Field>
-    struct enable_is_valid_element
+    struct is_value_type_exact
     {
         typedef typename Field::value_type value_type;
 
         const static bool value =
-            !(Field::max_value == std::numeric_limits<value_type>::max());
+            (Field::max_value == std::numeric_limits<value_type>::max());
     };
 
 }

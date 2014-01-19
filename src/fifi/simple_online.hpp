@@ -7,9 +7,8 @@
 
 #include "final.hpp"
 #include "field_types.hpp"
-#include "simple_online_layer.hpp"
+#include "arithmetic_simple_online.hpp"
 #include "polynomial_degree.hpp"
-#include "binary_arithmetic.hpp"
 
 namespace fifi
 {
@@ -18,10 +17,9 @@ namespace fifi
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
     class simple_online :
-        public simple_online_layer<Field,
-               polynomial_degree<Field,
-               binary_arithmetic<
-               final<Field> > > >
+        public arithmetic_simple_online<Field,
+               polynomial_degree<
+               final<Field> > >
     { };
 
 }
