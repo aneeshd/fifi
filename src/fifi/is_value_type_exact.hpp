@@ -30,10 +30,8 @@ namespace fifi
     {
         typedef typename Field::value_type value_type;
 
-        enum check
-        {
-            value = (Field::max_value == std::numeric_limits<value_type>::max())
-        };
+        const static bool value =
+            (Field::max_value == std::numeric_limits<value_type>::max());
     };
 
 }

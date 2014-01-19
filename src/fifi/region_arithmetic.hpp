@@ -16,66 +16,70 @@ namespace fifi
         /// Typedef of the data type used for each field element
         typedef typename Super::value_type value_type;
 
-        void add(value_type* dest, const value_type* src,
+    public:
+
+        void region_add(value_type* dest, const value_type* src,
                  uint32_t length) const
         {
             for(uint32_t i = 0; i < length; ++i)
             {
-                Super::packed_add(a[i], b[i]);
+                dest[i] = Super::packed_add(dest[i], src[i]);
             }
         }
 
-        void subtract(value_type* dest, const value_type* src,
+        void region_subtract(value_type* dest, const value_type* src,
                       uint32_t length) const
         {
             for(uint32_t i = 0; i < length; ++i)
             {
-                Super::packed_subtract(a[i], b[i]);
+                dest[i] = Super::packed_subtract(dest[i], src[i]);
             }
         }
 
-        void divide(value_type* dest, const value_type* src,
+        void region_divide(value_type* dest, const value_type* src,
                     uint32_t length) const
         {
             for(uint32_t i = 0; i < length; ++i)
             {
-                Super::packed_divide(a[i], b[i]);
+                dest[i] = Super::packed_divide(dest[i], src[i]);
             }
         }
 
-        void multiply(value_type* dest, const value_type* src,
+        void region_multiply(value_type* dest, const value_type* src,
                       uint32_t length) const
         {
             for(uint32_t i = 0; i < length; ++i)
             {
-                Super::packed_multiply(a[i], b[i]);
+                dest[i] = Super::packed_multiply(dest[i], src[i]);
             }
         }
 
-        void multiply(value_type* dest, value_type constant,
+        void region_multiply(value_type* dest, value_type constant,
                       uint32_t length) const
         {
             for(uint32_t i = 0; i < length; ++i)
             {
-                Super::packed_multiply(a, b[i]);
+                dest[i] = Super::packed_multiply(dest[i], constant);
             }
         }
 
-        void multiply_add(value_type* dest, const value_type* src,
+        void region_multiply_add(value_type* dest, const value_type* src,
                           value_type constant, uint32_t length) const
         {
             for(uint32_t i = 0; i < length; ++i)
             {
-                Super::packed_multiply(a[i], b[i]);
+                value_type v = Super::packed_multiply(src[i], constant);
+                dest[i] = Super::packed_subtract(dest[i], v);
             }
         }
 
-        void multiply_substract(value_type* dest, const value_type* src,
+        void region_multiply_substract(value_type* dest, const value_type* src,
                                 value_type constant, uint32_t length) const
         {
             for(uint32_t i = 0; i < length; ++i)
             {
-                Super::packed_multiply(a[i], b[i]);
+                value_type v = Super::packed_multiply(src[i], constant);
+                dest[i] = Super::packed_subtract(dest[i], v);
             }
         }
 

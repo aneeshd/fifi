@@ -9,6 +9,10 @@
 #include "arithmetic_simple_online.hpp"
 #include "arithmetic_full_table.hpp"
 #include "polynomial_degree.hpp"
+#include "packed_arithmetic.hpp"
+#include "binary_packed_arithmetic.hpp"
+#include "binary4_packed_arithmetic.hpp"
+#include "region_arithmetic.hpp"
 
 namespace fifi
 {
@@ -18,12 +22,16 @@ namespace fifi
     template<class Field>
     class full_table :
         public // Region arithmetic
+               region_arithmetic<
                // Packed arithmetic
+               binary4_packed_arithmetic<Field,
+               binary_packed_arithmetic<Field,
+               packed_arithmetic<
                // Arithmetic
                arithmetic_full_table<Field,
                arithmetic_simple_online<Field,
                polynomial_degree<
-               final<Field> > > >
+               final<Field> > > > > > > >
     { };
 }
 
