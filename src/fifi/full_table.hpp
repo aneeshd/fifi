@@ -17,7 +17,10 @@ namespace fifi
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
     class full_table :
-        public arithmetic_full_table<Field,
+        public // Region arithmetic
+               // Packed arithmetic
+               // Arithmetic
+               arithmetic_full_table<Field,
                arithmetic_simple_online<Field,
                polynomial_degree<
                final<Field> > > >
