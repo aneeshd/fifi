@@ -6,6 +6,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstdlib>
 
 #include "fifi_utils.hpp"
 #include "is_valid_element.hpp"
