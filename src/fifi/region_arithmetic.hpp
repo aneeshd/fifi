@@ -8,6 +8,12 @@
 namespace fifi
 {
 
+    /// Region arithmetic makes it easy to perform finite field
+    /// arithmetic over memory regions instead of single finite field
+    /// elements. Note, that the region arithmetic assumes that the
+    /// memory is "packed" i.e. multiple elements per value_type if
+    /// possible. See more about packed arithmeic in
+    /// packed_arithmetic.hpp.
     template<class Super>
     class region_arithmetic : public Super
     {

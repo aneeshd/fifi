@@ -15,14 +15,22 @@ namespace fifi
     class binary4_packed_arithmetic : public Super
     { };
 
+    /// Specialization for packed arithmetic for the binary field.
     template<class Super>
     class binary4_packed_arithmetic<binary4, Super> : public Super
     {
     public:
 
-        /// The value type
+        /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
 
+        /// Ensure that the stack is also initialized with the binary field
+        static_assert(std::is_same<binary4, typename Super::field_type>::value,
+                      "The field used throughout the stack should match");
+
+        /// In the code below we assume that the value_type used for
+        /// binary4 is the uint8_t so lets add a check to make sure we
+        /// catch it if it changes.
         static_assert(std::is_same<value_type, uint8_t>::value,
                       "The code below assumes we use uint8_t as data type "
                       "for the binary4 field");

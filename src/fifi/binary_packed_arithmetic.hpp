@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include "field_types.hpp"
+
 namespace fifi
 {
 
@@ -13,24 +15,28 @@ namespace fifi
     class binary_packed_arithmetic : public Super
     { };
 
+    /// Specialization for packed arithmetic for the binary field.
     template<class Super>
-    class binary_packed_arithmetic<binary,Super> : public Super
+    class binary_packed_arithmetic<binary, Super> : public Super
     {
     public:
 
-        /// The value type
+        /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
+
+        /// Ensure that the stack is also initialized with the binary field
+        static_assert(std::is_same<binary, typename Super::field_type>::value,
+                      "The field used throughout the stack should match");
 
     public:
 
-        /// For all binary extension fields the binary
-        /// @copydoc finite_field::packed_add()
+        /// @copydoc layer::packed_multiply(value_type, value_type) const
         value_type packed_multiply(value_type a, value_type b) const
         {
             return a & b;
         }
 
-        /// @copydoc finite_field::divide()
+        /// @copydoc layer::packed_divide(value_type, value_type) const
         value_type packed_divide(value_type numerator,
                                  value_type denominator) const
         {
@@ -41,22 +47,22 @@ namespace fifi
             return numerator & denominator;
         }
 
-        /// @copydoc finite_field::invert()
+        /// @copydoc packed_invert::invert(value_type) const
         value_type packed_invert(value_type a) const
         {
             // Zero does not have an inverse so the value a should be
             // a vector of all ones
             assert(a == std::numeric_limits<value_type>::max());
-            return Super::invert(a);
+            return a;
         }
 
-        /// @copydoc finite_field::add()
+        /// @copydoc layer::packed_add(value_type, value_type)
         value_type packed_add(value_type a, value_type b) const
         {
             return a ^ b;
         }
 
-        /// @copydoc finite_field::subtract()
+        /// @copydoc layer::packed_subtract(value_type, value_type) const
         value_type packed_subtract(value_type a, value_type b) const
         {
             return a ^ b;
