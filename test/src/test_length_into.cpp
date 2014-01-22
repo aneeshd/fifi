@@ -34,5 +34,4 @@ TEST(TestLengthInto, api)
         stack.set_length(i);
         EXPECT_EQ(i, stack.length());
     }
-
 }
