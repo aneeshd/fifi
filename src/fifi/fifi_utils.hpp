@@ -77,6 +77,18 @@ namespace fifi
         return length * sizeof(typename Field::value_type);
     }
 
+    /// Returns the size in bytes needed to store a certain
+    /// number of value_type elements
+    /// @param length the number of value_type elements to store
+    /// @return the size in bytes needed to store the value_type elements
+    template<>
+    inline uint32_t length_to_size<binary>(uint32_t length)
+    {
+        assert(length > 0);
+
+        return sak::ceil_division(length, binary::bits_per_value);
+    }
+
     /// Returns the number of field elements needed to store a certain
     /// number of value_type elements
     /// @param length the number of value_type elements

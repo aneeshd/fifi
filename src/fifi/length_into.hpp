@@ -32,7 +32,7 @@ namespace fifi
     private:
 
         /// The length
-        uint32_t m_length
+        uint32_t m_length;
 
     };
 }
