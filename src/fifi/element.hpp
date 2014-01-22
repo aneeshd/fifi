@@ -31,29 +31,56 @@ namespace fifi
     public:
         /// Construct a zero initialized field element.
         /// @param field_impl the field to which the element belongs
-        element(const field_impl_type &field_impl);
+        element(const field_impl_type &field_impl)
+        : m_value(0),
+          m_field_impl(field_impl)
+        {
+        }
 
         /// Construct a value initialized field element
         /// @param value the initial value of the finite field
         /// @param field_impl the field to which the element belongs
-        element(value_type value, const field_impl_type &field_impl);
+        element(value_type value, const field_impl_type &field_impl)
+        : m_value(value),
+          m_field_impl(field_impl)
+        {
+        }
 
         /// Addition assignment
-        element& operator+=(const element &e);
+        element& operator+=(const element &e)
+        {
+            m_value = m_field_impl.add(m_value, e.m_value);
+            return *this;
+        }
 
         /// Substraction assignment
-        element& operator-=(const element &e);
+        element& operator-=(const element<FieldImpl> &e)
+        {
+            m_value = m_field_impl.subtract(m_value, e.m_value);
+            return *this;
+        }
 
         /// Division assignment
-        element& operator/=(const element &e);
+        element& operator/=(const element<FieldImpl> &e)
+        {
+            m_value = m_field_impl.divide(m_value, e.m_value);
+            return *this;
+        }
 
         /// Multiplication assignment
-        element& operator*=(const element &e);
+        element& operator*=(const element<FieldImpl> &e)
+        {
+            m_value = m_field_impl.multiply(m_value, e.m_value);
+            return *this;
+        }
 
         /// Access to the field element
         /// @return the ValueType constaining the decimal value of the
         ///         field element
-        value_type value() const;
+        value_type value() const
+        {
+            return m_value;
+        }
 
     private:
         /// The value to the specific field element
@@ -62,55 +89,6 @@ namespace fifi
         /// Reference to the field providing the arithmetic operations
         field_impl_type m_field_impl;
     };
-
-    template<class FieldImpl>
-    inline element<FieldImpl>::element(const field_impl_type &field_impl)
-        : m_value(0),
-          m_field_impl(field_impl)
-    {
-    }
-
-    template<class FieldImpl>
-    inline element<FieldImpl>::element(value_type value, const field_impl_type &field_impl)
-        : m_value(value),
-          m_field_impl(field_impl)
-    {
-    }
-
-    template<class FieldImpl>
-    inline element<FieldImpl>& element<FieldImpl>::operator+=(const element &e)
-    {
-        m_value = m_field_impl.add(m_value, e.m_value);
-        return *this;
-    }
-
-    template<class FieldImpl>
-    inline element<FieldImpl>& element<FieldImpl>::operator-=(const element<FieldImpl> &e)
-    {
-        m_value = m_field_impl.subtract(m_value, e.m_value);
-        return *this;
-    }
-
-    template<class FieldImpl>
-    inline element<FieldImpl>& element<FieldImpl>::operator/=(const element<FieldImpl> &e)
-    {
-        m_value = m_field_impl.divide(m_value, e.m_value);
-        return *this;
-    }
-
-    template<class FieldImpl>
-    inline element<FieldImpl>& element<FieldImpl>::operator*=(const element<FieldImpl> &e)
-    {
-        m_value = m_field_impl.multiply(m_value, e.m_value);
-        return *this;
-    }
-
-
-    template<class FieldImpl>
-    inline typename element<FieldImpl>::value_type element<FieldImpl>::value() const
-    {
-        return m_value;
-    }
 
     /// Addition operator for a field element
     template<class FieldImpl>
