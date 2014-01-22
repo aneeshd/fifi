@@ -3,8 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_PRIME_2325_BITMAP_HPP
-#define FIFI_PRIME_2325_BITMAP_HPP
+#pragma once
 
 #include <sak/storage.hpp>
 
@@ -185,7 +184,3 @@ namespace fifi
         std::vector<mapping_type> m_bitmap;
     };
 }
-
-#endif
-
-

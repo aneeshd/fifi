@@ -3,8 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_PRIME_2325_BINARY_SEARCH_HPP
-#define FIFI_PRIME_2325_BINARY_SEARCH_HPP
+#pragma once
 
 #include <sak/storage.hpp>
 
@@ -278,6 +277,3 @@ namespace fifi
 
     };
 }
-
-#endif
-

@@ -34,5 +34,3 @@ namespace fifi
                final<Field> > > > > > > >
     { };
 }
-
-

@@ -3,8 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_DISABLE_IF_BINARY_HPP
-#define FIFI_DISABLE_IF_BINARY_HPP
+#pragma once
 
 #include <boost/utility/enable_if.hpp>
 
@@ -28,6 +27,3 @@ namespace fifi
     { };
 
 }
-
-#endif
-

@@ -3,8 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_ARITHMETICS_HPP
-#define FIFI_ARITHMETICS_HPP
+#pragma once
 
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
@@ -557,6 +556,3 @@ namespace fifi
         }
     }
 }
-
-#endif
-

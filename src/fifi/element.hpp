@@ -3,8 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_ELEMENT_HPP
-#define FIFI_ELEMENT_HPP
+#pragma once
 
 namespace fifi
 {
@@ -153,6 +152,3 @@ namespace fifi
         return os << (unsigned)element.Value();
     }
 }
-
-#endif
-

@@ -3,8 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_DEFAULT_FIELD_HPP
-#define FIFI_DEFAULT_FIELD_HPP
+#pragma once
 
 #include "field_types.hpp"
 #include "simple_online.hpp"
@@ -54,6 +53,3 @@ namespace fifi
     };
 
 }
-
-#endif
-

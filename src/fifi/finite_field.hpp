@@ -3,8 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_FINITE_FIELD_HPP
-#define FIFI_FINITE_FIELD_HPP
+#pragma once
 
 #include <boost/shared_ptr.hpp>
 
@@ -118,6 +117,3 @@ namespace fifi
             return *m_impl;
         }
 }
-
-#endif
-

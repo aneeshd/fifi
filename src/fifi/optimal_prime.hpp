@@ -3,8 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_OPTIMAL_PRIME_HPP
-#define FIFI_OPTIMAL_PRIME_HPP
+#pragma once
 
 #include <stdint.h>
 
@@ -160,6 +159,3 @@ namespace fifi
     }
 
 }
-
-#endif
-
