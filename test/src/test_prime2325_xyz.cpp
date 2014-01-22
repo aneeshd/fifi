@@ -254,4 +254,3 @@ TEST(test_prime2325, binary_search_size_needed)
     EXPECT_EQ(fifi::prime2325_binary_search::size_needed(127, 20),
               2*size_of_counter);
 }
-

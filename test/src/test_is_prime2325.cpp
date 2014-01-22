@@ -14,4 +14,3 @@ TEST(TestIsPrime2325, is_prime2325)
     EXPECT_TRUE(fifi::is_prime2325<fifi::binary16>::value == false);
     EXPECT_TRUE(fifi::is_prime2325<fifi::prime2325>::value == true);
 }
-

@@ -19,4 +19,3 @@ TEST(TestIsValidElement, api)
     EXPECT_TRUE(fifi::is_valid_element<fifi::binary4>(2U));
     EXPECT_FALSE(fifi::is_valid_element<fifi::binary4>(16U));
 }
-

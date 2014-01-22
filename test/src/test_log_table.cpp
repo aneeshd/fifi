@@ -27,5 +27,3 @@ TEST(TestLogTable, api)
    test_log_table<fifi::binary8>();
    test_log_table<fifi::binary16>();
 }
-
-

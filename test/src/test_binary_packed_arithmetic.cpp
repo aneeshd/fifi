@@ -70,8 +70,6 @@ namespace fifi
         struct dummy_stack : public
         binary_packed_arithmetic<Field, dummy_layer<Field> >
         { };
-
-
     }
 }
 
@@ -147,6 +145,3 @@ TEST(TestBinaryPackedArithmetic, api)
     test_field<fifi::prime2325>();
 
 }
-
-
-

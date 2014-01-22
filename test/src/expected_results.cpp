@@ -776,6 +776,3 @@ invert_results<fifi::prime2325>::m_results[] =
 
 const uint32_t invert_results<fifi::prime2325>::m_size =
     dimension_of(invert_results<fifi::prime2325>::m_results);
-
-
-

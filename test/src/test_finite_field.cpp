@@ -117,4 +117,3 @@ TEST(test_finite_field, Optimal_Prime_Prime2325)
     fifi::finite_field<field_type> finite_field;
     finite_field_construct_helper(finite_field);
 }
-

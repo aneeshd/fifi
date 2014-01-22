@@ -285,5 +285,3 @@ TEST(test_arithmetics, RunFunctions)
     }
 
 }
-
-

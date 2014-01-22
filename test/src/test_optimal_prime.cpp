@@ -52,8 +52,3 @@ TEST(test_optimal_prime, prime2325randCheck)
         EXPECT_EQ( optimal.multiply(v, optimal.divide(1, v)), 1U);
     }
 }
-
-
-
-
-

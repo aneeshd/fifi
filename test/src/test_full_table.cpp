@@ -26,4 +26,3 @@ TEST(TestFullTable, api)
    test_full_table<fifi::binary4>();
    test_full_table<fifi::binary8>();
 }
-
