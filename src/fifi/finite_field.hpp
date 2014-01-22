@@ -32,88 +32,66 @@ namespace fifi
     public:
 
         /// Constructor to create a new finite field
-        finite_field();
+        finite_field()
+            : m_impl(new FieldImpl)
+        {}
 
         ///  Operator performing the field multiplication
         ///  @param element_one the first field element
         ///  @param element_two the second field element
         ///  @return the result after multiplication
-        value_type multiply(value_type element_one, value_type element_two) const;
+        value_type multiply(value_type element_one,
+            value_type element_two) const
+        {
+            return m_impl->multiply(element_one, element_two);
+        }
 
         /// Perform division of two field elements
         /// @param numerator the element in the numerator
         /// @param denominator the element in the denominator
         /// @return the result after division
-        value_type divide(value_type numerator, value_type denominator) const;
+        value_type divide(value_type numerator, value_type denominator)  const
+        {
+            return m_impl->divide(numerator, denominator);
+        }
+
 
         ///  Operator performing the field inversion
         ///  @param element the field element to be inverted
         ///  @return the result after inversion
-        value_type invert(value_type element) const;
+        value_type invert(value_type element) const
+        {
+           return m_impl->invert(element);
+        }
 
         ///  Performs the field addition
         ///  @param element_one the first field element
         ///  @param element_two the second field element
         ///  @return the result after addition
-        value_type add(value_type element_one, value_type element_two) const;
+        value_type add(value_type element_one, value_type element_two) const
+        {
+            return m_impl->add(element_one, element_two);
+        }
 
         ///  Performs the field subtraction
         ///  @param element_one the first field element
         ///  @param element_two the second field element
         ///  @return the result after subtraction
-        value_type subtract(value_type element_one, value_type element_two) const;
+        value_type subtract(value_type element_one,
+            value_type element_two) const
+        {
+            return m_impl->subtract(element_one, element_two);
+        }
 
         ///  Returns a reference to the field implementation
-        FieldImpl& impl();
+        FieldImpl& impl()
+        {
+            return *m_impl;
+        }
 
     private:
 
         ///  The private implementation
         impl_type m_impl;
     };
-
-    template<class FieldImpl>
-    finite_field<FieldImpl>::finite_field() : m_impl(new FieldImpl)
-    {}
-
-    template<class FieldImpl>
-    typename finite_field<FieldImpl>::value_type finite_field<FieldImpl>::multiply(
-        value_type element_one, value_type element_two) const
-    {
-        return m_impl->multiply(element_one, element_two);
-    }
-
-    template<class FieldImpl>
-    typename finite_field<FieldImpl>::value_type finite_field<FieldImpl>::divide(
-        value_type numerator, value_type denominator) const
-    {
-        return m_impl->divide(numerator, denominator);
-    }
-
-    template<class FieldImpl>
-    typename finite_field<FieldImpl>::value_type finite_field<FieldImpl>::invert(
-        value_type element) const
-    {
-       return m_impl->invert(element);
-    }
-
-    template<class FieldImpl>
-    typename finite_field<FieldImpl>::value_type finite_field<FieldImpl>::add(
-        value_type element_one, value_type element_two) const
-    {
-        return m_impl->add(element_one, element_two);
-    }
-
-    template<class FieldImpl>
-    typename finite_field<FieldImpl>::value_type finite_field<FieldImpl>::subtract(
-        value_type element_one, value_type element_two) const
-    {
-        return m_impl->subtract(element_one, element_two);
-    }
-
-    template<class FieldImpl>
-    FieldImpl& finite_field<FieldImpl>::impl()
-        {
-            return *m_impl;
-        }
 }

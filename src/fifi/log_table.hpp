@@ -12,8 +12,8 @@
 #include <vector>
 
 #include "final.hpp"
-#include "arithmetic_simple_online.hpp"
-#include "arithmetic_log_table.hpp"
+#include "simple_online_arithmetic.hpp"
+#include "log_table_arithmetic.hpp"
 #include "polynomial_degree.hpp"
 
 namespace fifi
@@ -23,8 +23,8 @@ namespace fifi
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
     class log_table :
-        public arithmetic_log_table<Field,
-               arithmetic_simple_online<Field,
+        public log_table_arithmetic<Field,
+               simple_online_arithmetic<Field,
                polynomial_degree<
                final<Field> > > >
     { };

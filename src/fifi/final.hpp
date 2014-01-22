@@ -7,11 +7,11 @@
 
 namespace fifi
 {
-
     /// @todo docs
     template<class Field>
     class final
     {
+
     public:
 
         /// The field type
@@ -19,7 +19,5 @@ namespace fifi
 
         /// The data type storing field elements
         typedef typename field_type::value_type value_type;
-
     };
-
 }

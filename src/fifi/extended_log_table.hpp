@@ -6,8 +6,8 @@
 #pragma once
 
 #include "final.hpp"
-#include "arithmetic_simple_online.hpp"
-#include "arithmetic_extended_log_table.hpp"
+#include "simple_online_arithmetic.hpp"
+#include "extended_log_table_arithmetic.hpp"
 #include "polynomial_degree.hpp"
 
 namespace fifi
@@ -15,8 +15,8 @@ namespace fifi
 
     template<class Field>
     class extended_log_table :
-        public arithmetic_extended_log_table<
-               arithmetic_simple_online<Field,
+        public extended_log_table_arithmetic<
+               simple_online_arithmetic<Field,
                polynomial_degree<
                final<Field> > > >
     { };
