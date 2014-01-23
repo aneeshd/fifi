@@ -8,7 +8,7 @@
 namespace fifi
 {
     template<class Field>
-    struct helper_fallthrough
+    struct helper_catch_all
     {
 
         typedef Field field_type;
@@ -18,7 +18,6 @@ namespace fifi
         value_type packed_multiply(value_type a, value_type b) const
         {
             (void) b;
-            m_fallthrough = true;
             return a;
         }
 
@@ -26,30 +25,55 @@ namespace fifi
                                  value_type denominator) const
         {
             (void) denominator;
-            m_fallthrough = true;
             return numerator;
         }
 
         value_type packed_invert(value_type a) const
         {
-            m_fallthrough = true;
             return a;
         }
 
         value_type packed_add(value_type a, value_type b) const
         {
             (void) b;
-            m_fallthrough = true;
             return a;
         }
 
         value_type packed_subtract(value_type a, value_type b) const
         {
             (void) a;
-            m_fallthrough = true;
             return b;
         }
 
-        mutable bool m_fallthrough;
+        value_type multiply(value_type a, value_type b) const
+        {
+            (void) b;
+            return a;
+        }
+
+        value_type divide(value_type numerator,
+                                 value_type denominator) const
+        {
+            (void) denominator;
+            return numerator;
+        }
+
+        value_type invert(value_type a) const
+        {
+            return a;
+        }
+
+        value_type add(value_type a, value_type b) const
+        {
+            (void) b;
+            return a;
+        }
+
+        value_type subtract(value_type a, value_type b) const
+        {
+            (void) a;
+            return b;
+        }
+
     };
 }

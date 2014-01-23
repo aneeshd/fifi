@@ -5,28 +5,28 @@
 
 #include <gtest/gtest.h>
 
-#include <fifi/binary_packed_arithmetic.hpp>
-#include <fifi/final.hpp>
+#include <fifi/binary4_packed_arithmetic.hpp>
 #include "helper_fall_through.hpp"
+#include "helper_catch_all.hpp"
 
 namespace fifi
 {
     namespace {
         template<class Field>
         struct helper_fall_through_stack : public
-        binary_packed_arithmetic<Field,
+        binary4_packed_arithmetic<Field,
         helper_fall_through<Field,
-        final<Field> > >
+        helper_catch_all<Field> > >
         { };
     }
 }
 
-TEST(TestBinaryPackedArithmetic, api)
+TEST(TestBinary4PackedArithmetic, api)
 {
     fifi::helper_fall_through_test<fifi::binary,
-        fifi::helper_fall_through_stack<fifi::binary> >(false);
+        fifi::helper_fall_through_stack<fifi::binary> >(true);
     fifi::helper_fall_through_test<fifi::binary4,
-        fifi::helper_fall_through_stack<fifi::binary4> >(true);
+        fifi::helper_fall_through_stack<fifi::binary4> >(false);
     fifi::helper_fall_through_test<fifi::binary8,
         fifi::helper_fall_through_stack<fifi::binary8> >(true);
     fifi::helper_fall_through_test<fifi::binary16,
