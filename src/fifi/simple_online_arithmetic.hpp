@@ -16,9 +16,8 @@ namespace fifi
     /// Simple online finite field algorithms - computes the results
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field, class Super>
-    class arithmetic_simple_online : public specialized_simple_online<Field,
+    class simple_online_arithmetic : public specialized_simple_online<Field,
                                             general_simple_online<Super> >
     { };
 
 }
-

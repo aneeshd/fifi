@@ -22,7 +22,7 @@ namespace fifi
     /// sizes it will most likely not work due to the very high memory
     /// requirements.
     template<class Field, class Super>
-    class arithmetic_full_table : public Super
+    class full_table_arithmetic : public Super
     {
     public:
 
@@ -35,7 +35,7 @@ namespace fifi
     public:
 
         /// Constructor
-        arithmetic_full_table()
+        full_table_arithmetic()
         {
             m_multtable.resize(Field::order * Field::order, '\0');
             m_divitable.resize(Field::order * Field::order, '\0');
@@ -95,5 +95,3 @@ namespace fifi
     };
 
 }
-
-

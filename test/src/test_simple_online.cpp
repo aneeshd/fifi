@@ -27,5 +27,3 @@ TEST(TestSimpleOnline, api)
     test_simple_online<fifi::binary8>();
     test_simple_online<fifi::binary16>();
 }
-
-

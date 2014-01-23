@@ -16,7 +16,7 @@ namespace fifi
     /// Produces an extended log table for multiplication
     /// and division.
     template<class Super>
-    class arithmetic_extended_log_table : public Super
+    class extended_log_table_arithmetic : public Super
     {
     public:
 
@@ -32,7 +32,7 @@ namespace fifi
     public:
 
         /// Constructor
-        arithmetic_extended_log_table()
+        extended_log_table_arithmetic()
         {
             m_log_data.resize(field_type::order, '\0');
             m_antilog_data.resize((3 * field_type::order) - 5, '\0');
@@ -127,6 +127,3 @@ namespace fifi
     };
 
 }
-
-
-

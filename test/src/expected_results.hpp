@@ -397,5 +397,3 @@ struct invert_results<fifi::prime2325>
     static const expected_result_unary<fifi::prime2325> m_results[];
     static const uint32_t m_size;
 };
-
-

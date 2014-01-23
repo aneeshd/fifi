@@ -11,13 +11,13 @@
 #include <cstdint>
 #include <vector>
 
-#include "modulo_sum.hpp"
+#include "sum_modulo.hpp"
 
 namespace fifi
 {
     /// Produces an extended log table for multiplication and division.
     template<class Field, class Super>
-    class arithmetic_log_table : public Super
+    class log_table_arithmetic : public Super
     {
     public:
 
@@ -33,7 +33,7 @@ namespace fifi
     public:
 
         /// Constructor
-        arithmetic_log_table()
+        log_table_arithmetic()
         {
             m_log.resize(Field::order, '\0');
             m_antilog.resize(Field::order, '\0');
@@ -137,6 +137,3 @@ namespace fifi
     };
 
 }
-
-
-

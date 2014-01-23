@@ -65,7 +65,6 @@ void element_construct_helper(FiniteField &finite_field)
     EXPECT_TRUE(true);
 }
 
-
 TEST(test_element, Simple_Online_Binary)
 {
     typedef fifi::simple_online<fifi::binary> field_type;
@@ -126,4 +125,3 @@ TEST(test_element, Optimal_Prime_Prime2325)
     fifi::finite_field<field_type> finite_field;
     element_construct_helper(finite_field);
 }
-

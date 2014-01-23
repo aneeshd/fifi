@@ -6,8 +6,8 @@
 #pragma once
 
 #include "final.hpp"
-#include "arithmetic_simple_online.hpp"
-#include "arithmetic_full_table.hpp"
+#include "simple_online_arithmetic.hpp"
+#include "full_table_arithmetic.hpp"
 #include "polynomial_degree.hpp"
 #include "packed_arithmetic.hpp"
 #include "binary_packed_arithmetic.hpp"
@@ -28,11 +28,9 @@ namespace fifi
                binary_packed_arithmetic<Field,
                packed_arithmetic<
                // Arithmetic
-               arithmetic_full_table<Field,
-               arithmetic_simple_online<Field,
+               full_table_arithmetic<Field,
+               simple_online_arithmetic<Field,
                polynomial_degree<
                final<Field> > > > > > > >
     { };
 }
-
-

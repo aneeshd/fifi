@@ -109,5 +109,3 @@ TEST(test_arithmetics, alignment)
         test_alignment(data_length, i);
     }
 }
-
-

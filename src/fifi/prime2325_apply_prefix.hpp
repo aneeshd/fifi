@@ -3,8 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_PRIME2325_APPLY_PREFIX_HPP
-#define FIFI_PRIME2325_APPLY_PREFIX_HPP
+#pragma once
 
 #include "field_types.hpp"
 
@@ -51,6 +50,3 @@ namespace fifi
     }
 
 }
-
-#endif
-

@@ -3,8 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#ifndef FIFI_IS_PRIME2325_HPP
-#define FIFI_IS_PRIME2325_HPP
+#pragma once
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -25,6 +24,3 @@ namespace fifi
     struct is_prime2325 : public boost::is_same<Field, fifi::prime2325>
     { };
 }
-
-#endif
-

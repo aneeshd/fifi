@@ -5,6 +5,9 @@
 
 #include "expected_results.hpp"
 
+/// @todo Make this file (and its cpp file), meet our standard of one class per
+/// file.
+
 // Small helper function to get the size of the arrays
 template<class T, uint32_t N>
 inline uint32_t dimension_of(T (&)[N])
@@ -776,6 +779,3 @@ invert_results<fifi::prime2325>::m_results[] =
 
 const uint32_t invert_results<fifi::prime2325>::m_size =
     dimension_of(invert_results<fifi::prime2325>::m_results);
-
-
-

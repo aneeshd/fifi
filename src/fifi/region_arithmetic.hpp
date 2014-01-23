@@ -12,8 +12,9 @@ namespace fifi
     /// arithmetic over memory regions instead of single finite field
     /// elements. Note, that the region arithmetic assumes that the
     /// memory is "packed" i.e. multiple elements per value_type if
-    /// possible. See more about packed arithmeic in
+    /// possible. See more about packed arithmetic in
     /// packed_arithmetic.hpp.
+    /// Also a length is assumed to be available through a call to length
     template<class Super>
     class region_arithmetic : public Super
     {
@@ -24,55 +25,50 @@ namespace fifi
 
     public:
 
-        void region_add(value_type* dest, const value_type* src,
-                 uint32_t length) const
+        void region_add(value_type* dest, const value_type* src) const
         {
-            for(uint32_t i = 0; i < length; ++i)
+            for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_add(dest[i], src[i]);
             }
         }
 
-        void region_subtract(value_type* dest, const value_type* src,
-                      uint32_t length) const
+        void region_subtract(value_type* dest, const value_type* src) const
         {
-            for(uint32_t i = 0; i < length; ++i)
+            for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_subtract(dest[i], src[i]);
             }
         }
 
-        void region_divide(value_type* dest, const value_type* src,
-                    uint32_t length) const
+        void region_divide(value_type* dest, const value_type* src) const
         {
-            for(uint32_t i = 0; i < length; ++i)
+            for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_divide(dest[i], src[i]);
             }
         }
 
-        void region_multiply(value_type* dest, const value_type* src,
-                      uint32_t length) const
+        void region_multiply(value_type* dest, const value_type* src) const
         {
-            for(uint32_t i = 0; i < length; ++i)
+            for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_multiply(dest[i], src[i]);
             }
         }
 
-        void region_multiply(value_type* dest, value_type constant,
-                      uint32_t length) const
+        void region_multiply(value_type* dest, value_type constant) const
         {
-            for(uint32_t i = 0; i < length; ++i)
+            for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_multiply(dest[i], constant);
             }
         }
 
         void region_multiply_add(value_type* dest, const value_type* src,
-                          value_type constant, uint32_t length) const
+                          value_type constant) const
         {
-            for(uint32_t i = 0; i < length; ++i)
+            for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 value_type v = Super::packed_multiply(src[i], constant);
                 dest[i] = Super::packed_subtract(dest[i], v);
@@ -80,17 +76,13 @@ namespace fifi
         }
 
         void region_multiply_substract(value_type* dest, const value_type* src,
-                                value_type constant, uint32_t length) const
+                                value_type constant) const
         {
-            for(uint32_t i = 0; i < length; ++i)
+            for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 value_type v = Super::packed_multiply(src[i], constant);
                 dest[i] = Super::packed_subtract(dest[i], v);
             }
         }
-
     };
-
 }
-
-
