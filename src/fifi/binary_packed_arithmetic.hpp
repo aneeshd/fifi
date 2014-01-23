@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "field_types.hpp"
+#include "binary.hpp"
 
 namespace fifi
 {

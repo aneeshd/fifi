@@ -8,7 +8,10 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
 
-#include "field_types.hpp"
+#include "binary.hpp"
+#include "binary8.hpp"
+#include "prime2325.hpp"
+
 #include "log_table.hpp"
 #include "extended_log_table.hpp"
 #include "full_table.hpp"

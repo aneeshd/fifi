@@ -6,7 +6,11 @@
 #include <gtest/gtest.h>
 
 #include <fifi/is_value_type_exact.hpp>
-#include <fifi/field_types.hpp>
+#include <fifi/binary.hpp>
+#include <fifi/binary4.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/binary16.hpp>
+#include <fifi/prime2325.hpp>
 
 TEST(TestIsValueTypeExact, api)
 {

@@ -14,12 +14,16 @@
 #include <fifi/element.hpp>
 #include <fifi/is_binary.hpp>
 
+#include <fifi/binary.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/binary16.hpp>
+#include <fifi/prime2325.hpp>
+
 template<class FiniteField>
 void element_construct_helper(FiniteField &finite_field)
 {
 
     typedef typename FiniteField::field_type field_type;
-    typedef typename FiniteField::field_impl field_impl;
     typedef typename FiniteField::value_type value_type;
 
     // Just two random values

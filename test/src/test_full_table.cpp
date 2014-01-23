@@ -6,7 +6,8 @@
 #include <gtest/gtest.h>
 
 #include <fifi/full_table.hpp>
-#include <fifi/field_types.hpp>
+#include <fifi/binary4.hpp>
+#include <fifi/binary8.hpp>
 
 #include "expected_results.hpp"
 

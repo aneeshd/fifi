@@ -6,7 +6,6 @@
 #pragma once
 
 #include "final.hpp"
-#include "field_types.hpp"
 #include "simple_online_arithmetic.hpp"
 #include "polynomial_degree.hpp"
 

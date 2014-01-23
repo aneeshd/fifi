@@ -7,6 +7,13 @@
 
 #include <fifi/binary_packed_arithmetic.hpp>
 #include <fifi/final.hpp>
+
+#include <fifi/binary.hpp>
+#include <fifi/binary4.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/binary16.hpp>
+#include <fifi/prime2325.hpp>
+
 #include "helper_fall_through.hpp"
 
 namespace fifi

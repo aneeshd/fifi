@@ -7,7 +7,7 @@
 
 #include <sak/storage.hpp>
 
-#include "field_types.hpp"
+#include "prime2325.hpp"
 
 namespace fifi
 {

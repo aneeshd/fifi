@@ -6,7 +6,8 @@
 #include <gtest/gtest.h>
 
 #include <fifi/is_valid_element.hpp>
-#include <fifi/field_types.hpp>
+#include <fifi/binary.hpp>
+#include <fifi/binary4.hpp>
 
 TEST(TestIsValidElement, api)
 {

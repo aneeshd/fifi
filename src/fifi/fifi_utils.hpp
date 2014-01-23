@@ -7,7 +7,7 @@
 
 #include <sak/ceil_division.hpp>
 
-#include "field_types.hpp"
+#include "binary.hpp"
 
 namespace fifi
 {
@@ -192,7 +192,7 @@ namespace fifi
     }
 
     /// Usefull abstraction function for swapping two field elements
-    /// @param elements, elements to manipulate
+    /// @param elements elements to manipulate
     /// @param index1,index2 indexes of elements to swap
     template<class Field>
     inline void swap_values(typename Field::value_type* elements,
@@ -208,16 +208,12 @@ namespace fifi
         set_value<Field>(elements, index2, value1);
     }
 
-    /// @todo unit test
-    /// Usefull abstraction function for swapping two field elements
-    /// @param elements, elements to manipulate
+    /// @todo unit test and write description
     template<class Field>
     inline void print_polynomial(
         std::ostream& out, typename Field::value_type element)
     {
-        typedef typename Field::degree_type degree_type;
         assert(0);
-
     }
 
     template<class Value>

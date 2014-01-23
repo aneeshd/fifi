@@ -9,7 +9,7 @@
 
 #include "fifi_utils.hpp"
 #include "is_valid_element.hpp"
-#include "field_types.hpp"
+#include "binary.hpp"
 
 namespace fifi
 {

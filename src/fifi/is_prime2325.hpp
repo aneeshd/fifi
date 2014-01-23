@@ -8,7 +8,7 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-#include "field_types.hpp"
+#include "prime2325.hpp"
 
 namespace fifi
 {

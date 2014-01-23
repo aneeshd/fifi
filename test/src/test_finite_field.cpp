@@ -14,6 +14,11 @@
 #include <fifi/log_table.hpp>
 #include <fifi/optimal_prime.hpp>
 
+#include <fifi/binary.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/binary16.hpp>
+#include <fifi/prime2325.hpp>
+
 template<class FiniteField>
 void finite_field_construct_helper(FiniteField &finite_field)
 {

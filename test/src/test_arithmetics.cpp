@@ -9,7 +9,12 @@
 #include <fifi/full_table.hpp>
 #include <fifi/log_table.hpp>
 #include <fifi/extended_log_table.hpp>
-#include <fifi/field_types.hpp>
+
+#include <fifi/binary.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/binary16.hpp>
+#include <fifi/prime2325.hpp>
+
 #include <fifi/arithmetics.hpp>
 #include <fifi/default_field.hpp>
 

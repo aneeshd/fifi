@@ -9,6 +9,12 @@
 #include "helper_fall_through.hpp"
 #include "helper_catch_all.hpp"
 
+#include <fifi/binary.hpp>
+#include <fifi/binary4.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/binary16.hpp>
+#include <fifi/prime2325.hpp>
+
 namespace fifi
 {
     namespace {

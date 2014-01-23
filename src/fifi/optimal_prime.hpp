@@ -5,9 +5,9 @@
 
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
 
-#include "field_types.hpp"
+#include "prime2325.hpp"
 
 namespace fifi
 {

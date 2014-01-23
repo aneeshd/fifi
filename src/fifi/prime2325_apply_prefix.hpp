@@ -5,7 +5,8 @@
 
 #pragma once
 
-#include "field_types.hpp"
+#include <cstdint>
+#include <cassert>
 
 namespace fifi
 {

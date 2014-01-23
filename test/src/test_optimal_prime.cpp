@@ -6,7 +6,8 @@
 #include <gtest/gtest.h>
 
 #include <fifi/optimal_prime.hpp>
-#include <fifi/field_types.hpp>
+
+#include <fifi/prime2325.hpp>
 
 #include "expected_results.hpp"
 

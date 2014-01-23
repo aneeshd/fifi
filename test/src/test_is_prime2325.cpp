@@ -6,6 +6,10 @@
 #include <gtest/gtest.h>
 
 #include <fifi/is_prime2325.hpp>
+#include <fifi/binary.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/binary16.hpp>
+#include <fifi/prime2325.hpp>
 
 TEST(TestIsPrime2325, is_prime2325)
 {

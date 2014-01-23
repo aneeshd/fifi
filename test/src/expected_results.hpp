@@ -7,7 +7,10 @@
 
 #include <cstdlib>
 
-#include <fifi/field_types.hpp>
+#include <fifi/binary4.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/binary16.hpp>
+#include <fifi/prime2325.hpp>
 
 // The expected result of an arithmetic operation
 // e.g. result == operation(arg1, arg2).

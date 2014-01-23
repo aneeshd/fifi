@@ -8,7 +8,10 @@
 
 #include <fifi/finite_field.hpp>
 #include <fifi/fifi_utils.hpp>
-
+#include <fifi/binary.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/binary16.hpp>
+#include <fifi/prime2325.hpp>
 
 TEST(TestFifiUtils, elements_to_size)
 {

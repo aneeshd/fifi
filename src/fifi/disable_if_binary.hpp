@@ -7,7 +7,6 @@
 
 #include <boost/utility/enable_if.hpp>
 
-#include "field_types.hpp"
 #include "is_binary.hpp"
 
 namespace fifi

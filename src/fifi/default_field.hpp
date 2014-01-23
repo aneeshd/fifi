@@ -5,7 +5,11 @@
 
 #pragma once
 
-#include "field_types.hpp"
+#include "binary.hpp"
+#include "binary8.hpp"
+#include "binary16.hpp"
+#include "prime2325.hpp"
+
 #include "simple_online.hpp"
 #include "full_table.hpp"
 #include "extended_log_table.hpp"

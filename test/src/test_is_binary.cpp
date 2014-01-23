@@ -7,6 +7,11 @@
 
 #include <fifi/is_binary.hpp>
 
+#include <fifi/binary.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/binary16.hpp>
+#include <fifi/prime2325.hpp>
+
 TEST(TestIsBinary, is_binary)
 {
     EXPECT_TRUE(fifi::is_binary<fifi::binary>::value == true);
