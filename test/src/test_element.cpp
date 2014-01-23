@@ -10,7 +10,7 @@
 #include <fifi/full_table.hpp>
 #include <fifi/extended_log_table.hpp>
 #include <fifi/log_table.hpp>
-#include <fifi/optimal_prime.hpp>
+#include <fifi/optimal_prime_arithmetic.hpp>
 #include <fifi/element.hpp>
 #include <fifi/is_binary.hpp>
 
@@ -125,7 +125,7 @@ TEST(test_element, Extended_Log_Table_Binary16)
 
 TEST(test_element, Optimal_Prime_Prime2325)
 {
-    typedef fifi::optimal_prime<fifi::prime2325> field_type;
+    typedef fifi::optimal_prime_arithmetic<fifi::prime2325> field_type;
     fifi::finite_field<field_type> finite_field;
     element_construct_helper(finite_field);
 }

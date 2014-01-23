@@ -15,7 +15,7 @@
 
 namespace fifi
 {
-    /// Produces an extended log table for multiplication and division.
+    /// Produces an log table for multiplication and division.
     template<class Field, class Super>
     class log_table_arithmetic : public Super
     {

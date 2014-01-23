@@ -261,7 +261,7 @@ void test_functions(uint32_t length, uint32_t start_offset)
     test_functions< fifi::extended_log_table<fifi::binary16> >(
         length, start_offset);
 
-    test_functions< fifi::optimal_prime<fifi::prime2325> >(
+    test_functions< fifi::optimal_prime_arithmetic<fifi::prime2325> >(
         length, start_offset);
 
     // Just also run the default fields

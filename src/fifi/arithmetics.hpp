@@ -16,7 +16,7 @@
 #include "extended_log_table.hpp"
 #include "full_table.hpp"
 #include "is_binary.hpp"
-#include "optimal_prime.hpp"
+#include "optimal_prime_arithmetic.hpp"
 #include "disable_if_binary.hpp"
 
 // Certain applications e.g. Error Correcting Codes (ECC) perform specific
@@ -57,9 +57,9 @@ namespace fifi
 
     template<>
     inline void
-    add(const optimal_prime<prime2325> &/*field*/,
-        optimal_prime<prime2325>::value_type * __restrict dest,
-        const optimal_prime<prime2325>::value_type * __restrict src,
+    add(const optimal_prime_arithmetic<prime2325> &/*field*/,
+        optimal_prime_arithmetic<prime2325>::value_type * __restrict dest,
+        const optimal_prime_arithmetic<prime2325>::value_type * __restrict src,
         uint32_t length)
     {
         assert(dest != 0);
@@ -144,9 +144,9 @@ namespace fifi
 
     template<>
     inline void
-    subtract(const optimal_prime<prime2325> &/*field*/,
-             optimal_prime<prime2325>::value_type * __restrict dest,
-             const optimal_prime<prime2325>::value_type * __restrict src,
+    subtract(const optimal_prime_arithmetic<prime2325> &/*field*/,
+             optimal_prime_arithmetic<prime2325>::value_type * __restrict dest,
+             const optimal_prime_arithmetic<prime2325>::value_type * __restrict src,
              uint32_t length)
     {
         assert(dest != 0);
@@ -313,12 +313,13 @@ namespace fifi
 
     template<>
     inline void
-    multiply_add(const optimal_prime<prime2325> &field,
-                 optimal_prime<prime2325>::value_type constant,
-                 optimal_prime<prime2325>::value_type * __restrict dest,
-                 const optimal_prime<prime2325>::value_type * __restrict src,
-                 optimal_prime<prime2325>::value_type * __restrict temp,
-                 uint32_t length)
+    multiply_add(
+        const optimal_prime_arithmetic<prime2325> &field,
+        optimal_prime_arithmetic<prime2325>::value_type constant,
+        optimal_prime_arithmetic<prime2325>::value_type * __restrict dest,
+        const optimal_prime_arithmetic<prime2325>::value_type * __restrict src,
+        optimal_prime_arithmetic<prime2325>::value_type * __restrict temp,
+        uint32_t length)
     {
         assert(dest != 0);
         assert(src != 0);
@@ -460,12 +461,13 @@ namespace fifi
 
     template<>
     inline void
-    multiply_subtract(const optimal_prime<prime2325> &field,
-                      optimal_prime<prime2325>::value_type constant,
-                      optimal_prime<prime2325>::value_type * __restrict dest,
-                      const optimal_prime<prime2325>::value_type * __restrict src,
-                      optimal_prime<prime2325>::value_type * __restrict temp,
-                      uint32_t length)
+    multiply_subtract(
+        const optimal_prime_arithmetic<prime2325> &field,
+        optimal_prime_arithmetic<prime2325>::value_type constant,
+        optimal_prime_arithmetic<prime2325>::value_type * __restrict dest,
+        const optimal_prime_arithmetic<prime2325>::value_type * __restrict src,
+        optimal_prime_arithmetic<prime2325>::value_type * __restrict temp,
+        uint32_t length)
     {
         assert(dest != 0);
         assert(src != 0);

@@ -5,16 +5,17 @@
 
 #pragma once
 
+#include "binary_simple_online_arithmetic.hpp"
+#include "final.hpp"
+#include "log_table_arithmetic.hpp"
+#include "polynomial_degree.hpp"
+#include "simple_online_arithmetic.hpp"
+
 #include <algorithm>
 #include <cmath>
 #include <cassert>
 #include <stdint.h>
 #include <vector>
-
-#include "final.hpp"
-#include "simple_online_arithmetic.hpp"
-#include "log_table_arithmetic.hpp"
-#include "polynomial_degree.hpp"
 
 namespace fifi
 {
@@ -23,10 +24,11 @@ namespace fifi
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
     class log_table :
-        public log_table_arithmetic<Field,
-               simple_online_arithmetic<Field,
+        public binary_simple_online_arithmetic<Field,
+               log_table_arithmetic<Field,
+               simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > >
+               final<Field> > > > >
     { };
 
 

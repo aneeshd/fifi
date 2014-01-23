@@ -5,10 +5,11 @@
 
 #pragma once
 
-#include "final.hpp"
-#include "simple_online_arithmetic.hpp"
+#include "binary_simple_online_arithmetic.hpp"
 #include "extended_log_table_arithmetic.hpp"
+#include "final.hpp"
 #include "polynomial_degree.hpp"
+#include "simple_online_arithmetic.hpp"
 
 namespace fifi
 {
@@ -16,9 +17,10 @@ namespace fifi
     template<class Field>
     class extended_log_table :
         public extended_log_table_arithmetic<
-               simple_online_arithmetic<Field,
+               binary_simple_online_arithmetic<Field,
+               simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > >
+               final<Field> > > > >
     { };
 
 }

@@ -5,9 +5,10 @@
 
 #pragma once
 
+#include "binary_simple_online_arithmetic.hpp"
 #include "final.hpp"
-#include "simple_online_arithmetic.hpp"
 #include "polynomial_degree.hpp"
+#include "simple_online_arithmetic.hpp"
 
 namespace fifi
 {
@@ -16,9 +17,10 @@ namespace fifi
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
     class simple_online :
-        public simple_online_arithmetic<Field,
+        public binary_simple_online_arithmetic<Field,
+               simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > >
+               final<Field> > > >
     { };
 
 }

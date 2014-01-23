@@ -21,7 +21,7 @@
 #include <fifi/full_table.hpp>
 #include <fifi/log_table.hpp>
 #include <fifi/extended_log_table.hpp>
-#include <fifi/optimal_prime.hpp>
+#include <fifi/optimal_prime_arithmetic.hpp>
 #include <fifi/binary8.hpp>
 #include <fifi/binary16.hpp>
 #include <fifi/prime2325.hpp>
@@ -466,7 +466,7 @@ BENCHMARK_F(setup_extended_log_table_binary16, Arithmetic, ExtendedLogTable16, 5
 }
 
 
-typedef arithmetic_setup< fifi::optimal_prime<fifi::prime2325> >
+typedef arithmetic_setup< fifi::optimal_prime_arithmetic<fifi::prime2325> >
 setup_optimal_prime2325;
 
 BENCHMARK_F(setup_optimal_prime2325, Arithmetic, OptimalPrime2325, 5)

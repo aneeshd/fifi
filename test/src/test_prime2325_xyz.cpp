@@ -10,7 +10,6 @@
 
 #include <sak/storage.hpp>
 
-#include <fifi/optimal_prime.hpp>
 #include <fifi/prime2325.hpp>
 #include <fifi/prime2325_bitmap.hpp>
 #include <fifi/prime2325_binary_search.hpp>
