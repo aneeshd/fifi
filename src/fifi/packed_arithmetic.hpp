@@ -58,7 +58,7 @@ namespace fifi
         /// @copydoc finite_field::add()
         value_type packed_add(value_type a, value_type b) const
         {
-            return Super::packed_add(a, b);
+            return Super::add(a, b);
         }
 
         /// @copydoc finite_field::subtract()
