@@ -7,7 +7,7 @@
 
 namespace fifi
 {
-    template<class Field, class Super>
+    template<class Field>
     struct helper_fallthrough
     {
 
@@ -17,39 +17,37 @@ namespace fifi
 
         value_type packed_multiply(value_type a, value_type b) const
         {
+            (void) b;
             m_fallthrough = true;
-            return Super::packed_multiply(a, b);
+            return a;
         }
 
         value_type packed_divide(value_type numerator,
                                  value_type denominator) const
         {
-            (void) numerator;
             (void) denominator;
             m_fallthrough = true;
-            return Super::packed_divide(numerator, denominator);
+            return numerator;
         }
 
         value_type packed_invert(value_type a) const
         {
             m_fallthrough = true;
-            return Super::packed_invert(a);
+            return a;
         }
 
         value_type packed_add(value_type a, value_type b) const
         {
-            (void) a;
             (void) b;
             m_fallthrough = true;
-            return Super::packed_add(a, b);
+            return a;
         }
 
         value_type packed_subtract(value_type a, value_type b) const
         {
             (void) a;
-            (void) b;
             m_fallthrough = true;
-            return Super::packed_subtract(a, b);
+            return b;
         }
 
         mutable bool m_fallthrough;

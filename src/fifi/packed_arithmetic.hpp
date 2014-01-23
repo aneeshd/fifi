@@ -64,7 +64,7 @@ namespace fifi
         /// @copydoc finite_field::subtract()
         value_type packed_subtract(value_type a, value_type b) const
         {
-            return Super::packed_subract(a, b);
+            return Super::subract(a, b);
         }
 
     };

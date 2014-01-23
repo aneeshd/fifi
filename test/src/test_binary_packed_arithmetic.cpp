@@ -6,15 +6,24 @@
 #include <gtest/gtest.h>
 
 #include <fifi/binary_packed_arithmetic.hpp>
+#include "helper_fallthrough.hpp"
 
-#include "helper_fallthrough_stack.hpp"
+namespace fifi
+{
+    namespace {
+        template<class Field>
+        struct helper_fallthrough_stack : public
+        binary_packed_arithmetic<Field, helper_fallthrough<Field> >
+        { };
+    }
+}
 
-template<Arithmetic, class Field>
+template<class Field>
 void test_field()
 {
     typedef typename Field::value_type value_type;
 
-    fifi::helper_fallthrough_stack<Arithmetic, Field> stack;
+    fifi::helper_fallthrough_stack<Field> stack;
     value_type value = 1;
 
     stack.m_fallthrough = false;
@@ -39,12 +48,12 @@ void test_field()
 
 }
 
-template<class Arithmetic>
+template<>
 void test_field<fifi::binary>()
 {
     typedef fifi::binary::value_type value_type;
 
-    fifi::helper_fallthrough_stack<Arithmetic, fifi::binary> stack;
+    fifi::helper_fallthrough_stack<fifi::binary> stack;
 
     // Create an all ones value (zero negated) since invert and divide
     // only works with all ones for the binary case
@@ -74,9 +83,9 @@ void test_field<fifi::binary>()
 
 TEST(TestBinaryPackedArithmetic, api)
 {
-    test_field<fifi::binary_packed_arithmetic, fifi::binary>();
-    test_field<fifi::binary_packed_arithmetic, fifi::binary4>();
-    test_field<fifi::binary_packed_arithmetic, fifi::binary8>();
-    test_field<fifi::binary_packed_arithmetic, fifi::binary16>();
-    test_field<fifi::binary_packed_arithmetic, fifi::prime2325>();
+    test_field<fifi::binary>();
+    test_field<fifi::binary4>();
+    test_field<fifi::binary8>();
+    test_field<fifi::binary16>();
+    test_field<fifi::prime2325>();
 }
