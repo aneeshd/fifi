@@ -14,6 +14,8 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
+#include "is_valid_element.hpp"
+
 namespace fifi
 {
     /// Produces a full lookup table of the multiplication and

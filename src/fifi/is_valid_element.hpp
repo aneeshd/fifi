@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <type_traits>
 #include "is_value_type_exact.hpp"
 
 namespace fifi

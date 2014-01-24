@@ -5,10 +5,11 @@
 
 #pragma once
 
-#include <sak/storage.hpp>
-
-#include <cstdint>
 #include <cassert>
+#include <cstdint>
+#include <ostream>
+
+#include <sak/storage.hpp>
 
 #include "prime2325.hpp"
 

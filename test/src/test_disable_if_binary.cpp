@@ -3,4 +3,4 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <fifi/log_table_arithmetic.hpp>
+#include <fifi/disable_if_binary.hpp>

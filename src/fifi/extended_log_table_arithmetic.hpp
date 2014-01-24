@@ -10,6 +10,8 @@
 #include <cassert>
 #include <cstdint>
 
+#include "is_valid_element.hpp"
+
 namespace fifi
 {
 

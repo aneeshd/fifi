@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <ostream>
+
 #include <sak/ceil_division.hpp>
 
 #include "binary.hpp"

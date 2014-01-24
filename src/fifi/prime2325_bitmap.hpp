@@ -5,6 +5,9 @@
 
 #pragma once
 
+#include <limits>
+#include <ostream>
+
 #include <sak/storage.hpp>
 
 #include "prime2325.hpp"

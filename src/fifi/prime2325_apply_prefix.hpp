@@ -8,6 +8,8 @@
 #include <cstdint>
 #include <cassert>
 
+#include <sak/storage.hpp>
+
 namespace fifi
 {
 

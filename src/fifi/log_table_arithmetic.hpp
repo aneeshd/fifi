@@ -11,6 +11,7 @@
 #include <cstdint>
 #include <vector>
 
+#include "is_valid_element.hpp"
 #include "sum_modulo.hpp"
 
 namespace fifi
