@@ -4,3 +4,9 @@
 // http://www.steinwurf.com/licensing
 
 #include <fifi/prime2325_apply_prefix.hpp>
+#include <gtest/gtest.h>
+
+TEST(prime2325_apply_prefix, prime2325_apply_prefix)
+{
+    /// @todo test this properly.
+}

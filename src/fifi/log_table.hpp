@@ -14,7 +14,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cassert>
-#include <stdint.h>
+#include <cstdint>
 #include <vector>
 
 namespace fifi

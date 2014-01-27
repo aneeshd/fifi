@@ -6,7 +6,7 @@
 #pragma once
 
 #include <cstdint>
-#include <limits>
+
 
 namespace fifi
 {
@@ -33,17 +33,16 @@ namespace fifi
         typedef uint32_t degree_type;
 
         /// The maximum decimal value of any field element
-        const static value_type max_value = 1;
+        const static value_type max_value;
 
         /// The minimum decimal value for any field element
-        const static value_type min_value = 0;
+        const static value_type min_value;
 
         /// The field order i.e. number of field elements
-        const static order_type order = 2;
+        const static order_type order;
 
         /// The number of bits in a value_type
-        const static uint32_t bits_per_value =
-            std::numeric_limits<value_type>::digits;
+        const static uint32_t bits_per_value;
 
     };
 }

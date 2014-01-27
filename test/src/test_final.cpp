@@ -4,3 +4,9 @@
 // http://www.steinwurf.com/licensing
 
 #include <fifi/final.hpp>
+#include <gtest/gtest.h>
+
+TEST(final, final)
+{
+    std::cout << "final" << std::endl;
+}

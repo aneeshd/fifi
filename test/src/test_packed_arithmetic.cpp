@@ -4,3 +4,9 @@
 // http://www.steinwurf.com/licensing
 
 #include <fifi/packed_arithmetic.hpp>
+#include <gtest/gtest.h>
+
+TEST(packed_arithmetic, packed_arithmetic)
+{
+    std::cout << "packed_arithmetic" << std::endl;
+}

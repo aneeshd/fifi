@@ -6,6 +6,7 @@
 #pragma once
 
 #include <ostream>
+#include <limits>
 
 #include <sak/ceil_division.hpp>
 

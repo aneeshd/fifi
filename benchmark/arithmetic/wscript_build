@@ -5,6 +5,6 @@ bld.program(
     features = 'cxx benchmark',
     source   = ['main.cpp'],
     target   = 'fifi_arithmetic_benchmarks',
-    use      = ['gtest','fifi_includes','boost_includes',
+    use      = ['gtest', 'fifi', 'fifi_includes','boost_includes',
                 'sak_includes', 'boost_timer', 'boost_system',
                 'boost_chrono', 'gauge'])

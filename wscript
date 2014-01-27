@@ -103,5 +103,7 @@ def build(bld):
         bld.recurse('benchmark/arithmetic')
         bld.recurse('benchmark/prime2325')
 
+    bld.recurse('src/fifi')
+
 
 

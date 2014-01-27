@@ -4,3 +4,9 @@
 // http://www.steinwurf.com/licensing
 
 #include <fifi/full_table_arithmetic.hpp>
+#include <gtest/gtest.h>
+
+TEST(full_table_arithmetic, full_table_arithmetic)
+{
+    std::cout << "full_table_arithmetic" << std::endl;
+}

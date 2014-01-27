@@ -51,5 +51,4 @@ namespace fifi
     {
         apply_prefix(sequence.begin(), sequence.end(), prefix);
     }
-
 }

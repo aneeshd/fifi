@@ -4,3 +4,19 @@
 // http://www.steinwurf.com/licensing
 
 #include <fifi/prime2325.hpp>
+#include <gtest/gtest.h>
+
+TEST(test_prime2325, prefix_length)
+{
+    // 2^y => 1 << y
+
+    // In 8 bits we can write 256 distinct bit values so 8 bit should
+    // be enough for a block length of 255 etc.
+    EXPECT_EQ(fifi::prime2325::prefix_length(127), 7U);
+    EXPECT_EQ(fifi::prime2325::prefix_length(128), 8U);
+    EXPECT_EQ(fifi::prime2325::prefix_length(255), 8U);
+    EXPECT_EQ(fifi::prime2325::prefix_length(256), 9U);
+    EXPECT_EQ(fifi::prime2325::prefix_length(511), 9U);
+    EXPECT_EQ(fifi::prime2325::prefix_length(512), 10U);
+    EXPECT_EQ(fifi::prime2325::prefix_length((1<<29) - 1), 29U);
+}

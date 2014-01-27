@@ -4,3 +4,9 @@
 // http://www.steinwurf.com/licensing
 
 #include <fifi/binary8.hpp>
+#include <gtest/gtest.h>
+
+TEST(binary8, binary8)
+{
+    std::cout << "binary8" << std::endl;
+}
