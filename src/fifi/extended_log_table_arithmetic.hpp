@@ -6,9 +6,10 @@
 #pragma once
 
 #include <algorithm>
-#include <cmath>
 #include <cassert>
+#include <cmath>
 #include <cstdint>
+#include <vector>
 
 #include "is_valid_element.hpp"
 
