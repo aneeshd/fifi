@@ -10,8 +10,8 @@
 
 TEST(test_binary, binary)
 {
-    EXPECT_EQ(fifi::binary::value_type(1), fifi::binary::max_value);
-    EXPECT_EQ(fifi::binary::value_type(0), fifi::binary::min_value);
-    EXPECT_EQ(fifi::binary::order_type(2), fifi::binary::order);
-    EXPECT_EQ(uint32_t(8), fifi::binary::bits_per_value);
+    EXPECT_EQ(1U, fifi::binary::max_value);
+    EXPECT_EQ(0U, fifi::binary::min_value);
+    EXPECT_EQ(2U, fifi::binary::order);
+    EXPECT_EQ(8U, fifi::binary::bits_per_value);
 }

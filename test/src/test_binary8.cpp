@@ -8,9 +8,9 @@
 
 TEST(test_binary8, binary8)
 {
-    EXPECT_EQ(fifi::binary8::value_type(255), fifi::binary8::max_value);
-    EXPECT_EQ(fifi::binary8::value_type(0), fifi::binary8::min_value);
-    EXPECT_EQ(fifi::binary8::order_type(256), fifi::binary8::order);
-    EXPECT_EQ(fifi::binary8::degree_type(8), fifi::binary8::degree);
-    EXPECT_EQ(fifi::binary8::value_type(29), fifi::binary8::prime);
+    EXPECT_EQ(255U, fifi::binary8::max_value);
+    EXPECT_EQ(0U, fifi::binary8::min_value);
+    EXPECT_EQ(256U, fifi::binary8::order);
+    EXPECT_EQ(8U, fifi::binary8::degree);
+    EXPECT_EQ(29U, fifi::binary8::prime);
 }

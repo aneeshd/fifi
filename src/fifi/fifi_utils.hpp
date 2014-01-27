@@ -211,14 +211,6 @@ namespace fifi
         set_value<Field>(elements, index2, value1);
     }
 
-    /// @todo unit test and write description
-    template<class Field>
-    inline void print_polynomial(
-        std::ostream& out, typename Field::value_type element)
-    {
-        assert(0);
-    }
-
     template<class Value>
     inline void print_bits(std::ostream& out, Value element)
     {

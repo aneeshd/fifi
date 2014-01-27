@@ -72,7 +72,7 @@ TEST(TestFifiUtils, length_to_size)
 
     EXPECT_EQ(fifi::length_to_size<fifi::binary>(1), 1U);
     EXPECT_EQ(fifi::length_to_size<fifi::binary>(3), 1U);
-    EXPECT_EQ(fifi::length_to_size<fifi::binary>(7), 1);
+    EXPECT_EQ(fifi::length_to_size<fifi::binary>(7), 1U);
     EXPECT_EQ(fifi::length_to_size<fifi::binary>(12), 2U);
     EXPECT_EQ(fifi::length_to_size<fifi::binary>(345), 44U);
     EXPECT_EQ(fifi::length_to_size<fifi::binary>(1024), 128U);

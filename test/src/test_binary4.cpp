@@ -8,9 +8,9 @@
 
 TEST(test_binary4, binary4)
 {
-    EXPECT_EQ(fifi::binary4::value_type(15), fifi::binary4::max_value);
-    EXPECT_EQ(fifi::binary4::value_type(0), fifi::binary4::min_value);
-    EXPECT_EQ(fifi::binary4::order_type(16), fifi::binary4::order);
-    EXPECT_EQ(fifi::binary4::degree_type(4), fifi::binary4::degree);
-    EXPECT_EQ(fifi::binary4::value_type(3), fifi::binary4::prime);
+    EXPECT_EQ(15U, fifi::binary4::max_value);
+    EXPECT_EQ(0U, fifi::binary4::min_value);
+    EXPECT_EQ(16U, fifi::binary4::order);
+    EXPECT_EQ(4U, fifi::binary4::degree);
+    EXPECT_EQ(3U, fifi::binary4::prime);
 }
