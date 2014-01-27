@@ -6,7 +6,11 @@
 #include <fifi/binary8.hpp>
 #include <gtest/gtest.h>
 
-TEST(binary8, binary8)
+TEST(test_binary8, binary8)
 {
-    std::cout << "binary8" << std::endl;
+    EXPECT_EQ(fifi::binary8::value_type(255), fifi::binary8::max_value);
+    EXPECT_EQ(fifi::binary8::value_type(0), fifi::binary8::min_value);
+    EXPECT_EQ(fifi::binary8::order_type(256), fifi::binary8::order);
+    EXPECT_EQ(fifi::binary8::degree_type(8), fifi::binary8::degree);
+    EXPECT_EQ(fifi::binary8::value_type(29), fifi::binary8::prime);
 }

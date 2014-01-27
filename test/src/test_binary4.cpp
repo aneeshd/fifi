@@ -6,7 +6,11 @@
 #include <fifi/binary4.hpp>
 #include <gtest/gtest.h>
 
-TEST(binary4, binary4)
+TEST(test_binary4, binary4)
 {
-    std::cout << "binary4" << std::endl;
+    EXPECT_EQ(fifi::binary4::value_type(15), fifi::binary4::max_value);
+    EXPECT_EQ(fifi::binary4::value_type(0), fifi::binary4::min_value);
+    EXPECT_EQ(fifi::binary4::order_type(16), fifi::binary4::order);
+    EXPECT_EQ(fifi::binary4::degree_type(4), fifi::binary4::degree);
+    EXPECT_EQ(fifi::binary4::value_type(3), fifi::binary4::prime);
 }
