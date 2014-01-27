@@ -14,7 +14,7 @@
 #include <gtest/gtest.h>
 
 // Simple test for simple class.
-TEST(test_final, final)
+TEST(TestFinal, final)
 {
     fifi::final<fifi::binary> f_binary;
     fifi::final<fifi::binary4> f_binary4;

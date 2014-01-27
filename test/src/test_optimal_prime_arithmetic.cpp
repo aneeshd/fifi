@@ -11,32 +11,32 @@
 
 #include "expected_results.hpp"
 
-TEST(test_optimal_prime_arithmetic, multiply)
+TEST(TestOptimalPrimeArithmetic, multiply)
 {
     check_results_multiply<fifi::optimal_prime_arithmetic<fifi::prime2325> >();
 }
 
-TEST(test_optimal_prime_arithmetic, divide2325)
+TEST(TestOptimalPrimeArithmetic, divide2325)
 {
     check_results_divide<fifi::optimal_prime_arithmetic<fifi::prime2325> >();
 }
 
-TEST(test_optimal_prime_arithmetic, add2325)
+TEST(TestOptimalPrimeArithmetic, add2325)
 {
     check_results_add<fifi::optimal_prime_arithmetic<fifi::prime2325> >();
 }
 
-TEST(test_optimal_prime_arithmetic, subtract2325)
+TEST(TestOptimalPrimeArithmetic, subtract2325)
 {
     check_results_subtract<fifi::optimal_prime_arithmetic<fifi::prime2325> >();
 }
 
-TEST(test_optimal_prime_arithmetic, invert2325)
+TEST(TestOptimalPrimeArithmetic, invert2325)
 {
     check_results_invert<fifi::optimal_prime_arithmetic<fifi::prime2325> >();
 }
 
-TEST(test_optimal_prime_arithmetic, prime2325randCheck)
+TEST(TestOptimalPrimeArithmetic, prime2325randCheck)
 {
     fifi::optimal_prime_arithmetic<fifi::prime2325> optimal;
 

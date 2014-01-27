@@ -6,7 +6,7 @@
 #include <fifi/polynomial_degree.hpp>
 #include <gtest/gtest.h>
 
-TEST(polynomial_degree, polynomial_degree)
+TEST(TestPolynomialDegree, polynomial_degree)
 {
     std::cout << "polynomial_degree" << std::endl;
 }

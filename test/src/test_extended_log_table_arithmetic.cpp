@@ -6,7 +6,7 @@
 #include <fifi/extended_log_table_arithmetic.hpp>
 #include <gtest/gtest.h>
 
-TEST(extended_log_table_arithmetic, extended_log_table_arithmetic)
+TEST(TestExtendedLogTableArithmetic, extended_log_table_arithmetic)
 {
     std::cout << "extended_log_table_arithmetic" << std::endl;
 }

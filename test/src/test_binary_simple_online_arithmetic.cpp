@@ -6,7 +6,7 @@
 #include <fifi/binary_simple_online_arithmetic.hpp>
 #include <gtest/gtest.h>
 
-TEST(binary_simple_online_arithmetic, binary_simple_online_arithmetic)
+TEST(BinarySimpleOnlineArithmetic, binary_simple_online_arithmetic)
 {
     std::cout << "binary_simple_online_arithmetic" << std::endl;
 }

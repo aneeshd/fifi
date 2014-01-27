@@ -8,7 +8,7 @@
 
 #include <fifi/binary.hpp>
 
-TEST(test_binary, binary)
+TEST(TestBinary, binary)
 {
     EXPECT_EQ(1U, fifi::binary::max_value);
     EXPECT_EQ(0U, fifi::binary::min_value);

@@ -6,7 +6,7 @@
 #include <fifi/disable_if_binary.hpp>
 #include <gtest/gtest.h>
 
-TEST(disable_if_binary, disable_if_binary)
+TEST(DisableIfBinary, disable_if_binary)
 {
     std::cout << "disable_if_binary" << std::endl;
 }

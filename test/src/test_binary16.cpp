@@ -6,7 +6,7 @@
 #include <fifi/binary16.hpp>
 #include <gtest/gtest.h>
 
-TEST(test_binary16, binary16)
+TEST(TestBinary16, binary16)
 {
     EXPECT_EQ(65535U, fifi::binary16::max_value);
     EXPECT_EQ(0U, fifi::binary16::min_value);
