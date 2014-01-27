@@ -31,10 +31,9 @@ namespace fifi
     {
         typedef typename Field::value_type value_type;
 
-        const static bool value;
+        enum check
+        {
+            value = (Field::max_value == std::numeric_limits<value_type>::max())
+        };
     };
-
-    template<class Field>
-    const is_value_type_exact::value =
-        (Field::max_value == std::numeric_limits<value_type>::max());
 }
