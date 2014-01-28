@@ -61,22 +61,21 @@ const expected_result_binary<fifi::binary>
 subtract_results<fifi::binary>::m_results[] =
 {
     // m_input1, m_input2, m_result
-    {0, 0, 0},
-    {1, 1, 0},
-    {1, 0, 1},
-    {0, 1, 0}
+    { 1, 1, 0},
+    { 0, 0, 0},
+    { 0, 1, 1},
+    { 1, 0, 1}
 };
 
 const uint32_t subtract_results<fifi::binary>::m_size =
     dimension_of(subtract_results<fifi::binary>::m_results);
 
-
+// Zero has no inverse and one is its own inverse
 const expected_result_unary<fifi::binary>
 invert_results<fifi::binary>::m_results[] =
 {
     // m_input1, m_result
-    { 1, 0},
-    { 0, 1}
+    { 1, 1}
 };
 
 const uint32_t invert_results<fifi::binary>::m_size =

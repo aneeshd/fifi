@@ -6,26 +6,35 @@
 #include <gtest/gtest.h>
 
 #include <fifi/simple_online.hpp>
+#include <fifi/binary.hpp>
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
 #include <fifi/binary16.hpp>
+#include <fifi/prime2325.hpp>
 
-#include "expected_results.hpp"
+#include "helper_test_arithmetic.hpp"
 
-template<class Field>
-inline void test_simple_online()
+TEST(TestSimpleOnline, add)
 {
-    check_results_multiply<fifi::simple_online<Field> >();
-    check_results_invert<fifi::simple_online<Field> >();
-    check_results_divide<fifi::simple_online<Field> >();
-    check_results_add<fifi::simple_online<Field> >();
-    check_results_subtract<fifi::simple_online<Field> >();
-    check_random<fifi::simple_online<Field> >();
+    fifi::check_add<fifi::simple_online>();
 }
 
-TEST(TestSimpleOnline, api)
+TEST(TestSimpleOnline, subtract)
 {
-    test_simple_online<fifi::binary4>();
-    test_simple_online<fifi::binary8>();
-    test_simple_online<fifi::binary16>();
+    fifi::check_subtract<fifi::simple_online>();
+}
+
+TEST(TestSimpleOnline, multiply)
+{
+    fifi::check_multiply<fifi::simple_online>();
+}
+
+TEST(TestSimpleOnline, divide)
+{
+    fifi::check_divide<fifi::simple_online>();
+}
+
+TEST(TestSimpleOnline, invert)
+{
+    fifi::check_invert<fifi::simple_online>();
 }
