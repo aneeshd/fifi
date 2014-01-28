@@ -3,10 +3,60 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <fifi/binary_simple_online_arithmetic.hpp>
+
 #include <gtest/gtest.h>
 
-TEST(BinarySimpleOnlineArithmetic, binary_simple_online_arithmetic)
+#include <fifi/binary.hpp>
+#include <fifi/binary4.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/binary16.hpp>
+#include <fifi/binary_simple_online_arithmetic.hpp>
+#include <fifi/final.hpp>
+#include <fifi/prime2325.hpp>
+
+#include "helper_catch_all.hpp"
+#include "helper_fall_through.hpp"
+#include "helper_test_arithmetic.hpp"
+#include "expected_results.hpp"
+
+namespace fifi
 {
-    std::cout << "binary_simple_online_arithmetic" << std::endl;
+    namespace {
+        template<class Field>
+        struct dummy_stack : public
+        binary_simple_online_arithmetic<Field,
+        helper_fall_through<Field,
+        helper_catch_all<Field> > >
+        { };
+    }
 }
+
+TEST(TestBinarySimpleOnlineArithmetic, fall_through)
+{
+    fifi::helper_fall_through_test<fifi::binary,
+        fifi::dummy_stack<fifi::binary> >(true, true, false, false, false);
+    fifi::helper_fall_through_test<fifi::binary4,
+        fifi::dummy_stack<fifi::binary4> >();
+    fifi::helper_fall_through_test<fifi::binary8,
+        fifi::dummy_stack<fifi::binary8> >();
+    fifi::helper_fall_through_test<fifi::binary16,
+        fifi::dummy_stack<fifi::binary16> >();
+    fifi::helper_fall_through_test<fifi::prime2325,
+        fifi::dummy_stack<fifi::prime2325> >();
+}
+
+TEST(TestBinarySimpleOnlineArithmetic, multiply)
+{
+    check_results_multiply<fifi::dummy_stack<fifi::binary> >();
+}
+
+TEST(TestBinarySimpleOnlineArithmetic, divide)
+{
+    check_results_divide<fifi::dummy_stack<fifi::binary>>();
+}
+
+TEST(TestBinarySimpleOnlineArithmetic, invert)
+{
+    check_results_invert<fifi::dummy_stack<fifi::binary>>();
+}
+

@@ -53,4 +53,14 @@ namespace fifi
         check_results_region_invert<FieldImpl<fifi::binary8> >();
         check_results_region_invert<FieldImpl<fifi::binary16> >();
     }
+
+    template<class FieldImpl>
+    void check_all()
+    {
+        check_results_region_multiply<FieldImpl>();
+        check_results_region_divide<FieldImpl>();
+        check_results_region_add<FieldImpl>();
+        check_results_region_subtract<FieldImpl>();
+        check_results_region_invert<FieldImpl>();
+    }
 }

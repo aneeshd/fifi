@@ -14,30 +14,30 @@
 #include <fifi/binary16.hpp>
 #include <fifi/prime2325.hpp>
 
-#include "helper_fall_through.hpp"
+#include "helper_packed_fall_through.hpp"
 
 namespace fifi
 {
     namespace {
         template<class Field>
-        struct helper_fall_through_stack : public
+        struct dummy_stack : public
         binary_packed_arithmetic<Field,
-        helper_fall_through<Field,
+        helper_packed_fall_through<Field,
         final<Field> > >
         { };
     }
 }
 
-TEST(TestBinaryPackedArithmetic, api)
+TEST(TestBinaryPackedArithmetic, fall_through)
 {
-    fifi::helper_fall_through_test<fifi::binary,
-        fifi::helper_fall_through_stack<fifi::binary> >(false);
-    fifi::helper_fall_through_test<fifi::binary4,
-        fifi::helper_fall_through_stack<fifi::binary4> >(true);
-    fifi::helper_fall_through_test<fifi::binary8,
-        fifi::helper_fall_through_stack<fifi::binary8> >(true);
-    fifi::helper_fall_through_test<fifi::binary16,
-        fifi::helper_fall_through_stack<fifi::binary16> >(true);
-    fifi::helper_fall_through_test<fifi::prime2325,
-        fifi::helper_fall_through_stack<fifi::prime2325> >(true);
+    fifi::helper_packed_fall_through_test<fifi::binary,
+        fifi::dummy_stack<fifi::binary> >(false, false, false, false, false);
+    fifi::helper_packed_fall_through_test<fifi::binary4,
+        fifi::dummy_stack<fifi::binary4> >();
+    fifi::helper_packed_fall_through_test<fifi::binary8,
+        fifi::dummy_stack<fifi::binary8> >();
+    fifi::helper_packed_fall_through_test<fifi::binary16,
+        fifi::dummy_stack<fifi::binary16> >();
+    fifi::helper_packed_fall_through_test<fifi::prime2325,
+        fifi::dummy_stack<fifi::prime2325> >();
 }
