@@ -158,14 +158,14 @@ template<class FieldImpl>
 inline void check_results_packed_divide()
 {
     typename method<FieldImpl>::binary divide = &FieldImpl::packed_divide;
-    check_results_binary<FieldImpl, divide_results, DEFAULT>(divide);
+    check_results_binary<FieldImpl, divide_results, PACKED>(divide);
 }
 
 template<class FieldImpl>
 inline void check_results_region_divide()
 {
     typename method<FieldImpl>::binary divide = &FieldImpl::region_divide;
-    check_results_binary<FieldImpl, divide_results, DEFAULT>(divide);
+    check_results_binary<FieldImpl, divide_results, REGION>(divide);
 }
 
 //------------------------------------------------------------------
@@ -186,14 +186,14 @@ template<class FieldImpl>
 inline void check_results_packed_add()
 {
     typename method<FieldImpl>::binary add = &FieldImpl::packed_add;
-    check_results_binary<FieldImpl, add_results, DEFAULT>(add);
+    check_results_binary<FieldImpl, add_results, PACKED>(add);
 }
 
 template<class FieldImpl>
 inline void check_results_region_add()
 {
     typename method<FieldImpl>::binary add = &FieldImpl::region_add;
-    check_results_binary<FieldImpl, add_results, DEFAULT>(add);
+    check_results_binary<FieldImpl, add_results, REGION>(add);
 }
 
 //------------------------------------------------------------------
@@ -214,14 +214,14 @@ template<class FieldImpl>
 inline void check_results_packed_subtract()
 {
     typename method<FieldImpl>::binary subtract = &FieldImpl::packed_subtract;
-    check_results_binary<FieldImpl, subtract_results, DEFAULT>(subtract);
+    check_results_binary<FieldImpl, subtract_results, PACKED>(subtract);
 }
 
 template<class FieldImpl>
 inline void check_results_region_subtract()
 {
     typename method<FieldImpl>::binary subtract = &FieldImpl::region_subtract;
-    check_results_binary<FieldImpl, subtract_results, DEFAULT>(subtract);
+    check_results_binary<FieldImpl, subtract_results, REGION>(subtract);
 }
 
 //------------------------------------------------------------------
@@ -242,14 +242,14 @@ template<class FieldImpl>
 inline void check_results_packed_invert()
 {
     typename method<FieldImpl>::unary invert = &FieldImpl::packed_invert;
-    check_results_unary<FieldImpl, invert_results, DEFAULT>(invert);
+    check_results_unary<FieldImpl, invert_results, PACKED>(invert);
 }
 
 template<class FieldImpl>
 inline void check_results_region_invert()
 {
     typename method<FieldImpl>::unary invert = &FieldImpl::region_invert;
-    check_results_unary<FieldImpl, invert_results, DEFAULT>(invert);
+    check_results_unary<FieldImpl, invert_results, REGION>(invert);
 }
 
 //------------------------------------------------------------------

@@ -89,10 +89,25 @@ const expected_result_binary<fifi::binary>
 multiply_results<fifi::binary, PACKED>::m_results[] =
 {
     // m_input1, m_input2, m_result
-    { 1, 0, 0},
-    { 0, 1, 0},
-    { 0, 0, 0},
-    { 1, 1, 1}
+    {  1, 255,   1},
+    { 14, 255,  14},
+    { 15, 255,  15},
+    { 16, 255,  16},
+    { 33, 255,  33},
+    { 64, 255,  64},
+    {128, 255, 128},
+    {129, 255, 129},
+    {255,   1,   1},
+    {255,  14,  14},
+    {255,  15,  15},
+    {255,  16,  16},
+    {255,  33,  33},
+    {255,  64,  64},
+    {255, 128, 128},
+    {255, 129, 129},
+    {255,   1,   1},
+    { 32,   1,   0},
+    { 33,   1,   1}
 };
 
 const uint32_t multiply_results<fifi::binary, PACKED>::m_size =
@@ -102,8 +117,14 @@ const expected_result_binary<fifi::binary>
 divide_results<fifi::binary, PACKED>::m_results[] =
 {
     // m_input1, m_input2, m_result
-    {1, 1, 1},
-    {0, 1, 0}
+    {  1, 255,   1},
+    { 14, 255,  14},
+    { 15, 255,  15},
+    { 16, 255,  16},
+    { 33, 255,  33},
+    { 64, 255,  64},
+    {128, 255, 128},
+    {129, 255, 129}
 };
 
 const uint32_t divide_results<fifi::binary, PACKED>::m_size =
@@ -113,10 +134,13 @@ const expected_result_binary<fifi::binary>
 add_results<fifi::binary, PACKED>::m_results[] =
 {
     // m_input1, m_input2, m_result
-    { 1, 1, 0},
-    { 0, 0, 0},
-    { 0, 1, 1},
-    { 1, 0, 1}
+    {   1,   1,   0},
+    {   0,   0,   0},
+    {   0,   1,   1},
+    {   1,   0,   1},
+    { 255,   0, 255},
+    { 255, 255,   0},
+    { 128, 255, 127}
 };
 
 const uint32_t add_results<fifi::binary, PACKED>::m_size =
@@ -126,10 +150,13 @@ const expected_result_binary<fifi::binary>
 subtract_results<fifi::binary, PACKED>::m_results[] =
 {
     // m_input1, m_input2, m_result
-    { 1, 1, 0},
-    { 0, 0, 0},
-    { 0, 1, 1},
-    { 1, 0, 1}
+    {   1,   1,   0},
+    {   0,   0,   0},
+    {   0,   1,   1},
+    {   1,   0,   1},
+    { 255,   0, 255},
+    { 255, 255,   0},
+    { 128, 255, 127}
 };
 
 const uint32_t subtract_results<fifi::binary, PACKED>::m_size =
@@ -140,7 +167,7 @@ const expected_result_unary<fifi::binary>
 invert_results<fifi::binary, PACKED>::m_results[] =
 {
     // m_input1, m_result
-    { 1, 1}
+    { 255, 255}
 };
 
 const uint32_t invert_results<fifi::binary, PACKED>::m_size =
