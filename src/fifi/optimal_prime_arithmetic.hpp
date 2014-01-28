@@ -24,7 +24,7 @@ namespace fifi
     {
     public:
         /// Typedef of the data type used for each field element
-        typedef typename prime2325::value_type value_type;
+        typedef prime2325::value_type value_type;
 
         /// Typedef of the field type used
         typedef prime2325 field_type;
