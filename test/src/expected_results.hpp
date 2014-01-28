@@ -38,11 +38,7 @@ struct expected_result_unary
     typename Field::value_type m_result;
 };
 
-template<class FieldImpl>
-using unary_method_type =
-    std::function<typename FieldImpl::value_type(
-        const FieldImpl&,
-        typename FieldImpl::value_type a)>;
+
 
 
 /// Expected results for binary functions i.e. functions taking two
@@ -56,11 +52,18 @@ struct expected_result_binary
 };
 
 template<class FieldImpl>
-using binary_method_type =
-    std::function<typename FieldImpl::value_type(
-        const FieldImpl&,
-        typename FieldImpl::value_type a,
-        typename FieldImpl::value_type b)>;
+struct method
+{
+
+    typedef std::function<typename FieldImpl::value_type(
+            const FieldImpl&,
+            typename FieldImpl::value_type a)> unary;
+
+    typedef std::function<typename FieldImpl::value_type(
+            const FieldImpl&,
+            typename FieldImpl::value_type a,
+            typename FieldImpl::value_type b)> binary;
+};
 
 //------------------------------------------------------------------
 // multiply
@@ -73,7 +76,7 @@ struct multiply_results;
 /// Helper template function which takes a FieldImpl as its
 /// template argument and runs its multiply function
 template<class FieldImpl, int Method>
-inline void check_results_multiply(binary_method_type<FieldImpl> arithmetic)
+inline void check_results_multiply(typename method<FieldImpl>::binary arithmetic)
 {
     typedef typename FieldImpl::field_type field_type;
 
@@ -91,21 +94,24 @@ inline void check_results_multiply(binary_method_type<FieldImpl> arithmetic)
 template<class FieldImpl>
 inline void check_results_multiply()
 {
-    binary_method_type<FieldImpl> multiply = &FieldImpl::multiply;
+    typedef typename method<FieldImpl>::binary binary;
+    binary multiply = &FieldImpl::multiply;
     check_results_multiply<FieldImpl, DEFAULT>(multiply);
 }
 
 template<class FieldImpl>
 inline void check_results_packed_multiply()
 {
-    binary_method_type<FieldImpl> multiply = &FieldImpl::packed_multiply;
+    typedef typename method<FieldImpl>::binary binary;
+    binary multiply = &FieldImpl::packed_multiply;
     check_results_multiply<FieldImpl, PACKED>(multiply);
 }
 
 template<class FieldImpl>
 inline void check_results_region_multiply()
 {
-    binary_method_type<FieldImpl> multiply = &FieldImpl::region_multiply;
+    typedef typename method<FieldImpl>::binary binary;
+    binary multiply = &FieldImpl::region_multiply;
     check_results_multiply<FieldImpl, REGION>(multiply);
 }
 
@@ -119,7 +125,7 @@ struct divide_results;
 /// Helper template function which takes a FieldImpl as its
 /// template argument and runs its divide function
 template<class FieldImpl, int Method>
-inline void check_results_divide(binary_method_type<FieldImpl> arithmetic)
+inline void check_results_divide(typename method<FieldImpl>::binary arithmetic)
 {
     typedef typename FieldImpl::field_type field_type;
 
@@ -136,21 +142,24 @@ inline void check_results_divide(binary_method_type<FieldImpl> arithmetic)
 template<class FieldImpl>
 inline void check_results_divide()
 {
-    binary_method_type<FieldImpl> divide = &FieldImpl::divide;
+    typedef typename method<FieldImpl>::binary binary;
+    binary divide = &FieldImpl::divide;
     check_results_divide<FieldImpl, DEFAULT>(divide);
 }
 
 template<class FieldImpl>
 inline void check_results_packed_divide()
 {
-    binary_method_type<FieldImpl> divide = &FieldImpl::packed_divide;
+    typedef typename method<FieldImpl>::binary binary;
+    binary divide = &FieldImpl::packed_divide;
     check_results_divide<FieldImpl, PACKED>(divide);
 }
 
 template<class FieldImpl>
 inline void check_results_region_divide()
 {
-    binary_method_type<FieldImpl> divide = &FieldImpl::region_divide;
+    typedef typename method<FieldImpl>::binary binary;
+    binary divide = &FieldImpl::region_divide;
     check_results_divide<FieldImpl, REGION>(divide);
 }
 
@@ -164,7 +173,7 @@ struct add_results;
 /// Helper template function which takes a FieldImpl as its
 /// template argument and runs its add function
 template<class FieldImpl, int Method>
-inline void check_results_add(binary_method_type<FieldImpl> arithmetic)
+inline void check_results_add(typename method<FieldImpl>::binary arithmetic)
 {
     typedef typename FieldImpl::field_type field_type;
 
@@ -182,21 +191,24 @@ inline void check_results_add(binary_method_type<FieldImpl> arithmetic)
 template<class FieldImpl>
 inline void check_results_add()
 {
-    binary_method_type<FieldImpl> add = &FieldImpl::add;
+    typedef typename method<FieldImpl>::binary binary;
+    binary add = &FieldImpl::add;
     check_results_add<FieldImpl, DEFAULT>(add);
 }
 
 template<class FieldImpl>
 inline void check_results_packed_add()
 {
-    binary_method_type<FieldImpl> add = &FieldImpl::packed_add;
+    typedef typename method<FieldImpl>::binary binary;
+    binary add = &FieldImpl::packed_add;
     check_results_add<FieldImpl, PACKED>(add);
 }
 
 template<class FieldImpl>
 inline void check_results_region_add()
 {
-    binary_method_type<FieldImpl> add = &FieldImpl::region_add;
+    typedef typename method<FieldImpl>::binary binary;
+    binary add = &FieldImpl::region_add;
     check_results_add<FieldImpl, REGION>(add);
 }
 
@@ -210,7 +222,7 @@ struct subtract_results;
 /// Helper template function which takes a FieldImpl as its
 /// template argument and runs its subtract function
 template<class FieldImpl, int Method>
-inline void check_results_subtract(binary_method_type<FieldImpl> arithmetic)
+inline void check_results_subtract(typename method<FieldImpl>::binary arithmetic)
 {
     typedef typename FieldImpl::field_type field_type;
 
@@ -228,21 +240,24 @@ inline void check_results_subtract(binary_method_type<FieldImpl> arithmetic)
 template<class FieldImpl>
 inline void check_results_subtract()
 {
-    binary_method_type<FieldImpl> subtract = &FieldImpl::subtract;
+    typedef typename method<FieldImpl>::binary binary;
+    binary subtract = &FieldImpl::subtract;
     check_results_subtract<FieldImpl, DEFAULT>(subtract);
 }
 
 template<class FieldImpl>
 inline void check_results_packed_subtract()
 {
-    binary_method_type<FieldImpl> subtract = &FieldImpl::packed_subtract;
+    typedef typename method<FieldImpl>::binary binary;
+    binary subtract = &FieldImpl::packed_subtract;
     check_results_subtract<FieldImpl, PACKED>(subtract);
 }
 
 template<class FieldImpl>
 inline void check_results_region_subtract()
 {
-    binary_method_type<FieldImpl> subtract = &FieldImpl::region_subtract;
+    typedef typename method<FieldImpl>::binary binary;
+    binary subtract = &FieldImpl::region_subtract;
     check_results_subtract<FieldImpl, REGION>(subtract);
 }
 
@@ -256,7 +271,7 @@ struct invert_results;
 /// Helper template function which takes a FieldImpl as its
 /// template argument and runs its invert function
 template<class FieldImpl, int Method>
-inline void check_results_invert(unary_method_type<FieldImpl> arithmetic)
+inline void check_results_invert(typename method<FieldImpl>::unary arithmetic)
 {
     typedef typename FieldImpl::field_type field_type;
 
@@ -274,21 +289,24 @@ inline void check_results_invert(unary_method_type<FieldImpl> arithmetic)
 template<class FieldImpl>
 inline void check_results_invert()
 {
-    unary_method_type<FieldImpl> invert = &FieldImpl::invert;
+    typedef typename method<FieldImpl>::unary unary;
+    unary invert = &FieldImpl::invert;
     check_results_invert<FieldImpl, DEFAULT>(invert);
 }
 
 template<class FieldImpl>
 inline void check_results_packed_invert()
 {
-    unary_method_type<FieldImpl> invert = &FieldImpl::packed_invert;
+    typedef typename method<FieldImpl>::unary unary;
+    unary invert = &FieldImpl::packed_invert;
     check_results_invert<FieldImpl, PACKED>(invert);
 }
 
 template<class FieldImpl>
 inline void check_results_region_invert()
 {
-    unary_method_type<FieldImpl> invert = &FieldImpl::region_invert;
+    typedef typename method<FieldImpl>::unary unary;
+    unary invert = &FieldImpl::region_invert;
     check_results_invert<FieldImpl, REGION>(invert);
 }
 
@@ -299,9 +317,9 @@ inline void check_results_region_invert()
 template<class FieldImpl>
 inline void check_random(
     uint32_t elements,
-    binary_method_type<FieldImpl> multiply,
-    binary_method_type<FieldImpl> divide,
-    unary_method_type<FieldImpl> invert)
+    typename method<FieldImpl>::binary multiply,
+    typename method<FieldImpl>::binary divide,
+    typename method<FieldImpl>::unary invert)
 {
     typedef typename FieldImpl::field_type field_type;
 
@@ -321,28 +339,36 @@ inline void check_random(
 template<class FieldImpl>
 inline void check_random(uint32_t elements = 100)
 {
-    binary_method_type<FieldImpl> multiply = &FieldImpl::multiply;
-    binary_method_type<FieldImpl> divide = &FieldImpl::divide;
-    unary_method_type<FieldImpl> invert = &FieldImpl::invert;
+    typedef typename method<FieldImpl>::unary unary;
+    typedef typename method<FieldImpl>::binary binary;
+
+    binary multiply = &FieldImpl::multiply;
+    binary divide = &FieldImpl::divide;
+    unary invert = &FieldImpl::invert;
     check_random<FieldImpl>(elements, multiply, divide, invert);
 }
 
 template<class FieldImpl>
 inline void check_random_packed(uint32_t elements = 100)
 {
+    typedef typename method<FieldImpl>::unary unary;
+    typedef typename method<FieldImpl>::binary binary;
 
-    binary_method_type<FieldImpl> multiply = &FieldImpl::packed_multiply;
-    binary_method_type<FieldImpl> divide = &FieldImpl::packed_divide;
-    unary_method_type<FieldImpl> invert = &FieldImpl::packed_invert;
+    binary multiply = &FieldImpl::multiply;
+    binary divide = &FieldImpl::divide;
+    unary invert = &FieldImpl::invert;
     check_random<FieldImpl>(elements, multiply, divide, invert);
 }
 
 template<class FieldImpl>
 inline void check_random_region(uint32_t elements = 100)
 {
-    binary_method_type<FieldImpl> multiply = &FieldImpl::region_multiply;
-    binary_method_type<FieldImpl> divide = &FieldImpl::region_divide;
-    unary_method_type<FieldImpl> invert = &FieldImpl::region_invert;
+    typedef typename method<FieldImpl>::unary unary;
+    typedef typename method<FieldImpl>::binary binary;
+
+    binary multiply = &FieldImpl::multiply;
+    binary divide = &FieldImpl::divide;
+    unary invert = &FieldImpl::invert;
     check_random<FieldImpl>(elements, multiply, divide, invert);
 }
 
