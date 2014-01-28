@@ -81,6 +81,70 @@ invert_results<fifi::binary>::m_results[] =
 const uint32_t invert_results<fifi::binary>::m_size =
     dimension_of(invert_results<fifi::binary>::m_results);
 
+//////////////////////
+/// packed results ///
+//////////////////////
+
+const expected_result_binary<fifi::binary>
+multiply_results<fifi::binary, PACKED>::m_results[] =
+{
+    // m_input1, m_input2, m_result
+    { 1, 0, 0},
+    { 0, 1, 0},
+    { 0, 0, 0},
+    { 1, 1, 1}
+};
+
+const uint32_t multiply_results<fifi::binary, PACKED>::m_size =
+    dimension_of(multiply_results<fifi::binary, PACKED>::m_results);
+
+const expected_result_binary<fifi::binary>
+divide_results<fifi::binary, PACKED>::m_results[] =
+{
+    // m_input1, m_input2, m_result
+    {1, 1, 1},
+    {0, 1, 0}
+};
+
+const uint32_t divide_results<fifi::binary, PACKED>::m_size =
+    dimension_of(divide_results<fifi::binary, PACKED>::m_results);
+
+const expected_result_binary<fifi::binary>
+add_results<fifi::binary, PACKED>::m_results[] =
+{
+    // m_input1, m_input2, m_result
+    { 1, 1, 0},
+    { 0, 0, 0},
+    { 0, 1, 1},
+    { 1, 0, 1}
+};
+
+const uint32_t add_results<fifi::binary, PACKED>::m_size =
+    dimension_of(add_results<fifi::binary, PACKED>::m_results);
+
+const expected_result_binary<fifi::binary>
+subtract_results<fifi::binary, PACKED>::m_results[] =
+{
+    // m_input1, m_input2, m_result
+    { 1, 1, 0},
+    { 0, 0, 0},
+    { 0, 1, 1},
+    { 1, 0, 1}
+};
+
+const uint32_t subtract_results<fifi::binary, PACKED>::m_size =
+    dimension_of(subtract_results<fifi::binary, PACKED>::m_results);
+
+// Zero has no inverse and one is its own inverse
+const expected_result_unary<fifi::binary>
+invert_results<fifi::binary, PACKED>::m_results[] =
+{
+    // m_input1, m_result
+    { 1, 1}
+};
+
+const uint32_t invert_results<fifi::binary, PACKED>::m_size =
+    dimension_of(invert_results<fifi::binary, PACKED>::m_results);
 
 //------------------------------------------------------------------
 // binary4

@@ -15,6 +15,7 @@
 #include <fifi/prime2325.hpp>
 
 #include "helper_packed_fall_through.hpp"
+#include "expected_results.hpp"
 
 namespace fifi
 {
@@ -40,4 +41,29 @@ TEST(TestBinaryPackedArithmetic, fall_through)
         fifi::dummy_stack<fifi::binary16> >();
     fifi::helper_packed_fall_through_test<fifi::prime2325,
         fifi::dummy_stack<fifi::prime2325> >();
+}
+
+TEST(TestBinaryPackedArithmetic, add)
+{
+    check_results_packed_add<fifi::dummy_stack<fifi::binary>>();
+}
+
+TEST(TestBinaryPackedArithmetic, subtract)
+{
+    check_results_packed_subtract<fifi::dummy_stack<fifi::binary>>();
+}
+
+TEST(TestBinaryPackedArithmetic, multiply)
+{
+    check_results_packed_multiply<fifi::dummy_stack<fifi::binary> >();
+}
+
+TEST(TestBinaryPackedArithmetic, divide)
+{
+    check_results_packed_divide<fifi::dummy_stack<fifi::binary>>();
+}
+
+TEST(TestBinaryPackedArithmetic, invert)
+{
+    check_results_packed_invert<fifi::dummy_stack<fifi::binary>>();
 }

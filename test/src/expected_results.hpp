@@ -130,14 +130,14 @@ template<class FieldImpl>
 inline void check_results_packed_multiply()
 {
     typename method<FieldImpl>::binary multiply = &FieldImpl::packed_multiply;
-    check_results_multiply<FieldImpl, multiply_results, PACKED>(multiply);
+    check_results_binary<FieldImpl, multiply_results, PACKED>(multiply);
 }
 
 template<class FieldImpl>
 inline void check_results_region_multiply()
 {
     typename method<FieldImpl>::binary multiply = &FieldImpl::region_multiply;
-    check_results_multiply<FieldImpl, multiply_results, REGION>(multiply);
+    check_results_binary<FieldImpl, multiply_results, REGION>(multiply);
 }
 
 //------------------------------------------------------------------
@@ -350,6 +350,43 @@ struct subtract_results<fifi::binary>
 
 template<>
 struct invert_results<fifi::binary>
+{
+    static const expected_result_unary<fifi::binary> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized structs which contains the packed results for the binary field
+
+template<>
+struct multiply_results<fifi::binary, PACKED>
+{
+    static const expected_result_binary<fifi::binary> m_results[];
+    static const uint32_t m_size;
+};
+
+template<>
+struct divide_results<fifi::binary, PACKED>
+{
+    static const expected_result_binary<fifi::binary> m_results[];
+    static const uint32_t m_size;
+};
+
+template<>
+struct add_results<fifi::binary, PACKED>
+{
+    static const expected_result_binary<fifi::binary> m_results[];
+    static const uint32_t m_size;
+};
+
+template<>
+struct subtract_results<fifi::binary, PACKED>
+{
+    static const expected_result_binary<fifi::binary> m_results[];
+    static const uint32_t m_size;
+};
+
+template<>
+struct invert_results<fifi::binary, PACKED>
 {
     static const expected_result_unary<fifi::binary> m_results[];
     static const uint32_t m_size;

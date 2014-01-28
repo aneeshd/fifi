@@ -16,7 +16,6 @@
 
 #include "helper_catch_all.hpp"
 #include "helper_fall_through.hpp"
-#include "helper_test_arithmetic.hpp"
 #include "expected_results.hpp"
 
 namespace fifi
@@ -59,4 +58,3 @@ TEST(TestBinarySimpleOnlineArithmetic, invert)
 {
     check_results_invert<fifi::dummy_stack<fifi::binary>>();
 }
-
