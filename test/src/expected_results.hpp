@@ -38,9 +38,6 @@ struct expected_result_unary
     typename Field::value_type m_result;
 };
 
-
-
-
 /// Expected results for binary functions i.e. functions taking two
 /// arguments and producing one output
 template<class Field>
@@ -65,6 +62,55 @@ struct method
             typename FieldImpl::value_type b)> binary;
 };
 
+template<class FieldImpl, template<class,int>class Results, int Method>
+inline void check_results_binary(typename method<FieldImpl>::binary arithmetic)
+{
+    typedef typename FieldImpl::field_type field_type;
+
+    FieldImpl field;
+
+    for(uint32_t i = 0; i < Results<field_type, Method>::m_size; ++i)
+    {
+        expected_result_binary<field_type> res =
+            Results<field_type, Method>::m_results[i];
+
+        EXPECT_EQ(arithmetic(field, res.m_input1, res.m_input2), res.m_result);
+    }
+}
+
+template<class FieldImpl, template<class,int>class Results, int Method>
+inline void check_results_buffer(typename method<FieldImpl>::binary arithmetic)
+{
+    typedef typename FieldImpl::field_type field_type;
+
+    FieldImpl field;
+
+    for(uint32_t i = 0; i < Results<field_type, Method>::m_size; ++i)
+    {
+        expected_result_binary<field_type> res =
+            Results<field_type, Method>::m_results[i];
+        assert(0);
+        EXPECT_EQ(arithmetic(field, res.m_input1, res.m_input2), res.m_result);
+    }
+}
+
+
+template<class FieldImpl, template<class,int>class Results, int Method>
+inline void check_results_unary(typename method<FieldImpl>::unary arithmetic)
+{
+    typedef typename FieldImpl::field_type field_type;
+
+    FieldImpl field;
+
+    for(uint32_t i = 0; i < Results<field_type, Method>::m_size; ++i)
+    {
+        expected_result_unary<field_type> res =
+            Results<field_type, Method>::m_results[i];
+
+        EXPECT_EQ(arithmetic(field, res.m_input1), res.m_result);
+    }
+}
+
 //------------------------------------------------------------------
 // multiply
 //------------------------------------------------------------------
@@ -73,46 +119,25 @@ struct method
 template<class Field, int Method = DEFAULT>
 struct multiply_results;
 
-/// Helper template function which takes a FieldImpl as its
-/// template argument and runs its multiply function
-template<class FieldImpl, int Method>
-inline void check_results_multiply(typename method<FieldImpl>::binary arithmetic)
-{
-    typedef typename FieldImpl::field_type field_type;
-
-    FieldImpl field;
-
-    for(uint32_t i = 0; i < multiply_results<field_type, Method>::m_size; ++i)
-    {
-        expected_result_binary<field_type> res =
-            multiply_results<field_type, Method>::m_results[i];
-
-        EXPECT_EQ(arithmetic(field, res.m_input1, res.m_input2), res.m_result);
-    }
-}
-
 template<class FieldImpl>
 inline void check_results_multiply()
 {
-    typedef typename method<FieldImpl>::binary binary;
-    binary multiply = &FieldImpl::multiply;
-    check_results_multiply<FieldImpl, DEFAULT>(multiply);
+    typename method<FieldImpl>::binary multiply = &FieldImpl::multiply;
+    check_results_binary<FieldImpl, multiply_results, DEFAULT>(multiply);
 }
 
 template<class FieldImpl>
 inline void check_results_packed_multiply()
 {
-    typedef typename method<FieldImpl>::binary binary;
-    binary multiply = &FieldImpl::packed_multiply;
-    check_results_multiply<FieldImpl, PACKED>(multiply);
+    typename method<FieldImpl>::binary multiply = &FieldImpl::packed_multiply;
+    check_results_multiply<FieldImpl, multiply_results, PACKED>(multiply);
 }
 
 template<class FieldImpl>
 inline void check_results_region_multiply()
 {
-    typedef typename method<FieldImpl>::binary binary;
-    binary multiply = &FieldImpl::region_multiply;
-    check_results_multiply<FieldImpl, REGION>(multiply);
+    typename method<FieldImpl>::binary multiply = &FieldImpl::region_multiply;
+    check_results_multiply<FieldImpl, multiply_results, REGION>(multiply);
 }
 
 //------------------------------------------------------------------
@@ -122,45 +147,25 @@ inline void check_results_region_multiply()
 template<class Field, int Method = DEFAULT>
 struct divide_results;
 
-/// Helper template function which takes a FieldImpl as its
-/// template argument and runs its divide function
-template<class FieldImpl, int Method>
-inline void check_results_divide(typename method<FieldImpl>::binary arithmetic)
-{
-    typedef typename FieldImpl::field_type field_type;
-
-    FieldImpl field;
-
-    for(uint32_t i = 0; i < divide_results<field_type, Method>::m_size; ++i)
-    {
-        expected_result_binary<field_type> res =
-            divide_results<field_type, Method>::m_results[i];
-        EXPECT_EQ(arithmetic(field, res.m_input1, res.m_input2), res.m_result);
-    }
-}
-
 template<class FieldImpl>
 inline void check_results_divide()
 {
-    typedef typename method<FieldImpl>::binary binary;
-    binary divide = &FieldImpl::divide;
-    check_results_divide<FieldImpl, DEFAULT>(divide);
+    typename method<FieldImpl>::binary divide = &FieldImpl::divide;
+    check_results_binary<FieldImpl, divide_results, DEFAULT>(divide);
 }
 
 template<class FieldImpl>
 inline void check_results_packed_divide()
 {
-    typedef typename method<FieldImpl>::binary binary;
-    binary divide = &FieldImpl::packed_divide;
-    check_results_divide<FieldImpl, PACKED>(divide);
+    typename method<FieldImpl>::binary divide = &FieldImpl::packed_divide;
+    check_results_binary<FieldImpl, divide_results, DEFAULT>(divide);
 }
 
 template<class FieldImpl>
 inline void check_results_region_divide()
 {
-    typedef typename method<FieldImpl>::binary binary;
-    binary divide = &FieldImpl::region_divide;
-    check_results_divide<FieldImpl, REGION>(divide);
+    typename method<FieldImpl>::binary divide = &FieldImpl::region_divide;
+    check_results_binary<FieldImpl, divide_results, DEFAULT>(divide);
 }
 
 //------------------------------------------------------------------
@@ -170,46 +175,25 @@ inline void check_results_region_divide()
 template<class Field, int Method = DEFAULT>
 struct add_results;
 
-/// Helper template function which takes a FieldImpl as its
-/// template argument and runs its add function
-template<class FieldImpl, int Method>
-inline void check_results_add(typename method<FieldImpl>::binary arithmetic)
-{
-    typedef typename FieldImpl::field_type field_type;
-
-    FieldImpl field;
-
-    for(uint32_t i = 0; i < add_results<field_type, Method>::m_size; ++i)
-    {
-        expected_result_binary<field_type> res =
-            add_results<field_type, Method>::m_results[i];
-
-        EXPECT_EQ(arithmetic(field, res.m_input1, res.m_input2), res.m_result);
-    }
-}
-
 template<class FieldImpl>
 inline void check_results_add()
 {
-    typedef typename method<FieldImpl>::binary binary;
-    binary add = &FieldImpl::add;
-    check_results_add<FieldImpl, DEFAULT>(add);
+    typename method<FieldImpl>::binary add = &FieldImpl::add;
+    check_results_binary<FieldImpl, add_results, DEFAULT>(add);
 }
 
 template<class FieldImpl>
 inline void check_results_packed_add()
 {
-    typedef typename method<FieldImpl>::binary binary;
-    binary add = &FieldImpl::packed_add;
-    check_results_add<FieldImpl, PACKED>(add);
+    typename method<FieldImpl>::binary add = &FieldImpl::packed_add;
+    check_results_binary<FieldImpl, add_results, DEFAULT>(add);
 }
 
 template<class FieldImpl>
 inline void check_results_region_add()
 {
-    typedef typename method<FieldImpl>::binary binary;
-    binary add = &FieldImpl::region_add;
-    check_results_add<FieldImpl, REGION>(add);
+    typename method<FieldImpl>::binary add = &FieldImpl::region_add;
+    check_results_binary<FieldImpl, add_results, DEFAULT>(add);
 }
 
 //------------------------------------------------------------------
@@ -219,46 +203,25 @@ inline void check_results_region_add()
 template<class Field, int Method = DEFAULT>
 struct subtract_results;
 
-/// Helper template function which takes a FieldImpl as its
-/// template argument and runs its subtract function
-template<class FieldImpl, int Method>
-inline void check_results_subtract(typename method<FieldImpl>::binary arithmetic)
-{
-    typedef typename FieldImpl::field_type field_type;
-
-    FieldImpl field;
-
-    for(uint32_t i = 0; i < subtract_results<field_type, Method>::m_size; ++i)
-    {
-        expected_result_binary<field_type> res =
-            subtract_results<field_type, Method>::m_results[i];
-
-        EXPECT_EQ(arithmetic(field, res.m_input1, res.m_input2), res.m_result);
-    }
-}
-
 template<class FieldImpl>
 inline void check_results_subtract()
 {
-    typedef typename method<FieldImpl>::binary binary;
-    binary subtract = &FieldImpl::subtract;
-    check_results_subtract<FieldImpl, DEFAULT>(subtract);
+    typename method<FieldImpl>::binary subtract = &FieldImpl::subtract;
+    check_results_binary<FieldImpl, subtract_results, DEFAULT>(subtract);
 }
 
 template<class FieldImpl>
 inline void check_results_packed_subtract()
 {
-    typedef typename method<FieldImpl>::binary binary;
-    binary subtract = &FieldImpl::packed_subtract;
-    check_results_subtract<FieldImpl, PACKED>(subtract);
+    typename method<FieldImpl>::binary subtract = &FieldImpl::packed_subtract;
+    check_results_binary<FieldImpl, subtract_results, DEFAULT>(subtract);
 }
 
 template<class FieldImpl>
 inline void check_results_region_subtract()
 {
-    typedef typename method<FieldImpl>::binary binary;
-    binary subtract = &FieldImpl::region_subtract;
-    check_results_subtract<FieldImpl, REGION>(subtract);
+    typename method<FieldImpl>::binary subtract = &FieldImpl::region_subtract;
+    check_results_binary<FieldImpl, subtract_results, DEFAULT>(subtract);
 }
 
 //------------------------------------------------------------------
@@ -268,46 +231,25 @@ inline void check_results_region_subtract()
 template<class Field, int Method = DEFAULT>
 struct invert_results;
 
-/// Helper template function which takes a FieldImpl as its
-/// template argument and runs its invert function
-template<class FieldImpl, int Method>
-inline void check_results_invert(typename method<FieldImpl>::unary arithmetic)
-{
-    typedef typename FieldImpl::field_type field_type;
-
-    FieldImpl field;
-
-    for(uint32_t i = 0; i < invert_results<field_type, Method>::m_size; ++i)
-    {
-        expected_result_unary<field_type> res =
-            invert_results<field_type, Method>::m_results[i];
-
-        EXPECT_EQ(arithmetic(field, res.m_input1), res.m_result);
-    }
-}
-
 template<class FieldImpl>
 inline void check_results_invert()
 {
-    typedef typename method<FieldImpl>::unary unary;
-    unary invert = &FieldImpl::invert;
-    check_results_invert<FieldImpl, DEFAULT>(invert);
+    typename method<FieldImpl>::unary invert = &FieldImpl::invert;
+    check_results_unary<FieldImpl, invert_results, DEFAULT>(invert);
 }
 
 template<class FieldImpl>
 inline void check_results_packed_invert()
 {
-    typedef typename method<FieldImpl>::unary unary;
-    unary invert = &FieldImpl::packed_invert;
-    check_results_invert<FieldImpl, PACKED>(invert);
+    typename method<FieldImpl>::unary invert = &FieldImpl::packed_invert;
+    check_results_unary<FieldImpl, invert_results, DEFAULT>(invert);
 }
 
 template<class FieldImpl>
 inline void check_results_region_invert()
 {
-    typedef typename method<FieldImpl>::unary unary;
-    unary invert = &FieldImpl::region_invert;
-    check_results_invert<FieldImpl, REGION>(invert);
+    typename method<FieldImpl>::unary invert = &FieldImpl::region_invert;
+    check_results_unary<FieldImpl, invert_results, DEFAULT>(invert);
 }
 
 //------------------------------------------------------------------
