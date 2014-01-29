@@ -348,6 +348,181 @@ invert_results<fifi::binary4>::m_results[] =
 const uint32_t invert_results<fifi::binary4>::m_size =
     dimension_of(invert_results<fifi::binary4>::m_results);
 
+//////////////////////
+/// packed results ///
+//////////////////////
+
+const expected_result_binary<fifi::binary4>
+multiply_results<fifi::binary4, PACKED>::m_results[] =
+{
+    // m_input1, m_input2, m_result
+    { 9,  9, 13},
+    { 5, 11,  1},
+    { 1,  1,  1},
+    {13, 15,  7},
+    { 7, 15, 11},
+    {10,  0,  0},
+    { 9,  5, 11},
+    { 0, 14,  0},
+    {15,  5,  6},
+    { 8, 12, 10},
+    {13,  1, 13},
+    { 5, 14,  3},
+    { 6, 11, 15},
+    {14,  7, 12},
+    { 3,  2,  6},
+    { 2,  9,  1},
+    {11,  9, 12},
+    {12,  4,  5},
+    { 0, 13,  0},
+    {14,  8,  9},
+    { 4,  8,  6},
+    {12,  8, 10},
+    { 2, 11,  5},
+    { 6,  6,  7},
+    { 5, 15,  6}
+};
+
+const uint32_t multiply_results<fifi::binary4, PACKED>::m_size =
+    dimension_of(multiply_results<fifi::binary4, PACKED>::m_results);
+
+const expected_result_binary<fifi::binary4>
+divide_results<fifi::binary4, PACKED>::m_results[] =
+{
+    // m_input1, m_input2, m_result
+    {11, 24,  3},
+    { 0, 29,  0},
+    {12, 18,  6},
+    { 0, 23,  0},
+    { 6, 20,  8},
+    {10, 26,  1},
+    { 9, 29,  2},
+    {14, 21,  8},
+    { 6, 19,  2},
+    { 0, 24,  0},
+    {11, 24,  3},
+    { 9, 17,  9},
+    { 4, 24,  9},
+    { 1, 28, 10},
+    { 2, 30,  6},
+    { 1, 17,  1},
+    {11, 22,  4},
+    {14, 30,  1},
+    { 0, 20,  0},
+    { 2, 25,  4},
+    { 0, 25,  0},
+    {11, 28,  2},
+    { 0, 25,  0},
+    {11, 30, 14},
+    {12, 24,  8}
+};
+
+const uint32_t divide_results<fifi::binary4, PACKED>::m_size =
+    dimension_of(divide_results<fifi::binary4, PACKED>::m_results);
+
+const expected_result_binary<fifi::binary4>
+add_results<fifi::binary4, PACKED>::m_results[] =
+{
+    // m_input1, m_input2, m_result
+    { 1,  6,  7},
+    {10,  6, 12},
+    {14,  6,  8},
+    { 5,  1,  4},
+    {12,  0, 12},
+    {11,  4, 15},
+    {13,  7, 10},
+    { 8,  4, 12},
+    {10,  4, 14},
+    {15,  0, 15},
+    { 3, 13, 14},
+    { 3,  0,  3},
+    { 6, 12, 10},
+    { 6,  7,  1},
+    { 7,  6,  1},
+    {12, 13,  1},
+    {15,  1, 14},
+    { 5,  3,  6},
+    {14,  4, 10},
+    { 2,  6,  4},
+    { 7,  1,  6},
+    {11, 14,  5},
+    {12,  1, 13},
+    { 3,  5,  6},
+    { 2,  5,  7}
+};
+
+const uint32_t add_results<fifi::binary4, PACKED>::m_size =
+    dimension_of(add_results<fifi::binary4, PACKED>::m_results);
+
+const expected_result_binary<fifi::binary4>
+subtract_results<fifi::binary4, PACKED>::m_results[] =
+{
+    // m_input1, m_input2, m_result
+    {13, 13,  0},
+    { 1,  9,  8},
+    { 6,  8, 14},
+    {14,  8,  6},
+    { 2,  3,  1},
+    {10, 13,  7},
+    {15,  0, 15},
+    {13,  3, 14},
+    { 1, 15, 14},
+    {14,  9,  7},
+    { 4,  2,  6},
+    {13,  9,  4},
+    { 2, 10,  8},
+    {11,  4, 15},
+    { 7, 12, 11},
+    { 9,  3, 10},
+    { 4,  2,  6},
+    { 9,  6, 15},
+    { 3,  2,  1},
+    {11, 12,  7},
+    { 4, 11, 15},
+    {14, 11,  5},
+    { 1, 12, 13},
+    { 2, 11,  9},
+    {11, 12,  7}
+};
+
+const uint32_t subtract_results<fifi::binary4, PACKED>::m_size =
+    dimension_of(subtract_results<fifi::binary4, PACKED>::m_results);
+
+
+const expected_result_unary<fifi::binary4>
+invert_results<fifi::binary4, PACKED>::m_results[] =
+{
+    // m_input1, m_result
+    {81  ,177},
+    {51  ,238},
+    {170 ,204},
+    {251 ,133},
+    {111 ,120},
+    {73  ,210},
+    {95  ,184},
+    {175 ,200},
+    {36  ,157},
+    {108 ,122},
+    {238 , 51},
+    {91  ,181},
+    {238 , 51},
+    {181 , 91},
+    {238 , 51},
+    {198 ,167},
+    {66  ,217},
+    {250 ,140},
+    {245 ,139},
+    {148 , 45},
+    {246 ,135},
+    {191 , 88},
+    {170 ,204},
+    {51  ,238},
+    {21  , 27}
+};
+
+const uint32_t invert_results<fifi::binary4, PACKED>::m_size =
+    dimension_of(invert_results<fifi::binary4, PACKED>::m_results);
+
 //------------------------------------------------------------------
 // binary8
 //------------------------------------------------------------------

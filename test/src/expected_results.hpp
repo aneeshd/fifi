@@ -74,7 +74,7 @@ inline void check_results_binary(typename method<FieldImpl>::binary arithmetic)
         expected_result_binary<field_type> res =
             Results<field_type, Method>::m_results[i];
 
-        EXPECT_EQ(arithmetic(field, res.m_input1, res.m_input2), res.m_result);
+        EXPECT_EQ(res.m_result, arithmetic(field, res.m_input1, res.m_input2));
     }
 }
 
@@ -90,7 +90,7 @@ inline void check_results_buffer(typename method<FieldImpl>::binary arithmetic)
         expected_result_binary<field_type> res =
             Results<field_type, Method>::m_results[i];
         assert(0);
-        EXPECT_EQ(arithmetic(field, res.m_input1, res.m_input2), res.m_result);
+        EXPECT_EQ(res.m_result, arithmetic(field, res.m_input1, res.m_input2));
     }
 }
 
@@ -107,7 +107,7 @@ inline void check_results_unary(typename method<FieldImpl>::unary arithmetic)
         expected_result_unary<field_type> res =
             Results<field_type, Method>::m_results[i];
 
-        EXPECT_EQ(arithmetic(field, res.m_input1), res.m_result);
+        EXPECT_EQ(res.m_result, arithmetic(field, res.m_input1));
     }
 }
 
@@ -428,6 +428,43 @@ struct subtract_results<fifi::binary4>
 
 template<>
 struct invert_results<fifi::binary4>
+{
+    static const expected_result_unary<fifi::binary4> m_results[];
+    static const uint32_t m_size;
+};
+
+/// Specialized structs which contains the packed results for the binary4 field
+
+template<>
+struct multiply_results<fifi::binary4, PACKED>
+{
+    static const expected_result_binary<fifi::binary4> m_results[];
+    static const uint32_t m_size;
+};
+
+template<>
+struct divide_results<fifi::binary4, PACKED>
+{
+    static const expected_result_binary<fifi::binary4> m_results[];
+    static const uint32_t m_size;
+};
+
+template<>
+struct add_results<fifi::binary4, PACKED>
+{
+    static const expected_result_binary<fifi::binary4> m_results[];
+    static const uint32_t m_size;
+};
+
+template<>
+struct subtract_results<fifi::binary4, PACKED>
+{
+    static const expected_result_binary<fifi::binary4> m_results[];
+    static const uint32_t m_size;
+};
+
+template<>
+struct invert_results<fifi::binary4, PACKED>
 {
     static const expected_result_unary<fifi::binary4> m_results[];
     static const uint32_t m_size;

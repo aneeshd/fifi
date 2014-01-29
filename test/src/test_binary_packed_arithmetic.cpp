@@ -5,6 +5,7 @@
 
 #include <gtest/gtest.h>
 
+#include <fifi/packed_arithmetic.hpp>
 #include <fifi/binary_packed_arithmetic.hpp>
 #include <fifi/final.hpp>
 
@@ -24,7 +25,8 @@ namespace fifi
         struct dummy_stack : public
         binary_packed_arithmetic<Field,
         helper_packed_fall_through<Field,
-        final<Field> > >
+        packed_arithmetic<
+        final<Field> > > >
         { };
     }
 }

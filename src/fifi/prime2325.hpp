@@ -60,6 +60,9 @@ namespace fifi
         /// i.e. the number of elements
         typedef uint32_t order_type;
 
+        /// The data type used to hold the degree of the field
+        typedef uint32_t degree_type;
+
         /// The maximum decimal value of any field element
         const static value_type max_value = 4294967290U;
 

@@ -5,15 +5,19 @@
 
 #include <gtest/gtest.h>
 
-#include <fifi/binary4_packed_arithmetic.hpp>
-#include "helper_packed_fall_through.hpp"
-#include "helper_catch_all.hpp"
-
+#include <fifi/simple_online_arithmetic.hpp>
 #include <fifi/binary.hpp>
 #include <fifi/binary4.hpp>
+#include <fifi/binary4_packed_arithmetic.hpp>
 #include <fifi/binary8.hpp>
 #include <fifi/binary16.hpp>
 #include <fifi/prime2325.hpp>
+#include <fifi/packed_arithmetic.hpp>
+#include <fifi/polynomial_degree.hpp>
+
+#include "expected_results.hpp"
+#include "helper_catch_all.hpp"
+#include "helper_packed_fall_through.hpp"
 
 namespace fifi
 {
@@ -22,7 +26,9 @@ namespace fifi
         struct dummy_stack : public
         binary4_packed_arithmetic<Field,
         helper_packed_fall_through<Field,
-        helper_catch_all<Field> > >
+        simple_online_arithmetic<
+        polynomial_degree<
+        helper_catch_all<Field> > > > >
         { };
     }
 }
@@ -39,4 +45,30 @@ TEST(TestBinary4PackedArithmetic, fall_through)
         fifi::dummy_stack<fifi::binary16> >();
     fifi::helper_packed_fall_through_test<fifi::prime2325,
         fifi::dummy_stack<fifi::prime2325> >();
+}
+
+
+TEST(TestBinary4PackedArithmetic, add)
+{
+    check_results_packed_add<fifi::dummy_stack<fifi::binary4>>();
+}
+
+TEST(TestBinary4PackedArithmetic, subtract)
+{
+    check_results_packed_subtract<fifi::dummy_stack<fifi::binary4>>();
+}
+
+TEST(TestBinary4PackedArithmetic, multiply)
+{
+    check_results_packed_multiply<fifi::dummy_stack<fifi::binary4> >();
+}
+
+TEST(TestBinary4PackedArithmetic, divide)
+{
+    check_results_packed_divide<fifi::dummy_stack<fifi::binary4>>();
+}
+
+TEST(TestBinary4PackedArithmetic, invert)
+{
+    check_results_packed_invert<fifi::dummy_stack<fifi::binary4>>();
 }
