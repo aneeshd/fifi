@@ -6,7 +6,7 @@
 #include <fifi/simple_online_arithmetic.hpp>
 #include <gtest/gtest.h>
 
-TEST(simple_online_arithmetic, simple_online_arithmetic)
+TEST(TestSimpleOnlineArithmetic, simple_online_arithmetic)
 {
     std::cout << "simple_online_arithmetic" << std::endl;
 }

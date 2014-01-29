@@ -6,7 +6,7 @@
 #include <fifi/prime2325.hpp>
 #include <gtest/gtest.h>
 
-TEST(test_prime2325, prime2325)
+TEST(TestPrime2325, prime2325)
 {
     EXPECT_EQ(4294967290U, fifi::prime2325::max_value);
     EXPECT_EQ(0U, fifi::prime2325::min_value);
@@ -16,7 +16,7 @@ TEST(test_prime2325, prime2325)
     EXPECT_EQ(536870911U, fifi::prime2325::max_block_length);
 }
 
-TEST(test_prime2325, prefix_length)
+TEST(TestPrime2325, prefix_length)
 {
     // 2^y => 1 << y
 

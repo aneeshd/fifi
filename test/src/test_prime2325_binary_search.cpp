@@ -9,7 +9,7 @@
 #include "helper_prime2325_find_one_prefix.hpp"
 #include "helper_prime2325_find_a_prefix.hpp"
 
-TEST(test_prime2325_binary_search, find_one_prefix)
+TEST(TestPrime2325BinarySearch, find_one_prefix)
 {
     fifi::helper_prime2325_find_one_prefix<fifi::prime2325_binary_search>(7);
     fifi::helper_prime2325_find_one_prefix<fifi::prime2325_binary_search>(8);
@@ -21,7 +21,7 @@ TEST(test_prime2325_binary_search, find_one_prefix)
 }
 
 /// Tests the size_needed() function for the prime2325_binary_search
-TEST(test_prime2325_binary_search, binary_search_size_needed)
+TEST(TestPrime2325BinarySearch, binary_search_size_needed)
 {
     // The size needed for the binary search depends on the
     // block length, the number of passes and the size of the
@@ -62,7 +62,7 @@ TEST(test_prime2325_binary_search, binary_search_size_needed)
 }
 
 /// For different block sizes find a prefix
-TEST(test_prime2325_binary_search, find_a_prefix)
+TEST(TestPrime2325BinarySearch, find_a_prefix)
 {
     fifi::helper_prime2325_find_a_prefix<fifi::prime2325_binary_search>(7);
     fifi::helper_prime2325_find_a_prefix<fifi::prime2325_binary_search>(8);

@@ -6,7 +6,7 @@
 #include <fifi/sum_modulo.hpp>
 #include <gtest/gtest.h>
 
-TEST(sum_modulo, sum_modulo)
+TEST(TestSumModulo, sum_modulo)
 {
     std::cout << "sum_modulo" << std::endl;
 }

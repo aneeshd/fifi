@@ -5,7 +5,7 @@
 #include <fifi/region_arithmetic.hpp>
 #include <gtest/gtest.h>
 
-TEST(region_arithmetic, region_arithmetic)
+TEST(TestRegionArithmetic, region_arithmetic)
 {
     std::cout << "region_arithmetic" << std::endl;
 }
