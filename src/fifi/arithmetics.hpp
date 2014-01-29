@@ -17,7 +17,6 @@
 #include "full_table.hpp"
 #include "is_binary.hpp"
 #include "optimal_prime_arithmetic.hpp"
-#include "disable_if_binary.hpp"
 
 // Certain applications e.g. Error Correcting Codes (ECC) perform specific
 // compound operations. These operations can for certain field implementations
