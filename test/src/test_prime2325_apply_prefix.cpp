@@ -6,7 +6,7 @@
 #include <fifi/prime2325_apply_prefix.hpp>
 #include <gtest/gtest.h>
 
-TEST(prime2325_apply_prefix, prime2325_apply_prefix)
+TEST(TestPrime2325ApplyPrefix, prime2325_apply_prefix)
 {
-    /// @todo test this properly.
+    std::cout << "prime2325_apply_prefix" << std::endl;
 }

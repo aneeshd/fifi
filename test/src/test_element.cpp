@@ -69,61 +69,61 @@ void element_construct_helper(FiniteField &finite_field)
     EXPECT_TRUE(true);
 }
 
-TEST(tTst_Eement, Simple_Online_Binary)
+TEST(TestElement, simple_online_binary)
 {
     typedef fifi::simple_online<fifi::binary> field_type;
     fifi::finite_field<field_type> finite_field;
     element_construct_helper(finite_field);
 }
 
-TEST(tTst_Eement, Simple_Online_Binary8)
+TEST(TestElement, simple_online_binary8)
 {
     typedef fifi::simple_online<fifi::binary8> field_type;
     fifi::finite_field<field_type> finite_field;
     element_construct_helper(finite_field);
 }
 
-TEST(tTst_Eement, Simple_Online_Binary16)
+TEST(TestElement, simple_online_binary16)
 {
     typedef fifi::simple_online<fifi::binary16> field_type;
     fifi::finite_field<field_type> finite_field;
     element_construct_helper(finite_field);
 }
 
-TEST(TestElement, Full_Table_Binary8)
+TEST(TestElement, full_table_binary8)
 {
     typedef fifi::full_table<fifi::binary8> field_type;
     fifi::finite_field<field_type> finite_field;
     element_construct_helper(finite_field);
 }
 
-TEST(TestElement, Log_Table_Binary8)
+TEST(TestElement, log_table_binary8)
 {
     typedef fifi::log_table<fifi::binary8> field_type;
     fifi::finite_field<field_type> finite_field;
     element_construct_helper(finite_field);
 }
-TEST(TestElement, Log_Table_Binary16)
+TEST(TestElement, log_table_binary16)
 {
     typedef fifi::log_table<fifi::binary16> field_type;
     fifi::finite_field<field_type> finite_field;
     element_construct_helper(finite_field);
 }
 
-TEST(TestElement, Extended_Log_Table_Binary8)
+TEST(TestElement, extended_log_table_binary8)
 {
     typedef fifi::extended_log_table<fifi::binary8> field_type;
     fifi::finite_field<field_type> finite_field;
     element_construct_helper(finite_field);
 }
-TEST(TestElement, Extended_Log_Table_Binary16)
+TEST(TestElement, extended_log_table_binary16)
 {
     typedef fifi::extended_log_table<fifi::binary16> field_type;
     fifi::finite_field<field_type> finite_field;
     element_construct_helper(finite_field);
 }
 
-TEST(TestElement, Optimal_Prime_Prime2325)
+TEST(TestElement, optimal_prime_prime2325)
 {
     typedef fifi::optimal_prime_arithmetic<fifi::prime2325> field_type;
     fifi::finite_field<field_type> finite_field;

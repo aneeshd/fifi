@@ -6,7 +6,7 @@
 #include <fifi/default_field.hpp>
 #include <gtest/gtest.h>
 
-TEST(DefaultField, default_field)
+TEST(TestDefaultField, default_field)
 {
     std::cout << "default_field" << std::endl;
 }

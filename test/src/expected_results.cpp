@@ -420,6 +420,7 @@ divide_results<fifi::binary4, PACKED>::m_results[] =
 const uint32_t divide_results<fifi::binary4, PACKED>::m_size =
     dimension_of(divide_results<fifi::binary4, PACKED>::m_results);
 
+///@todo, add testing values spanning a whole byte
 const expected_result_binary<fifi::binary4>
 add_results<fifi::binary4, PACKED>::m_results[] =
 {
@@ -454,6 +455,7 @@ add_results<fifi::binary4, PACKED>::m_results[] =
 const uint32_t add_results<fifi::binary4, PACKED>::m_size =
     dimension_of(add_results<fifi::binary4, PACKED>::m_results);
 
+///@todo, add testing values spanning a whole byte
 const expected_result_binary<fifi::binary4>
 subtract_results<fifi::binary4, PACKED>::m_results[] =
 {

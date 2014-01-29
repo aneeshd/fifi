@@ -18,6 +18,5 @@ TEST(TestIsValueTypeExact, api)
     EXPECT_FALSE(fifi::is_value_type_exact<fifi::binary4>::value);
     EXPECT_TRUE(fifi::is_value_type_exact<fifi::binary8>::value);
     EXPECT_TRUE(fifi::is_value_type_exact<fifi::binary16>::value);
-    // EXPECT_TRUE(fifi::is_value_type_exact<fifi::binary32>::value);
     EXPECT_FALSE(fifi::is_value_type_exact<fifi::prime2325>::value);
 }
