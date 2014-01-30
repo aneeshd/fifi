@@ -14,6 +14,7 @@
 #include "is_valid_element.hpp"
 #include "sum_modulo.hpp"
 #include "binary.hpp"
+#include "prime2325.hpp"
 
 namespace fifi
 {
@@ -21,6 +22,8 @@ namespace fifi
     template<class Field, class Super>
     class log_table_arithmetic : public Super
     {
+        static_assert(!std::is_same<prime2325, typename Super::field_type>::value,
+              "This layer does not support the 2^32 - 5 prime field");
         static_assert(!std::is_same<binary, typename Super::field_type>::value,
               "This layer does not support the binary field");
 

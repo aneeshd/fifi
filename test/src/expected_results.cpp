@@ -81,6 +81,17 @@ invert_results<fifi::binary>::m_results[] =
 const uint32_t invert_results<fifi::binary>::m_size =
     dimension_of(invert_results<fifi::binary>::m_results);
 
+const expected_result_unary<fifi::binary>
+find_degree_results<fifi::binary>::m_results[] =
+{
+    // m_input1, m_result
+    { 1, 0},
+    { 0, 0}
+};
+
+const uint32_t find_degree_results<fifi::binary>::m_size =
+    dimension_of(find_degree_results<fifi::binary>::m_results);
+
 //////////////////////
 /// packed results ///
 //////////////////////
@@ -347,6 +358,31 @@ invert_results<fifi::binary4>::m_results[] =
 
 const uint32_t invert_results<fifi::binary4>::m_size =
     dimension_of(invert_results<fifi::binary4>::m_results);
+
+const expected_result_unary<fifi::binary4>
+find_degree_results<fifi::binary4>::m_results[] =
+{
+    // m_input1, m_result
+    { 15, 3},
+    { 14, 3},
+    { 13, 3},
+    { 12, 3},
+    { 11, 3},
+    { 10, 3},
+    {  9, 3},
+    {  8, 3},
+    {  7, 2},
+    {  6, 2},
+    {  5, 2},
+    {  4, 2},
+    {  3, 1},
+    {  2, 1},
+    {  1, 0},
+    {  0, 0},
+};
+
+const uint32_t find_degree_results<fifi::binary4>::m_size =
+    dimension_of(find_degree_results<fifi::binary4>::m_results);
 
 //////////////////////
 /// packed results ///
@@ -729,6 +765,41 @@ invert_results<fifi::binary8>::m_results[] =
 const uint32_t invert_results<fifi::binary8>::m_size =
     dimension_of(invert_results<fifi::binary8>::m_results);
 
+const expected_result_unary<fifi::binary8>
+find_degree_results<fifi::binary8>::m_results[] =
+{
+    // m_input1, m_result
+    { 255, 7},
+    { 254, 7},
+    { 128, 7},
+    { 127, 6},
+    {  64, 6},
+    {  63, 5},
+    {  32, 5},
+    {  31, 4},
+    {  17, 4},
+    {  16, 4},
+    {  15, 3},
+    {  14, 3},
+    {  13, 3},
+    {  12, 3},
+    {  11, 3},
+    {  10, 3},
+    {   9, 3},
+    {   8, 3},
+    {   7, 2},
+    {   6, 2},
+    {   5, 2},
+    {   4, 2},
+    {   3, 1},
+    {   2, 1},
+    {   1, 0},
+    {   0, 0},
+};
+
+const uint32_t find_degree_results<fifi::binary8>::m_size =
+    dimension_of(find_degree_results<fifi::binary8>::m_results);
+
 //------------------------------------------------------------------
 // binary16
 //------------------------------------------------------------------
@@ -941,8 +1012,60 @@ invert_results<fifi::binary16>::m_results[] =
 const uint32_t invert_results<fifi::binary16>::m_size =
     dimension_of(invert_results<fifi::binary16>::m_results);
 
+const expected_result_unary<fifi::binary16>
+find_degree_results<fifi::binary16>::m_results[] =
+{
+    // m_input1, m_result
+    { 65535, 15},
+    { 32768, 15},
+    { 32767, 14},
+    { 16384, 14},
+    { 16383, 13},
+    {  8192, 13},
+    {  8191, 12},
+    {  4096, 12},
+    {  4095, 11},
+    {  2048, 11},
+    {  2047, 10},
+    {  1024, 10},
+    {  1023,  9},
+    {   512,  9},
+    {   511,  8},
+    {   256,  8},
+    {   255,  7},
+    {   254,  7},
+    {   128,  7},
+    {   127,  6},
+    {    64,  6},
+    {    63,  5},
+    {    32,  5},
+    {    31,  4},
+    {    17,  4},
+    {    16,  4},
+    {    15,  3},
+    {    14,  3},
+    {    13,  3},
+    {    12,  3},
+    {    11,  3},
+    {    10,  3},
+    {     9,  3},
+    {     8,  3},
+    {     7,  2},
+    {     6,  2},
+    {     5,  2},
+    {     4,  2},
+    {     3,  1},
+    {     2,  1},
+    {     1,  0},
+    {     0,  0},
+};
 
+const uint32_t find_degree_results<fifi::binary16>::m_size =
+    dimension_of(find_degree_results<fifi::binary16>::m_results);
 
+//------------------------------------------------------------------
+// prime2325
+//------------------------------------------------------------------
 
 const expected_result_binary<fifi::prime2325>
 multiply_results<fifi::prime2325>::m_results[] =
@@ -1114,3 +1237,56 @@ invert_results<fifi::prime2325>::m_results[] =
 
 const uint32_t invert_results<fifi::prime2325>::m_size =
     dimension_of(invert_results<fifi::prime2325>::m_results);
+
+
+const expected_result_unary<fifi::prime2325>
+find_degree_results<fifi::prime2325>::m_results[] =
+{
+    // m_input1, m_result
+    { 4294967290U, 31},
+    {       65535, 15},
+    {       32768, 15},
+    {       32767, 14},
+    {       16384, 14},
+    {       16383, 13},
+    {        8192, 13},
+    {        8191, 12},
+    {        4096, 12},
+    {        4095, 11},
+    {        2048, 11},
+    {        2047, 10},
+    {        1024, 10},
+    {        1023,  9},
+    {         512,  9},
+    {         511,  8},
+    {         256,  8},
+    {         255,  7},
+    {         254,  7},
+    {         128,  7},
+    {         127,  6},
+    {          64,  6},
+    {          63,  5},
+    {          32,  5},
+    {          31,  4},
+    {          17,  4},
+    {          16,  4},
+    {          15,  3},
+    {          14,  3},
+    {          13,  3},
+    {          12,  3},
+    {          11,  3},
+    {          10,  3},
+    {           9,  3},
+    {           8,  3},
+    {           7,  2},
+    {           6,  2},
+    {           5,  2},
+    {           4,  2},
+    {           3,  1},
+    {           2,  1},
+    {           1,  0},
+    {           0,  0},
+};
+
+const uint32_t find_degree_results<fifi::prime2325>::m_size =
+    dimension_of(find_degree_results<fifi::prime2325>::m_results);

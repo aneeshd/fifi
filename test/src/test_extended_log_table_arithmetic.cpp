@@ -57,28 +57,64 @@ TEST(TestExtendedLogTableArithmetic, fall_through)
 
 TEST(TestExtendedLogTableArithmetic, multiply)
 {
-    check_results_multiply<fifi::dummy_stack<fifi::binary4> >();
-    check_results_multiply<fifi::dummy_stack<fifi::binary8> >();
-    check_results_multiply<fifi::dummy_stack<fifi::binary16> >();
+    {
+        SCOPED_TRACE("binary4");
+        check_results_multiply<fifi::dummy_stack<fifi::binary4> >();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        check_results_multiply<fifi::dummy_stack<fifi::binary8> >();
+    }
+    {
+        SCOPED_TRACE("binary16");
+        check_results_multiply<fifi::dummy_stack<fifi::binary16> >();
+    }
 }
 
 TEST(TestExtendedLogTableArithmetic, divide)
 {
-    check_results_divide<fifi::dummy_stack<fifi::binary4> >();
-    check_results_divide<fifi::dummy_stack<fifi::binary8> >();
-    check_results_divide<fifi::dummy_stack<fifi::binary16> >();
+    {
+        SCOPED_TRACE("binary4");
+        check_results_divide<fifi::dummy_stack<fifi::binary4> >();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        check_results_divide<fifi::dummy_stack<fifi::binary8> >();
+    }
+    {
+        SCOPED_TRACE("binary16");
+        check_results_divide<fifi::dummy_stack<fifi::binary16> >();
+    }
 }
 
 TEST(TestExtendedLogTableArithmetic, invert)
 {
-    check_results_invert<fifi::dummy_stack<fifi::binary4> >();
-    check_results_invert<fifi::dummy_stack<fifi::binary8> >();
-    check_results_invert<fifi::dummy_stack<fifi::binary16> >();
+    {
+        SCOPED_TRACE("binary4");
+        check_results_invert<fifi::dummy_stack<fifi::binary4> >();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        check_results_invert<fifi::dummy_stack<fifi::binary8> >();
+    }
+    {
+        SCOPED_TRACE("binary16");
+        check_results_invert<fifi::dummy_stack<fifi::binary16> >();
+    }
 }
 
 TEST(TestExtendedLogTableArithmetic, random)
 {
-    check_random_default<fifi::dummy_stack<fifi::binary4> >();
-    check_random_default<fifi::dummy_stack<fifi::binary8> >();
-    check_random_default<fifi::dummy_stack<fifi::binary16> >();
+    {
+        SCOPED_TRACE("binary4");
+        check_random_default<fifi::dummy_stack<fifi::binary4> >();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        check_random_default<fifi::dummy_stack<fifi::binary8> >();
+    }
+    {
+        SCOPED_TRACE("binary16");
+        check_random_default<fifi::dummy_stack<fifi::binary16> >();
+    }
 }

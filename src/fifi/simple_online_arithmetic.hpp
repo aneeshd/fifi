@@ -32,6 +32,8 @@ namespace fifi
         /// @copydoc finite_field::multiply()
         value_type multiply(value_type a, value_type b) const
         {
+            static_assert(!std::is_same<binary, typename Super::field_type>::value,
+                "This member function does not support the binary field");
             assert(is_valid_element<field_type>(a));
             assert(is_valid_element<field_type>(b));
 
@@ -72,6 +74,8 @@ namespace fifi
         /// @copydoc finite_field::divide()
         value_type divide(value_type numerator, value_type denominator) const
         {
+            static_assert(!std::is_same<binary, typename Super::field_type>::value,
+                "This member function does not support the binary field");
             assert(is_valid_element<field_type>(numerator));
             assert(is_valid_element<field_type>(denominator));
 
@@ -81,6 +85,8 @@ namespace fifi
         /// @copydoc finite_field::invert()
         value_type invert(value_type a) const
         {
+            static_assert(!std::is_same<binary, typename Super::field_type>::value,
+                "This member function does not support the binary field");
             assert(a != 0); // Zero has no inverse
             assert(is_valid_element<field_type>(a));
 

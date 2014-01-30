@@ -53,24 +53,48 @@ TEST(TestFullTableArithmetic, fall_through)
 
 TEST(TestFullTableArithmetic, multiply)
 {
-    check_results_multiply<fifi::dummy_stack<fifi::binary4> >();
-    check_results_multiply<fifi::dummy_stack<fifi::binary8> >();
+    {
+        SCOPED_TRACE("binary4");
+        check_results_multiply<fifi::dummy_stack<fifi::binary4> >();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        check_results_multiply<fifi::dummy_stack<fifi::binary8> >();
+    }
 }
 
 TEST(TestFullTableArithmetic, divide)
 {
-    check_results_divide<fifi::dummy_stack<fifi::binary4> >();
-    check_results_divide<fifi::dummy_stack<fifi::binary8> >();
+    {
+        SCOPED_TRACE("binary4");
+        check_results_divide<fifi::dummy_stack<fifi::binary4> >();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        check_results_divide<fifi::dummy_stack<fifi::binary8> >();
+    }
 }
 
 TEST(TestFullTableArithmetic, invert)
 {
-    check_results_invert<fifi::dummy_stack<fifi::binary4> >();
-    check_results_invert<fifi::dummy_stack<fifi::binary8> >();
+    {
+        SCOPED_TRACE("binary4");
+        check_results_invert<fifi::dummy_stack<fifi::binary4> >();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        check_results_invert<fifi::dummy_stack<fifi::binary8> >();
+    }
 }
 
 TEST(TestFullTableArithmetic, random)
 {
-    check_random_default<fifi::dummy_stack<fifi::binary4> >();
-    check_random_default<fifi::dummy_stack<fifi::binary8> >();
+    {
+        SCOPED_TRACE("binary4");
+        check_random_default<fifi::dummy_stack<fifi::binary4> >();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        check_random_default<fifi::dummy_stack<fifi::binary8> >();
+    }
 }

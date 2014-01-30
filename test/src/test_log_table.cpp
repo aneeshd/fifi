@@ -14,15 +14,15 @@
 
 TEST(TestLogTable, binary4)
 {
-    fifi::check_all<fifi::log_table<fifi::binary4>>();
+    fifi::check_all<fifi::log_table<fifi::binary4> >();
 }
 
 TEST(TestLogTable, binary8)
 {
-    fifi::check_all<fifi::log_table<fifi::binary8>>();
+    fifi::check_all<fifi::log_table<fifi::binary8> >();
 }
 
 TEST(TestLogTable, binary16)
 {
-    fifi::check_all<fifi::log_table<fifi::binary16>>();
+    fifi::check_all<fifi::log_table<fifi::binary16> >();
 }

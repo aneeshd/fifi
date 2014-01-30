@@ -7,6 +7,7 @@
 
 #include <cstdlib>
 #include <functional>
+#include <string>
 
 #include <fifi/binary.hpp>
 #include <fifi/binary4.hpp>
@@ -71,6 +72,8 @@ inline void check_results_binary(typename method<FieldImpl>::binary arithmetic)
     {
         expected_result_binary<field_type> res =
             Results<field_type, Method>::m_results[i];
+        SCOPED_TRACE("a: " + std::to_string(res.m_input1) +
+                    " b: " + std::to_string(res.m_input2));
         EXPECT_EQ(res.m_result, arithmetic(field, res.m_input1, res.m_input2));
     }
 }
@@ -103,7 +106,7 @@ inline void check_results_unary(typename method<FieldImpl>::unary arithmetic)
     {
         expected_result_unary<field_type> res =
             Results<field_type, Method>::m_results[i];
-
+        SCOPED_TRACE("a: " + std::to_string(res.m_input1));
         EXPECT_EQ(res.m_result, arithmetic(field, res.m_input1));
     }
 }
@@ -248,6 +251,20 @@ inline void check_results_region_invert()
 }
 
 //------------------------------------------------------------------
+// find_degree
+//------------------------------------------------------------------
+
+template<class Field, int Method = DEFAULT>
+struct find_degree_results;
+
+template<class FieldImpl>
+inline void check_results_find_degree()
+{
+    check_results_unary<FieldImpl, find_degree_results, DEFAULT>(
+        &FieldImpl::find_degree);
+}
+
+//------------------------------------------------------------------
 // check_random
 //------------------------------------------------------------------
 
@@ -344,6 +361,13 @@ struct invert_results<fifi::binary>
     static const uint32_t m_size;
 };
 
+template<>
+struct find_degree_results<fifi::binary>
+{
+    static const expected_result_unary<fifi::binary> m_results[];
+    static const uint32_t m_size;
+};
+
 /// Specialized structs which contains the packed results for the binary field
 
 template<>
@@ -417,6 +441,13 @@ struct subtract_results<fifi::binary4>
 
 template<>
 struct invert_results<fifi::binary4>
+{
+    static const expected_result_unary<fifi::binary4> m_results[];
+    static const uint32_t m_size;
+};
+
+template<>
+struct find_degree_results<fifi::binary4>
 {
     static const expected_result_unary<fifi::binary4> m_results[];
     static const uint32_t m_size;
@@ -500,6 +531,13 @@ struct invert_results<fifi::binary8>
     static const uint32_t m_size;
 };
 
+template<>
+struct find_degree_results<fifi::binary8>
+{
+    static const expected_result_unary<fifi::binary8> m_results[];
+    static const uint32_t m_size;
+};
+
 //------------------------------------------------------------------
 // binary16
 //------------------------------------------------------------------
@@ -536,6 +574,13 @@ struct subtract_results<fifi::binary16>
 
 template<>
 struct invert_results<fifi::binary16>
+{
+    static const expected_result_unary<fifi::binary16> m_results[];
+    static const uint32_t m_size;
+};
+
+template<>
+struct find_degree_results<fifi::binary16>
 {
     static const expected_result_unary<fifi::binary16> m_results[];
     static const uint32_t m_size;
@@ -581,3 +626,11 @@ struct invert_results<fifi::prime2325>
     static const expected_result_unary<fifi::prime2325> m_results[];
     static const uint32_t m_size;
 };
+
+template<>
+struct find_degree_results<fifi::prime2325>
+{
+    static const expected_result_unary<fifi::prime2325> m_results[];
+    static const uint32_t m_size;
+};
+
