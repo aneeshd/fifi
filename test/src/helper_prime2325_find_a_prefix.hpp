@@ -19,7 +19,7 @@ namespace fifi
     /// @todo is this a good name? how is this different from find one prefix?
 
     template<class Algorithm>
-    void prime2325_find_a_prefix(std::vector<uint32_t> data)
+    void helper_prime2325_find_a_prefix(std::vector<uint32_t> data)
     {
         uint32_t block_length = data.size();
         Algorithm p(block_length);
@@ -53,13 +53,13 @@ namespace fifi
                 data[i] = rand();
             }
 
-            prime2325_find_a_prefix<Algorithm>(data);
+            helper_prime2325_find_a_prefix<Algorithm>(data);
         }
 
         {
             std::vector<uint32_t> data(block_length, 0xffffffffU);
 
-            prime2325_find_a_prefix<Algorithm>(data);
+            helper_prime2325_find_a_prefix<Algorithm>(data);
         }
     }
 }

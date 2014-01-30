@@ -129,9 +129,4 @@ namespace fifi
         value_type *m_antilog;
 
     };
-
-    /// Fall-through for binary
-    template<class Super>
-    class extended_log_table_arithmetic<binary, Super> : public Super
-    { };
 }

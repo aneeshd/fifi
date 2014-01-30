@@ -153,7 +153,5 @@ namespace fifi
             assert(is_valid_element<field_type>(b));
             return a ^ b;
         }
-
     };
-
 }

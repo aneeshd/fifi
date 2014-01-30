@@ -5,6 +5,11 @@
 
 #pragma once
 
+#include <fifi/binary.hpp>
+#include <fifi/binary4.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/binary16.hpp>
+
 #include "expected_results.hpp"
 
 namespace fifi
@@ -12,55 +17,157 @@ namespace fifi
     template<template <class> FieldImpl>
     void check_region_add()
     {
-        check_results_region_add<FieldImpl<fifi::binary> >();
-        check_results_region_add<FieldImpl<fifi::binary4> >();
-        check_results_region_add<FieldImpl<fifi::binary8> >();
-        check_results_region_add<FieldImpl<fifi::binary16> >();
+        {
+            SCOPED_TRACE("binary");
+            check_results_region_add<FieldImpl<fifi::binary> >();
+        }
+        {
+            SCOPED_TRACE("binary4");
+            check_results_region_add<FieldImpl<fifi::binary4> >();
+        }
+        {
+            SCOPED_TRACE("binary8");
+            check_results_region_add<FieldImpl<fifi::binary8> >();
+        }
+        {
+            SCOPED_TRACE("binary16");
+            check_results_region_add<FieldImpl<fifi::binary16> >();
+        }
     }
 
     template<template <class> FieldImpl>
     void check_region_subtract()
     {
-        check_results_region_subtract<FieldImpl<fifi::binary> >();
-        check_results_region_subtract<FieldImpl<fifi::binary4> >();
-        check_results_region_subtract<FieldImpl<fifi::binary8> >();
-        check_results_region_subtract<FieldImpl<fifi::binary16> >();
+        {
+            SCOPED_TRACE("binary");
+            check_results_region_subtract<FieldImpl<fifi::binary> >();
+        }
+        {
+            SCOPED_TRACE("binary4");
+            check_results_region_subtract<FieldImpl<fifi::binary4> >();
+        }
+        {
+            SCOPED_TRACE("binary8");
+            check_results_region_subtract<FieldImpl<fifi::binary8> >();
+        }
+        {
+            SCOPED_TRACE("binary16");
+            check_results_region_subtract<FieldImpl<fifi::binary16> >();
+        }
     }
 
     template<template <class> FieldImpl>
     void check_region_multiply()
     {
-        check_results_region_multiply<FieldImpl<fifi::binary> >();
-        check_results_region_multiply<FieldImpl<fifi::binary4> >();
-        check_results_region_multiply<FieldImpl<fifi::binary8> >();
-        check_results_region_multiply<FieldImpl<fifi::binary16> >();
+        {
+            SCOPED_TRACE("binary");
+            check_results_region_multiply<FieldImpl<fifi::binary> >();
+        }
+        {
+            SCOPED_TRACE("binary4");
+            check_results_region_multiply<FieldImpl<fifi::binary4> >();
+        }
+        {
+            SCOPED_TRACE("binary8");
+            check_results_region_multiply<FieldImpl<fifi::binary8> >();
+        }
+        {
+            SCOPED_TRACE("binary16");
+            check_results_region_multiply<FieldImpl<fifi::binary16> >();
+        }
     }
 
     template<template <class> FieldImpl>
     void check_region_divide()
     {
-        check_results_region_divide<FieldImpl<fifi::binary> >();
-        check_results_region_divide<FieldImpl<fifi::binary4> >();
-        check_results_region_divide<FieldImpl<fifi::binary8> >();
-        check_results_region_divide<FieldImpl<fifi::binary16> >();
+        {
+            SCOPED_TRACE("binary");
+            check_results_region_divide<FieldImpl<fifi::binary> >();
+        }
+        {
+            SCOPED_TRACE("binary4");
+            check_results_region_divide<FieldImpl<fifi::binary4> >();
+        }
+        {
+            SCOPED_TRACE("binary8");
+            check_results_region_divide<FieldImpl<fifi::binary8> >();
+        }
+        {
+            SCOPED_TRACE("binary16");
+            check_results_region_divide<FieldImpl<fifi::binary16> >();
+        }
     }
 
     template<template <class> FieldImpl>
     void check_region_invert()
     {
-        check_results_region_invert<FieldImpl<fifi::binary> >();
-        check_results_region_invert<FieldImpl<fifi::binary4> >();
-        check_results_region_invert<FieldImpl<fifi::binary8> >();
-        check_results_region_invert<FieldImpl<fifi::binary16> >();
+        {
+            SCOPED_TRACE("binary");
+            check_results_region_invert<FieldImpl<fifi::binary> >();
+        }
+        {
+            SCOPED_TRACE("binary4");
+            check_results_region_invert<FieldImpl<fifi::binary4> >();
+        }
+        {
+            SCOPED_TRACE("binary8");
+            check_results_region_invert<FieldImpl<fifi::binary8> >();
+        }
+        {
+            SCOPED_TRACE("binary16");
+            check_results_region_invert<FieldImpl<fifi::binary16> >();
+        }
+    }
+
+
+    template<template <class> class FieldImpl>
+    void check_region_random()
+    {
+
+        {
+            SCOPED_TRACE("binary");
+            check_random_region<FieldImpl<fifi::binary> >();
+        }
+        {
+            SCOPED_TRACE("binary4");
+            check_random_region<FieldImpl<fifi::binary4> >();
+        }
+        {
+            SCOPED_TRACE("binary8");
+            check_random_region<FieldImpl<fifi::binary8> >();
+        }
+        {
+            SCOPED_TRACE("binary16");
+            check_random_region<FieldImpl<fifi::binary16> >();
+        }
     }
 
     template<class FieldImpl>
-    void check_all()
+    void check_region_all()
     {
-        check_results_region_multiply<FieldImpl>();
-        check_results_region_divide<FieldImpl>();
-        check_results_region_add<FieldImpl>();
-        check_results_region_subtract<FieldImpl>();
-        check_results_region_invert<FieldImpl>();
+        {
+            SCOPED_TRACE("multiply");
+            check_results_region_multiply<FieldImpl>();
+        }
+        {
+            SCOPED_TRACE("divide");
+            check_results_region_divide<FieldImpl>();
+        }
+        {
+            SCOPED_TRACE("add");
+            check_results_region_add<FieldImpl>();
+        }
+        {
+            SCOPED_TRACE("subtract");
+            check_results_region_subtract<FieldImpl>();
+        }
+        {
+            SCOPED_TRACE("invert");
+            check_results_region_invert<FieldImpl>();
+        }
+        {
+            SCOPED_TRACE("random");
+            check_random_region<FieldImpl>();
+        }
     }
 }

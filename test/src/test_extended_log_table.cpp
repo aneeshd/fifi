@@ -8,34 +8,23 @@
 #include <fifi/extended_log_table.hpp>
 
 #include "helper_test_arithmetic.hpp"
-#include "expected_results.hpp"
 
-TEST(TestExtendedLogTable, add)
+#include <fifi/binary4.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/binary16.hpp>
+
+
+TEST(TestExtendedLogTable, binary4)
 {
-    fifi::check_add<fifi::extended_log_table>();
+    fifi::check_all<fifi::extended_log_table<fifi::binary4>>();
 }
 
-TEST(TestExtendedLogTable, subtract)
+TEST(TestExtendedLogTable, binary8)
 {
-    fifi::check_subtract<fifi::extended_log_table>();
+    fifi::check_all<fifi::extended_log_table<fifi::binary8>>();
 }
 
-TEST(TestExtendedLogTable, multiply)
+TEST(TestExtendedLogTable, binary16)
 {
-    fifi::check_multiply<fifi::extended_log_table>();
-}
-
-TEST(TestExtendedLogTable, divide)
-{
-    fifi::check_divide<fifi::extended_log_table>();
-}
-
-TEST(TestExtendedLogTable, invert)
-{
-    fifi::check_invert<fifi::extended_log_table>();
-}
-
-TEST(TestExtendedLogTable, random)
-{
-    fifi::check_random<fifi::extended_log_table>();
+    fifi::check_all<fifi::extended_log_table<fifi::binary16>>();
 }
