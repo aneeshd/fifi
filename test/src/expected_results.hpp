@@ -274,8 +274,8 @@ struct sum_modulo_results;
 template<class FieldImpl>
 inline void check_results_sum_modulo()
 {
-    //check_results_binary<FieldImpl, sum_modulo_results, DEFAULT>(
-    //    &FieldImpl::calculate_sum_modulo);
+    check_results_binary<FieldImpl, sum_modulo_results, DEFAULT>(
+        &FieldImpl::template calculate_sum_modulo<>);
 }
 
 //------------------------------------------------------------------
