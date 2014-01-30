@@ -5,9 +5,7 @@
 
 #pragma once
 
-#include "binary_simple_online_arithmetic.hpp"
 #include "binary4_packed_arithmetic.hpp"
-#include "binary_packed_arithmetic.hpp"
 #include "final.hpp"
 #include "full_table_arithmetic.hpp"
 #include "packed_arithmetic.hpp"
@@ -26,14 +24,11 @@ namespace fifi
                region_arithmetic<
                // Packed arithmetic
                binary4_packed_arithmetic<Field,
-               binary_packed_arithmetic<Field,
                packed_arithmetic<
-               // Specialized Arithmetic
-               binary_simple_online_arithmetic<Field,
                // Arithmetic
                full_table_arithmetic<Field,
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > > > >
+               final<Field> > > > > > >
     { };
 }

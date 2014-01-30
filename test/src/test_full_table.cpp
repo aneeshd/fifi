@@ -9,21 +9,14 @@
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
 
-#include "expected_results.hpp"
+#include "helper_test_arithmetic.hpp"
 
-template<class Field>
-inline void test_full_table()
+TEST(TestFullTable, binary4)
 {
-    check_results_multiply<fifi::full_table<Field> >();
-    check_results_invert<fifi::full_table<Field> >();
-    check_results_divide<fifi::full_table<Field> >();
-    check_results_add<fifi::full_table<Field> >();
-    check_results_subtract<fifi::full_table<Field> >();
-    check_random_default<fifi::full_table<Field> >();
+    fifi::check_all<fifi::full_table<fifi::binary4>>();
 }
 
-TEST(TestFullTable, api)
+TEST(TestFullTable, binary8)
 {
-   test_full_table<fifi::binary4>();
-   test_full_table<fifi::binary8>();
+    fifi::check_all<fifi::full_table<fifi::binary8>>();
 }

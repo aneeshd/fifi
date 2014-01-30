@@ -13,6 +13,7 @@
 
 #include "is_valid_element.hpp"
 #include "sum_modulo.hpp"
+#include "binary.hpp"
 
 namespace fifi
 {
@@ -20,6 +21,9 @@ namespace fifi
     template<class Field, class Super>
     class log_table_arithmetic : public Super
     {
+        static_assert(!std::is_same<binary, typename Super::field_type>::value,
+              "This layer does not support the binary field");
+
     public:
 
         /// Typedef of the data type used for each field element

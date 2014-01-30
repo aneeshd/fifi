@@ -33,16 +33,31 @@ namespace fifi
 
 TEST(TestBinaryPackedArithmetic, fall_through)
 {
-    fifi::helper_packed_fall_through_test<fifi::binary,
+    {
+        SCOPED_TRACE("binary");
+        fifi::helper_packed_fall_through_test<fifi::binary,
         fifi::dummy_stack<fifi::binary> >(false, false, false, false, false);
-    fifi::helper_packed_fall_through_test<fifi::binary4,
+    }
+    {
+        SCOPED_TRACE("binary4");
+        fifi::helper_packed_fall_through_test<fifi::binary4,
         fifi::dummy_stack<fifi::binary4> >();
-    fifi::helper_packed_fall_through_test<fifi::binary8,
+    }
+    {
+        SCOPED_TRACE("binary8");
+        fifi::helper_packed_fall_through_test<fifi::binary8,
         fifi::dummy_stack<fifi::binary8> >();
-    fifi::helper_packed_fall_through_test<fifi::binary16,
+    }
+    {
+        SCOPED_TRACE("binary16");
+        fifi::helper_packed_fall_through_test<fifi::binary16,
         fifi::dummy_stack<fifi::binary16> >();
-    fifi::helper_packed_fall_through_test<fifi::prime2325,
+    }
+    {
+        SCOPED_TRACE("prime2325");
+        fifi::helper_packed_fall_through_test<fifi::prime2325,
         fifi::dummy_stack<fifi::prime2325> >();
+    }
 }
 
 TEST(TestBinaryPackedArithmetic, add)

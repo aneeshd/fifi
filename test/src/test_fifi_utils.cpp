@@ -6,7 +6,6 @@
 
 #include <gtest/gtest.h>
 
-#include <fifi/finite_field.hpp>
 #include <fifi/fifi_utils.hpp>
 #include <fifi/binary.hpp>
 #include <fifi/binary8.hpp>

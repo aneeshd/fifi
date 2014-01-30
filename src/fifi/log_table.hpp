@@ -24,11 +24,10 @@ namespace fifi
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
     class log_table :
-        public binary_simple_online_arithmetic<Field,
-               log_table_arithmetic<Field,
+        public log_table_arithmetic<Field,
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > >
+               final<Field> > > >
     { };
 
 

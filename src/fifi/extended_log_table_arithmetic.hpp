@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "binary.hpp"
+#include "prime2325.hpp"
 #include "is_valid_element.hpp"
 
 namespace fifi
@@ -23,6 +24,10 @@ namespace fifi
     class extended_log_table_arithmetic : public Super
     {
     public:
+        static_assert(!std::is_same<prime2325, typename Super::field_type>::value,
+              "This layer does not support the 2^32 - 5 prime field");
+        static_assert(!std::is_same<binary, typename Super::field_type>::value,
+              "This layer does not support the binary field");
 
         /// The field type
         typedef typename Super::field_type field_type;
