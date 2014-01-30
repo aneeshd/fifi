@@ -17,7 +17,7 @@
 
 #include <fifi/arithmetics.hpp>
 #include <fifi/default_field.hpp>
-
+/*
 template<class FieldImpl>
 class test_arithmetics
 {
@@ -290,3 +290,4 @@ TEST(test_arithmetics, RunFunctions)
     }
 
 }
+*/

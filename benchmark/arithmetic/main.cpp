@@ -474,7 +474,6 @@ BENCHMARK_F(setup_optimal_prime2325, Arithmetic, OptimalPrime2325, 5)
     benchmark();
 }
 
-
 int main(int argc, const char* argv[])
 {
 

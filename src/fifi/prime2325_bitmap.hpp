@@ -11,6 +11,7 @@
 #include <sak/storage.hpp>
 
 #include "prime2325.hpp"
+#include "prime2325_prefix_length.hpp"
 
 namespace fifi
 {
@@ -36,7 +37,7 @@ namespace fifi
             // log2 of the maximum block size gives us the
             // maximum bit prefix needed
             uint32_t max_prefix_bits =
-                prime2325::prefix_length(m_max_block_length);
+                prime2325_prefix_length(m_max_block_length);
 
             // The amount to shift the prefix to get the prefix value:
             //
@@ -70,7 +71,7 @@ namespace fifi
             assert(block_length > 0);
             assert(block_length <= prime2325::max_block_length);
 
-            uint32_t prefix_bits = prime2325::prefix_length(block_length);
+            uint32_t prefix_bits = prime2325_prefix_length(block_length);
 
             // ceil(x/y) = ((x - 1) / y) + 1
             uint32_t size_bytes = (((1 << prefix_bits) - 1) / 8) + 1;

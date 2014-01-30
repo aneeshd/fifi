@@ -29,12 +29,14 @@ namespace fifi
     template<class Field, class Super>
     class full_table_arithmetic : public Super
     {
-        static_assert(!std::is_same<prime2325, typename Super::field_type>::value,
-              "This layer does not support the 2^32 - 5 prime field");
-        static_assert(!std::is_same<binary16, typename Super::field_type>::value,
-              "This layer does not support the binary16 field");
+        static_assert(
+            !std::is_same<prime2325, typename Super::field_type>::value,
+            "This layer does not support the 2^32 - 5 prime field");
+        static_assert(
+            !std::is_same<binary16, typename Super::field_type>::value,
+            "This layer does not support the binary16 field");
         static_assert(!std::is_same<binary, typename Super::field_type>::value,
-              "This layer does not support the binary field");
+            "This layer does not support the binary field");
 
     public:
 

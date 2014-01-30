@@ -24,7 +24,7 @@
 
 namespace fifi
 {
-
+    /*
     /// Generic version of adding two buffers
     ///
     /// Provides: dest[i] = dest[i] + src[i]
@@ -56,11 +56,12 @@ namespace fifi
 
     template<>
     inline void
-    add(const optimal_prime_arithmetic<prime2325> &/*field*/,
+    add(const optimal_prime_arithmetic<prime2325> &field,
         optimal_prime_arithmetic<prime2325>::value_type * __restrict dest,
         const optimal_prime_arithmetic<prime2325>::value_type * __restrict src,
         uint32_t length)
     {
+        (void)field;
         assert(dest != 0);
         assert(src != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
@@ -143,11 +144,12 @@ namespace fifi
 
     template<>
     inline void
-    subtract(const optimal_prime_arithmetic<prime2325> &/*field*/,
+    subtract(const optimal_prime_arithmetic<prime2325> &field,
              optimal_prime_arithmetic<prime2325>::value_type * __restrict dest,
              const optimal_prime_arithmetic<prime2325>::value_type * __restrict src,
              uint32_t length)
     {
+        (void)field;
         assert(dest != 0);
         assert(src != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
@@ -243,11 +245,12 @@ namespace fifi
     /// @see generic version of multiply_constant(...) for parameters
     template<template <class> class FieldImpl>
     inline void
-    multiply_constant(const FieldImpl<binary> &/*field*/,
+    multiply_constant(const FieldImpl<binary> &field,
                       typename binary::value_type constant,
                       typename binary::value_type *dest,
                       uint32_t length)
     {
+        (void)field;
         assert(dest != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
         assert(length > 0);
@@ -351,9 +354,10 @@ namespace fifi
                  full_table<binary8>::value_type constant,
                  full_table<binary8>::value_type * __restrict dest,
                  const full_table<binary8>::value_type * __restrict src,
-                 full_table<binary8>::value_type * /*__restrict temp*/,
+                 full_table<binary8>::value_type * __restrict temp,
                  uint32_t length)
     {
+        (void)temp;
         assert(dest != 0);
         assert(src  != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
@@ -389,9 +393,10 @@ namespace fifi
                              typename binary::value_type constant,
                              typename binary::value_type * __restrict dest,
                              const typename binary::value_type * __restrict src,
-                             typename binary::value_type * /*__restrict temp*/,
+                             typename binary::value_type * __restrict temp,
                              uint32_t length)
     {
+        (void)temp;
         assert(dest != 0);
         assert(src  != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
@@ -499,9 +504,10 @@ namespace fifi
                       full_table<binary8>::value_type constant,
                       full_table<binary8>::value_type * __restrict dest,
                       const full_table<binary8>::value_type * __restrict src,
-                      full_table<binary8>::value_type * /*__restrict temp*/,
+                      full_table<binary8>::value_type * __restrict temp,
                       uint32_t length)
     {
+        (void)temp;
         assert(dest != 0);
         assert(src != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
@@ -538,9 +544,10 @@ namespace fifi
                       typename binary::value_type constant,
                       typename binary::value_type * __restrict dest,
                       const typename binary::value_type * __restrict src,
-                      typename binary::value_type * /*__restrict temp*/,
+                      typename binary::value_type * __restrict temp,
                       uint32_t length)
     {
+        (void)temp;
         assert(dest != 0);
         assert(src != 0);
         // assert((((uintptr_t)dest) & 15) == 0); // Check alignment
@@ -559,4 +566,5 @@ namespace fifi
             subtract(field, dest, src, length);
         }
     }
+    */
 }

@@ -11,7 +11,7 @@
 #include <gtest/gtest.h>
 
 #include <fifi/prime2325.hpp>
-
+#include <fifi/prime2325_prefix_length.hpp>
 #include <sak/storage.hpp>
 namespace fifi
 {
@@ -29,7 +29,7 @@ namespace fifi
         std::vector<uint32_t> data(block_length);
 
         uint8_t skip_value = rand() % block_length;
-        uint32_t prefix_length = prime2325::prefix_length(block_length);
+        uint32_t prefix_length = prime2325_prefix_length(block_length);
 
         EXPECT_EQ(prefix_bits, prefix_length);
 

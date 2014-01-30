@@ -15,7 +15,7 @@
 #include <fifi/prime2325.hpp>
 #include <fifi/arithmetics.hpp>
 #include <fifi/default_field.hpp>
-
+/*
 template<class FieldImpl>
 void test_alignment(uint32_t length, uint32_t start_offset)
 {
@@ -112,3 +112,4 @@ TEST(test_arithmetics, alignment)
         test_alignment(data_length, i);
     }
 }
+*/

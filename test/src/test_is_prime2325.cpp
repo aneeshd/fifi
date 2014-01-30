@@ -13,8 +13,8 @@
 
 TEST(TestIsPrime2325, is_prime2325)
 {
-    EXPECT_TRUE(fifi::is_prime2325<fifi::binary>::value == false);
-    EXPECT_TRUE(fifi::is_prime2325<fifi::binary8>::value == false);
-    EXPECT_TRUE(fifi::is_prime2325<fifi::binary16>::value == false);
-    EXPECT_TRUE(fifi::is_prime2325<fifi::prime2325>::value == true);
+    EXPECT_FALSE(fifi::is_prime2325<fifi::binary>::value);
+    EXPECT_FALSE(fifi::is_prime2325<fifi::binary8>::value);
+    EXPECT_FALSE(fifi::is_prime2325<fifi::binary16>::value);
+    EXPECT_TRUE(fifi::is_prime2325<fifi::prime2325>::value);
 }

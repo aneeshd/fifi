@@ -5,51 +5,50 @@
 
 #include <gtest/gtest.h>
 
-#include <fifi/optimal_prime_arithmetic.hpp>
-
 #include <fifi/prime2325.hpp>
-
+#include <fifi/optimal_prime_arithmetic.hpp>
+#include <fifi/final.hpp>
 #include "expected_results.hpp"
+
+namespace fifi
+{
+    namespace {
+        template<class Field>
+        struct dummy_stack : public
+        optimal_prime_arithmetic<
+        final<Field> >
+        { };
+    }
+}
 
 TEST(TestOptimalPrimeArithmetic, multiply)
 {
-    check_results_multiply<fifi::optimal_prime_arithmetic<fifi::prime2325> >();
-}
-
-TEST(TestOptimalPrimeArithmetic, divide2325)
-{
-    check_results_divide<fifi::optimal_prime_arithmetic<fifi::prime2325> >();
-}
-
-TEST(TestOptimalPrimeArithmetic, add2325)
-{
-    check_results_add<fifi::optimal_prime_arithmetic<fifi::prime2325> >();
-}
-
-TEST(TestOptimalPrimeArithmetic, subtract2325)
-{
-    check_results_subtract<fifi::optimal_prime_arithmetic<fifi::prime2325> >();
-}
-
-TEST(TestOptimalPrimeArithmetic, invert2325)
-{
-    check_results_invert<fifi::optimal_prime_arithmetic<fifi::prime2325> >();
-}
-
-TEST(TestOptimalPrimeArithmetic, prime2325randCheck)
-{
-    fifi::optimal_prime_arithmetic<fifi::prime2325> optimal;
-
-    int elements = 10000;
-
-    for(int i = 0; i < elements; ++i)
     {
-        fifi::prime2325::value_type v = rand() % fifi::prime2325::order;
+        SCOPED_TRACE("prime2325");
+        check_results_multiply<fifi::dummy_stack<fifi::prime2325> >();
+    }
+}
 
-        if(v == 0)
-            ++v;
+TEST(TestOptimalPrimeArithmetic, divide)
+{
+    {
+        SCOPED_TRACE("prime2325");
+        check_results_divide<fifi::dummy_stack<fifi::prime2325> >();
+    }
+}
 
-        EXPECT_EQ( optimal.multiply(v, optimal.invert(v)), 1U);
-        EXPECT_EQ( optimal.multiply(v, optimal.divide(1, v)), 1U);
+TEST(TestOptimalPrimeArithmetic, invert)
+{
+    {
+        SCOPED_TRACE("prime2325");
+        check_results_invert<fifi::dummy_stack<fifi::prime2325> >();
+    }
+}
+
+TEST(TestOptimalPrimeArithmetic, random)
+{
+    {
+        SCOPED_TRACE("prime2325");
+        check_random_default<fifi::dummy_stack<fifi::prime2325> >();
     }
 }

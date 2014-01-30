@@ -11,23 +11,21 @@
 
 namespace fifi
 {
-    /// Fall through case for other fields(?)
-    template<class Field>
-    class optimal_prime_arithmetic
-    { };
-
     /// This implementation allows finite field arithmetics in the
     /// prime fields in this case where the characteristic of the
     /// field is different than two.
-    template<>
-    class optimal_prime_arithmetic<prime2325>
+    template<class Super>
+    class optimal_prime_arithmetic : public Super
     {
+        static_assert(std::is_same<prime2325, typename Super::field_type>::value,
+              "This layer only support the 2^32 - 5 prime field");
     public:
+
         /// Typedef of the data type used for each field element
-        typedef prime2325::value_type value_type;
+        typedef typename Super::value_type value_type;
 
         /// Typedef of the field type used
-        typedef prime2325 field_type;
+        typedef typename Super::field_type field_type;
 
     public:
         /// Specialization for the (2^32 - 5) prime field. Multiplication is
@@ -52,7 +50,7 @@ namespace fifi
 
             c = c + l1 + l2;
 
-            c = c >= prime2325::prime ? c - prime2325::prime : c;
+            c = c >= field_type::prime ? c - field_type::prime : c;
 
             return static_cast<value_type>(c);
 
@@ -75,7 +73,7 @@ namespace fifi
         value_type invert(value_type element) const
         {
             assert(element > 0);
-            assert(element < prime2325::prime);
+            assert(element < field_type::prime);
 
             int64_t q  = 0;
 
@@ -84,7 +82,7 @@ namespace fifi
             int64_t x1 = 1;
 
             int64_t r  = 0;
-            int64_t r0 = prime2325::prime;
+            int64_t r0 = field_type::prime;
             int64_t r1 = element;
 
             while(r1 != 1)
@@ -101,7 +99,7 @@ namespace fifi
                 x1 = x;
             }
 
-            x1 = x1 < 0 ? (x1 + prime2325::prime) : x1;
+            x1 = x1 < 0 ? (x1 + field_type::prime) : x1;
 
             return static_cast<value_type>(x1);
         }
@@ -114,7 +112,7 @@ namespace fifi
 
 
             element_one = element_one -
-                (prime2325::prime & ((prime2325::prime > element_one) - 1));
+                (field_type::prime & ((field_type::prime > element_one) - 1));
 
             return element_one;
         }

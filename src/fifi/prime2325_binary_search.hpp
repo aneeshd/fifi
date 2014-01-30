@@ -12,7 +12,7 @@
 #include <sak/storage.hpp>
 
 #include "prime2325.hpp"
-
+#include "prime2325_prefix_length.hpp"
 namespace fifi
 {
     /// Binary search algorithms for finding an unused bit prefix in arbitrary
@@ -44,8 +44,7 @@ namespace fifi
             assert(m_k_pass > 0);
 
             // How many bits are needed to find an unused prefix
-            uint32_t prefix_bits =
-                prime2325::prefix_length(m_max_block_length);
+            uint32_t prefix_bits = prime2325_prefix_length(m_max_block_length);
 
             // Calculate the shifts required for each pass
             // Example m_k_pass_bits = 4
@@ -124,8 +123,7 @@ namespace fifi
             assert(block_length <= prime2325::max_block_length);
 
             // How many bits are needed to find an unused prefix
-            uint32_t prefix_bits =
-                prime2325::prefix_length(block_length);
+            uint32_t prefix_bits = prime2325_prefix_length(block_length);
 
             uint32_t large_shifts = ((prefix_bits - 1) / k_pass) + 1;
             uint32_t number_of_buckets = 1 << large_shifts;

@@ -11,7 +11,6 @@
 
 namespace fifi
 {
-
     /// @brief This layer implements a simple function for determining
     ///        whether a value is within the valid range of the chosen
     ///        finite field.
