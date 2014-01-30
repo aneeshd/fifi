@@ -79,7 +79,7 @@ namespace fifi
             value_type one = m_log[a];
             value_type two = m_log[b];
 
-            value_type sum = sum_modulo<field_type>(one, two);
+            value_type sum = Super::calculate_sum_modulo(one, two);
 
             // Notice that we handle the case where sum is equal to
             // 2^m - 1, by remapping this entry in the AntiLog table
@@ -112,7 +112,7 @@ namespace fifi
             two = Field::max_value - two;
 
             // Now we may simply multiply like before
-            value_type sum = sum_modulo<field_type>(one, two);
+            value_type sum = Super::calculate_sum_modulo(one, two);
 
             // Notice that we handle the case where sum is equal to
             // 2^m - 1, by remapping this entry in the AntiLog table

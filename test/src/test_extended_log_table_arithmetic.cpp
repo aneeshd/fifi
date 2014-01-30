@@ -20,7 +20,7 @@ namespace fifi
     namespace {
         template<class Field>
         struct dummy_stack_fall_through : public
-        extended_log_table_arithmetic<Field,
+        extended_log_table_arithmetic<
         helper_fall_through<Field,
         helper_catch_all<Field> > >
         { };
@@ -29,7 +29,7 @@ namespace fifi
     namespace {
         template<class Field>
         struct dummy_stack : public
-        extended_log_table_arithmetic<Field,
+        extended_log_table_arithmetic<
         simple_online_arithmetic<
         final<Field> > >
         { };

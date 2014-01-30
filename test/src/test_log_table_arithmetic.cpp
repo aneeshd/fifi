@@ -11,6 +11,7 @@
 #include <fifi/log_table_arithmetic.hpp>
 #include <fifi/simple_online_arithmetic.hpp>
 #include <fifi/final.hpp>
+#include <fifi/sum_modulo.hpp>
 #include "helper_catch_all.hpp"
 #include "helper_fall_through.hpp"
 #include "expected_results.hpp"
@@ -22,7 +23,8 @@ namespace fifi
         struct dummy_stack_fall_through : public
         log_table_arithmetic<Field,
         helper_fall_through<Field,
-        helper_catch_all<Field> > >
+        sum_modulo<
+        helper_catch_all<Field> > > >
         { };
     }
 
@@ -31,7 +33,8 @@ namespace fifi
         struct dummy_stack : public
         log_table_arithmetic<Field,
         simple_online_arithmetic<
-        final<Field> > >
+        sum_modulo<
+        final<Field> > > >
         { };
     }
 }

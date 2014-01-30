@@ -92,6 +92,20 @@ find_degree_results<fifi::binary>::m_results[] =
 const uint32_t find_degree_results<fifi::binary>::m_size =
     dimension_of(find_degree_results<fifi::binary>::m_results);
 
+const expected_result_binary<fifi::binary>
+sum_modulo_results<fifi::binary>::m_results[] =
+{
+    // m_input1, m_input2, m_result
+    { 1, 1, 0},
+    { 0, 0, 0},
+    { 0, 1, 1},
+    { 1, 0, 1}
+};
+
+const uint32_t sum_modulo_results<fifi::binary>::m_size =
+    dimension_of(sum_modulo_results<fifi::binary>::m_results);
+
+
 //////////////////////
 /// packed results ///
 //////////////////////
@@ -324,7 +338,6 @@ subtract_results<fifi::binary4>::m_results[] =
 const uint32_t subtract_results<fifi::binary4>::m_size =
     dimension_of(subtract_results<fifi::binary4>::m_results);
 
-
 const expected_result_unary<fifi::binary4>
 invert_results<fifi::binary4>::m_results[] =
 {
@@ -383,6 +396,40 @@ find_degree_results<fifi::binary4>::m_results[] =
 
 const uint32_t find_degree_results<fifi::binary4>::m_size =
     dimension_of(find_degree_results<fifi::binary4>::m_results);
+
+const expected_result_binary<fifi::binary4>
+sum_modulo_results<fifi::binary4>::m_results[] =
+{
+    // m_input1, m_input2, m_result
+    {13, 13,  0},
+    { 1,  9,  8},
+    { 6,  8, 14},
+    {14,  8,  6},
+    { 2,  3,  1},
+    {10, 13,  7},
+    {15,  0, 15},
+    {13,  3, 14},
+    { 1, 15, 14},
+    {14,  9,  7},
+    { 4,  2,  6},
+    {13,  9,  4},
+    { 2, 10,  8},
+    {11,  4, 15},
+    { 7, 12, 11},
+    { 9,  3, 10},
+    { 4,  2,  6},
+    { 9,  6, 15},
+    { 3,  2,  1},
+    {11, 12,  7},
+    { 4, 11, 15},
+    {14, 11,  5},
+    { 1, 12, 13},
+    { 2, 11,  9},
+    {11, 12,  7}
+};
+
+const uint32_t sum_modulo_results<fifi::binary4>::m_size =
+    dimension_of(sum_modulo_results<fifi::binary4>::m_results);
 
 //////////////////////
 /// packed results ///
@@ -800,6 +847,36 @@ find_degree_results<fifi::binary8>::m_results[] =
 const uint32_t find_degree_results<fifi::binary8>::m_size =
     dimension_of(find_degree_results<fifi::binary8>::m_results);
 
+const expected_result_binary<fifi::binary8>
+sum_modulo_results<fifi::binary8>::m_results[] =
+{
+    // arg1, arg2, result
+    {  147,  115,  224 },
+    {   11,    7,   12 },
+    {   80,    3,   83 },
+    {   98,  174,  204 },
+    {   24,    9,   17 },
+    {  156,  155,    7 },
+    {    4,    4,    0 },
+    {   48,  150,  166 },
+    {   15,   94,   81 },
+    {  161,  183,   22 },
+    {  177,   21,  164 },
+    {  116,  113,    5 },
+    {   90,   39,  125 },
+    {  172,  178,   30 },
+    {  186,  122,  192 },
+    {  141,   31,  146 },
+    {  115,  183,  196 },
+    {  228,   70,  162 },
+    {   65,  221,  156 },
+    {   59,  205,  246 },
+    {  232,   59,  211 }
+};
+
+const uint32_t sum_modulo_results<fifi::binary8>::m_size =
+    dimension_of(sum_modulo_results<fifi::binary8>::m_results);
+
 //------------------------------------------------------------------
 // binary16
 //------------------------------------------------------------------
@@ -980,8 +1057,6 @@ subtract_results<fifi::binary16>::m_results[] =
 const uint32_t subtract_results<fifi::binary16>::m_size =
     dimension_of(subtract_results<fifi::binary16>::m_results);
 
-
-
 // Invert binary16
 const expected_result_unary<fifi::binary16>
 invert_results<fifi::binary16>::m_results[] =
@@ -1062,6 +1137,36 @@ find_degree_results<fifi::binary16>::m_results[] =
 
 const uint32_t find_degree_results<fifi::binary16>::m_size =
     dimension_of(find_degree_results<fifi::binary16>::m_results);
+
+const expected_result_binary<fifi::binary16>
+sum_modulo_results<fifi::binary16>::m_results[] =
+{
+    // arg1,    arg2,    result
+    {  47030U,  45394U,   1764U },
+    {   5510U,  29776U,  25046U },
+    {  28955U,  23150U,  11125U },
+    {  10067U,  44278U,  35749U },
+    {  45823U,  47677U,   2242U },
+    {  31351U,  36362U,  62589U },
+    {   7933U,  29540U,  28057U },
+    {  46915U,  58512U,  21459U },
+    {  17898U,  16696U,   1234U },
+    {  56727U,  15227U,  59116U },
+    {  52747U,  59532U,   9863U },
+    {  15197U,  15683U,   1566U },
+    {   3261U,   5137U,   6316U },
+    {  41996U,  12510U,  38098U },
+    {  55303U,  11397U,  62594U },
+    {  11193U,  65161U,  54576U },
+    {  28822U,  22285U,  10139U },
+    {  20592U,  23925U,   3333U },
+    {  25771U,  38766U,  62405U },
+    {   7848U,   2499U,   5995U },
+    {  30054U,  57007U,  43977U }
+};
+
+const uint32_t sum_modulo_results<fifi::binary16>::m_size =
+    dimension_of(sum_modulo_results<fifi::binary16>::m_results);
 
 //------------------------------------------------------------------
 // prime2325
@@ -1172,8 +1277,6 @@ add_results<fifi::prime2325>::m_results[] =
 
 const uint32_t add_results<fifi::prime2325>::m_size =
     dimension_of(add_results<fifi::prime2325>::m_results);
-
-
 
 const expected_result_binary<fifi::prime2325>
 subtract_results<fifi::prime2325>::m_results[] =
@@ -1290,3 +1393,35 @@ find_degree_results<fifi::prime2325>::m_results[] =
 
 const uint32_t find_degree_results<fifi::prime2325>::m_size =
     dimension_of(find_degree_results<fifi::prime2325>::m_results);
+
+const expected_result_binary<fifi::prime2325>
+sum_modulo_results<fifi::prime2325>::m_results[] =
+{
+    // arg1,       arg2,        result
+    { 0U,          0U,          0U          },
+    { 4294967290U, 1U,          4294967289U },
+    { 4294967290U, 2U,          4294967288U },
+    { 1U,          4294967290U, 2U          },
+    { 2U,          4294967290U, 3U          },
+    { 4294967290U, 4294967290U, 0U          },
+    { 2021566441U, 1563544409U, 458022032U  },
+    { 1376464298U, 3719246614U, 1952184975U },
+    { 1646681944U, 2090570642U, 3851078593U },
+    { 1718415100U, 3764394937U, 2248987454U },
+    { 1555616877U, 417999038U,  1137617839U },
+    { 3448691623U, 2270397823U, 1178293800U },
+    { 3267843829U, 3990959519U, 3571851601U },
+    { 4181356062U, 2914712094U, 1266643968U },
+    { 2486487802U, 4101049708U, 2680405385U },
+    { 2313466124U, 1242826905U, 1070639219U },
+    { 3850830140U, 4242429948U, 3903367483U },
+    { 815150013U,  2783628454U, 2326488850U },
+    { 3601154686U, 238248285U,  3362906401U },
+    { 2279203252U, 2364542188U, 4209628355U },
+    { 3007334859U, 2068575905U, 938758954U  },
+    { 1591755985U, 760357706U,  831398279U  },
+    { 1111197069U, 3288497105U, 2117667255U }
+};
+
+const uint32_t sum_modulo_results<fifi::prime2325>::m_size =
+    dimension_of(sum_modulo_results<fifi::prime2325>::m_results);

@@ -265,6 +265,20 @@ inline void check_results_find_degree()
 }
 
 //------------------------------------------------------------------
+// sum_modulo
+//------------------------------------------------------------------
+
+template<class Field, int Method = DEFAULT>
+struct sum_modulo_results;
+
+template<class FieldImpl>
+inline void check_results_sum_modulo()
+{
+    //check_results_binary<FieldImpl, sum_modulo_results, DEFAULT>(
+    //    &FieldImpl::calculate_sum_modulo);
+}
+
+//------------------------------------------------------------------
 // check_random
 //------------------------------------------------------------------
 
@@ -368,6 +382,13 @@ struct find_degree_results<fifi::binary>
     static const uint32_t m_size;
 };
 
+template<>
+struct sum_modulo_results<fifi::binary>
+{
+    static const expected_result_binary<fifi::binary> m_results[];
+    static const uint32_t m_size;
+};
+
 /// Specialized structs which contains the packed results for the binary field
 
 template<>
@@ -450,6 +471,13 @@ template<>
 struct find_degree_results<fifi::binary4>
 {
     static const expected_result_unary<fifi::binary4> m_results[];
+    static const uint32_t m_size;
+};
+
+template<>
+struct sum_modulo_results<fifi::binary4>
+{
+    static const expected_result_binary<fifi::binary4> m_results[];
     static const uint32_t m_size;
 };
 
@@ -538,6 +566,13 @@ struct find_degree_results<fifi::binary8>
     static const uint32_t m_size;
 };
 
+template<>
+struct sum_modulo_results<fifi::binary8>
+{
+    static const expected_result_binary<fifi::binary8> m_results[];
+    static const uint32_t m_size;
+};
+
 //------------------------------------------------------------------
 // binary16
 //------------------------------------------------------------------
@@ -583,6 +618,13 @@ template<>
 struct find_degree_results<fifi::binary16>
 {
     static const expected_result_unary<fifi::binary16> m_results[];
+    static const uint32_t m_size;
+};
+
+template<>
+struct sum_modulo_results<fifi::binary16>
+{
+    static const expected_result_binary<fifi::binary16> m_results[];
     static const uint32_t m_size;
 };
 
@@ -634,3 +676,9 @@ struct find_degree_results<fifi::prime2325>
     static const uint32_t m_size;
 };
 
+template<>
+struct sum_modulo_results<fifi::prime2325>
+{
+    static const expected_result_binary<fifi::prime2325> m_results[];
+    static const uint32_t m_size;
+};

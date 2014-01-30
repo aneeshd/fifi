@@ -20,7 +20,7 @@ namespace fifi
     /// Produces an extended log table for multiplication and division.
     /// A fall-through specialization for the binary has been added as
     /// the table creation requires arithemetics not supported by that field.
-    template<class Field, class Super>
+    template<class Super>
     class extended_log_table_arithmetic : public Super
     {
     public:

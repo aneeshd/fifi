@@ -27,6 +27,7 @@ namespace fifi
         public log_table_arithmetic<Field,
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > >
+               sum_modulo<
+               final<Field> > > > >
     { };
 }

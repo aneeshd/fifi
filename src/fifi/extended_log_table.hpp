@@ -16,7 +16,7 @@ namespace fifi
 
     template<class Field>
     class extended_log_table :
-        public extended_log_table_arithmetic<Field,
+        public extended_log_table_arithmetic<
                simple_online_arithmetic<
                polynomial_degree<
                final<Field> > > >
