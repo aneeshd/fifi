@@ -19,7 +19,7 @@ inline void test_full_table()
     check_results_divide<fifi::full_table<Field> >();
     check_results_add<fifi::full_table<Field> >();
     check_results_subtract<fifi::full_table<Field> >();
-    check_random<fifi::full_table<Field> >();
+    check_random_default<fifi::full_table<Field> >();
 }
 
 TEST(TestFullTable, api)

@@ -11,14 +11,15 @@
 #include <cstdint>
 #include <vector>
 
+#include "binary.hpp"
 #include "is_valid_element.hpp"
 
 namespace fifi
 {
-
-    /// Produces an extended log table for multiplication
-    /// and division.
-    template<class Super>
+    /// Produces an extended log table for multiplication and division.
+    /// A fall-through specialization for the binary has been added as
+    /// the table creation requires arithemetics not supported by that field.
+    template<class Field, class Super>
     class extended_log_table_arithmetic : public Super
     {
     public:
@@ -129,4 +130,8 @@ namespace fifi
 
     };
 
+    /// Fall-through for binary
+    template<class Super>
+    class extended_log_table_arithmetic<binary, Super> : public Super
+    { };
 }

@@ -38,3 +38,8 @@ TEST(TestSimpleOnline, invert)
 {
     fifi::check_invert<fifi::simple_online>();
 }
+
+TEST(TestSimpleOnline, random)
+{
+    fifi::check_random<fifi::simple_online>();
+}

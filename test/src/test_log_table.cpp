@@ -15,17 +15,21 @@
 template<class Field>
 inline void test_log_table()
 {
+    /*
     check_results_multiply<fifi::log_table<Field> >();
     check_results_invert<fifi::log_table<Field> >();
     check_results_divide<fifi::log_table<Field> >();
     check_results_add<fifi::log_table<Field> >();
     check_results_subtract<fifi::log_table<Field> >();
     check_random<fifi::log_table<Field> >();
+    */
 }
 
 TEST(TestLogTable, api)
 {
+    /*
    test_log_table<fifi::binary4>();
    test_log_table<fifi::binary8>();
    test_log_table<fifi::binary16>();
+    */
 }

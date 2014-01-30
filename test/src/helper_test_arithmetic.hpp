@@ -54,6 +54,16 @@ namespace fifi
         check_results_invert<FieldImpl<fifi::binary16> >();
     }
 
+    template<template <class> class FieldImpl>
+    void check_random()
+    {
+
+        check_random_default<FieldImpl<fifi::binary> >();
+        check_random_default<FieldImpl<fifi::binary4> >();
+        check_random_default<FieldImpl<fifi::binary8> >();
+        check_random_default<FieldImpl<fifi::binary16> >();
+    }
+
     template<class FieldImpl>
     void check_all()
     {
@@ -62,5 +72,6 @@ namespace fifi
         check_results_add<FieldImpl>();
         check_results_subtract<FieldImpl>();
         check_results_invert<FieldImpl>();
+        check_random_default<FieldImpl>();
     }
 }

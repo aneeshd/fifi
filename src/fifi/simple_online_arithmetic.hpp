@@ -27,10 +27,6 @@ namespace fifi
         /// Typedef of the data type used for each field element
         typedef typename Super::value_type value_type;
 
-        /// Typedef of the data type used for each field element
-        typedef typename field_type::degree_type degree_type;
-
-
     public:
 
         /// @copydoc finite_field::multiply()
@@ -49,7 +45,7 @@ namespace fifi
 
             value_type result = 0;
 
-            for(degree_type i = 0; i < field_type::degree; ++i)
+            for(typename field_type::degree_type i = 0; i < field_type::degree; ++i)
             {
                 low_bit_flag = b & 0x1;
 

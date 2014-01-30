@@ -6,26 +6,36 @@
 #include <gtest/gtest.h>
 
 #include <fifi/extended_log_table.hpp>
-#include <fifi/binary4.hpp>
-#include <fifi/binary8.hpp>
-#include <fifi/binary16.hpp>
 
+#include "helper_test_arithmetic.hpp"
 #include "expected_results.hpp"
 
-template<class Field>
-inline void test_extended_log_table()
+TEST(TestExtendedLogTable, add)
 {
-    check_results_multiply<fifi::extended_log_table<Field> >();
-    check_results_invert<fifi::extended_log_table<Field> >();
-    check_results_divide<fifi::extended_log_table<Field> >();
-    check_results_add<fifi::extended_log_table<Field> >();
-    check_results_subtract<fifi::extended_log_table<Field> >();
-    check_random<fifi::extended_log_table<Field> >();
+    fifi::check_add<fifi::extended_log_table>();
 }
 
-TEST(TestExtendedLogTable, api)
+TEST(TestExtendedLogTable, subtract)
 {
-   test_extended_log_table<fifi::binary4>();
-   test_extended_log_table<fifi::binary8>();
-   test_extended_log_table<fifi::binary16>();
+    fifi::check_subtract<fifi::extended_log_table>();
+}
+
+TEST(TestExtendedLogTable, multiply)
+{
+    fifi::check_multiply<fifi::extended_log_table>();
+}
+
+TEST(TestExtendedLogTable, divide)
+{
+    fifi::check_divide<fifi::extended_log_table>();
+}
+
+TEST(TestExtendedLogTable, invert)
+{
+    fifi::check_invert<fifi::extended_log_table>();
+}
+
+TEST(TestExtendedLogTable, random)
+{
+    fifi::check_random<fifi::extended_log_table>();
 }
