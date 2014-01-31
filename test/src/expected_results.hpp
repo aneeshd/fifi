@@ -63,8 +63,19 @@ struct method
 
     typedef std::function<void(
             const FieldImpl&,
-            typename FieldImpl::value_type* a,
+                  typename FieldImpl::value_type* a,
             const typename FieldImpl::value_type* b)> binary_ptrs;
+
+    typedef std::function<void(
+            const FieldImpl&,
+            typename FieldImpl::value_type* a,
+            typename FieldImpl::value_type b)> binary_ptr_const;
+
+    typedef std::function<void(
+            const FieldImpl&,
+            typename FieldImpl::value_type* a,
+            typename FieldImpl::value_type* b,
+            typename FieldImpl::value_type  c)> binary_ptrs_const;
 };
 
 template<class FieldImpl, template<class>class Results>
@@ -488,6 +499,15 @@ struct packed_invert_results<fifi::binary>
 {
     static const expected_result_unary<fifi::binary> m_results[];
     static const uint32_t m_size;
+};
+
+template<>
+struct region_multiply_constant_results<fifi::binary>
+{
+    static const typename fifi::binary::value_type m_inputs[];
+    static const typename fifi::binary::value_type m_constants[];
+    static const uint32_t m_inputs_size;
+    static const uint32_t m_constants_size;
 };
 
 //------------------------------------------------------------------
