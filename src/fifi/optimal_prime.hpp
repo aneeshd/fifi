@@ -7,6 +7,9 @@
 
 #include "final.hpp"
 #include "optimal_prime_arithmetic.hpp"
+#include "region_arithmetic.hpp"
+#include "region_info.hpp"
+#include "packed_arithmetic.hpp"
 
 namespace fifi
 {
@@ -16,7 +19,10 @@ namespace fifi
     template<class Field>
     class optimal_prime :
         public
+               region_arithmetic<
+               region_info<Field,
+               packed_arithmetic<
                optimal_prime_arithmetic<
-               final<Field> >
+               final<Field> > > > >
     { };
 }

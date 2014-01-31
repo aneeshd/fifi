@@ -6,9 +6,14 @@
 #pragma once
 
 #include "binary_simple_online_arithmetic.hpp"
+#include "binary_packed_arithmetic.hpp"
+#include "binary4_packed_arithmetic.hpp"
 #include "final.hpp"
 #include "polynomial_degree.hpp"
 #include "simple_online_arithmetic.hpp"
+#include "packed_arithmetic.hpp"
+#include "region_arithmetic.hpp"
+#include "region_info.hpp"
 
 namespace fifi
 {
@@ -17,10 +22,15 @@ namespace fifi
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
     class simple_online :
-        public binary_simple_online_arithmetic<Field,
+        public region_arithmetic<
+               region_info<Field,
+               binary4_packed_arithmetic<Field,
+               binary_packed_arithmetic<Field,
+               packed_arithmetic<
+               binary_simple_online_arithmetic<Field,
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > >
+               final<Field> > > > > > > > >
     { };
 
 }
