@@ -12,6 +12,7 @@
 #include <fifi/fifi_utils.hpp>
 #include <fifi/prime2325.hpp>
 #include <fifi/region_info.hpp>
+#include <fifi/final.hpp>
 
 namespace fifi
 {
@@ -21,12 +22,10 @@ namespace fifi
     // translation units
     namespace
     {
-
-        template<class Super>
-        struct dummy_super : Super
-        { };
-
-        struct dummy_final
+        template<class Field>
+        struct dummy_stack : public
+        region_info<Field,
+        final<Field> >
         { };
     }
 }
@@ -34,7 +33,7 @@ namespace fifi
 template<class Field>
 inline void test_region_info()
 {
-    fifi::dummy_super<fifi::region_info<Field, fifi::dummy_final>> stack;
+    fifi::dummy_stack<Field> stack;
 
     for(uint32_t i = 33; i < 63; ++i)
     {
@@ -54,7 +53,7 @@ TEST(TestRegionInfo, api)
     test_region_info<fifi::binary4>();
     test_region_info<fifi::binary8>();
 
-    // This fails, but why?
+    ///@todo This fails, but why?
     //test_region_info<fifi::binary16>();
     //test_region_info<fifi::prime2325>();
 }
