@@ -9,6 +9,7 @@
 #include <functional>
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include <fifi/binary.hpp>
 #include <fifi/binary4.hpp>
@@ -59,6 +60,11 @@ struct method
             const FieldImpl&,
             typename FieldImpl::value_type a,
             typename FieldImpl::value_type b)> binary;
+
+    typedef std::function<void(
+            const FieldImpl&,
+            typename FieldImpl::value_type* a,
+            const typename FieldImpl::value_type* b)> binary_ptrs;
 };
 
 template<class FieldImpl, template<class>class Results>
@@ -94,39 +100,45 @@ inline void check_results_unary(typename method<FieldImpl>::unary arithmetic)
 
 template<class Field>
 inline void create_region(
-    expected_result_binary<Field> results[],
+    const expected_result_binary<Field> data[],
     typename Field::value_type expected_result_binary<Field>::*pData,
-    typename Field::value_type* output)
+    typename Field::value_type output[],
+    uint32_t size)
 {
-    (void)results;
-    (void)pData;
-    (void)output;
+    for(uint32_t i = 0; i < size; ++i)
+    {
+        output[i] = data[i].*pData;
+    }
 }
 
 template<class FieldImpl, template<class>class Results>
-inline void check_results_region(typename method<FieldImpl>::binary arithmetic)
+inline void check_results_region(
+    typename method<FieldImpl>::binary_ptrs arithmetic)
 {
-    (void)arithmetic;
     typedef typename FieldImpl::field_type field_type;
+    typedef typename field_type::value_type value_type;
+
+    typedef expected_result_binary<field_type> entry;
+
+    auto size = Results<field_type>::m_size;
+    auto data = Results<field_type>::m_results;
+
+    std::vector<value_type> dest(size);
+    std::vector<value_type> src(size);
+    std::vector<value_type> results(size);
+
+    create_region<field_type>(data, &entry::m_input1, dest.data(),    size);
+    create_region<field_type>(data, &entry::m_input2, src.data(),     size);
+    create_region<field_type>(data, &entry::m_result, results.data(), size);
 
     FieldImpl field;
-    std::vector<field_type> input1s;
+    field.set_length(size);
+    arithmetic(field, dest.data(), src.data());
 
-    create_region<field_type>(
-        Results<field_type>::m_results,
-        &expected_result_binary<field_type>::m_input1,
-        input1s.data()
-        );
-
-    /*
-    for(uint32_t i = 0; i < Results<field_type>::m_size; ++i)
+    for (uint32_t i = 0; i < size; ++i)
     {
-        expected_result_binary<field_type> res =
-            Results<field_type>::m_results[i];
-        assert(0);
-        EXPECT_EQ(res.m_result, arithmetic(field, res.m_input1, res.m_input2));
+        EXPECT_EQ(results[i], dest[i]);
     }
-    */
 }
 
 //------------------------------------------------------------------
@@ -157,7 +169,7 @@ inline void check_results_packed_multiply()
 template<class FieldImpl>
 inline void check_results_region_multiply()
 {
-    check_results_region<FieldImpl, multiply_results>(
+    check_results_region<FieldImpl, packed_multiply_results>(
         &FieldImpl::region_multiply);
 }
 
@@ -188,7 +200,7 @@ inline void check_results_packed_divide()
 template<class FieldImpl>
 inline void check_results_region_divide()
 {
-    check_results_region<FieldImpl, divide_results>(
+    check_results_region<FieldImpl, packed_divide_results>(
         &FieldImpl::region_divide);
 }
 
@@ -218,7 +230,7 @@ inline void check_results_packed_add()
 template<class FieldImpl>
 inline void check_results_region_add()
 {
-    check_results_region<FieldImpl, add_results>(
+    check_results_region<FieldImpl, packed_add_results>(
         &FieldImpl::region_add);
 }
 
@@ -249,7 +261,7 @@ inline void check_results_packed_subtract()
 template<class FieldImpl>
 inline void check_results_region_subtract()
 {
-    check_results_region<FieldImpl, subtract_results >(
+    check_results_region<FieldImpl, packed_subtract_results >(
         &FieldImpl::region_subtract);
 }
 
@@ -276,15 +288,8 @@ inline void check_results_packed_invert()
         &FieldImpl::packed_invert);
 }
 
-template<class FieldImpl>
-inline void check_results_region_invert()
-{
-    check_results_region<FieldImpl, invert_results>(
-        &FieldImpl::region_invert);
-}
-
 //------------------------------------------------------------------
-// find_degree
+// find degree
 //------------------------------------------------------------------
 
 template<class Field>
@@ -298,7 +303,7 @@ inline void check_results_find_degree()
 }
 
 //------------------------------------------------------------------
-// sum_modulo
+// sum modulo
 //------------------------------------------------------------------
 
 template<class Field>
@@ -309,6 +314,52 @@ inline void check_results_sum_modulo()
 {
     check_results_binary<FieldImpl, sum_modulo_results>(
         &FieldImpl::template calculate_sum_modulo<>);
+}
+
+//------------------------------------------------------------------
+// multiply constant
+//------------------------------------------------------------------
+
+template<class Field>
+struct region_multiply_constant_results;
+
+template<class FieldImpl>
+inline void check_results_region_multiply_constant()
+{
+    std::cout << "check_results_region_multiply_constant: Not implemented." << std::endl;
+    //check_results_region<FieldImpl, region_multiply_constant_results>(
+    //    &FieldImpl::region_multiply_constant);
+}
+
+//------------------------------------------------------------------
+// multiply add
+//------------------------------------------------------------------
+
+template<class Field>
+struct region_multiply_add_results;
+
+template<class FieldImpl>
+inline void check_results_region_multiply_add()
+{
+    std::cout << "check_results_region_multiply_add: Not implemented." << std::endl;
+    //check_results_region<FieldImpl, region_multiply_add_results>(
+    //    &FieldImpl::region_multiply_add);
+}
+
+//------------------------------------------------------------------
+// multiply subtract
+//------------------------------------------------------------------
+
+template<class Field>
+struct region_multiply_subtract_results;
+
+template<class FieldImpl>
+inline void check_results_region_multiply_subtract()
+{
+
+    std::cout << "check_results_region_multiply_subtract: Not implemented." << std::endl;
+    //check_results_region<FieldImpl, region_multiply_subtract_results>(
+    //    &FieldImpl::region_multiply_subtract);
 }
 
 //------------------------------------------------------------------

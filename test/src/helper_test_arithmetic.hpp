@@ -14,10 +14,7 @@
 
 namespace fifi
 {
-
-
-
-    template<template<class>class FieldImpl>
+    template<template<class> class FieldImpl>
     void check_add()
     {
         {

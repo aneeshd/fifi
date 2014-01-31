@@ -5,7 +5,6 @@
 
 #pragma once
 
-
 #include <fifi/binary.hpp>
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
@@ -15,7 +14,7 @@
 
 namespace fifi
 {
-    template<template <class> FieldImpl>
+    template<template <class> class FieldImpl>
     void check_packed_add()
     {
         {
@@ -36,7 +35,7 @@ namespace fifi
         }
     }
 
-    template<template <class> FieldImpl>
+    template<template <class> class FieldImpl>
     void check_packed_subtract()
     {
         {
@@ -57,7 +56,7 @@ namespace fifi
         }
     }
 
-    template<template <class> FieldImpl>
+    template<template <class> class FieldImpl>
     void check_packed_multiply()
     {
         {
@@ -78,7 +77,7 @@ namespace fifi
         }
     }
 
-    template<template <class> FieldImpl>
+    template<template <class> class FieldImpl>
     void check_packed_divide()
     {
         {
@@ -99,7 +98,7 @@ namespace fifi
         }
     }
 
-    template<template <class> FieldImpl>
+    template<template <class> class FieldImpl>
     void check_packed_invert()
     {
         {
@@ -117,27 +116,6 @@ namespace fifi
         {
             SCOPED_TRACE("binary16");
             check_results_packed_invert<FieldImpl<fifi::binary16> >();
-        }
-    }
-
-    template<template <class> FieldImpl>
-    void check_packed_random()
-    {
-        {
-            SCOPED_TRACE("binary");
-            check_random_packed<FieldImpl<fifi::binary> >();
-        }
-        {
-            SCOPED_TRACE("binary4");
-            check_random_packed<FieldImpl<fifi::binary4> >();
-        }
-        {
-            SCOPED_TRACE("binary8");
-            check_random_packed<FieldImpl<fifi::binary8> >();
-        }
-        {
-            SCOPED_TRACE("binary16");
-            check_random_packed<FieldImpl<fifi::binary16> >();
         }
     }
 
@@ -163,11 +141,6 @@ namespace fifi
         {
             SCOPED_TRACE("invert");
             check_results_packed_invert<FieldImpl>();
-        }
-
-        {
-            SCOPED_TRACE("random");
-            check_random_packed<FieldImpl>();
         }
     }
 }

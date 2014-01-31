@@ -14,7 +14,7 @@
 
 namespace fifi
 {
-    template<template <class> FieldImpl>
+    template<template <class> class FieldImpl>
     void check_region_add()
     {
         {
@@ -35,7 +35,7 @@ namespace fifi
         }
     }
 
-    template<template <class> FieldImpl>
+    template<template <class> class FieldImpl>
     void check_region_subtract()
     {
         {
@@ -56,7 +56,7 @@ namespace fifi
         }
     }
 
-    template<template <class> FieldImpl>
+    template<template <class> class FieldImpl>
     void check_region_multiply()
     {
         {
@@ -77,7 +77,7 @@ namespace fifi
         }
     }
 
-    template<template <class> FieldImpl>
+    template<template <class> class FieldImpl>
     void check_region_divide()
     {
         {
@@ -98,47 +98,66 @@ namespace fifi
         }
     }
 
-    template<template <class> FieldImpl>
-    void check_region_invert()
+    template<template <class> class FieldImpl>
+    void check_region_multiply_constant()
     {
         {
             SCOPED_TRACE("binary");
-            check_results_region_invert<FieldImpl<fifi::binary> >();
+            check_results_region_multiply<FieldImpl<fifi::binary> >();
         }
         {
             SCOPED_TRACE("binary4");
-            check_results_region_invert<FieldImpl<fifi::binary4> >();
+            check_results_region_multiply<FieldImpl<fifi::binary4> >();
         }
         {
             SCOPED_TRACE("binary8");
-            check_results_region_invert<FieldImpl<fifi::binary8> >();
+            check_results_region_multiply<FieldImpl<fifi::binary8> >();
         }
         {
             SCOPED_TRACE("binary16");
-            check_results_region_invert<FieldImpl<fifi::binary16> >();
+            check_results_region_multiply<FieldImpl<fifi::binary16> >();
         }
     }
 
-
     template<template <class> class FieldImpl>
-    void check_region_random()
+    void check_region_multiply_add()
     {
-
         {
             SCOPED_TRACE("binary");
-            check_random_region<FieldImpl<fifi::binary> >();
+            check_results_region_multiply<FieldImpl<fifi::binary> >();
         }
         {
             SCOPED_TRACE("binary4");
-            check_random_region<FieldImpl<fifi::binary4> >();
+            check_results_region_multiply<FieldImpl<fifi::binary4> >();
         }
         {
             SCOPED_TRACE("binary8");
-            check_random_region<FieldImpl<fifi::binary8> >();
+            check_results_region_multiply<FieldImpl<fifi::binary8> >();
         }
         {
             SCOPED_TRACE("binary16");
-            check_random_region<FieldImpl<fifi::binary16> >();
+            check_results_region_multiply<FieldImpl<fifi::binary16> >();
+        }
+    }
+
+    template<template <class> class FieldImpl>
+    void check_region_multiply_subtract()
+    {
+        {
+            SCOPED_TRACE("binary");
+            check_results_region_multiply<FieldImpl<fifi::binary> >();
+        }
+        {
+            SCOPED_TRACE("binary4");
+            check_results_region_multiply<FieldImpl<fifi::binary4> >();
+        }
+        {
+            SCOPED_TRACE("binary8");
+            check_results_region_multiply<FieldImpl<fifi::binary8> >();
+        }
+        {
+            SCOPED_TRACE("binary16");
+            check_results_region_multiply<FieldImpl<fifi::binary16> >();
         }
     }
 
@@ -162,12 +181,16 @@ namespace fifi
             check_results_region_subtract<FieldImpl>();
         }
         {
-            SCOPED_TRACE("invert");
-            check_results_region_invert<FieldImpl>();
+            SCOPED_TRACE("multiply_constant");
+            check_results_region_multiply_constant<FieldImpl>();
         }
         {
-            SCOPED_TRACE("random");
-            check_random_region<FieldImpl>();
+            SCOPED_TRACE("multiply_add");
+            check_results_region_multiply_add<FieldImpl>();
+        }
+        {
+            SCOPED_TRACE("multiply_subtract");
+            check_results_region_multiply_subtract<FieldImpl>();
         }
     }
 }
