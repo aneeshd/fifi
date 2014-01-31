@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <functional>
 #include <string>
+#include <vector>
 
 #include <fifi/binary.hpp>
 #include <fifi/binary4.hpp>
@@ -91,13 +92,33 @@ inline void check_results_unary(typename method<FieldImpl>::unary arithmetic)
     }
 }
 
+template<class Field>
+inline void create_region(
+    expected_result_binary<Field> results[],
+    typename Field::value_type expected_result_binary<Field>::*pData,
+    typename Field::value_type* output)
+{
+    (void)results;
+    (void)pData;
+    (void)output;
+}
+
 template<class FieldImpl, template<class>class Results>
 inline void check_results_region(typename method<FieldImpl>::binary arithmetic)
 {
+    (void)arithmetic;
     typedef typename FieldImpl::field_type field_type;
 
     FieldImpl field;
+    std::vector<field_type> input1s;
 
+    create_region<field_type>(
+        Results<field_type>::m_results,
+        &expected_result_binary<field_type>::m_input1,
+        input1s.data()
+        );
+
+    /*
     for(uint32_t i = 0; i < Results<field_type>::m_size; ++i)
     {
         expected_result_binary<field_type> res =
@@ -105,6 +126,7 @@ inline void check_results_region(typename method<FieldImpl>::binary arithmetic)
         assert(0);
         EXPECT_EQ(res.m_result, arithmetic(field, res.m_input1, res.m_input2));
     }
+    */
 }
 
 //------------------------------------------------------------------

@@ -35,13 +35,13 @@ namespace fifi
         }
 
         /// Gets the length i.e. the number of elements
-        uint32_t length()
+        uint32_t length() const
         {
             return m_length;
         }
 
         /// Gets the size in of the elements in bytes
-        uint32_t size()
+        uint32_t size() const
         {
             return m_size;
         }
