@@ -111,7 +111,7 @@ const uint32_t sum_modulo_results<fifi::binary>::m_size =
 //////////////////////
 
 const expected_result_binary<fifi::binary>
-multiply_results<fifi::binary, PACKED>::m_results[] =
+packed_multiply_results<fifi::binary>::m_results[] =
 {
     // m_input1, m_input2, m_result
     {   1, 255,   1 },
@@ -135,11 +135,11 @@ multiply_results<fifi::binary, PACKED>::m_results[] =
     { 255, 129, 129 },
 };
 
-const uint32_t multiply_results<fifi::binary, PACKED>::m_size =
-    dimension_of(multiply_results<fifi::binary, PACKED>::m_results);
+const uint32_t packed_multiply_results<fifi::binary>::m_size =
+    dimension_of(packed_multiply_results<fifi::binary>::m_results);
 
 const expected_result_binary<fifi::binary>
-divide_results<fifi::binary, PACKED>::m_results[] =
+packed_divide_results<fifi::binary>::m_results[] =
 {
     // m_input1, m_input2, m_result
     {   1, 255,   1 },
@@ -152,11 +152,11 @@ divide_results<fifi::binary, PACKED>::m_results[] =
     { 129, 255, 129 },
 };
 
-const uint32_t divide_results<fifi::binary, PACKED>::m_size =
-    dimension_of(divide_results<fifi::binary, PACKED>::m_results);
+const uint32_t packed_divide_results<fifi::binary>::m_size =
+    dimension_of(packed_divide_results<fifi::binary>::m_results);
 
 const expected_result_binary<fifi::binary>
-add_results<fifi::binary, PACKED>::m_results[] =
+packed_add_results<fifi::binary>::m_results[] =
 {
     // m_input1, m_input2, m_result
     {   0,   0,   0 },
@@ -168,11 +168,11 @@ add_results<fifi::binary, PACKED>::m_results[] =
     { 255, 255,   0 },
 };
 
-const uint32_t add_results<fifi::binary, PACKED>::m_size =
-    dimension_of(add_results<fifi::binary, PACKED>::m_results);
+const uint32_t packed_add_results<fifi::binary>::m_size =
+    dimension_of(packed_add_results<fifi::binary>::m_results);
 
 const expected_result_binary<fifi::binary>
-subtract_results<fifi::binary, PACKED>::m_results[] =
+packed_subtract_results<fifi::binary>::m_results[] =
 {
     // m_input1, m_input2, m_result
     {   0,   0,   0 },
@@ -184,19 +184,19 @@ subtract_results<fifi::binary, PACKED>::m_results[] =
     { 255, 255,   0 },
 };
 
-const uint32_t subtract_results<fifi::binary, PACKED>::m_size =
-    dimension_of(subtract_results<fifi::binary, PACKED>::m_results);
+const uint32_t packed_subtract_results<fifi::binary>::m_size =
+    dimension_of(packed_subtract_results<fifi::binary>::m_results);
 
 // Zero has no inverse and one is its own inverse
 const expected_result_unary<fifi::binary>
-invert_results<fifi::binary, PACKED>::m_results[] =
+packed_invert_results<fifi::binary>::m_results[] =
 {
     // m_input1, m_result
     { 255, 255},
 };
 
-const uint32_t invert_results<fifi::binary, PACKED>::m_size =
-    dimension_of(invert_results<fifi::binary, PACKED>::m_results);
+const uint32_t packed_invert_results<fifi::binary>::m_size =
+    dimension_of(packed_invert_results<fifi::binary>::m_results);
 
 //------------------------------------------------------------------
 // binary4
@@ -420,7 +420,7 @@ const uint32_t sum_modulo_results<fifi::binary4>::m_size =
 //////////////////////
 
 const expected_result_binary<fifi::binary4>
-multiply_results<fifi::binary4, PACKED>::m_results[] =
+packed_multiply_results<fifi::binary4>::m_results[] =
 {
     // m_input1, m_input2, m_result
     {  0, 13,  0 },
@@ -450,11 +450,11 @@ multiply_results<fifi::binary4, PACKED>::m_results[] =
     { 15,  5,  6 },
 };
 
-const uint32_t multiply_results<fifi::binary4, PACKED>::m_size =
-    dimension_of(multiply_results<fifi::binary4, PACKED>::m_results);
+const uint32_t packed_multiply_results<fifi::binary4>::m_size =
+    dimension_of(packed_multiply_results<fifi::binary4>::m_results);
 
 const expected_result_binary<fifi::binary4>
-divide_results<fifi::binary4, PACKED>::m_results[] =
+packed_divide_results<fifi::binary4>::m_results[] =
 {
     // m_input1, m_input2, m_result
     {  0, 20,  0 },
@@ -484,12 +484,12 @@ divide_results<fifi::binary4, PACKED>::m_results[] =
     { 14, 30,  1 },
 };
 
-const uint32_t divide_results<fifi::binary4, PACKED>::m_size =
-    dimension_of(divide_results<fifi::binary4, PACKED>::m_results);
+const uint32_t packed_divide_results<fifi::binary4>::m_size =
+    dimension_of(packed_divide_results<fifi::binary4>::m_results);
 
 ///@todo, add testing values spanning a whole byte
 const expected_result_binary<fifi::binary4>
-add_results<fifi::binary4, PACKED>::m_results[] =
+packed_add_results<fifi::binary4>::m_results[] =
 {
     // m_input1, m_input2, m_result
     {  1,  6,  7 },
@@ -519,12 +519,12 @@ add_results<fifi::binary4, PACKED>::m_results[] =
     { 15,  1, 14 },
 };
 
-const uint32_t add_results<fifi::binary4, PACKED>::m_size =
-    dimension_of(add_results<fifi::binary4, PACKED>::m_results);
+const uint32_t packed_add_results<fifi::binary4>::m_size =
+    dimension_of(packed_add_results<fifi::binary4>::m_results);
 
 ///@todo, add testing values spanning a whole byte
 const expected_result_binary<fifi::binary4>
-subtract_results<fifi::binary4, PACKED>::m_results[] =
+packed_subtract_results<fifi::binary4>::m_results[] =
 {
     // m_input1, m_input2, m_result
     {  1,  9,  8 },
@@ -554,12 +554,12 @@ subtract_results<fifi::binary4, PACKED>::m_results[] =
     { 15,  0, 15 },
 };
 
-const uint32_t subtract_results<fifi::binary4, PACKED>::m_size =
-    dimension_of(subtract_results<fifi::binary4, PACKED>::m_results);
+const uint32_t packed_subtract_results<fifi::binary4>::m_size =
+    dimension_of(packed_subtract_results<fifi::binary4>::m_results);
 
 
 const expected_result_unary<fifi::binary4>
-invert_results<fifi::binary4, PACKED>::m_results[] =
+packed_invert_results<fifi::binary4>::m_results[] =
 {
     // m_input1, m_result
     {  21,  27 },
@@ -589,8 +589,8 @@ invert_results<fifi::binary4, PACKED>::m_results[] =
     { 251, 133 },
 };
 
-const uint32_t invert_results<fifi::binary4, PACKED>::m_size =
-    dimension_of(invert_results<fifi::binary4, PACKED>::m_results);
+const uint32_t packed_invert_results<fifi::binary4>::m_size =
+    dimension_of(packed_invert_results<fifi::binary4>::m_results);
 
 //------------------------------------------------------------------
 // binary8

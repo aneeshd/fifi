@@ -76,5 +76,5 @@ TEST(TestBinarySimpleOnlineArithmetic, invert)
 
 TEST(TestBinarySimpleOnlineArithmetic, random)
 {
-    check_random_packed<fifi::dummy_stack<fifi::binary>>();
+    check_random_default<fifi::dummy_stack<fifi::binary>>();
 }
