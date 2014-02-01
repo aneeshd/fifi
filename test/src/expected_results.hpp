@@ -437,11 +437,8 @@ struct add_results<fifi::binary>
 };
 
 template<>
-struct subtract_results<fifi::binary>
-{
-    static const expected_result_binary<fifi::binary> m_results[];
-    static const uint32_t m_size;
-};
+struct subtract_results<fifi::binary> : add_results<fifi::binary>
+{ };
 
 template<>
 struct invert_results<fifi::binary>
@@ -488,11 +485,8 @@ struct packed_add_results<fifi::binary>
 };
 
 template<>
-struct packed_subtract_results<fifi::binary>
-{
-    static const expected_result_binary<fifi::binary> m_results[];
-    static const uint32_t m_size;
-};
+struct packed_subtract_results<fifi::binary> : packed_add_results<fifi::binary>
+{ };
 
 template<>
 struct packed_invert_results<fifi::binary>
@@ -538,11 +532,8 @@ struct add_results<fifi::binary4>
 };
 
 template<>
-struct subtract_results<fifi::binary4>
-{
-    static const expected_result_binary<fifi::binary4> m_results[];
-    static const uint32_t m_size;
-};
+struct subtract_results<fifi::binary4> : add_results<fifi::binary4>
+{ };
 
 template<>
 struct invert_results<fifi::binary4>
@@ -588,18 +579,27 @@ struct packed_add_results<fifi::binary4>
     static const uint32_t m_size;
 };
 
+
+// add and substract is the same for this field.
 template<>
-struct packed_subtract_results<fifi::binary4>
-{
-    static const expected_result_binary<fifi::binary4> m_results[];
-    static const uint32_t m_size;
-};
+struct packed_subtract_results<fifi::binary4> :
+    packed_add_results<fifi::binary4>
+{ };
 
 template<>
 struct packed_invert_results<fifi::binary4>
 {
     static const expected_result_unary<fifi::binary4> m_results[];
     static const uint32_t m_size;
+};
+
+template<>
+struct region_multiply_constant_results<fifi::binary4>
+{
+    static const typename fifi::binary4::value_type m_inputs[];
+    static const typename fifi::binary4::value_type m_constants[];
+    static const uint32_t m_inputs_size;
+    static const uint32_t m_constants_size;
 };
 
 //------------------------------------------------------------------
@@ -630,11 +630,8 @@ struct add_results<fifi::binary8>
 };
 
 template<>
-struct subtract_results<fifi::binary8>
-{
-    static const expected_result_binary<fifi::binary8> m_results[];
-    static const uint32_t m_size;
-};
+struct subtract_results<fifi::binary8> : add_results<fifi::binary8>
+{ };
 
 template<>
 struct invert_results<fifi::binary8>
@@ -676,13 +673,22 @@ struct packed_add_results<fifi::binary8>
 
 template<>
 struct packed_subtract_results<fifi::binary8>
-    : public subtract_results<fifi::binary8>
+    : public packed_add_results<fifi::binary8>
 { };
 
 template<>
 struct packed_invert_results<fifi::binary8>
     : public invert_results<fifi::binary8>
 { };
+
+template<>
+struct region_multiply_constant_results<fifi::binary8>
+{
+    static const typename fifi::binary8::value_type m_inputs[];
+    static const typename fifi::binary8::value_type m_constants[];
+    static const uint32_t m_inputs_size;
+    static const uint32_t m_constants_size;
+};
 
 //------------------------------------------------------------------
 // binary16
@@ -712,11 +718,8 @@ struct add_results<fifi::binary16>
 };
 
 template<>
-struct subtract_results<fifi::binary16>
-{
-    static const expected_result_binary<fifi::binary16> m_results[];
-    static const uint32_t m_size;
-};
+struct subtract_results<fifi::binary16> : add_results<fifi::binary16>
+{ };
 
 template<>
 struct invert_results<fifi::binary16>
@@ -758,13 +761,22 @@ struct packed_add_results<fifi::binary16>
 
 template<>
 struct packed_subtract_results<fifi::binary16>
-    : public subtract_results<fifi::binary16>
+    : public packed_add_results<fifi::binary16>
 { };
 
 template<>
 struct packed_invert_results<fifi::binary16>
     : public invert_results<fifi::binary16>
 { };
+
+template<>
+struct region_multiply_constant_results<fifi::binary16>
+{
+    static const typename fifi::binary16::value_type m_inputs[];
+    static const typename fifi::binary16::value_type m_constants[];
+    static const uint32_t m_inputs_size;
+    static const uint32_t m_constants_size;
+};
 
 //------------------------------------------------------------------
 // prime2325
@@ -847,3 +859,12 @@ template<>
 struct packed_invert_results<fifi::prime2325>
     : public invert_results<fifi::prime2325>
 { };
+
+template<>
+struct region_multiply_constant_results<fifi::prime2325>
+{
+    static const typename fifi::prime2325::value_type m_inputs[];
+    static const typename fifi::prime2325::value_type m_constants[];
+    static const uint32_t m_inputs_size;
+    static const uint32_t m_constants_size;
+};

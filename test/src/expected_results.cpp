@@ -57,19 +57,6 @@ add_results<fifi::binary>::m_results[] =
 const uint32_t add_results<fifi::binary>::m_size =
     dimension_of(add_results<fifi::binary>::m_results);
 
-const expected_result_binary<fifi::binary>
-subtract_results<fifi::binary>::m_results[] =
-{
-    // m_input1, m_input2, m_result
-    { 0, 0, 0 },
-    { 0, 1, 1 },
-    { 1, 0, 1 },
-    { 1, 1, 0 },
-};
-
-const uint32_t subtract_results<fifi::binary>::m_size =
-    dimension_of(subtract_results<fifi::binary>::m_results);
-
 // Zero has no inverse and one is its own inverse
 const expected_result_unary<fifi::binary>
 invert_results<fifi::binary>::m_results[] =
@@ -105,6 +92,25 @@ sum_modulo_results<fifi::binary>::m_results[] =
 const uint32_t sum_modulo_results<fifi::binary>::m_size =
     dimension_of(sum_modulo_results<fifi::binary>::m_results);
 
+const typename fifi::binary::value_type
+region_multiply_constant_results<fifi::binary>::m_inputs[] =
+{
+    0,1,0,0,1,1,1,0,1,0,1,0,1,1,1,0,1,1,0,1,0,1
+};
+
+const typename fifi::binary::value_type
+region_multiply_constant_results<fifi::binary>::m_constants[] =
+{
+    0,1
+};
+
+const uint32_t
+region_multiply_constant_results<fifi::binary>::m_inputs_size =
+    dimension_of(region_multiply_constant_results<fifi::binary>::m_inputs);
+
+const uint32_t
+region_multiply_constant_results<fifi::binary>::m_constants_size =
+    dimension_of(region_multiply_constant_results<fifi::binary>::m_constants);
 
 //////////////////////
 /// packed results ///
@@ -170,22 +176,6 @@ packed_add_results<fifi::binary>::m_results[] =
 
 const uint32_t packed_add_results<fifi::binary>::m_size =
     dimension_of(packed_add_results<fifi::binary>::m_results);
-
-const expected_result_binary<fifi::binary>
-packed_subtract_results<fifi::binary>::m_results[] =
-{
-    // m_input1, m_input2, m_result
-    {   0,   0,   0 },
-    {   0,   1,   1 },
-    {   1,   0,   1 },
-    {   1,   1,   0 },
-    { 128, 255, 127 },
-    { 255,   0, 255 },
-    { 255, 255,   0 },
-};
-
-const uint32_t packed_subtract_results<fifi::binary>::m_size =
-    dimension_of(packed_subtract_results<fifi::binary>::m_results);
 
 // Zero has no inverse and one is its own inverse
 const expected_result_unary<fifi::binary>
@@ -303,40 +293,6 @@ add_results<fifi::binary4>::m_results[] =
 
 const uint32_t add_results<fifi::binary4>::m_size =
     dimension_of(add_results<fifi::binary4>::m_results);
-
-const expected_result_binary<fifi::binary4>
-subtract_results<fifi::binary4>::m_results[] =
-{
-    // m_input1, m_input2, m_result
-    {  1,  9,  8 },
-    {  1, 12, 13 },
-    {  1, 15, 14 },
-    {  2,  3,  1 },
-    {  2, 10,  8 },
-    {  2, 11,  9 },
-    {  3,  2,  1 },
-    {  4,  2,  6 },
-    {  4,  2,  6 },
-    {  4, 11, 15 },
-    {  6,  8, 14 },
-    {  7, 12, 11 },
-    {  9,  3, 10 },
-    {  9,  6, 15 },
-    { 10, 13,  7 },
-    { 11,  4, 15 },
-    { 11, 12,  7 },
-    { 11, 12,  7 },
-    { 13,  3, 14 },
-    { 13,  9,  4 },
-    { 13, 13,  0 },
-    { 14,  8,  6 },
-    { 14,  9,  7 },
-    { 14, 11,  5 },
-    { 15,  0, 15 },
-};
-
-const uint32_t subtract_results<fifi::binary4>::m_size =
-    dimension_of(subtract_results<fifi::binary4>::m_results);
 
 const expected_result_unary<fifi::binary4>
 invert_results<fifi::binary4>::m_results[] =
@@ -493,70 +449,56 @@ packed_add_results<fifi::binary4>::m_results[] =
 {
     // m_input1, m_input2, m_result
     {  1,  6,  7 },
-    {  2,  5,  7 },
-    {  2,  6,  4 },
-    {  3,  0,  3 },
-    {  3,  5,  6 },
-    {  3, 13, 14 },
-    {  5,  1,  4 },
-    {  5,  3,  6 },
-    {  6,  7,  1 },
-    {  6, 12, 10 },
-    {  7,  1,  6 },
-    {  7,  6,  1 },
-    {  8,  4, 12 },
-    { 10,  4, 14 },
-    { 10,  6, 12 },
-    { 11,  4, 15 },
-    { 11, 14,  5 },
-    { 12,  0, 12 },
-    { 12,  1, 13 },
-    { 12, 13,  1 },
-    { 13,  7, 10 },
-    { 14,  4, 10 },
-    { 14,  6,  8 },
-    { 15,  0, 15 },
-    { 15,  1, 14 },
-};
-
-const uint32_t packed_add_results<fifi::binary4>::m_size =
-    dimension_of(packed_add_results<fifi::binary4>::m_results);
-
-///@todo, add testing values spanning a whole byte
-const expected_result_binary<fifi::binary4>
-packed_subtract_results<fifi::binary4>::m_results[] =
-{
-    // m_input1, m_input2, m_result
     {  1,  9,  8 },
     {  1, 12, 13 },
     {  1, 15, 14 },
     {  2,  3,  1 },
+    {  2,  5,  7 },
+    {  2,  6,  4 },
     {  2, 10,  8 },
     {  2, 11,  9 },
+    {  3,  0,  3 },
     {  3,  2,  1 },
-    {  4,  2,  6 },
+    {  3,  5,  6 },
+    {  3, 13, 14 },
     {  4,  2,  6 },
     {  4, 11, 15 },
+    {  5,  1,  4 },
+    {  5,  3,  6 },
+    {  6,  7,  1 },
     {  6,  8, 14 },
+    {  6, 12, 10 },
+    {  7,  1,  6 },
+    {  7,  6,  1 },
     {  7, 12, 11 },
+    {  8,  4, 12 },
     {  9,  3, 10 },
     {  9,  6, 15 },
+    { 10,  4, 14 },
+    { 10,  6, 12 },
     { 10, 13,  7 },
     { 11,  4, 15 },
     { 11, 12,  7 },
-    { 11, 12,  7 },
+    { 11, 14,  5 },
+    { 12,  0, 12 },
+    { 12,  1, 13 },
+    { 12, 13,  1 },
     { 13,  3, 14 },
+    { 13,  7, 10 },
     { 13,  9,  4 },
     { 13, 13,  0 },
+    { 14,  4, 10 },
+    { 14,  6,  8 },
     { 14,  8,  6 },
     { 14,  9,  7 },
     { 14, 11,  5 },
     { 15,  0, 15 },
+    { 15,  1, 14 },
+    { 17, 17,  0 },
 };
 
-const uint32_t packed_subtract_results<fifi::binary4>::m_size =
-    dimension_of(packed_subtract_results<fifi::binary4>::m_results);
-
+const uint32_t packed_add_results<fifi::binary4>::m_size =
+    dimension_of(packed_add_results<fifi::binary4>::m_results);
 
 const expected_result_unary<fifi::binary4>
 packed_invert_results<fifi::binary4>::m_results[] =
@@ -591,6 +533,27 @@ packed_invert_results<fifi::binary4>::m_results[] =
 
 const uint32_t packed_invert_results<fifi::binary4>::m_size =
     dimension_of(packed_invert_results<fifi::binary4>::m_results);
+
+
+const typename fifi::binary4::value_type
+region_multiply_constant_results<fifi::binary4>::m_inputs[] =
+{
+    0,1,0,0,1,1,1,0,1,0,1,0,1,1,1,0,1,1,0,1,0,1
+};
+
+const typename fifi::binary4::value_type
+region_multiply_constant_results<fifi::binary4>::m_constants[] =
+{
+    0,1
+};
+
+const uint32_t
+region_multiply_constant_results<fifi::binary4>::m_inputs_size =
+    dimension_of(region_multiply_constant_results<fifi::binary4>::m_inputs);
+
+const uint32_t
+region_multiply_constant_results<fifi::binary4>::m_constants_size =
+    dimension_of(region_multiply_constant_results<fifi::binary4>::m_constants);
 
 //------------------------------------------------------------------
 // binary8
@@ -711,60 +674,6 @@ add_results<fifi::binary8>::m_results[] =
 
 const uint32_t add_results<fifi::binary8>::m_size =
     dimension_of(add_results<fifi::binary8>::m_results);
-
-
-// Subtract binary8
-//
-// Computed using the following Matlab script:
-//
-//     m = 8
-//     n = 2^m - 1
-//     max = 20
-//
-//     for j = 0:max
-//       v1 = uint8(rand(1) * n);
-//       v2 = uint8(rand(1) * n);
-//
-//       gf1 = gf(v1, m);
-//       gf2 = gf(v2, m);
-//
-//       xgf = gf1 - gf2;
-//
-//       str = sprintf('{ %4d, %4d, %4d }', ...
-//                     uint8(gf1.x), uint8(gf2.x), ...
-//                     uint8(xgf.x));
-//       disp(str)
-//     end
-const expected_result_binary<fifi::binary8>
-subtract_results<fifi::binary8>::m_results[] =
-{
-    // arg1, arg2, result
-    {    4,    4,    0 },
-    {   11,    7,   12 },
-    {   15,   94,   81 },
-    {   24,    9,   17 },
-    {   48,  150,  166 },
-    {   59,  205,  246 },
-    {   65,  221,  156 },
-    {   80,    3,   83 },
-    {   90,   39,  125 },
-    {   98,  174,  204 },
-    {  115,  183,  196 },
-    {  116,  113,    5 },
-    {  141,   31,  146 },
-    {  147,  115,  224 },
-    {  156,  155,    7 },
-    {  161,  183,   22 },
-    {  172,  178,   30 },
-    {  177,   21,  164 },
-    {  186,  122,  192 },
-    {  228,   70,  162 },
-    {  232,   59,  211 },
-};
-
-const uint32_t subtract_results<fifi::binary8>::m_size =
-    dimension_of(subtract_results<fifi::binary8>::m_results);
-
 
 // Invert binary8
 const expected_result_unary<fifi::binary8>
@@ -974,61 +883,6 @@ add_results<fifi::binary16>::m_results[] =
 
 const uint32_t add_results<fifi::binary16>::m_size =
     dimension_of(add_results<fifi::binary16>::m_results);
-
-
-
-// Subtract binary16
-//
-// Computed using the following Matlab script:
-//
-//     m = 16
-//     n = 2^m - 1
-//     prime = 69643
-//     max = 20
-//
-//     for j = 0:max
-//       v1 = uint16(rand(1) * n);
-//       v2 = uint16(rand(1) * n);
-//
-//       gf1 = gf(v1, m, prime);
-//       gf2 = gf(v2, m, prime);
-//
-//       xgf = gf1 - gf2;
-//
-//       str = sprintf('{ %6dU, %6dU, %6dU }', ...
-//                     uint16(gf1.x), uint16(gf2.x), ...
-//                     uint16(xgf.x));
-//       disp(str)
-//     end
-const expected_result_binary<fifi::binary16>
-subtract_results<fifi::binary16>::m_results[] =
-{
-    // arg1,    arg2,    result
-    {   3261U,   5137U,   6316U },
-    {   5510U,  29776U,  25046U },
-    {   7848U,   2499U,   5995U },
-    {   7933U,  29540U,  28057U },
-    {  10067U,  44278U,  35749U },
-    {  11193U,  65161U,  54576U },
-    {  15197U,  15683U,   1566U },
-    {  17898U,  16696U,   1234U },
-    {  20592U,  23925U,   3333U },
-    {  25771U,  38766U,  62405U },
-    {  28822U,  22285U,  10139U },
-    {  28955U,  23150U,  11125U },
-    {  30054U,  57007U,  43977U },
-    {  31351U,  36362U,  62589U },
-    {  41996U,  12510U,  38098U },
-    {  45823U,  47677U,   2242U },
-    {  46915U,  58512U,  21459U },
-    {  47030U,  45394U,   1764U },
-    {  52747U,  59532U,   9863U },
-    {  55303U,  11397U,  62594U },
-    {  56727U,  15227U,  59116U },
-};
-
-const uint32_t subtract_results<fifi::binary16>::m_size =
-    dimension_of(subtract_results<fifi::binary16>::m_results);
 
 // Invert binary16
 const expected_result_unary<fifi::binary16>
