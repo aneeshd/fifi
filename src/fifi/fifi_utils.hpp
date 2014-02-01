@@ -11,6 +11,7 @@
 #include <sak/ceil_division.hpp>
 
 #include "binary.hpp"
+#include "binary4.hpp"
 
 namespace fifi
 {
@@ -27,14 +28,15 @@ namespace fifi
         return elements;
     }
 
-    /// elements_to_length specilization for the binary field
+    /// elements_to_length specialization for the binary field
     /// @copydoc elements_to_length(uint32_t)
     template<>
     inline uint32_t elements_to_length<binary>(uint32_t elements)
     {
         assert(elements > 0);
 
-        return sak::ceil_division(elements, binary::bits_per_value);
+        return sak::ceil_division(
+            elements, std::numeric_limits<binary::value_type>::digits);
     }
 
     /// Returns the minimum size in bytes required to accommodate a certain
@@ -89,7 +91,8 @@ namespace fifi
     {
         assert(length > 0);
 
-        return sak::ceil_division(length, binary::bits_per_value);
+        return sak::ceil_division(
+            length, std::numeric_limits<binary::value_type>::digits);
     }
 
     /// Returns the number of field elements needed to store a certain
@@ -104,14 +107,14 @@ namespace fifi
         return length;
     }
 
-    /// length_to_elements specilization for the binary field
+    /// length_to_elements specialization for the binary field
     /// @copydoc length_to_elements(uint32_t)
     template<>
     inline uint32_t length_to_elements<binary>(uint32_t length)
     {
         assert(length > 0);
 
-        return length*binary::bits_per_value;
+        return length*std::numeric_limits<binary::value_type>::digits;
     }
 
     /// Returns the number of field elements that can fit within a certain
@@ -127,12 +130,10 @@ namespace fifi
         return length_to_elements<Field>((size_to_length<Field>(bytes)));
     }
 
-    /// Usefull abstraction functions for accessing field elements if
-    /// a mixed binary & other fields implementation is created.
-    /// Returns the value of an element at the specific position in the
-    /// symbol.
+    /// Useful abstraction functions for accessing field elements in a buffer
+    /// Note this function assumes that values are packed.
     /// @param elements elements to get value from
-    /// @param index index of element to access
+    /// @param index index of element to access in the packed buffer
     /// @return the value of the element at specified index
     template<class Field>
     inline typename Field::value_type
@@ -142,7 +143,7 @@ namespace fifi
         return elements[index];
     }
 
-    /// get_value specilization for the binary field
+    /// get_value specialization for the binary field
     template<>
     inline binary::value_type
     get_value<binary>(const binary::value_type *elements, uint32_t index)
@@ -150,16 +151,16 @@ namespace fifi
         assert(elements != 0);
 
         uint32_t array_index =
-            index / binary::bits_per_value;
+            index / std::numeric_limits<binary::value_type>::digits;
 
         uint32_t offset =
-            index % binary::bits_per_value;
+            index % std::numeric_limits<binary::value_type>::digits;
 
         return (elements[array_index] >> offset) & 0x1;
     }
 
-    /// Usefull abstraction function for assigning field elements a specific
-    /// value.
+    /// Useful abstraction function for assigning field elements in a buffer
+    /// a specific value. Note this function assumes that values are packed.
     /// @param elements elements to manipulate
     /// @param index index of element
     /// @param value value to assign element
@@ -171,7 +172,7 @@ namespace fifi
         elements[index] = value;
     }
 
-    /// set_value specilization for the binary field
+    /// set_value specialization for the binary field
     template<>
     inline void set_value<binary>(binary::value_type* elements, uint32_t index,
                                   binary::value_type value)
@@ -179,8 +180,10 @@ namespace fifi
         assert(elements != 0);
         assert(value < 2); // only {0,1} allowed
 
-        uint32_t array_index = index / binary::bits_per_value;
-        uint32_t offset = index % binary::bits_per_value;
+        uint32_t array_index =
+            index / std::numeric_limits<binary::value_type>::digits;
+        uint32_t offset =
+            index % std::numeric_limits<binary::value_type>::digits;
 
         binary::value_type mask = 1 << offset;
 
@@ -194,7 +197,34 @@ namespace fifi
         }
     }
 
-    /// Usefull abstraction function for swapping two field elements
+    /// set_value specialization for the binary4 field
+    template<>
+    inline void set_value<binary4>(
+        binary4::value_type* elements,
+        uint32_t index,
+        binary4::value_type value)
+    {
+        assert(elements != 0);
+        assert(value < 16);
+
+        uint32_t array_index =
+            index / (std::numeric_limits<binary4::value_type>::digits / 4);
+        uint32_t offset =
+            index % (std::numeric_limits<binary4::value_type>::digits / 4);
+
+        binary4::value_type mask = 1 << offset*4;
+
+        if(value)
+        {
+            elements[array_index] |= mask;
+        }
+        else
+        {
+            elements[array_index] &= ~mask;
+        }
+    }
+
+    /// Useful abstraction function for swapping two field elements
     /// @param elements elements to manipulate
     /// @param index1,index2 indexes of elements to swap
     template<class Field>

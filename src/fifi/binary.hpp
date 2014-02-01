@@ -37,10 +37,5 @@ namespace fifi
 
         /// The field order i.e. number of field elements
         const static order_type order = 2;
-
-        /// The number of bits in a value_type
-        const static uint32_t bits_per_value =
-            std::numeric_limits<binary::value_type>::digits;
-
     };
 }

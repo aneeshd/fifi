@@ -110,24 +110,114 @@ TEST(TestFifiUtils, length_to_elements)
     EXPECT_EQ(fifi::length_to_elements<fifi::prime2325>(9), 9U);
 }
 
-TEST(TestFifiUtils, set_value)
+TEST(TestFifiUtils, set_value_binary)
 {
-    uint8_t test[2] = {0,0};
+    fifi::binary::value_type test[2] = { 0, 0 };
 
     fifi::set_value<fifi::binary>(&test[0],7,1);
-    EXPECT_EQ(test[0],128U);
+    EXPECT_EQ(128U, test[0]);
+    EXPECT_EQ(0U, test[1]);
 
     fifi::set_value<fifi::binary>(&test[0],0,1);
-    EXPECT_EQ(test[0],129U);
+    EXPECT_EQ(129U, test[0]);
+    EXPECT_EQ(0U, test[1]);
 
     fifi::set_value<fifi::binary>(&test[0],0,0);
     fifi::set_value<fifi::binary>(&test[0],7,0);
-    EXPECT_EQ(test[0],0U);
+    EXPECT_EQ(0U, test[0]);
+    EXPECT_EQ(0U, test[1]);
 
-    uint8_t test_8[2] = {0,0};
+    fifi::set_value<fifi::binary>(&test[0],8,1);
+    EXPECT_EQ(0U, test[0]);
+    EXPECT_EQ(1U, test[1]);
+}
 
-    fifi::set_value<fifi::binary8>(&test_8[0],0,143);
-    EXPECT_EQ(test_8[0],143U);
+TEST(TestFifiUtils, set_value_binary4)
+{
+    fifi::binary4::value_type test[2] = { 0, 0 };
+
+    fifi::set_value<fifi::binary4>(&test[0],1,1);
+    EXPECT_EQ(16U, test[0]);
+    EXPECT_EQ(0U, test[1]);
+
+    fifi::set_value<fifi::binary4>(&test[0],0,1);
+    EXPECT_EQ(17U, test[0]);
+    EXPECT_EQ(0U, test[1]);
+
+    fifi::set_value<fifi::binary4>(&test[0],0,0);
+    fifi::set_value<fifi::binary4>(&test[0],1,0);
+    EXPECT_EQ(0U, test[0]);
+    EXPECT_EQ(0U, test[1]);
+
+    fifi::set_value<fifi::binary4>(&test[0],2,1);
+    EXPECT_EQ(0U, test[0]);
+    EXPECT_EQ(1U, test[1]);
+}
+
+TEST(TestFifiUtils, set_value_binary8)
+{
+    fifi::binary8::value_type test[2] = { 0, 0 };
+
+    fifi::set_value<fifi::binary8>(&test[0],0,1);
+    EXPECT_EQ(1U, test[0]);
+    EXPECT_EQ(0U, test[1]);
+
+    fifi::set_value<fifi::binary8>(&test[0],1,1);
+    EXPECT_EQ(1U, test[0]);
+    EXPECT_EQ(1U, test[1]);
+
+    fifi::set_value<fifi::binary8>(&test[0],0,0);
+    fifi::set_value<fifi::binary8>(&test[0],1,0);
+    EXPECT_EQ(0U, test[0]);
+    EXPECT_EQ(0U, test[1]);
+
+    fifi::set_value<fifi::binary8>(&test[0],1,1);
+    EXPECT_EQ(0U, test[0]);
+    EXPECT_EQ(1U, test[1]);
+}
+
+TEST(TestFifiUtils, set_value_binary16)
+{
+    fifi::binary16::value_type test[2] = { 0, 0 };
+
+    fifi::set_value<fifi::binary16>(&test[0],0,1);
+    EXPECT_EQ(1U, test[0]);
+    EXPECT_EQ(0U, test[1]);
+
+    fifi::set_value<fifi::binary16>(&test[0],1,1);
+    EXPECT_EQ(1U, test[0]);
+    EXPECT_EQ(1U, test[1]);
+
+    fifi::set_value<fifi::binary16>(&test[0],0,0);
+    fifi::set_value<fifi::binary16>(&test[0],1,0);
+    EXPECT_EQ(0U, test[0]);
+    EXPECT_EQ(0U, test[1]);
+
+    fifi::set_value<fifi::binary16>(&test[0],1,1);
+    EXPECT_EQ(0U, test[0]);
+    EXPECT_EQ(1U, test[1]);
+}
+
+TEST(TestFifiUtils, set_value_prime2325)
+{
+    fifi::prime2325::value_type test[2] = { 0, 0 };
+
+    fifi::set_value<fifi::prime2325>(&test[0],0,1);
+    EXPECT_EQ(1U, test[0]);
+    EXPECT_EQ(0U, test[1]);
+
+    fifi::set_value<fifi::prime2325>(&test[0],1,1);
+    EXPECT_EQ(1U, test[0]);
+    EXPECT_EQ(1U, test[1]);
+
+    fifi::set_value<fifi::prime2325>(&test[0],0,0);
+    fifi::set_value<fifi::prime2325>(&test[0],1,0);
+    EXPECT_EQ(0U, test[0]);
+    EXPECT_EQ(0U, test[1]);
+
+    fifi::set_value<fifi::prime2325>(&test[0],1,1);
+    EXPECT_EQ(0U, test[0]);
+    EXPECT_EQ(1U, test[1]);
 }
 
 TEST(TestFifiUtils, get_value)

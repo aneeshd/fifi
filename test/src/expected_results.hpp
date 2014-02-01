@@ -110,91 +110,16 @@ inline void check_results_unary(typename method<FieldImpl>::unary arithmetic)
     }
 }
 
-template<class Field>
-inline void create_region(
-    const expected_result_binary<Field> data[],
-    typename Field::value_type expected_result_binary<Field>::*pData,
-    typename Field::value_type output[],
-    uint32_t elements)
-{
-    static_assert(fifi::is_value_type_exact<Field>::value,
-            "Requested field is not exact, please make a specialization.");
-    // in this case elements == length
-    for(uint32_t i = 0; i < elements; ++i)
-    {
-        output[i] = data[i].*pData;
-    }
-}
-
-template<>
-inline void create_region<fifi::binary>(
-    const expected_result_binary<fifi::binary> data[],
-    typename fifi::binary::value_type expected_result_binary<fifi::binary>::*pData,
-    typename fifi::binary::value_type output[],
-    uint32_t elements)
-{
-    for(uint32_t element = 1; element < elements+1; ++element)
-    {
-        uint32_t i = fifi::elements_to_length<fifi::binary>(element) - 1;
-        output[i] ^= data[element-1].*pData << element;
-    }
-}
-
-template<>
-inline void create_region<fifi::binary4>(
-    const expected_result_binary<fifi::binary4> data[],
-    typename fifi::binary4::value_type expected_result_binary<fifi::binary4>::*pData,
-    typename fifi::binary4::value_type output[],
-    uint32_t elements)
-{
-    for(uint32_t i = 0; i < elements; ++i)
-    {
-        output[i] = data[i].*pData;
-    }
-}
-
-template<>
-inline void create_region<fifi::prime2325>(
-    const expected_result_binary<fifi::prime2325> data[],
-    typename fifi::prime2325::value_type expected_result_binary<fifi::prime2325>::*pData,
-    typename fifi::prime2325::value_type output[],
-    uint32_t elements)
-{
-    for(uint32_t i = 0; i < elements; ++i)
-    {
-        output[i] = data[i].*pData;
-    }
-}
-
-template<class FieldImpl, template<class>class Results>
+template<class FieldImpl>
 inline void check_results_region(
     typename method<FieldImpl>::binary_ptrs arithmetic)
 {
-    typedef typename FieldImpl::field_type field_type;
-    typedef typename field_type::value_type value_type;
-
-    typedef expected_result_binary<field_type> entry;
-
-    auto elements = Results<field_type>::m_size;
-    auto size = fifi::elements_to_length<field_type>(elements);
-    auto data = Results<field_type>::m_results;
-
-    std::vector<value_type> dest(size);
-    std::vector<value_type> src(size);
-    std::vector<value_type> results(size);
-
-    create_region<field_type>(data, &entry::m_input1, dest.data(),    elements);
-    create_region<field_type>(data, &entry::m_input2, src.data(),     elements);
-    create_region<field_type>(data, &entry::m_result, results.data(), elements);
-
-    FieldImpl field;
-    field.set_length(size);
-    arithmetic(field, dest.data(), src.data());
-
-    for (uint32_t i = 0; i < size; ++i)
-    {
-        EXPECT_EQ(results[i], dest[i]);
-    }
+    (void)arithmetic;
+    // Create random data
+    // Scope trace it
+    // Calculate random results using packed arithmetics and combine
+    // Calculate using region
+    // Compare the two result sets
 }
 
 //------------------------------------------------------------------
@@ -225,7 +150,7 @@ inline void check_results_packed_multiply()
 template<class FieldImpl>
 inline void check_results_region_multiply()
 {
-    check_results_region<FieldImpl, packed_multiply_results>(
+    check_results_region<FieldImpl>(
         &FieldImpl::region_multiply);
 }
 
@@ -256,7 +181,7 @@ inline void check_results_packed_divide()
 template<class FieldImpl>
 inline void check_results_region_divide()
 {
-    check_results_region<FieldImpl, packed_divide_results>(
+    check_results_region<FieldImpl>(
         &FieldImpl::region_divide);
 }
 
@@ -286,7 +211,7 @@ inline void check_results_packed_add()
 template<class FieldImpl>
 inline void check_results_region_add()
 {
-    check_results_region<FieldImpl, packed_add_results>(
+    check_results_region<FieldImpl>(
         &FieldImpl::region_add);
 }
 
@@ -317,7 +242,7 @@ inline void check_results_packed_subtract()
 template<class FieldImpl>
 inline void check_results_region_subtract()
 {
-    check_results_region<FieldImpl, packed_subtract_results >(
+    check_results_region<FieldImpl >(
         &FieldImpl::region_subtract);
 }
 
@@ -376,14 +301,11 @@ inline void check_results_sum_modulo()
 // multiply constant
 //------------------------------------------------------------------
 
-template<class Field>
-struct region_multiply_constant_results;
-
 template<class FieldImpl>
 inline void check_results_region_multiply_constant()
 {
     std::cout << "check_results_region_multiply_constant: Not implemented." << std::endl;
-    //check_results_region<FieldImpl, region_multiply_constant_results>(
+    //check_results_region<FieldImpl>(
     //    &FieldImpl::region_multiply_constant);
 }
 
@@ -391,14 +313,11 @@ inline void check_results_region_multiply_constant()
 // multiply add
 //------------------------------------------------------------------
 
-template<class Field>
-struct region_multiply_add_results;
-
 template<class FieldImpl>
 inline void check_results_region_multiply_add()
 {
     std::cout << "check_results_region_multiply_add: Not implemented." << std::endl;
-    //check_results_region<FieldImpl, region_multiply_add_results>(
+    //check_results_region<FieldImpl>(
     //    &FieldImpl::region_multiply_add);
 }
 
@@ -406,15 +325,12 @@ inline void check_results_region_multiply_add()
 // multiply subtract
 //------------------------------------------------------------------
 
-template<class Field>
-struct region_multiply_subtract_results;
-
 template<class FieldImpl>
 inline void check_results_region_multiply_subtract()
 {
 
     std::cout << "check_results_region_multiply_subtract: Not implemented." << std::endl;
-    //check_results_region<FieldImpl, region_multiply_subtract_results>(
+    //check_results_region<FieldImpl>(
     //    &FieldImpl::region_multiply_subtract);
 }
 
@@ -540,13 +456,6 @@ struct packed_invert_results<fifi::binary>
     static const uint32_t m_size;
 };
 
-template<>
-struct region_multiply_constant_results<fifi::binary>
-{
-    static const expected_result_binary<fifi::binary> m_results[];
-    static const uint32_t m_size;
-};
-
 //------------------------------------------------------------------
 // binary4
 //------------------------------------------------------------------
@@ -636,13 +545,6 @@ struct packed_invert_results<fifi::binary4>
     static const uint32_t m_size;
 };
 
-template<>
-struct region_multiply_constant_results<fifi::binary4>
-{
-    static const expected_result_binary<fifi::binary4> m_results[];
-    static const uint32_t m_size;
-};
-
 //------------------------------------------------------------------
 // binary8
 //------------------------------------------------------------------
@@ -722,13 +624,6 @@ struct packed_invert_results<fifi::binary8>
     : public invert_results<fifi::binary8>
 { };
 
-template<>
-struct region_multiply_constant_results<fifi::binary8>
-{
-    static const expected_result_binary<fifi::binary8> m_results[];
-    static const uint32_t m_size;
-};
-
 //------------------------------------------------------------------
 // binary16
 //------------------------------------------------------------------
@@ -807,14 +702,6 @@ template<>
 struct packed_invert_results<fifi::binary16>
     : public invert_results<fifi::binary16>
 { };
-
-template<>
-struct region_multiply_constant_results<fifi::binary16>
-{
-    static const expected_result_binary<fifi::binary16> m_results[];
-    static const uint32_t m_size;
-};
-
 
 //------------------------------------------------------------------
 // prime2325
@@ -897,10 +784,3 @@ template<>
 struct packed_invert_results<fifi::prime2325>
     : public invert_results<fifi::prime2325>
 { };
-
-template<>
-struct region_multiply_constant_results<fifi::prime2325>
-{
-    static const expected_result_binary<fifi::prime2325> m_results[];
-    static const uint32_t m_size;
-};
