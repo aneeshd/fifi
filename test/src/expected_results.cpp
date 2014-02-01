@@ -92,26 +92,6 @@ sum_modulo_results<fifi::binary>::m_results[] =
 const uint32_t sum_modulo_results<fifi::binary>::m_size =
     dimension_of(sum_modulo_results<fifi::binary>::m_results);
 
-const typename fifi::binary::value_type
-region_multiply_constant_results<fifi::binary>::m_inputs[] =
-{
-    0,1,0,0,1,1,1,0,1,0,1,0,1,1,1,0,1,1,0,1,0,1
-};
-
-const typename fifi::binary::value_type
-region_multiply_constant_results<fifi::binary>::m_constants[] =
-{
-    0,1
-};
-
-const uint32_t
-region_multiply_constant_results<fifi::binary>::m_inputs_size =
-    dimension_of(region_multiply_constant_results<fifi::binary>::m_inputs);
-
-const uint32_t
-region_multiply_constant_results<fifi::binary>::m_constants_size =
-    dimension_of(region_multiply_constant_results<fifi::binary>::m_constants);
-
 //////////////////////
 /// packed results ///
 //////////////////////
@@ -187,6 +167,50 @@ packed_invert_results<fifi::binary>::m_results[] =
 
 const uint32_t packed_invert_results<fifi::binary>::m_size =
     dimension_of(packed_invert_results<fifi::binary>::m_results);
+
+// input 1 denotes the constant. Whenever the constant changes,
+// a new buffer of input2 is created.
+const expected_result_binary<fifi::binary>
+region_multiply_constant_results<fifi::binary>::m_results[] =
+{
+    // m_input1 (constant), m_input2, m_result
+    { 0, 0, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 0, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 0, 0 },
+    { 1, 1, 1 },
+    { 1, 1, 1 },
+    { 1, 1, 1 },
+    { 1, 0, 0 },
+    { 1, 1, 1 },
+    { 1, 0, 0 },
+    { 1, 0, 0 },
+    { 0, 0, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 0, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 0, 0 },
+    { 1, 1, 1 },
+    { 1, 1, 1 },
+    { 1, 1, 1 },
+    { 1, 1, 1 },
+    { 1, 0, 0 },
+    { 1, 1, 1 },
+    { 1, 0, 0 },
+    { 1, 0, 0 },
+};
+
+const uint32_t region_multiply_constant_results<fifi::binary>::m_size =
+    dimension_of(region_multiply_constant_results<fifi::binary>::m_results);
+
 
 //------------------------------------------------------------------
 // binary4
@@ -533,27 +557,6 @@ packed_invert_results<fifi::binary4>::m_results[] =
 
 const uint32_t packed_invert_results<fifi::binary4>::m_size =
     dimension_of(packed_invert_results<fifi::binary4>::m_results);
-
-
-const typename fifi::binary4::value_type
-region_multiply_constant_results<fifi::binary4>::m_inputs[] =
-{
-    0,1,0,0,1,1,1,0,1,0,1,0,1,1,1,0,1,1,0,1,0,1
-};
-
-const typename fifi::binary4::value_type
-region_multiply_constant_results<fifi::binary4>::m_constants[] =
-{
-    0,1
-};
-
-const uint32_t
-region_multiply_constant_results<fifi::binary4>::m_inputs_size =
-    dimension_of(region_multiply_constant_results<fifi::binary4>::m_inputs);
-
-const uint32_t
-region_multiply_constant_results<fifi::binary4>::m_constants_size =
-    dimension_of(region_multiply_constant_results<fifi::binary4>::m_constants);
 
 //------------------------------------------------------------------
 // binary8

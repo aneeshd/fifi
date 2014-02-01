@@ -16,7 +16,8 @@
 #include <fifi/binary8.hpp>
 #include <fifi/binary16.hpp>
 #include <fifi/prime2325.hpp>
-
+#include <fifi/is_value_type_exact.hpp>
+#include <fifi/fifi_utils.hpp>
 // The expected result of an arithmetic operation
 // e.g. result == operation(arg1, arg2).
 // Where operation can be add, subtract, multiply
@@ -114,9 +115,52 @@ inline void create_region(
     const expected_result_binary<Field> data[],
     typename Field::value_type expected_result_binary<Field>::*pData,
     typename Field::value_type output[],
-    uint32_t size)
+    uint32_t elements)
 {
-    for(uint32_t i = 0; i < size; ++i)
+    static_assert(fifi::is_value_type_exact<Field>::value,
+            "Requested field is not exact, please make a specialization.");
+    // in this case elements == length
+    for(uint32_t i = 0; i < elements; ++i)
+    {
+        output[i] = data[i].*pData;
+    }
+}
+
+template<>
+inline void create_region<fifi::binary>(
+    const expected_result_binary<fifi::binary> data[],
+    typename fifi::binary::value_type expected_result_binary<fifi::binary>::*pData,
+    typename fifi::binary::value_type output[],
+    uint32_t elements)
+{
+    for(uint32_t element = 1; element < elements+1; ++element)
+    {
+        uint32_t i = fifi::elements_to_length<fifi::binary>(element) - 1;
+        output[i] ^= data[element-1].*pData << element;
+    }
+}
+
+template<>
+inline void create_region<fifi::binary4>(
+    const expected_result_binary<fifi::binary4> data[],
+    typename fifi::binary4::value_type expected_result_binary<fifi::binary4>::*pData,
+    typename fifi::binary4::value_type output[],
+    uint32_t elements)
+{
+    for(uint32_t i = 0; i < elements; ++i)
+    {
+        output[i] = data[i].*pData;
+    }
+}
+
+template<>
+inline void create_region<fifi::prime2325>(
+    const expected_result_binary<fifi::prime2325> data[],
+    typename fifi::prime2325::value_type expected_result_binary<fifi::prime2325>::*pData,
+    typename fifi::prime2325::value_type output[],
+    uint32_t elements)
+{
+    for(uint32_t i = 0; i < elements; ++i)
     {
         output[i] = data[i].*pData;
     }
@@ -131,16 +175,17 @@ inline void check_results_region(
 
     typedef expected_result_binary<field_type> entry;
 
-    auto size = Results<field_type>::m_size;
+    auto elements = Results<field_type>::m_size;
+    auto size = fifi::elements_to_length<field_type>(elements);
     auto data = Results<field_type>::m_results;
 
     std::vector<value_type> dest(size);
     std::vector<value_type> src(size);
     std::vector<value_type> results(size);
 
-    create_region<field_type>(data, &entry::m_input1, dest.data(),    size);
-    create_region<field_type>(data, &entry::m_input2, src.data(),     size);
-    create_region<field_type>(data, &entry::m_result, results.data(), size);
+    create_region<field_type>(data, &entry::m_input1, dest.data(),    elements);
+    create_region<field_type>(data, &entry::m_input2, src.data(),     elements);
+    create_region<field_type>(data, &entry::m_result, results.data(), elements);
 
     FieldImpl field;
     field.set_length(size);
@@ -498,10 +543,8 @@ struct packed_invert_results<fifi::binary>
 template<>
 struct region_multiply_constant_results<fifi::binary>
 {
-    static const typename fifi::binary::value_type m_inputs[];
-    static const typename fifi::binary::value_type m_constants[];
-    static const uint32_t m_inputs_size;
-    static const uint32_t m_constants_size;
+    static const expected_result_binary<fifi::binary> m_results[];
+    static const uint32_t m_size;
 };
 
 //------------------------------------------------------------------
@@ -596,10 +639,8 @@ struct packed_invert_results<fifi::binary4>
 template<>
 struct region_multiply_constant_results<fifi::binary4>
 {
-    static const typename fifi::binary4::value_type m_inputs[];
-    static const typename fifi::binary4::value_type m_constants[];
-    static const uint32_t m_inputs_size;
-    static const uint32_t m_constants_size;
+    static const expected_result_binary<fifi::binary4> m_results[];
+    static const uint32_t m_size;
 };
 
 //------------------------------------------------------------------
@@ -684,10 +725,8 @@ struct packed_invert_results<fifi::binary8>
 template<>
 struct region_multiply_constant_results<fifi::binary8>
 {
-    static const typename fifi::binary8::value_type m_inputs[];
-    static const typename fifi::binary8::value_type m_constants[];
-    static const uint32_t m_inputs_size;
-    static const uint32_t m_constants_size;
+    static const expected_result_binary<fifi::binary8> m_results[];
+    static const uint32_t m_size;
 };
 
 //------------------------------------------------------------------
@@ -772,11 +811,10 @@ struct packed_invert_results<fifi::binary16>
 template<>
 struct region_multiply_constant_results<fifi::binary16>
 {
-    static const typename fifi::binary16::value_type m_inputs[];
-    static const typename fifi::binary16::value_type m_constants[];
-    static const uint32_t m_inputs_size;
-    static const uint32_t m_constants_size;
+    static const expected_result_binary<fifi::binary16> m_results[];
+    static const uint32_t m_size;
 };
+
 
 //------------------------------------------------------------------
 // prime2325
@@ -863,8 +901,6 @@ struct packed_invert_results<fifi::prime2325>
 template<>
 struct region_multiply_constant_results<fifi::prime2325>
 {
-    static const typename fifi::prime2325::value_type m_inputs[];
-    static const typename fifi::prime2325::value_type m_constants[];
-    static const uint32_t m_inputs_size;
-    static const uint32_t m_constants_size;
+    static const expected_result_binary<fifi::prime2325> m_results[];
+    static const uint32_t m_size;
 };
