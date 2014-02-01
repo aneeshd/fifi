@@ -8,13 +8,12 @@
 namespace fifi
 {
 
-    /// @brief This layer provides the default region alignment
-    ///        required for the buffers used in the finite field
-    ///        computations. The buffers passed to the arithmetic
-    ///        functions should have their memory aligned according to
-    ///        the value returned by this layer
+    /// @brief This layer provides the default region buffer size
+    ///        granularity. This means that the size (bytes) or length
+    ///        (number of value_type elements) must be divisible by
+    ///        the size and length granularity
     template<class Super>
-    class granularity : public Super
+    class region_granularity : public Super
     {
     public:
 
@@ -38,6 +37,6 @@ namespace fifi
             return 1U;
         }
 
-
     };
+
 }
