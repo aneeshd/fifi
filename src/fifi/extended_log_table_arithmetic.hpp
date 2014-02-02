@@ -10,6 +10,8 @@
 #include <cmath>
 #include <cstdint>
 #include <vector>
+#include <string>
+#include <iostream>
 
 #include "binary.hpp"
 #include "prime2325.hpp"
@@ -98,7 +100,6 @@ namespace fifi
         {
             assert(is_valid_element<field_type>(numerator));
             assert(is_valid_element<field_type>(denominator));
-
             assert(denominator != 0);
 
             if(numerator == 0)
@@ -114,6 +115,7 @@ namespace fifi
         value_type invert(value_type a) const
         {
             assert(is_valid_element<field_type>(a));
+            assert(a != 0);
             return divide(1, a);
         }
 

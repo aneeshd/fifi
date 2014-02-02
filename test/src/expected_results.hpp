@@ -111,15 +111,78 @@ inline void check_results_unary(typename method<FieldImpl>::unary arithmetic)
 }
 
 template<class FieldImpl>
-inline void check_results_region(
-    typename method<FieldImpl>::binary_ptrs arithmetic)
+inline void check_results_random(
+    uint32_t elements,
+    typename method<FieldImpl>::binary multiply,
+    typename method<FieldImpl>::binary divide,
+    typename method<FieldImpl>::unary invert)
 {
-    (void)arithmetic;
-    // Create random data
-    // Scope trace it
+    typedef typename FieldImpl::field_type field_type;
+
+    FieldImpl field;
+
+    for(uint32_t i = 0; i < elements; ++i)
+    {
+        typename field_type::value_type v = rand() % field_type::order;
+        if(v == 0)
+            ++v;
+
+        EXPECT_EQ(multiply(field, v, invert(field, v)), 1U);
+        EXPECT_EQ(multiply(field, v, divide(field, 1U, v)), 1U);
+    }
+}
+
+template<class FieldImpl>
+inline void check_results_region(
+    typename method<FieldImpl>::binary packed_arithmetic,
+    typename method<FieldImpl>::binary_ptrs region_arithmetic,
+    bool divison = false,
+    uint32_t elements = 128)
+{
+    typedef typename FieldImpl::field_type field_type;
+    typedef typename field_type::value_type value_type;
+
+    FieldImpl field;
+
+    uint32_t length = fifi::elements_to_length<field_type>(elements);
+
+    field.set_length(length);
+
+    std::vector<value_type> dest(length);
+    std::vector<value_type> src(length);
+
+    for (uint32_t i = 0; i < elements; ++i)
+    {
+        value_type v1 = rand() % field_type::order;
+        value_type v2 = rand() % field_type::order;
+
+        if (divison && v2 == 0)
+        {
+            v2++;
+        }
+
+        SCOPED_TRACE(std::to_string(v1));
+        SCOPED_TRACE(std::to_string(v2));
+        fifi::set_value<field_type>(dest.data(), i, v1);
+        fifi::set_value<field_type>(src.data(), i, v2);
+    }
+
+    std::vector<value_type> expected(length);
+    for (uint32_t i = 0; i < length; ++i)
+    {
+        expected[i] = packed_arithmetic(field, dest[i], src[i]);
+    }
+
+    region_arithmetic(field, dest.data(), src.data());
+
+    for (uint32_t i = 0; i < length; ++i)
+    {
+        EXPECT_EQ(expected[i], dest[i]);
+    }
     // Calculate random results using packed arithmetics and combine
     // Calculate using region
     // Compare the two result sets
+
 }
 
 //------------------------------------------------------------------
@@ -151,6 +214,7 @@ template<class FieldImpl>
 inline void check_results_region_multiply()
 {
     check_results_region<FieldImpl>(
+        &FieldImpl::packed_multiply,
         &FieldImpl::region_multiply);
 }
 
@@ -182,7 +246,9 @@ template<class FieldImpl>
 inline void check_results_region_divide()
 {
     check_results_region<FieldImpl>(
-        &FieldImpl::region_divide);
+        &FieldImpl::packed_divide,
+        &FieldImpl::region_divide,
+        true);
 }
 
 //------------------------------------------------------------------
@@ -212,6 +278,7 @@ template<class FieldImpl>
 inline void check_results_region_add()
 {
     check_results_region<FieldImpl>(
+        &FieldImpl::packed_add,
         &FieldImpl::region_add);
 }
 
@@ -243,6 +310,7 @@ template<class FieldImpl>
 inline void check_results_region_subtract()
 {
     check_results_region<FieldImpl >(
+        &FieldImpl::packed_subtract,
         &FieldImpl::region_subtract);
 }
 
@@ -337,28 +405,6 @@ inline void check_results_region_multiply_subtract()
 //------------------------------------------------------------------
 // check_random
 //------------------------------------------------------------------
-
-template<class FieldImpl>
-inline void check_results_random(
-    uint32_t elements,
-    typename method<FieldImpl>::binary multiply,
-    typename method<FieldImpl>::binary divide,
-    typename method<FieldImpl>::unary invert)
-{
-    typedef typename FieldImpl::field_type field_type;
-
-    FieldImpl field;
-
-    for(uint32_t i = 0; i < elements; ++i)
-    {
-        typename field_type::value_type v = rand() % field_type::order;
-
-        if(v == 0)
-            ++v;
-        EXPECT_EQ(multiply(field, v, invert(field, v)), 1U);
-        EXPECT_EQ(multiply(field, v, divide(field, 1U, v)), 1U);
-    }
-}
 
 template<class FieldImpl>
 inline void check_random_default(uint32_t elements = 100)

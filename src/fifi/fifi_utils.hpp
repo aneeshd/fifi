@@ -7,7 +7,8 @@
 
 #include <ostream>
 #include <limits>
-
+#include <iostream>
+#include <string>
 #include <sak/ceil_division.hpp>
 
 #include "binary.hpp"
@@ -37,6 +38,16 @@ namespace fifi
 
         return sak::ceil_division(
             elements, std::numeric_limits<binary::value_type>::digits);
+    }
+
+    /// elements_to_length specialization for the binary4 field
+    /// @copydoc elements_to_length(uint32_t)
+    template<>
+    inline uint32_t elements_to_length<binary4>(uint32_t elements)
+    {
+        assert(elements > 0);
+
+        return sak::ceil_division(elements, 2);
     }
 
     /// Returns the minimum size in bytes required to accommodate a certain
@@ -82,10 +93,8 @@ namespace fifi
         return length * sizeof(typename Field::value_type);
     }
 
-    /// Returns the size in bytes needed to store a certain
-    /// number of value_type elements
-    /// @param length the number of value_type elements to store
-    /// @return the size in bytes needed to store the value_type elements
+    /// length_to_size specialization for the binary field
+    /// @copydoc length_to_size(uint32_t)
     template<>
     inline uint32_t length_to_size<binary>(uint32_t length)
     {
@@ -93,6 +102,16 @@ namespace fifi
 
         return sak::ceil_division(
             length, std::numeric_limits<binary::value_type>::digits);
+    }
+
+    /// length_to_size specialization for the binary4 field
+    /// @copydoc length_to_size(uint32_t)
+    template<>
+    inline uint32_t length_to_size<binary4>(uint32_t length)
+    {
+        assert(length > 0);
+
+        return sak::ceil_division(length, 2);
     }
 
     /// Returns the number of field elements needed to store a certain
@@ -115,6 +134,16 @@ namespace fifi
         assert(length > 0);
 
         return length*std::numeric_limits<binary::value_type>::digits;
+    }
+
+    /// length_to_elements specialization for the binary4 field
+    /// @copydoc length_to_elements(uint32_t)
+    template<>
+    inline uint32_t length_to_elements<binary4>(uint32_t length)
+    {
+        assert(length > 0);
+
+        return length*2;
     }
 
     /// Returns the number of field elements that can fit within a certain
@@ -157,6 +186,27 @@ namespace fifi
             index % std::numeric_limits<binary::value_type>::digits;
 
         return (elements[array_index] >> offset) & 0x1;
+    }
+
+    /// get_value specialization for the binary4 field
+    template<>
+    inline binary4::value_type
+    get_value<binary4>(const binary4::value_type *elements, uint32_t index)
+    {
+        assert(elements != 0);
+
+        uint32_t array_index = index / 2;
+
+        if (index % 2 == 1)
+        {
+            // get upper nibble
+            return (elements[array_index] & 0xF0) >> 4;
+        }
+        else
+        {
+            // get lower nibble
+            return elements[array_index] & 0x0F;
+        }
     }
 
     /// Useful abstraction function for assigning field elements in a buffer
@@ -207,20 +257,19 @@ namespace fifi
         assert(elements != 0);
         assert(value < 16);
 
-        uint32_t array_index =
-            index / (std::numeric_limits<binary4::value_type>::digits / 4);
-        uint32_t offset =
-            index % (std::numeric_limits<binary4::value_type>::digits / 4);
+        uint32_t array_index = index / 2;
 
-        binary4::value_type mask = 1 << offset*4;
-
-        if(value)
+        if (index % 2 == 1)
         {
-            elements[array_index] |= mask;
+            // write upper nibble
+            elements[array_index] &= 0x0F;
+            elements[array_index] |= (value << 4);
         }
         else
         {
-            elements[array_index] &= ~mask;
+            // write lower nibble
+            elements[array_index] &= 0xF0;
+            elements[array_index] |= value;
         }
     }
 
