@@ -16,7 +16,8 @@
 #include <fifi/binary8.hpp>
 #include <fifi/binary16.hpp>
 #include <fifi/prime2325.hpp>
-
+#include <fifi/is_value_type_exact.hpp>
+#include <fifi/fifi_utils.hpp>
 // The expected result of an arithmetic operation
 // e.g. result == operation(arg1, arg2).
 // Where operation can be add, subtract, multiply
@@ -109,47 +110,79 @@ inline void check_results_unary(typename method<FieldImpl>::unary arithmetic)
     }
 }
 
-template<class Field>
-inline void create_region(
-    const expected_result_binary<Field> data[],
-    typename Field::value_type expected_result_binary<Field>::*pData,
-    typename Field::value_type output[],
-    uint32_t size)
+template<class FieldImpl>
+inline void check_results_random(
+    uint32_t elements,
+    typename method<FieldImpl>::binary multiply,
+    typename method<FieldImpl>::binary divide,
+    typename method<FieldImpl>::unary invert)
 {
-    for(uint32_t i = 0; i < size; ++i)
+    typedef typename FieldImpl::field_type field_type;
+
+    FieldImpl field;
+
+    for(uint32_t i = 0; i < elements; ++i)
     {
-        output[i] = data[i].*pData;
+        typename field_type::value_type v = rand() % field_type::order;
+        if(v == 0)
+            ++v;
+
+        EXPECT_EQ(multiply(field, v, invert(field, v)), 1U);
+        EXPECT_EQ(multiply(field, v, divide(field, 1U, v)), 1U);
     }
 }
 
-template<class FieldImpl, template<class>class Results>
+template<class FieldImpl>
 inline void check_results_region(
-    typename method<FieldImpl>::binary_ptrs arithmetic)
+    typename method<FieldImpl>::binary packed_arithmetic,
+    typename method<FieldImpl>::binary_ptrs region_arithmetic,
+    bool divison = false,
+    uint32_t elements = 128)
 {
     typedef typename FieldImpl::field_type field_type;
     typedef typename field_type::value_type value_type;
 
-    typedef expected_result_binary<field_type> entry;
-
-    auto size = Results<field_type>::m_size;
-    auto data = Results<field_type>::m_results;
-
-    std::vector<value_type> dest(size);
-    std::vector<value_type> src(size);
-    std::vector<value_type> results(size);
-
-    create_region<field_type>(data, &entry::m_input1, dest.data(),    size);
-    create_region<field_type>(data, &entry::m_input2, src.data(),     size);
-    create_region<field_type>(data, &entry::m_result, results.data(), size);
-
     FieldImpl field;
-    field.set_length(size);
-    arithmetic(field, dest.data(), src.data());
 
-    for (uint32_t i = 0; i < size; ++i)
+    uint32_t length = fifi::elements_to_length<field_type>(elements);
+
+    field.set_length(length);
+
+    std::vector<value_type> dest(length);
+    std::vector<value_type> src(length);
+
+    for (uint32_t i = 0; i < elements; ++i)
     {
-        EXPECT_EQ(results[i], dest[i]);
+        value_type v1 = rand() % field_type::order;
+        value_type v2 = rand() % field_type::order;
+
+        if (divison && v2 == 0)
+        {
+            v2++;
+        }
+
+        SCOPED_TRACE(std::to_string(v1));
+        SCOPED_TRACE(std::to_string(v2));
+        fifi::set_value<field_type>(dest.data(), i, v1);
+        fifi::set_value<field_type>(src.data(), i, v2);
     }
+
+    std::vector<value_type> expected(length);
+    for (uint32_t i = 0; i < length; ++i)
+    {
+        expected[i] = packed_arithmetic(field, dest[i], src[i]);
+    }
+
+    region_arithmetic(field, dest.data(), src.data());
+
+    for (uint32_t i = 0; i < length; ++i)
+    {
+        EXPECT_EQ(expected[i], dest[i]);
+    }
+    // Calculate random results using packed arithmetics and combine
+    // Calculate using region
+    // Compare the two result sets
+
 }
 
 //------------------------------------------------------------------
@@ -180,7 +213,8 @@ inline void check_results_packed_multiply()
 template<class FieldImpl>
 inline void check_results_region_multiply()
 {
-    check_results_region<FieldImpl, packed_multiply_results>(
+    check_results_region<FieldImpl>(
+        &FieldImpl::packed_multiply,
         &FieldImpl::region_multiply);
 }
 
@@ -211,8 +245,10 @@ inline void check_results_packed_divide()
 template<class FieldImpl>
 inline void check_results_region_divide()
 {
-    check_results_region<FieldImpl, packed_divide_results>(
-        &FieldImpl::region_divide);
+    check_results_region<FieldImpl>(
+        &FieldImpl::packed_divide,
+        &FieldImpl::region_divide,
+        true);
 }
 
 //------------------------------------------------------------------
@@ -241,7 +277,8 @@ inline void check_results_packed_add()
 template<class FieldImpl>
 inline void check_results_region_add()
 {
-    check_results_region<FieldImpl, packed_add_results>(
+    check_results_region<FieldImpl>(
+        &FieldImpl::packed_add,
         &FieldImpl::region_add);
 }
 
@@ -272,7 +309,8 @@ inline void check_results_packed_subtract()
 template<class FieldImpl>
 inline void check_results_region_subtract()
 {
-    check_results_region<FieldImpl, packed_subtract_results >(
+    check_results_region<FieldImpl >(
+        &FieldImpl::packed_subtract,
         &FieldImpl::region_subtract);
 }
 
@@ -331,14 +369,11 @@ inline void check_results_sum_modulo()
 // multiply constant
 //------------------------------------------------------------------
 
-template<class Field>
-struct region_multiply_constant_results;
-
 template<class FieldImpl>
 inline void check_results_region_multiply_constant()
 {
     std::cout << "check_results_region_multiply_constant: Not implemented." << std::endl;
-    //check_results_region<FieldImpl, region_multiply_constant_results>(
+    //check_results_region<FieldImpl>(
     //    &FieldImpl::region_multiply_constant);
 }
 
@@ -346,14 +381,11 @@ inline void check_results_region_multiply_constant()
 // multiply add
 //------------------------------------------------------------------
 
-template<class Field>
-struct region_multiply_add_results;
-
 template<class FieldImpl>
 inline void check_results_region_multiply_add()
 {
     std::cout << "check_results_region_multiply_add: Not implemented." << std::endl;
-    //check_results_region<FieldImpl, region_multiply_add_results>(
+    //check_results_region<FieldImpl>(
     //    &FieldImpl::region_multiply_add);
 }
 
@@ -361,43 +393,18 @@ inline void check_results_region_multiply_add()
 // multiply subtract
 //------------------------------------------------------------------
 
-template<class Field>
-struct region_multiply_subtract_results;
-
 template<class FieldImpl>
 inline void check_results_region_multiply_subtract()
 {
 
     std::cout << "check_results_region_multiply_subtract: Not implemented." << std::endl;
-    //check_results_region<FieldImpl, region_multiply_subtract_results>(
+    //check_results_region<FieldImpl>(
     //    &FieldImpl::region_multiply_subtract);
 }
 
 //------------------------------------------------------------------
 // check_random
 //------------------------------------------------------------------
-
-template<class FieldImpl>
-inline void check_results_random(
-    uint32_t elements,
-    typename method<FieldImpl>::binary multiply,
-    typename method<FieldImpl>::binary divide,
-    typename method<FieldImpl>::unary invert)
-{
-    typedef typename FieldImpl::field_type field_type;
-
-    FieldImpl field;
-
-    for(uint32_t i = 0; i < elements; ++i)
-    {
-        typename field_type::value_type v = rand() % field_type::order;
-
-        if(v == 0)
-            ++v;
-        EXPECT_EQ(multiply(field, v, invert(field, v)), 1U);
-        EXPECT_EQ(multiply(field, v, divide(field, 1U, v)), 1U);
-    }
-}
 
 template<class FieldImpl>
 inline void check_random_default(uint32_t elements = 100)
@@ -495,15 +502,6 @@ struct packed_invert_results<fifi::binary>
     static const uint32_t m_size;
 };
 
-template<>
-struct region_multiply_constant_results<fifi::binary>
-{
-    static const typename fifi::binary::value_type m_inputs[];
-    static const typename fifi::binary::value_type m_constants[];
-    static const uint32_t m_inputs_size;
-    static const uint32_t m_constants_size;
-};
-
 //------------------------------------------------------------------
 // binary4
 //------------------------------------------------------------------
@@ -593,15 +591,6 @@ struct packed_invert_results<fifi::binary4>
     static const uint32_t m_size;
 };
 
-template<>
-struct region_multiply_constant_results<fifi::binary4>
-{
-    static const typename fifi::binary4::value_type m_inputs[];
-    static const typename fifi::binary4::value_type m_constants[];
-    static const uint32_t m_inputs_size;
-    static const uint32_t m_constants_size;
-};
-
 //------------------------------------------------------------------
 // binary8
 //------------------------------------------------------------------
@@ -681,15 +670,6 @@ struct packed_invert_results<fifi::binary8>
     : public invert_results<fifi::binary8>
 { };
 
-template<>
-struct region_multiply_constant_results<fifi::binary8>
-{
-    static const typename fifi::binary8::value_type m_inputs[];
-    static const typename fifi::binary8::value_type m_constants[];
-    static const uint32_t m_inputs_size;
-    static const uint32_t m_constants_size;
-};
-
 //------------------------------------------------------------------
 // binary16
 //------------------------------------------------------------------
@@ -768,15 +748,6 @@ template<>
 struct packed_invert_results<fifi::binary16>
     : public invert_results<fifi::binary16>
 { };
-
-template<>
-struct region_multiply_constant_results<fifi::binary16>
-{
-    static const typename fifi::binary16::value_type m_inputs[];
-    static const typename fifi::binary16::value_type m_constants[];
-    static const uint32_t m_inputs_size;
-    static const uint32_t m_constants_size;
-};
 
 //------------------------------------------------------------------
 // prime2325
@@ -859,12 +830,3 @@ template<>
 struct packed_invert_results<fifi::prime2325>
     : public invert_results<fifi::prime2325>
 { };
-
-template<>
-struct region_multiply_constant_results<fifi::prime2325>
-{
-    static const typename fifi::prime2325::value_type m_inputs[];
-    static const typename fifi::prime2325::value_type m_constants[];
-    static const uint32_t m_inputs_size;
-    static const uint32_t m_constants_size;
-};

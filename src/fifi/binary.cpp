@@ -10,5 +10,4 @@ namespace fifi
     const binary::value_type binary::max_value;
     const binary::value_type binary::min_value;
     const binary::order_type binary::order;
-    const uint32_t binary::bits_per_value;
 }

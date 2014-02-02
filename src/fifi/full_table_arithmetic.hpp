@@ -60,8 +60,6 @@ namespace fifi
 
                 for(uint32_t j = 0; j < Field::order; ++j)
                 {
-                    //std::cout << m_multtable.size() << std::endl;
-                    //std::cout << "index = " << (offset + j) << std::endl;
                     m_multtable[offset + j] = Super::multiply(i,j);
 
                     if(j == 0) // Cannot divide by zero
