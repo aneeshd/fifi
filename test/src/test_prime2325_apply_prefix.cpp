@@ -1,11 +1,15 @@
-// Copyright Steinwurf ApS 2011-2012.
+// Copyright Steinwurf ApS 2011-2014.
 // Distributed under the "STEINWURF RESEARCH LICENSE 1.0".
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
+
+#include <gtest/gtest.h>
+
 #include <fifi/prime2325.hpp>
 #include <fifi/prime2325_apply_prefix.hpp>
-#include <gtest/gtest.h>
+
 #include <sak/storage.hpp>
+
 #include <vector>
 
 TEST(TestPrime2325ApplyPrefix, prime2325_apply_prefix)

@@ -1,13 +1,14 @@
-// Copyright Steinwurf ApS 2011-2012.
+// Copyright Steinwurf ApS 2011-2014.
 // Distributed under the "STEINWURF RESEARCH LICENSE 1.0".
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <fifi/prime2325_bitmap.hpp>
 #include <gtest/gtest.h>
 
-#include "helper_prime2325_find_one_prefix.hpp"
+#include <fifi/prime2325_bitmap.hpp>
+
 #include "helper_prime2325_find_a_prefix.hpp"
+#include "helper_prime2325_find_one_prefix.hpp"
 
 TEST(TestPrime2325Bitmap, prefix_bitmap)
 {

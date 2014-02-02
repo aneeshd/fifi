@@ -6,11 +6,11 @@
 #include <gtest/gtest.h>
 
 #include <fifi/binary.hpp>
+#include <fifi/binary16.hpp>
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
-#include <fifi/binary16.hpp>
-#include <fifi/prime2325.hpp>
 #include <fifi/final.hpp>
+#include <fifi/prime2325.hpp>
 #include <fifi/region_alignment.hpp>
 
 #include "expected_results.hpp"

@@ -1,7 +1,7 @@
-// Copyright Steinwurf ApS 2011-2012.
+// Copyright Steinwurf ApS 2011-2014.
 // Distributed under the "STEINWURF RESEARCH LICENSE 1.0".
 // See accompanying file LICENSE.rst or
-// http://www.steinwurf.com/licensing
+// http://www.steinwurf.com/licensingg
 
 #pragma once
 
