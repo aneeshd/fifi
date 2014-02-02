@@ -289,17 +289,4 @@ namespace fifi
         set_value<Field>(elements, index1, value2);
         set_value<Field>(elements, index2, value1);
     }
-
-    template<class Value>
-    inline void print_bits(std::ostream& out, Value element)
-    {
-        auto bits = std::numeric_limits<Value>::digits;
-
-        for(uint32_t i = bits; i --> 0;)
-        {
-            out << uint32_t((element >> i)&0x1);
-        }
-    }
-
-
 }

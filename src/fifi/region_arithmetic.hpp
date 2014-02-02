@@ -78,7 +78,7 @@ namespace fifi
             }
         }
 
-        void region_multiply_substract(value_type* dest, const value_type* src,
+        void region_multiply_subtract(value_type* dest, const value_type* src,
                                 value_type constant) const
         {
             for(uint32_t i = 0; i < Super::length(); ++i)

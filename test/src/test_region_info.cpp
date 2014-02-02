@@ -33,27 +33,43 @@ namespace fifi
 template<class Field>
 inline void test_region_info()
 {
+    typedef typename Field::value_type value_type;
+
     fifi::dummy_stack<Field> stack;
 
-    for(uint32_t i = 33; i < 63; ++i)
+    for(uint32_t i = sizeof(value_type); i < 256; i += sizeof(value_type))
     {
         stack.set_length(i);
         EXPECT_EQ(i, stack.length());
         EXPECT_EQ(fifi::length_to_size<Field>(i), stack.size());
-
         stack.set_size(i);
         EXPECT_EQ(i, stack.size());
         EXPECT_EQ(fifi::size_to_length<Field>(i), stack.length());
     }
 }
 
-TEST(TestRegionInfo, api)
+TEST(TestRegionInfo, binary)
 {
     test_region_info<fifi::binary>();
-    test_region_info<fifi::binary4>();
-    test_region_info<fifi::binary8>();
+}
 
+TEST(TestRegionInfo, binary4)
+{
+    test_region_info<fifi::binary4>();
+}
+
+TEST(TestRegionInfo, binary8)
+{
+    test_region_info<fifi::binary8>();
+}
+TEST(TestRegionInfo, binary16)
+{
     ///@todo This fails, but why?
-    //test_region_info<fifi::binary16>();
-    //test_region_info<fifi::prime2325>();
+    test_region_info<fifi::binary16>();
+}
+
+TEST(TestRegionInfo, prime2325)
+{
+    ///@todo This fails, but why?
+    test_region_info<fifi::prime2325>();
 }

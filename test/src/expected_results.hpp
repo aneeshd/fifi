@@ -65,7 +65,7 @@ struct method
     typedef std::function<void(
             const FieldImpl&,
                   typename FieldImpl::value_type* a,
-            const typename FieldImpl::value_type* b)> binary_ptrs;
+            const typename FieldImpl::value_type* b)> binary_ptr_ptr;
 
     typedef std::function<void(
             const FieldImpl&,
@@ -76,7 +76,7 @@ struct method
             const FieldImpl&,
             typename FieldImpl::value_type* a,
             typename FieldImpl::value_type* b,
-            typename FieldImpl::value_type  c)> binary_ptrs_const;
+            typename FieldImpl::value_type  c)> binary_ptr_ptr_const;
 };
 
 template<class FieldImpl, template<class>class Results>
@@ -135,17 +135,16 @@ inline void check_results_random(
 template<class FieldImpl>
 inline void check_results_region(
     typename method<FieldImpl>::binary packed_arithmetic,
-    typename method<FieldImpl>::binary_ptrs region_arithmetic,
-    bool divison = false,
-    uint32_t elements = 128)
+    typename method<FieldImpl>::binary_ptr_ptr region_arithmetic,
+    uint32_t elements,
+    bool divison = false)
 {
     typedef typename FieldImpl::field_type field_type;
     typedef typename field_type::value_type value_type;
 
-    FieldImpl field;
-
     uint32_t length = fifi::elements_to_length<field_type>(elements);
 
+    FieldImpl field;
     field.set_length(length);
 
     std::vector<value_type> dest(length);
@@ -160,9 +159,6 @@ inline void check_results_region(
         {
             v2++;
         }
-
-        SCOPED_TRACE(std::to_string(v1));
-        SCOPED_TRACE(std::to_string(v2));
         fifi::set_value<field_type>(dest.data(), i, v1);
         fifi::set_value<field_type>(src.data(), i, v2);
     }
@@ -179,10 +175,97 @@ inline void check_results_region(
     {
         EXPECT_EQ(expected[i], dest[i]);
     }
-    // Calculate random results using packed arithmetics and combine
-    // Calculate using region
-    // Compare the two result sets
+}
 
+template<class FieldImpl>
+inline void check_results_region(
+    typename method<FieldImpl>::binary packed_arithmetic,
+    typename method<FieldImpl>::binary_ptr_const region_arithmetic,
+    uint32_t elements)
+{
+    typedef typename FieldImpl::field_type field_type;
+    typedef typename field_type::value_type value_type;
+
+    uint32_t length = fifi::elements_to_length<field_type>(elements);
+
+    FieldImpl field;
+    field.set_length(length);
+
+    std::vector<value_type> data(length);
+    for (uint32_t i = 0; i < elements; ++i)
+    {
+        fifi::set_value<field_type>(data.data(), i, rand() % field_type::order);
+    }
+
+    uint32_t tests = 10;
+
+    for (uint32_t i = 0; i < tests; ++i)
+    {
+        value_type constant = rand() % field_type::order;
+        SCOPED_TRACE(std::to_string(constant));
+
+        std::vector<value_type> dest = data;
+
+        std::vector<value_type> expected(length);
+        for (uint32_t j = 0; j < length; ++j)
+        {
+            expected[j] = packed_arithmetic(field, dest[j], constant);
+        }
+        region_arithmetic(field, dest.data(), constant);
+        for (uint32_t j = 0; j < length; ++j)
+        {
+            EXPECT_EQ(expected[j], dest[j]);
+        }
+    }
+}
+
+template<class FieldImpl>
+inline void check_results_region(
+    typename method<FieldImpl>::binary packed_arithmetic1,
+    typename method<FieldImpl>::binary packed_arithmetic2,
+    typename method<FieldImpl>::binary_ptr_ptr_const region_arithmetic,
+    uint32_t elements)
+{
+    typedef typename FieldImpl::field_type field_type;
+    typedef typename field_type::value_type value_type;
+
+    uint32_t length = fifi::elements_to_length<field_type>(elements);
+
+    FieldImpl field;
+    field.set_length(length);
+
+    std::vector<value_type> data(length);
+    std::vector<value_type> src(length);
+
+    for (uint32_t i = 0; i < elements; ++i)
+    {
+        fifi::set_value<field_type>(data.data(), i, rand() % field_type::order);
+        fifi::set_value<field_type>(src.data(), i, rand() % field_type::order);
+    }
+
+    uint32_t tests = 10;
+
+    for (uint32_t i = 0; i < tests; ++i)
+    {
+        value_type constant = rand() % field_type::order;
+
+        SCOPED_TRACE(std::to_string(constant));
+
+        std::vector<value_type> dest = data;
+
+        std::vector<value_type> expected(length);
+        for (uint32_t j = 0; j < length; ++j)
+        {
+            expected[j] = packed_arithmetic1(field, src[j], constant);
+            expected[j] = packed_arithmetic2(field, dest[j], expected[j]);
+        }
+
+        region_arithmetic(field, dest.data(), src.data(), constant);
+        for (uint32_t j = 0; j < length; ++j)
+        {
+            EXPECT_EQ(expected[j], dest[j]);
+        }
+    }
 }
 
 //------------------------------------------------------------------
@@ -211,11 +294,12 @@ inline void check_results_packed_multiply()
 }
 
 template<class FieldImpl>
-inline void check_results_region_multiply()
+inline void check_results_region_multiply(uint32_t elements = 128)
 {
     check_results_region<FieldImpl>(
         &FieldImpl::packed_multiply,
-        &FieldImpl::region_multiply);
+        &FieldImpl::region_multiply,
+        elements);
 }
 
 //------------------------------------------------------------------
@@ -243,11 +327,12 @@ inline void check_results_packed_divide()
 }
 
 template<class FieldImpl>
-inline void check_results_region_divide()
+inline void check_results_region_divide(uint32_t elements = 128)
 {
     check_results_region<FieldImpl>(
         &FieldImpl::packed_divide,
         &FieldImpl::region_divide,
+        elements,
         true);
 }
 
@@ -275,11 +360,12 @@ inline void check_results_packed_add()
 }
 
 template<class FieldImpl>
-inline void check_results_region_add()
+inline void check_results_region_add(uint32_t elements = 128)
 {
     check_results_region<FieldImpl>(
         &FieldImpl::packed_add,
-        &FieldImpl::region_add);
+        &FieldImpl::region_add,
+        elements);
 }
 
 //------------------------------------------------------------------
@@ -307,11 +393,12 @@ inline void check_results_packed_subtract()
 }
 
 template<class FieldImpl>
-inline void check_results_region_subtract()
+inline void check_results_region_subtract(uint32_t elements = 128)
 {
     check_results_region<FieldImpl >(
         &FieldImpl::packed_subtract,
-        &FieldImpl::region_subtract);
+        &FieldImpl::region_subtract,
+        elements);
 }
 
 //------------------------------------------------------------------
@@ -370,11 +457,12 @@ inline void check_results_sum_modulo()
 //------------------------------------------------------------------
 
 template<class FieldImpl>
-inline void check_results_region_multiply_constant()
+inline void check_results_region_multiply_constant(uint32_t elements = 128)
 {
-    std::cout << "check_results_region_multiply_constant: Not implemented." << std::endl;
-    //check_results_region<FieldImpl>(
-    //    &FieldImpl::region_multiply_constant);
+    check_results_region<FieldImpl>(
+        &FieldImpl::packed_multiply,
+        &FieldImpl::region_multiply_constant,
+        elements);
 }
 
 //------------------------------------------------------------------
@@ -382,11 +470,13 @@ inline void check_results_region_multiply_constant()
 //------------------------------------------------------------------
 
 template<class FieldImpl>
-inline void check_results_region_multiply_add()
+inline void check_results_region_multiply_add(uint32_t elements = 128)
 {
-    std::cout << "check_results_region_multiply_add: Not implemented." << std::endl;
-    //check_results_region<FieldImpl>(
-    //    &FieldImpl::region_multiply_add);
+    check_results_region<FieldImpl>(
+        &FieldImpl::packed_multiply,
+        &FieldImpl::packed_add,
+        &FieldImpl::region_multiply_add,
+        elements);
 }
 
 //------------------------------------------------------------------
@@ -394,12 +484,13 @@ inline void check_results_region_multiply_add()
 //------------------------------------------------------------------
 
 template<class FieldImpl>
-inline void check_results_region_multiply_subtract()
+inline void check_results_region_multiply_subtract(uint32_t elements = 128)
 {
-
-    std::cout << "check_results_region_multiply_subtract: Not implemented." << std::endl;
-    //check_results_region<FieldImpl>(
-    //    &FieldImpl::region_multiply_subtract);
+    check_results_region<FieldImpl>(
+        &FieldImpl::packed_multiply,
+        &FieldImpl::packed_subtract,
+        &FieldImpl::region_multiply_subtract,
+        elements);
 }
 
 //------------------------------------------------------------------
@@ -578,7 +669,7 @@ struct packed_add_results<fifi::binary4>
 };
 
 
-// add and substract is the same for this field.
+// add and subtract is the same for this field.
 template<>
 struct packed_subtract_results<fifi::binary4> :
     packed_add_results<fifi::binary4>

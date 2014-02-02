@@ -60,7 +60,7 @@ namespace fifi
             m_fall_through = true;
         }
 
-        void region_multiply_substract(value_type* dest, const value_type* src,
+        void region_multiply_subtract(value_type* dest, const value_type* src,
                                 value_type constant) const
         {
             (void) dest;
@@ -117,7 +117,7 @@ namespace fifi
         EXPECT_EQ(expect_multiply_add, stack.m_fall_through);
 
         stack.m_fall_through = false;
-        stack.region_multiply_substract(dest.data(), src.data(), constant);
+        stack.region_multiply_subtract(dest.data(), src.data(), constant);
         EXPECT_EQ(expect_multiply_subtract, stack.m_fall_through);
 
     }

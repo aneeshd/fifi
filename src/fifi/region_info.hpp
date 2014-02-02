@@ -8,6 +8,7 @@
 #include "fifi_utils.hpp"
 
 #include <cstdint>
+#include <cassert>
 
 namespace fifi
 {
@@ -22,6 +23,7 @@ namespace fifi
         /// @param length denotes the new length
         void set_length(uint32_t length)
         {
+            assert(length > 0);
             m_length = length;
             m_size = length_to_size<Field>(length);
         }
@@ -30,6 +32,7 @@ namespace fifi
         /// @param size denotes the new size
         void set_size(uint32_t size)
         {
+            assert((size % sizeof(typename Field::value_type)) == 0);
             m_size = size;
             m_length = size_to_length<Field>(size);
         }
