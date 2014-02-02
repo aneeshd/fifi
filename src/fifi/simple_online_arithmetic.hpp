@@ -159,9 +159,8 @@ namespace fifi
         /// @copydoc finite_field::subtract()
         value_type subtract(value_type a, value_type b) const
         {
-            assert(is_valid_element<field_type>(a));
-            assert(is_valid_element<field_type>(b));
-            return a ^ b;
+            // In the binary extension fields add and subtract are the same
+            return add(a, b);
         }
     };
 }

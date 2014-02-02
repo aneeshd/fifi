@@ -65,7 +65,8 @@ namespace fifi
         /// @copydoc layer::packed_subtract(value_type, value_type) const
         value_type packed_subtract(value_type a, value_type b) const
         {
-            return a ^ b;
+            // In the binary extension fields add and subtract are the same
+            return packed_add(a, b);
         }
 
     };

@@ -256,8 +256,8 @@ inline void check_results_region(
         std::vector<value_type> expected(length);
         for (uint32_t j = 0; j < length; ++j)
         {
-            expected[j] = packed_arithmetic1(field, src[j], constant);
-            expected[j] = packed_arithmetic2(field, dest[j], expected[j]);
+            value_type v = packed_arithmetic1(field, src[j], constant);
+            expected[j] = packed_arithmetic2(field, dest[j], v);
         }
 
         region_arithmetic(field, dest.data(), src.data(), constant);

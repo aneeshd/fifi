@@ -103,19 +103,19 @@ namespace fifi
     {
         {
             SCOPED_TRACE("binary");
-            check_results_region_multiply<FieldImpl<fifi::binary> >(elements);
+            check_results_region_multiply_constant<FieldImpl<fifi::binary> >(elements);
         }
         {
             SCOPED_TRACE("binary4");
-            check_results_region_multiply<FieldImpl<fifi::binary4> >(elements);
+            check_results_region_multiply_constant<FieldImpl<fifi::binary4> >(elements);
         }
         {
             SCOPED_TRACE("binary8");
-            check_results_region_multiply<FieldImpl<fifi::binary8> >(elements);
+            check_results_region_multiply_constant<FieldImpl<fifi::binary8> >(elements);
         }
         {
             SCOPED_TRACE("binary16");
-            check_results_region_multiply<FieldImpl<fifi::binary16> >(elements);
+            check_results_region_multiply_constant<FieldImpl<fifi::binary16> >(elements);
         }
     }
 
@@ -124,19 +124,19 @@ namespace fifi
     {
         {
             SCOPED_TRACE("binary");
-            check_results_region_multiply<FieldImpl<fifi::binary> >(elements);
+            check_results_region_multiply_add<FieldImpl<fifi::binary> >(elements);
         }
         {
             SCOPED_TRACE("binary4");
-            check_results_region_multiply<FieldImpl<fifi::binary4> >(elements);
+            check_results_region_multiply_add<FieldImpl<fifi::binary4> >(elements);
         }
         {
             SCOPED_TRACE("binary8");
-            check_results_region_multiply<FieldImpl<fifi::binary8> >(elements);
+            check_results_region_multiply_add<FieldImpl<fifi::binary8> >(elements);
         }
         {
             SCOPED_TRACE("binary16");
-            check_results_region_multiply<FieldImpl<fifi::binary16> >(elements);
+            check_results_region_multiply_add<FieldImpl<fifi::binary16> >(elements);
         }
     }
 
@@ -145,19 +145,19 @@ namespace fifi
     {
         {
             SCOPED_TRACE("binary");
-            check_results_region_multiply<FieldImpl<fifi::binary> >(elements);
+            check_results_region_multiply_subtract<FieldImpl<fifi::binary> >(elements);
         }
         {
             SCOPED_TRACE("binary4");
-            check_results_region_multiply<FieldImpl<fifi::binary4> >(elements);
+            check_results_region_multiply_subtract<FieldImpl<fifi::binary4> >(elements);
         }
         {
             SCOPED_TRACE("binary8");
-            check_results_region_multiply<FieldImpl<fifi::binary8> >(elements);
+            check_results_region_multiply_subtract<FieldImpl<fifi::binary8> >(elements);
         }
         {
             SCOPED_TRACE("binary16");
-            check_results_region_multiply<FieldImpl<fifi::binary16> >(elements);
+            check_results_region_multiply_subtract<FieldImpl<fifi::binary16> >(elements);
         }
     }
 
