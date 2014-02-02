@@ -14,7 +14,7 @@
 #include <fifi/region_info.hpp>
 #include <fifi/full_table_arithmetic.hpp>
 #include <fifi/simple_online_arithmetic.hpp>
-
+#include <fifi/final.hpp>
 #include "expected_results.hpp"
 #include "helper_catch_all.hpp"
 #include "helper_region_fall_through.hpp"
@@ -40,10 +40,11 @@ namespace fifi
         binary8_region_arithmetic_full_table<Field,
         region_arithmetic<
         region_info<Field,
+        packed_arithmetic<
         full_table_arithmetic<Field,
         simple_online_arithmetic<
         polynomial_degree<
-        helper_catch_all<Field> > > > > > >
+        final<Field> > > > > > > >
         { };
     }
 }
@@ -68,12 +69,12 @@ TEST(TestBinary8RegionArithmeticFullTable, fall_through)
 TEST(TestBinary8RegionArithmeticFullTable, multiply_add)
 {
     std::cout << "FAILED" << std::endl;
-    //check_results_region_multiply_add<fifi::dummy_stack<fifi::binary8> >();
+    check_results_region_multiply_add<fifi::dummy_stack<fifi::binary8> >();
 }
 
 TEST(TestBinary8RegionArithmeticFullTable, multiply_subtract)
 {
     std::cout << "FAILED" << std::endl;
-    //check_results_region_multiply_subtract<fifi::dummy_stack<fifi::binary8> >();
+    check_results_region_multiply_subtract<fifi::dummy_stack<fifi::binary8> >();
 }
 
