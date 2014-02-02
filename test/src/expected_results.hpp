@@ -133,7 +133,7 @@ inline void check_results_random(
 }
 
 template<class FieldImpl>
-inline void check_results_region(
+inline void check_results_region_ptr_ptr(
     typename method<FieldImpl>::binary packed_arithmetic,
     typename method<FieldImpl>::binary_ptr_ptr region_arithmetic,
     uint32_t elements,
@@ -178,7 +178,7 @@ inline void check_results_region(
 }
 
 template<class FieldImpl>
-inline void check_results_region(
+inline void check_results_region_ptr_const(
     typename method<FieldImpl>::binary packed_arithmetic,
     typename method<FieldImpl>::binary_ptr_const region_arithmetic,
     uint32_t elements)
@@ -220,7 +220,7 @@ inline void check_results_region(
 }
 
 template<class FieldImpl>
-inline void check_results_region(
+inline void check_results_region_ptr_ptr_const(
     typename method<FieldImpl>::binary packed_arithmetic1,
     typename method<FieldImpl>::binary packed_arithmetic2,
     typename method<FieldImpl>::binary_ptr_ptr_const region_arithmetic,
@@ -296,7 +296,7 @@ inline void check_results_packed_multiply()
 template<class FieldImpl>
 inline void check_results_region_multiply(uint32_t elements = 128)
 {
-    check_results_region<FieldImpl>(
+    check_results_region_ptr_ptr<FieldImpl>(
         &FieldImpl::packed_multiply,
         &FieldImpl::region_multiply,
         elements);
@@ -329,7 +329,7 @@ inline void check_results_packed_divide()
 template<class FieldImpl>
 inline void check_results_region_divide(uint32_t elements = 128)
 {
-    check_results_region<FieldImpl>(
+    check_results_region_ptr_ptr<FieldImpl>(
         &FieldImpl::packed_divide,
         &FieldImpl::region_divide,
         elements,
@@ -362,7 +362,7 @@ inline void check_results_packed_add()
 template<class FieldImpl>
 inline void check_results_region_add(uint32_t elements = 128)
 {
-    check_results_region<FieldImpl>(
+    check_results_region_ptr_ptr<FieldImpl>(
         &FieldImpl::packed_add,
         &FieldImpl::region_add,
         elements);
@@ -395,7 +395,7 @@ inline void check_results_packed_subtract()
 template<class FieldImpl>
 inline void check_results_region_subtract(uint32_t elements = 128)
 {
-    check_results_region<FieldImpl >(
+    check_results_region_ptr_ptr<FieldImpl >(
         &FieldImpl::packed_subtract,
         &FieldImpl::region_subtract,
         elements);
@@ -459,7 +459,7 @@ inline void check_results_sum_modulo()
 template<class FieldImpl>
 inline void check_results_region_multiply_constant(uint32_t elements = 128)
 {
-    check_results_region<FieldImpl>(
+    check_results_region_ptr_const<FieldImpl>(
         &FieldImpl::packed_multiply,
         &FieldImpl::region_multiply_constant,
         elements);
@@ -472,7 +472,7 @@ inline void check_results_region_multiply_constant(uint32_t elements = 128)
 template<class FieldImpl>
 inline void check_results_region_multiply_add(uint32_t elements = 128)
 {
-    check_results_region<FieldImpl>(
+    check_results_region_ptr_ptr_const<FieldImpl>(
         &FieldImpl::packed_multiply,
         &FieldImpl::packed_add,
         &FieldImpl::region_multiply_add,
@@ -486,7 +486,7 @@ inline void check_results_region_multiply_add(uint32_t elements = 128)
 template<class FieldImpl>
 inline void check_results_region_multiply_subtract(uint32_t elements = 128)
 {
-    check_results_region<FieldImpl>(
+    check_results_region_ptr_ptr_const<FieldImpl>(
         &FieldImpl::packed_multiply,
         &FieldImpl::packed_subtract,
         &FieldImpl::region_multiply_subtract,
