@@ -65,6 +65,12 @@ TEST(TestBinary8RegionArithmeticFullTable, fall_through)
     }
 }
 
+TEST(TestBinary8RegionArithmeticFullTable, init)
+{
+    fifi::dummy_stack<fifi::binary8> stack;
+    (void) stack;
+}
+
 TEST(TestBinary8RegionArithmeticFullTable, multiply_add)
 {
     check_results_region_multiply_add<fifi::dummy_stack<fifi::binary8> >();
