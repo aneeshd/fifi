@@ -207,7 +207,7 @@ inline void check_results_region_ptr_const(
 
     for (uint32_t i = 0; i < tests; ++i)
     {
-        value_type constant = rand() % field_type::order;
+        value_type constant = fifi::pack<field_type>(rand() % field_type::order);
         SCOPED_TRACE("constant:");
         SCOPED_TRACE(constant);
 
@@ -255,7 +255,7 @@ inline void check_results_region_ptr_ptr_const(
 
     for (uint32_t i = 0; i < tests; ++i)
     {
-        value_type constant = rand() % field_type::order;
+        value_type constant = fifi::pack<field_type>(rand() % field_type::order);
 
         SCOPED_TRACE("constant:");
         SCOPED_TRACE(constant);

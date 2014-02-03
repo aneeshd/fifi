@@ -10,6 +10,7 @@
 #include <cstdint>
 
 #include "binary.hpp"
+#include "is_packed_constant.hpp"
 
 namespace fifi
 {
@@ -23,6 +24,9 @@ namespace fifi
     {
     public:
 
+        /// The field type
+        typedef typename Super::field_type field_type;
+
         /// Typedef of the data type used for each field element
         typedef typename Super::value_type value_type;
 
@@ -35,8 +39,7 @@ namespace fifi
         {
             assert(dest != 0);
             assert(Super::length() > 0);
-            // Only {0,1} allowed
-            assert(constant == 0 || constant == 1);
+            assert(is_packed_constant<field_type>(constant));
 
             if(constant == 0)
             {
@@ -51,10 +54,8 @@ namespace fifi
         {
             assert(dest != 0);
             assert(src  != 0);
-            assert(Super::length());
-
-            // Only {0,1} allowed
-            assert(constant == 0 || constant == 1);
+            assert(Super::length() > 0);
+            assert(is_packed_constant<field_type>(constant));
 
             if(constant == 0) // Do nothing
             {
@@ -71,6 +72,11 @@ namespace fifi
         void region_multiply_subtract(value_type* dest, const value_type* src,
             value_type constant) const
         {
+            assert(dest != 0);
+            assert(src  != 0);
+            assert(Super::length() > 0);
+            assert(is_packed_constant<field_type>(constant));
+
             // In the binary extension fields add and subtract are the same
             region_multiply_add(dest, src, constant);
         }

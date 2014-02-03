@@ -5,7 +5,10 @@
 
 #pragma once
 
+#include <cassert>
 #include <cstdint>
+
+#include "is_packed_constant.hpp"
 
 namespace fifi
 {
@@ -22,6 +25,9 @@ namespace fifi
     {
     public:
 
+        /// The field type
+        typedef typename Super::field_type field_type;
+
         /// Typedef of the data type used for each field element
         typedef typename Super::value_type value_type;
 
@@ -29,6 +35,9 @@ namespace fifi
 
         void region_add(value_type* dest, const value_type* src) const
         {
+            assert(dest != 0);
+            assert(src  != 0);
+            assert(Super::length() > 0);
             for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_add(dest[i], src[i]);
@@ -37,6 +46,9 @@ namespace fifi
 
         void region_subtract(value_type* dest, const value_type* src) const
         {
+            assert(dest != 0);
+            assert(src  != 0);
+            assert(Super::length() > 0);
             for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_subtract(dest[i], src[i]);
@@ -45,6 +57,9 @@ namespace fifi
 
         void region_divide(value_type* dest, const value_type* src) const
         {
+            assert(dest != 0);
+            assert(src  != 0);
+            assert(Super::length() > 0);
             for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_divide(dest[i], src[i]);
@@ -53,6 +68,9 @@ namespace fifi
 
         void region_multiply(value_type* dest, const value_type* src) const
         {
+            assert(dest != 0);
+            assert(src  != 0);
+            assert(Super::length() > 0);
             for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_multiply(dest[i], src[i]);
@@ -62,8 +80,9 @@ namespace fifi
         void region_multiply_constant(
             value_type* dest, value_type constant) const
         {
-            // Check that constant is packed
-
+            assert(dest != 0);
+            assert(Super::length() > 0);
+            assert(is_packed_constant<field_type>(constant));
             for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_multiply(dest[i], constant);
@@ -73,8 +92,10 @@ namespace fifi
         void region_multiply_add(value_type* dest, const value_type* src,
                           value_type constant) const
         {
-            // Check that constant is packed
-
+            assert(dest != 0);
+            assert(src  != 0);
+            assert(Super::length() > 0);
+            assert(is_packed_constant<field_type>(constant));
             for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 value_type v = Super::packed_multiply(src[i], constant);
@@ -85,8 +106,10 @@ namespace fifi
         void region_multiply_subtract(value_type* dest, const value_type* src,
                                 value_type constant) const
         {
-            // Check that constant is packed
-
+            assert(dest != 0);
+            assert(src  != 0);
+            assert(Super::length() > 0);
+            assert(is_packed_constant<field_type>(constant));
             for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 value_type v = Super::packed_multiply(src[i], constant);
