@@ -7,6 +7,7 @@
 
 #include <cstdint>
 #include <cstdlib>
+#include <utility>
 
 #include "fifi_utils.hpp"
 #include "is_valid_element.hpp"
@@ -29,7 +30,7 @@ namespace fifi
 
     public:
 
-        /// @copydoc finite_field::multiply()
+        /// @copydoc layer::multiply()
         value_type multiply(value_type a, value_type b) const
         {
             static_assert(
@@ -73,7 +74,7 @@ namespace fifi
 
         }
 
-        /// @copydoc finite_field::divide()
+        /// @copydoc layer::divide()
         value_type divide(value_type numerator, value_type denominator) const
         {
             static_assert(
@@ -85,7 +86,7 @@ namespace fifi
             return multiply(invert(denominator), numerator);
         }
 
-        /// @copydoc finite_field::invert()
+        /// @copydoc layer::invert()
         value_type invert(value_type a) const
         {
             static_assert(
@@ -148,7 +149,7 @@ namespace fifi
             return y_large;
         }
 
-        /// @copydoc finite_field::add()
+        /// @copydoc layer::add()
         value_type add(value_type a, value_type b) const
         {
             assert(is_valid_element<field_type>(a));
@@ -156,7 +157,7 @@ namespace fifi
             return a ^ b;
         }
 
-        /// @copydoc finite_field::subtract()
+        /// @copydoc layer::subtract()
         value_type subtract(value_type a, value_type b) const
         {
             // In the binary extension fields add and subtract are the same

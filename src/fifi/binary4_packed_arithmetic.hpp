@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <type_traits>
+
 #include "binary4.hpp"
 
 namespace fifi

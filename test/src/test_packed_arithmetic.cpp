@@ -6,14 +6,12 @@
 #include <gtest/gtest.h>
 
 #include <fifi/binary.hpp>
+#include <fifi/binary16.hpp>
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
-#include <fifi/binary16.hpp>
-#include <fifi/prime2325.hpp>
 #include <fifi/packed_arithmetic.hpp>
-#include <fifi/polynomial_degree.hpp>
+#include <fifi/prime2325.hpp>
 
-#include "expected_results.hpp"
 #include "helper_catch_all.hpp"
 #include "helper_packed_fall_through.hpp"
 

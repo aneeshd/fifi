@@ -7,17 +7,18 @@
 
 #include <cstdlib>
 #include <functional>
-#include <string>
 #include <vector>
-#include <iostream>
+
+#include <gtest/gtest.h>
 
 #include <fifi/binary.hpp>
+#include <fifi/binary16.hpp>
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
-#include <fifi/binary16.hpp>
-#include <fifi/prime2325.hpp>
-#include <fifi/is_value_type_exact.hpp>
 #include <fifi/fifi_utils.hpp>
+#include <fifi/is_value_type_exact.hpp>
+#include <fifi/prime2325.hpp>
+
 // The expected result of an arithmetic operation
 // e.g. result == operation(arg1, arg2).
 // Where operation can be add, subtract, multiply
@@ -88,8 +89,10 @@ inline void check_results_binary(typename method<FieldImpl>::binary arithmetic)
     {
         expected_result_binary<field_type> res =
             Results<field_type>::m_results[i];
-        SCOPED_TRACE("a: " + std::to_string(res.m_input1) +
-                    " b: " + std::to_string(res.m_input2));
+        SCOPED_TRACE("a:");
+        SCOPED_TRACE(res.m_input1);
+        SCOPED_TRACE("b:");
+        SCOPED_TRACE(res.m_input2);
         EXPECT_EQ(res.m_result, arithmetic(field, res.m_input1, res.m_input2));
     }
 }
@@ -105,7 +108,8 @@ inline void check_results_unary(typename method<FieldImpl>::unary arithmetic)
     {
         expected_result_unary<field_type> res =
             Results<field_type>::m_results[i];
-        SCOPED_TRACE("a: " + std::to_string(res.m_input1));
+        SCOPED_TRACE("a:");
+        SCOPED_TRACE(res.m_input1);
         EXPECT_EQ(res.m_result, arithmetic(field, res.m_input1));
     }
 }
@@ -204,7 +208,8 @@ inline void check_results_region_ptr_const(
     for (uint32_t i = 0; i < tests; ++i)
     {
         value_type constant = rand() % field_type::order;
-        SCOPED_TRACE(std::to_string(constant));
+        SCOPED_TRACE("constant:");
+        SCOPED_TRACE(constant);
 
         std::vector<value_type> dest = data;
 
@@ -252,7 +257,8 @@ inline void check_results_region_ptr_ptr_const(
     {
         value_type constant = rand() % field_type::order;
 
-        SCOPED_TRACE(std::to_string(constant));
+        SCOPED_TRACE("constant:");
+        SCOPED_TRACE(constant);
 
         std::vector<value_type> dest = data;
 

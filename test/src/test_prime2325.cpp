@@ -4,6 +4,7 @@
 // http://www.steinwurf.com/licensing
 
 #include <fifi/prime2325.hpp>
+
 #include <gtest/gtest.h>
 
 TEST(TestPrime2325, prime2325)

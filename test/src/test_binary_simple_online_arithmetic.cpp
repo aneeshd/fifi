@@ -3,20 +3,18 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#include <fifi/binary.hpp>
+#include <fifi/binary16.hpp>
+#include <fifi/binary4.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/binary_simple_online_arithmetic.hpp>
+#include <fifi/prime2325.hpp>
 
 #include <gtest/gtest.h>
 
-#include <fifi/binary.hpp>
-#include <fifi/binary4.hpp>
-#include <fifi/binary8.hpp>
-#include <fifi/binary16.hpp>
-#include <fifi/binary_simple_online_arithmetic.hpp>
-#include <fifi/final.hpp>
-#include <fifi/prime2325.hpp>
-
+#include "expected_results.hpp"
 #include "helper_catch_all.hpp"
 #include "helper_fall_through.hpp"
-#include "expected_results.hpp"
 
 namespace fifi
 {

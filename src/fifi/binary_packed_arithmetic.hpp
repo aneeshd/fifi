@@ -7,6 +7,7 @@
 
 #include <cassert>
 #include <limits>
+#include <type_traits>
 
 #include "binary.hpp"
 

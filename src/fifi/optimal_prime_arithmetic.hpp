@@ -7,6 +7,7 @@
 
 #include <cassert>
 #include <cstdint>
+#include <type_traits>
 
 #include "prime2325.hpp"
 

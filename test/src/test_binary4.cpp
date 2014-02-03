@@ -4,6 +4,7 @@
 // http://www.steinwurf.com/licensing
 
 #include <fifi/binary4.hpp>
+
 #include <gtest/gtest.h>
 
 TEST(TestBinary4, binary4)

@@ -3,7 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <gtest/gtest.h>
+#include <cstdint>
 
 #include <fifi/binary.hpp>
 #include <fifi/binary16.hpp>
@@ -13,6 +13,8 @@
 #include <fifi/final.hpp>
 #include <fifi/prime2325.hpp>
 #include <fifi/region_info.hpp>
+
+#include <gtest/gtest.h>
 
 namespace fifi
 {
@@ -64,12 +66,10 @@ TEST(TestRegionInfo, binary8)
 }
 TEST(TestRegionInfo, binary16)
 {
-    ///@todo This fails, but why?
     test_region_info<fifi::binary16>();
 }
 
 TEST(TestRegionInfo, prime2325)
 {
-    ///@todo This fails, but why?
     test_region_info<fifi::prime2325>();
 }

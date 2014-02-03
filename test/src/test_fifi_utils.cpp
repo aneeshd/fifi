@@ -3,14 +3,13 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#include <fifi/binary.hpp>
+#include <fifi/binary16.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/fifi_utils.hpp>
+#include <fifi/prime2325.hpp>
 
 #include <gtest/gtest.h>
-
-#include <fifi/fifi_utils.hpp>
-#include <fifi/binary.hpp>
-#include <fifi/binary8.hpp>
-#include <fifi/binary16.hpp>
-#include <fifi/prime2325.hpp>
 
 TEST(TestFifiUtils, elements_to_size)
 {

@@ -3,18 +3,16 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <gtest/gtest.h>
-
-#include <fifi/optimal_prime_region_arithmetic.hpp>
+#include <fifi/final.hpp>
 #include <fifi/optimal_prime_arithmetic.hpp>
+#include <fifi/optimal_prime_region_arithmetic.hpp>
 #include <fifi/packed_arithmetic.hpp>
-#include <fifi/polynomial_degree.hpp>
+#include <fifi/prime2325.hpp>
 #include <fifi/region_arithmetic.hpp>
 #include <fifi/region_info.hpp>
-#include <fifi/full_table_arithmetic.hpp>
-#include <fifi/simple_online_arithmetic.hpp>
-#include <fifi/prime2325.hpp>
-#include <fifi/final.hpp>
+
+#include <gtest/gtest.h>
+
 #include "expected_results.hpp"
 #include "helper_catch_all.hpp"
 #include "helper_region_fall_through.hpp"
@@ -47,11 +45,8 @@ namespace fifi
 
 TEST(TestOptimalPrimeRegionArithmetic, fall_through)
 {
-    {
-        SCOPED_TRACE("prime2325");
-        fifi::helper_region_fall_through_test<fifi::prime2325,
-        fifi::dummy_stack_fall_through<fifi::prime2325> >(false, false);
-    }
+    fifi::helper_region_fall_through_test<fifi::prime2325,
+    fifi::dummy_stack_fall_through<fifi::prime2325> >(false, false);
 }
 
 TEST(TestOptimalPrimeRegionArithmetic, add)

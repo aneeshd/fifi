@@ -4,9 +4,10 @@
 // http://www.steinwurf.com/licensing
 
 #include <cstdint>
-#include <gtest/gtest.h>
 
 #include <fifi/binary.hpp>
+
+#include <gtest/gtest.h>
 
 TEST(TestBinary, binary)
 {

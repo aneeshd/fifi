@@ -3,9 +3,14 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <gtest/gtest.h>
+#include <cstdint>
+#include <vector>
 
 #include <fifi/prime2325_bitmap.hpp>
+
+#include <gtest/gtest.h>
+
+#include <sak/storage.hpp>
 
 #include "helper_prime2325_find_a_prefix.hpp"
 #include "helper_prime2325_find_one_prefix.hpp"

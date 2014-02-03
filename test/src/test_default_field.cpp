@@ -4,13 +4,14 @@
 // http://www.steinwurf.com/licensing
 
 #include <type_traits>
-#include <fifi/default_field.hpp>
-#include <gtest/gtest.h>
 
-#include <fifi/simple_online.hpp>
-#include <fifi/full_table.hpp>
+#include <fifi/default_field.hpp>
 #include <fifi/extended_log_table.hpp>
+#include <fifi/full_table.hpp>
 #include <fifi/optimal_prime_arithmetic.hpp>
+#include <fifi/simple_online.hpp>
+
+#include <gtest/gtest.h>
 
 TEST(TestDefaultField, binary_default_field)
 {

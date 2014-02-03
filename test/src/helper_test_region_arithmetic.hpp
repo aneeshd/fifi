@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 #include <fifi/binary.hpp>
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>

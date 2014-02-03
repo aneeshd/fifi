@@ -7,6 +7,7 @@
 
 #include <fifi/is_prime2325.hpp>
 #include <fifi/binary.hpp>
+#include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
 #include <fifi/binary16.hpp>
 #include <fifi/prime2325.hpp>
@@ -14,6 +15,7 @@
 TEST(TestIsPrime2325, is_prime2325)
 {
     EXPECT_FALSE(fifi::is_prime2325<fifi::binary>::value);
+    EXPECT_FALSE(fifi::is_prime2325<fifi::binary4>::value);
     EXPECT_FALSE(fifi::is_prime2325<fifi::binary8>::value);
     EXPECT_FALSE(fifi::is_prime2325<fifi::binary16>::value);
     EXPECT_TRUE(fifi::is_prime2325<fifi::prime2325>::value);

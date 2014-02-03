@@ -3,10 +3,10 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <gtest/gtest.h>
-
 #include <fifi/optimal_prime.hpp>
 #include <fifi/prime2325.hpp>
+
+#include <gtest/gtest.h>
 
 #include "helper_test_arithmetic.hpp"
 #include "helper_test_packed_arithmetic.hpp"

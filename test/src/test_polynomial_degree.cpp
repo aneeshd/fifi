@@ -3,15 +3,15 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <gtest/gtest.h>
-
 #include <fifi/binary.hpp>
+#include <fifi/binary16.hpp>
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
-#include <fifi/binary16.hpp>
-#include <fifi/prime2325.hpp>
 #include <fifi/final.hpp>
 #include <fifi/polynomial_degree.hpp>
+#include <fifi/prime2325.hpp>
+
+#include <gtest/gtest.h>
 
 #include "expected_results.hpp"
 

@@ -3,8 +3,6 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#pragma once
-
 #include "binary8.hpp"
 
 namespace fifi

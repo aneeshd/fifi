@@ -23,7 +23,7 @@ namespace fifi
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
     class simple_online :
-        public //binary_region_arithmetic<Field,
+        public binary_region_arithmetic<Field,
                region_arithmetic<
                region_info<Field,
                binary4_packed_arithmetic<Field,
@@ -32,7 +32,7 @@ namespace fifi
                binary_simple_online_arithmetic<Field,
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > > > > // >
+               final<Field> > > > > > > > > >
     { };
 
 }

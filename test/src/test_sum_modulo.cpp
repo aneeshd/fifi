@@ -3,7 +3,6 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <gtest/gtest.h>
 
 #include <fifi/binary.hpp>
 #include <fifi/binary16.hpp>
@@ -12,6 +11,8 @@
 #include <fifi/final.hpp>
 #include <fifi/prime2325.hpp>
 #include <fifi/sum_modulo.hpp>
+
+#include <gtest/gtest.h>
 
 #include "expected_results.hpp"
 

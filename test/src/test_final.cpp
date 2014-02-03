@@ -4,16 +4,15 @@
 // http://www.steinwurf.com/licensing
 
 #include <fifi/binary.hpp>
+#include <fifi/binary16.hpp>
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
-#include <fifi/binary16.hpp>
-#include <fifi/prime2325.hpp>
-
 #include <fifi/final.hpp>
+#include <fifi/prime2325.hpp>
 
 #include <gtest/gtest.h>
 
-// Simple test for simple class.
+// A simple test for a simple class.
 TEST(TestFinal, final)
 {
     fifi::final<fifi::binary> f_binary;

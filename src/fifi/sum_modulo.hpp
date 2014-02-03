@@ -51,7 +51,8 @@ namespace fifi
             return sum;
         }
 
-        /// @copydoc is_valid_element(typename Field::value_type v)
+        /// specialization for non exact types
+        /// @copydoc calculate_sum_modulo(value_type, value_type)
         template<class T = field_type>
         inline typename std::enable_if<!is_value_type_exact<T>::value,
             typename T::value_type>::type

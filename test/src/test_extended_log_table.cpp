@@ -3,17 +3,16 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <gtest/gtest.h>
-
+#include <fifi/binary16.hpp>
+#include <fifi/binary4.hpp>
+#include <fifi/binary8.hpp>
 #include <fifi/extended_log_table.hpp>
+
+#include <gtest/gtest.h>
 
 #include "helper_test_arithmetic.hpp"
 #include "helper_test_packed_arithmetic.hpp"
 #include "helper_test_region_arithmetic.hpp"
-
-#include <fifi/binary4.hpp>
-#include <fifi/binary8.hpp>
-#include <fifi/binary16.hpp>
 
 TEST(TestExtendedLogTable, binary4)
 {

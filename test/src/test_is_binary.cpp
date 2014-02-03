@@ -3,19 +3,20 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <gtest/gtest.h>
-
-#include <fifi/is_binary.hpp>
-
 #include <fifi/binary.hpp>
-#include <fifi/binary8.hpp>
 #include <fifi/binary16.hpp>
+#include <fifi/binary4.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/is_binary.hpp>
 #include <fifi/prime2325.hpp>
+
+#include <gtest/gtest.h>
 
 TEST(TestIsBinary, is_binary)
 {
-    EXPECT_TRUE(fifi::is_binary<fifi::binary>::value == true);
-    EXPECT_TRUE(fifi::is_binary<fifi::binary8>::value == false);
-    EXPECT_TRUE(fifi::is_binary<fifi::binary16>::value == false);
-    EXPECT_TRUE(fifi::is_binary<fifi::prime2325>::value == false);
+    EXPECT_TRUE(fifi::is_binary<fifi::binary>::value);
+    EXPECT_FALSE(fifi::is_binary<fifi::binary4>::value);
+    EXPECT_FALSE(fifi::is_binary<fifi::binary8>::value);
+    EXPECT_FALSE(fifi::is_binary<fifi::binary16>::value);
+    EXPECT_FALSE(fifi::is_binary<fifi::prime2325>::value);
 }

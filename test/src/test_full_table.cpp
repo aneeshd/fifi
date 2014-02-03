@@ -3,11 +3,11 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <gtest/gtest.h>
-
-#include <fifi/full_table.hpp>
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
+#include <fifi/full_table.hpp>
+
+#include <gtest/gtest.h>
 
 #include "helper_test_arithmetic.hpp"
 #include "helper_test_packed_arithmetic.hpp"

@@ -15,8 +15,6 @@
 #include <sak/storage.hpp>
 namespace fifi
 {
-    /// @todo is this a good name? how is this different from find a prefix?
-
     /// Very simple test we just set a few values and check that we are fine
     template<class Algorithm>
     void helper_prime2325_find_one_prefix(uint32_t prefix_bits)
