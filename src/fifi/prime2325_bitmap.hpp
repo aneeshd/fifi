@@ -5,8 +5,10 @@
 
 #pragma once
 
+#include <cassert>
+#include <cstdint>
 #include <limits>
-#include <ostream>
+#include <vector>
 
 #include <sak/storage.hpp>
 
@@ -164,12 +166,6 @@ namespace fifi
             uint32_t offset = prefix_value % m_mapping_bits;
 
             m_bitmap[index] = m_bitmap[index] | 1 << offset;
-        }
-
-        /// Prints the identification of this algorithm
-        void print_info(std::ostream &out)
-        {
-            out << "bitmap, max_block_length=" << m_max_block_length;
         }
 
         /// The maximum block length in elements of uint32_t

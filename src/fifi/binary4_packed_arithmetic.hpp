@@ -15,7 +15,7 @@ namespace fifi
     class binary4_packed_arithmetic : public Super
     { };
 
-    /// Specialization for packed arithmetic for the binary field.
+    /// Specialization for packed arithmetic for the binary4 field.
     template<class Super>
     class binary4_packed_arithmetic<binary4, Super> : public Super
     {
@@ -24,7 +24,7 @@ namespace fifi
         /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
 
-        /// Ensure that the stack is also initialized with the binary field
+        /// Ensure that the stack is also initialized with the binary4 field
         static_assert(std::is_same<binary4, typename Super::field_type>::value,
                       "The field used throughout the stack should match");
 
@@ -37,8 +37,7 @@ namespace fifi
 
     public:
 
-        /// For all binary extension fields the binary
-        /// @copydoc finite_field::packed_add()
+        /// @copydoc packed_arithmetic::packed_multiply()
         value_type packed_multiply(value_type a, value_type b) const
         {
             value_type high = Super::multiply(a >> 4, b >> 4);
@@ -47,7 +46,7 @@ namespace fifi
             return (high << 4) | low;
         }
 
-        /// @copydoc finite_field::divide()
+        /// @copydoc packed_arithmetic::packed_divide()
         value_type packed_divide(value_type numerator,
                                  value_type denominator) const
         {
@@ -60,7 +59,7 @@ namespace fifi
             return (high << 4) | low;
         }
 
-        /// @copydoc finite_field::invert()
+        /// @copydoc packed_arithmetic::packed_invert()
         value_type packed_invert(value_type a) const
         {
             value_type high = Super::invert(a >> 4);
@@ -69,13 +68,13 @@ namespace fifi
             return (high << 4) | low;
         }
 
-        /// @copydoc finite_field::add()
+        /// @copydoc packed_arithmetic::packed_add()
         value_type packed_add(value_type a, value_type b) const
         {
             return a ^ b;
         }
 
-        /// @copydoc finite_field::subtract()
+        /// @copydoc packed_arithmetic::packed_subtract()
         value_type packed_subtract(value_type a, value_type b) const
         {
             // In the binary extension fields add and subtract are the same

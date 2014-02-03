@@ -64,17 +64,13 @@ TEST(TestBinary8RegionArithmeticFullTable, fall_through)
     }
 }
 
-#include <iostream>
-
 TEST(TestBinary8RegionArithmeticFullTable, multiply_add)
 {
-    std::cout << "FAILED" << std::endl;
     check_results_region_multiply_add<fifi::dummy_stack<fifi::binary8> >();
 }
 
 TEST(TestBinary8RegionArithmeticFullTable, multiply_subtract)
 {
-    std::cout << "FAILED" << std::endl;
     check_results_region_multiply_subtract<fifi::dummy_stack<fifi::binary8> >();
 }
 

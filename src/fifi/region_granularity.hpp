@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace fifi
 {
 
@@ -36,7 +38,5 @@ namespace fifi
         {
             return 1U;
         }
-
     };
-
 }

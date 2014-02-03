@@ -6,6 +6,7 @@
 #pragma once
 
 #include "binary4_packed_arithmetic.hpp"
+#include "binary8_region_arithmetic_full_table.hpp"
 #include "final.hpp"
 #include "full_table_arithmetic.hpp"
 #include "packed_arithmetic.hpp"
@@ -17,20 +18,18 @@
 namespace fifi
 {
 
-    /// Simple online finite field algorithms - computes the results
-    /// on the fly without relying on pre-computed look-up tables etc.
+    /// The full look-up table - computes a full lookup table of
+    /// the multiplication and division operations.
     template<class Field>
     class full_table :
-        public // Region arithmetic
+        public binary8_region_arithmetic_full_table<Field,
                region_arithmetic<
                region_info<Field,
-               // Packed arithmetic
                binary4_packed_arithmetic<Field,
                packed_arithmetic<
-               // Arithmetic
                full_table_arithmetic<Field,
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > > >
+               final<Field> > > > > > > > >
     { };
 }

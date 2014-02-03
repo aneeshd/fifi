@@ -6,14 +6,13 @@
 #pragma once
 
 #include "binary.hpp"
-#include "binary8.hpp"
 #include "binary16.hpp"
-#include "prime2325.hpp"
-
-#include "simple_online.hpp"
-#include "full_table.hpp"
+#include "binary8.hpp"
 #include "extended_log_table.hpp"
+#include "full_table.hpp"
 #include "optimal_prime_arithmetic.hpp"
+#include "prime2325.hpp"
+#include "simple_online.hpp"
 
 namespace fifi
 {
@@ -48,7 +47,7 @@ namespace fifi
         typedef extended_log_table<binary16> type;
     };
 
-    /// For the binary16 field
+    /// For the prime2325 field
     template<>
     struct default_field<prime2325>
     {

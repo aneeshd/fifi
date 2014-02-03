@@ -5,6 +5,9 @@
 
 #pragma once
 
+#include <cassert>
+#include <limits>
+
 #include "binary.hpp"
 
 namespace fifi
@@ -47,7 +50,7 @@ namespace fifi
             return numerator & denominator;
         }
 
-        /// @copydoc packed_invert::invert(value_type) const
+        /// @copydoc layer::packed_invert(value_type) const
         value_type packed_invert(value_type a) const
         {
             // Zero does not have an inverse so the value a should be

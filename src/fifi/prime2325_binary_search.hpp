@@ -7,12 +7,13 @@
 
 #include <cassert>
 #include <cstdint>
-#include <ostream>
+#include <vector>
 
 #include <sak/storage.hpp>
 
 #include "prime2325.hpp"
 #include "prime2325_prefix_length.hpp"
+
 namespace fifi
 {
     /// Binary search algorithms for finding an unused bit prefix in arbitrary
@@ -243,13 +244,6 @@ namespace fifi
 
                 ++first;
             }
-        }
-
-        /// Prints the identification of this algorithm
-        void print_info(std::ostream &out)
-        {
-            out << "binary_search, max_block_length=" << m_max_block_length
-                << " k_pass=" << m_k_pass;
         }
 
         /// The maximum block length in elements of uint32_t

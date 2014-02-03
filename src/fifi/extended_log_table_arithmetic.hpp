@@ -5,23 +5,20 @@
 
 #pragma once
 
-#include <algorithm>
 #include <cassert>
-#include <cmath>
-#include <cstdint>
 #include <vector>
-#include <string>
-#include <iostream>
+
+#include <boost/static_assert.hpp>
 
 #include "binary.hpp"
-#include "prime2325.hpp"
 #include "is_valid_element.hpp"
+#include "prime2325.hpp"
 
 namespace fifi
 {
     /// Produces an extended log table for multiplication and division.
     /// A fall-through specialization for the binary has been added as
-    /// the table creation requires arithemetics not supported by that field.
+    /// the table creation requires arithmetics not supported by that field.
     template<class Super>
     class extended_log_table_arithmetic : public Super
     {
@@ -53,7 +50,7 @@ namespace fifi
             uint32_t mid_offset  = low_offset + field_type::order - 2;
             uint32_t high_offset = mid_offset + field_type::order - 1;
 
-            // inital value corresponds x^0
+            // initial value corresponds x^0
             value_type power = 1;
 
             for(order_type i = 0; i < field_type::order - 1; ++i)
@@ -80,7 +77,7 @@ namespace fifi
             m_antilog = &m_antilog_data[0] + field_type::order - 2;
         }
 
-        /// @copydoc finite_field::multiply()
+        /// @copydoc layer::multiply()
         value_type multiply(value_type a, value_type b) const
         {
             assert(is_valid_element<field_type>(a));
@@ -95,7 +92,7 @@ namespace fifi
             return m_antilog[one + two];
         }
 
-        /// @copydoc finite_field::divide()
+        /// @copydoc layer::divide()
         value_type divide(value_type numerator, value_type denominator) const
         {
             assert(is_valid_element<field_type>(numerator));
@@ -111,7 +108,7 @@ namespace fifi
             return m_antilog[one - two];
         }
 
-        /// @copydoc finite_field::invert()
+        /// @copydoc layer::invert()
         value_type invert(value_type a) const
         {
             assert(is_valid_element<field_type>(a));

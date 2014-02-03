@@ -5,15 +5,16 @@
 
 #pragma once
 
-#include "binary_simple_online_arithmetic.hpp"
-#include "binary_packed_arithmetic.hpp"
 #include "binary4_packed_arithmetic.hpp"
+#include "binary_packed_arithmetic.hpp"
+#include "binary_region_arithmetic.hpp"
+#include "binary_simple_online_arithmetic.hpp"
 #include "final.hpp"
-#include "polynomial_degree.hpp"
-#include "simple_online_arithmetic.hpp"
 #include "packed_arithmetic.hpp"
+#include "polynomial_degree.hpp"
 #include "region_arithmetic.hpp"
 #include "region_info.hpp"
+#include "simple_online_arithmetic.hpp"
 
 namespace fifi
 {
@@ -22,7 +23,8 @@ namespace fifi
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
     class simple_online :
-        public region_arithmetic<
+        public //binary_region_arithmetic<Field,
+               region_arithmetic<
                region_info<Field,
                binary4_packed_arithmetic<Field,
                binary_packed_arithmetic<Field,
@@ -30,7 +32,7 @@ namespace fifi
                binary_simple_online_arithmetic<Field,
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > > > >
+               final<Field> > > > > > > > > // >
     { };
 
 }

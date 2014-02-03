@@ -9,7 +9,7 @@ namespace fifi
 {
 
     /// Packed arithmetic is used to perform standard arithmetic
-    /// operations but where field elementes are expected to be
+    /// operations but where field elements are expected to be
     /// "packed" in the value_type. This ensures that we correctly
     /// deals with fields that do not have a corresponding native data
     /// type to contain its value. E.g. for binary4 we have no data
@@ -36,32 +36,32 @@ namespace fifi
 
     public:
 
-        /// @copydoc finite_field::packed_add()
+        /// @copydoc layer::packed_multiply()
         value_type packed_multiply(value_type a, value_type b) const
         {
             return Super::multiply(a, b);
         }
 
-        /// @copydoc finite_field::divide()
+        /// @copydoc layer::packed_divide()
         value_type packed_divide(value_type numerator,
                                  value_type denominator) const
         {
             return Super::divide(numerator, denominator);
         }
 
-        /// @copydoc finite_field::invert()
+        /// @copydoc layer::packed_invert()
         value_type packed_invert(value_type a) const
         {
             return Super::invert(a);
         }
 
-        /// @copydoc finite_field::add()
+        /// @copydoc layer::packed_add()
         value_type packed_add(value_type a, value_type b) const
         {
             return Super::add(a, b);
         }
 
-        /// @copydoc finite_field::subtract()
+        /// @copydoc layer::packed_subtract()
         value_type packed_subtract(value_type a, value_type b) const
         {
             return Super::subtract(a, b);

@@ -5,8 +5,7 @@
 
 #pragma once
 
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_same.hpp>
+#include <type_traits>
 
 #include "binary.hpp"
 
@@ -22,7 +21,7 @@ namespace fifi
     ///    }
     ///
     template<class Field>
-    struct is_binary : public boost::is_same<Field, fifi::binary>
+    struct is_binary : public std::is_same<Field, fifi::binary>
     { };
 
 }

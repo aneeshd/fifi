@@ -4,7 +4,6 @@
 // http://www.steinwurf.com/licensing
 
 #include <cstdint>
-#include <cassert>
 
 #include "prime2325.hpp"
 

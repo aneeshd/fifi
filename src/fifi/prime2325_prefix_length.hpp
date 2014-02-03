@@ -7,6 +7,7 @@
 
 #include <cassert>
 #include <cstdint>
+
 #include "prime2325.hpp"
 
 namespace fifi
@@ -30,8 +31,8 @@ namespace fifi
         }
 
         // How many values can be represented where the most
-        // significant bit is topbit.  Create a mask of
-        // 0000000..1111..1 where the MSBit is in the topbit position
+        // significant bit is top bit.  Create a mask of
+        // 0000000..1111..1 where the MSBit is in the top bit position
         uint32_t prefix_values = ~(~0 << topbit) + 1;
 
         if(prefix_values > block_length)

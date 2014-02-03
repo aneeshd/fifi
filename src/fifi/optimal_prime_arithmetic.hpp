@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <cassert>
 #include <cstdint>
 
 #include "prime2325.hpp"

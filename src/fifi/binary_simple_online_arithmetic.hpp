@@ -5,9 +5,9 @@
 
 #pragma once
 
+#include <cassert>
 #include <cstdint>
 
-#include "fifi_utils.hpp"
 #include "is_valid_element.hpp"
 #include "binary.hpp"
 
@@ -38,7 +38,7 @@ namespace fifi
 
     public:
 
-        /// @copydoc finite_field::multiply()
+        /// @copydoc layer::multiply()
         value_type multiply(value_type a, value_type b) const
         {
             assert(is_valid_element<field_type>(a));
@@ -47,7 +47,7 @@ namespace fifi
             return a & b;
         }
 
-        /// @copydoc finite_field::divide()
+        /// @copydoc layer::divide()
         value_type divide(value_type numerator, value_type denominator) const
         {
             assert(is_valid_element<field_type>(numerator));
@@ -58,7 +58,7 @@ namespace fifi
         }
 
         /// Zero has no inverse and one is its own inverse
-        /// @copydoc finite_field::invert()
+        /// @copydoc layer::invert()
         value_type invert(value_type a) const
         {
             assert(is_valid_element<field_type>(a));

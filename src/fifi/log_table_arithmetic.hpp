@@ -5,14 +5,10 @@
 
 #pragma once
 
-#include <algorithm>
-#include <cmath>
 #include <cassert>
-#include <cstdint>
 #include <vector>
 
 #include "is_valid_element.hpp"
-#include "sum_modulo.hpp"
 #include "binary.hpp"
 #include "prime2325.hpp"
 
@@ -67,7 +63,7 @@ namespace fifi
 
         }
 
-        /// @copydoc finite_field::multiply()
+        /// @copydoc layer::multiply()
         value_type multiply(value_type a, value_type b) const
         {
             assert(is_valid_element<field_type>(a));
@@ -87,7 +83,7 @@ namespace fifi
             return m_antilog[sum];
         }
 
-        /// @copydoc finite_field::divide()
+        /// @copydoc layer::divide()
         value_type divide(value_type numerator, value_type denominator) const
         {
             assert(is_valid_element<field_type>(numerator));
@@ -120,7 +116,7 @@ namespace fifi
             return m_antilog[sum];
         }
 
-        /// @copydoc finite_field::invert()
+        /// @copydoc layer::invert()
         value_type invert(value_type a) const
         {
             assert(is_valid_element<field_type>(a));
@@ -128,7 +124,7 @@ namespace fifi
 
             value_type power = m_log[a];
 
-            // See log_table<Field>::divide
+            // See log_table_arithmetic::divide
             power = Field::max_value - power;
 
             return m_antilog[power];

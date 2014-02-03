@@ -177,6 +177,8 @@ inline void check_results_region_ptr_ptr(
     }
 }
 
+#include <iostream>
+
 template<class FieldImpl>
 inline void check_results_region_ptr_const(
     typename method<FieldImpl>::binary packed_arithmetic,
@@ -211,6 +213,7 @@ inline void check_results_region_ptr_const(
         {
             expected[j] = packed_arithmetic(field, dest[j], constant);
         }
+
         region_arithmetic(field, dest.data(), constant);
         for (uint32_t j = 0; j < length; ++j)
         {

@@ -5,18 +5,14 @@
 
 #pragma once
 
-#include <algorithm>
-#include <cmath>
 #include <cassert>
-#include <stdint.h>
+#include <cstdint>
+#include <type_traits>
 #include <vector>
 
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_same.hpp>
-
-#include "is_valid_element.hpp"
 #include "binary.hpp"
 #include "binary16.hpp"
+#include "is_valid_element.hpp"
 #include "prime2325.hpp"
 
 namespace fifi

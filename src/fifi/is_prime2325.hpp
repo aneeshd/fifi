@@ -5,8 +5,7 @@
 
 #pragma once
 
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_same.hpp>
+#include <type_traits>
 
 #include "prime2325.hpp"
 
@@ -21,6 +20,6 @@ namespace fifi
     ///    }
     ///
     template<class Field>
-    struct is_prime2325 : public boost::is_same<Field, fifi::prime2325>
+    struct is_prime2325 : public std::is_same<Field, fifi::prime2325>
     { };
 }

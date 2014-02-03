@@ -5,7 +5,10 @@
 
 #pragma once
 
+#include <algorithm>
+#include <cassert>
 #include <cstdint>
+
 #include "binary.hpp"
 
 namespace fifi
@@ -25,7 +28,10 @@ namespace fifi
 
     public:
 
-        void region_multiply_constant(value_type* dest, value_type constant) const
+        /// @copydoc region_arithmetic::region_multiply_constant(value_type*,
+        ///              value_type)
+        void region_multiply_constant(value_type* dest,
+            value_type constant) const
         {
             assert(dest != 0);
             assert(Super::length() > 0);
@@ -38,6 +44,8 @@ namespace fifi
             }
         }
 
+        /// @copydoc region_arithmetic::region_multiply_add(value_type*,
+        ///              value_type*, value_type)
         void region_multiply_add(value_type* dest, const value_type* src,
                           value_type constant) const
         {
@@ -58,6 +66,8 @@ namespace fifi
             }
         }
 
+        /// @copydoc region_arithmetic::region_multiply_subtract(value_type*,
+        ///              value_type*, value_type)
         void region_multiply_subtract(value_type* dest, const value_type* src,
             value_type constant) const
         {

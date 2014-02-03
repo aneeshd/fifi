@@ -5,18 +5,20 @@
 
 #include <gtest/gtest.h>
 
-#include <fifi/binary_region_arithmetic.hpp>
-#include <fifi/packed_arithmetic.hpp>
-#include <fifi/polynomial_degree.hpp>
-#include <fifi/region_arithmetic.hpp>
-#include <fifi/region_info.hpp>
-#include <fifi/full_table_arithmetic.hpp>
-#include <fifi/simple_online_arithmetic.hpp>
-#include <fifi/prime2325.hpp>
 #include <fifi/binary.hpp>
+#include <fifi/binary16.hpp>
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
-#include <fifi/binary16.hpp>
+#include <fifi/binary_region_arithmetic.hpp>
+#include <fifi/binary_simple_online_arithmetic.hpp>
+#include <fifi/final.hpp>
+#include <fifi/packed_arithmetic.hpp>
+#include <fifi/binary_packed_arithmetic.hpp>
+#include <fifi/polynomial_degree.hpp>
+#include <fifi/prime2325.hpp>
+#include <fifi/region_arithmetic.hpp>
+#include <fifi/region_info.hpp>
+#include <fifi/simple_online_arithmetic.hpp>
 
 #include "expected_results.hpp"
 #include "helper_catch_all.hpp"
@@ -40,9 +42,12 @@ namespace fifi
         binary_region_arithmetic<Field,
         region_arithmetic<
         region_info<Field,
+        binary_packed_arithmetic<Field,
+        packed_arithmetic<
+        binary_simple_online_arithmetic<Field,
         simple_online_arithmetic<
         polynomial_degree<
-        helper_catch_all<Field> > > > > >
+        final<Field> > > > > > > > >
         { };
     }
 }
@@ -78,12 +83,18 @@ TEST(TestBinaryRegionArithmetic, fall_through)
 }
 
 
-TEST(TestBinaryRegionArithmetic, add)
+TEST(TestBinaryRegionArithmetic, multiply_constant)
 {
-    check_results_region_add<fifi::dummy_stack<fifi::binary> >();
+    check_results_region_multiply_constant<fifi::dummy_stack<fifi::binary> >();
+}
+/*
+TEST(TestBinaryRegionArithmetic, multiply_add)
+{
+    check_results_region_multiply_add<fifi::dummy_stack<fifi::binary> >();
 }
 
-TEST(TestBinaryRegionArithmetic, subtract)
+TEST(TestBinaryRegionArithmetic, multiply_subtract)
 {
-    check_results_region_subtract<fifi::dummy_stack<fifi::binary> >();
+    check_results_region_multiply_subtract<fifi::dummy_stack<fifi::binary> >();
 }
+*/

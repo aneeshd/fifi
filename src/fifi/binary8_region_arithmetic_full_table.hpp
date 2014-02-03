@@ -5,7 +5,9 @@
 
 #pragma once
 
+#include <cassert>
 #include <cstdint>
+
 #include "binary8.hpp"
 
 namespace fifi
@@ -25,6 +27,9 @@ namespace fifi
         typedef typename Super::value_type value_type;
 
     public:
+
+        /// @copydoc region_arithmetic::region_multiply_add(value_type*,
+        ///              value_type*, value_type)
         void region_multiply_add(value_type* dest, const value_type* src,
                           value_type constant) const
         {
@@ -35,10 +40,10 @@ namespace fifi
             if(constant == 0)
                 return;
 
-            // In the multiplication table the constant is used to indentify
+            // In the multiplication table the constant is used to identify
             // the row number. Therefore the constant is used as an offset,
             // and all possible results can then be accessed on the following
-            // number of indices indices.
+            // number of indices.
             const value_type *offset =
                 &Super::m_multtable[(constant << binary8::degree)];
 
@@ -49,6 +54,8 @@ namespace fifi
             }
         }
 
+        /// @copydoc region_arithmetic::region_multiply_subtract(value_type*,
+        ///              value_type*, value_type)
         void region_multiply_subtract(value_type* dest, const value_type* src,
             value_type constant) const
         {

@@ -54,16 +54,12 @@ TEST(TestOptimalPrimeRegionArithmetic, fall_through)
     }
 }
 
-#include <iostream>
-
 TEST(TestOptimalPrimeRegionArithmetic, add)
 {
-    std::cout << "FAILED" << std::endl;
     check_results_region_add<fifi::dummy_stack<fifi::prime2325> >();
 }
 
 TEST(TestOptimalPrimeRegionArithmetic, subtract)
 {
-    std::cout << "FAILED" << std::endl;
     check_results_region_subtract<fifi::dummy_stack<fifi::prime2325> >();
 }

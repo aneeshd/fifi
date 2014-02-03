@@ -5,8 +5,6 @@
 
 #include "binary16.hpp"
 
-#include <cstdint>
-
 namespace fifi
 {
     const binary16::value_type binary16::max_value;
