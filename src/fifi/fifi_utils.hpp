@@ -10,6 +10,7 @@
 
 #include "binary.hpp"
 #include "binary4.hpp"
+#include "is_valid_element.hpp"
 
 namespace fifi
 {
@@ -285,5 +286,24 @@ namespace fifi
 
         set_value<Field>(elements, index1, value2);
         set_value<Field>(elements, index2, value1);
+    }
+
+    /// Useful abstraction function for creating packed constants
+    /// @param constant the constant to pack.
+    template<class Field>
+    inline typename Field::value_type pack(typename Field::value_type constant)
+    {
+        assert(is_valid_element<Field>(constant));
+
+        typedef typename Field::value_type value_type;
+
+        value_type result = 0;
+
+        for(uint32_t i = 0; i < size_to_elements<Field>(sizeof(value_type)); ++i)
+        {
+            set_value<Field>(&result, i, constant);
+        }
+
+        return result;
     }
 }

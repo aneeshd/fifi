@@ -62,6 +62,8 @@ namespace fifi
         void region_multiply_constant(
             value_type* dest, value_type constant) const
         {
+            // Check that constant is packed
+
             for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_multiply(dest[i], constant);
@@ -71,6 +73,8 @@ namespace fifi
         void region_multiply_add(value_type* dest, const value_type* src,
                           value_type constant) const
         {
+            // Check that constant is packed
+
             for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 value_type v = Super::packed_multiply(src[i], constant);
@@ -81,6 +85,8 @@ namespace fifi
         void region_multiply_subtract(value_type* dest, const value_type* src,
                                 value_type constant) const
         {
+            // Check that constant is packed
+
             for(uint32_t i = 0; i < Super::length(); ++i)
             {
                 value_type v = Super::packed_multiply(src[i], constant);
