@@ -82,27 +82,27 @@ TEST(TestIsPackedConstant, binary4)
 
 TEST(TestIsPackedConstant, binary8)
 {
-    test_is_packed_constant<fifi::binary8>(0x34FA, true);
-    test_is_packed_constant<fifi::binary8>(0x34FF, true);
-    test_is_packed_constant<fifi::binary8>(0xFFFF, true);
-    test_is_packed_constant<fifi::binary8>(0x0000, true);
-    test_is_packed_constant<fifi::binary8>(0xFA5D, true);
+    test_is_packed_constant<fifi::binary8>(0x34, true);
+    test_is_packed_constant<fifi::binary8>(0x34, true);
+    test_is_packed_constant<fifi::binary8>(0xFF, true);
+    test_is_packed_constant<fifi::binary8>(0x00, true);
+    test_is_packed_constant<fifi::binary8>(0xFA, true);
 }
 
 TEST(TestIsPackedConstant, binary16)
 {
-    test_is_packed_constant<fifi::binary8>(0x34FAA5D3, true);
-    test_is_packed_constant<fifi::binary8>(0x34FFFA5D, true);
-    test_is_packed_constant<fifi::binary8>(0xFFFFFFFF, true);
-    test_is_packed_constant<fifi::binary8>(0x00000000, true);
-    test_is_packed_constant<fifi::binary8>(0xFA5D34FA, true);
+    test_is_packed_constant<fifi::binary16>(0x34FA, true);
+    test_is_packed_constant<fifi::binary16>(0x34FF, true);
+    test_is_packed_constant<fifi::binary16>(0xFFFF, true);
+    test_is_packed_constant<fifi::binary16>(0x0000, true);
+    test_is_packed_constant<fifi::binary16>(0xFA5D, true);
 }
 
 TEST(TestIsPackedConstant, prime2325)
 {
-    test_is_packed_constant<fifi::prime2325>(0x34FAA5D3FFA5DD34, true);
-    test_is_packed_constant<fifi::prime2325>(0x34FFFA5D34FAA5D3, true);
-    test_is_packed_constant<fifi::prime2325>(0xFFFFFFFFFFFFFFFF, true);
-    test_is_packed_constant<fifi::prime2325>(0x0000000000000000, true);
-    test_is_packed_constant<fifi::prime2325>(0xFD34A5D34FAD3434, true);
+    test_is_packed_constant<fifi::prime2325>(0x34FAA5D3, true);
+    test_is_packed_constant<fifi::prime2325>(0x34FFFA5D, true);
+    test_is_packed_constant<fifi::prime2325>(0xFFFFFFFF, true);
+    test_is_packed_constant<fifi::prime2325>(0x00000000, true);
+    test_is_packed_constant<fifi::prime2325>(0xFD34A5D3, true);
 }
