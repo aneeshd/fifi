@@ -52,29 +52,25 @@ struct expected_result_binary
 template<class FieldImpl>
 struct method
 {
-    typedef std::function<typename FieldImpl::value_type(
-            const FieldImpl&,
-            typename FieldImpl::value_type a)> unary;
+    typedef typename FieldImpl::value_type (FieldImpl::*unary) (
+        typename FieldImpl::value_type a) const;
 
-    typedef typename FieldImpl::value_type (FieldImpl::*binary)(
+    typedef typename FieldImpl::value_type (FieldImpl::*binary) (
         typename FieldImpl::value_type a,
         typename FieldImpl::value_type b) const;
 
-    typedef std::function<void(
-            const FieldImpl&,
-                  typename FieldImpl::value_type* a,
-            const typename FieldImpl::value_type* b)> binary_ptr_ptr;
+    typedef typename FieldImpl::value_type (FieldImpl::*binary_ptr_ptr) (
+        typename FieldImpl::value_type* a,
+        typename FieldImpl::value_type* b) const;
 
-    typedef std::function<void(
-            const FieldImpl&,
-            typename FieldImpl::value_type* a,
-            typename FieldImpl::value_type b)> binary_ptr_const;
+    typedef typename FieldImpl::value_type (FieldImpl::*binary_ptr_const) (
+        typename FieldImpl::value_type* a,
+        typename FieldImpl::value_type b) const;
 
-    typedef std::function<void(
-            const FieldImpl&,
-            typename FieldImpl::value_type* a,
-            typename FieldImpl::value_type* b,
-            typename FieldImpl::value_type  c)> binary_ptr_ptr_const;
+    typedef typename FieldImpl::value_type (FieldImpl::*binary_ptr_ptr_const) (
+        typename FieldImpl::value_type* a,
+        typename FieldImpl::value_type* b,
+        typename FieldImpl::value_type  c) const;
 };
 
 template<class FieldImpl, template<class>class Results>
