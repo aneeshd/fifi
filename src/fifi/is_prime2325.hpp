@@ -14,7 +14,7 @@ namespace fifi
     /// Will inherit from true-type if Field equal fifi::prime2325
     /// Can be used e.g.:
     ///
-    ///    if( is_prime2325<field_type>::value )
+    ///    if (is_prime2325<field_type>::value)
     ///    {
     ///        /// do something clever
     ///    }

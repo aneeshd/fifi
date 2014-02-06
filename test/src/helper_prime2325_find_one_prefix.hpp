@@ -33,7 +33,7 @@ namespace fifi
 
         uint32_t shift_prefix = 32 - prefix_length;
 
-        for(uint32_t i = 0; i < block_length; ++i)
+        for (uint32_t i = 0; i < block_length; ++i)
         {
             if (i >= skip_value)
             {

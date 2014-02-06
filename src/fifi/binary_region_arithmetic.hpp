@@ -41,7 +41,7 @@ namespace fifi
             assert(Super::length() > 0);
             assert(is_packed_constant<field_type>(constant));
 
-            if(constant == 0)
+            if (constant == 0)
             {
                 std::fill_n(dest, Super::length(), 0);
             }
@@ -57,7 +57,7 @@ namespace fifi
             assert(Super::length() > 0);
             assert(is_packed_constant<field_type>(constant));
 
-            if(constant == 0) // Do nothing
+            if (constant == 0) // Do nothing
             {
                 return;
             }

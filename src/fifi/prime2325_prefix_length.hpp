@@ -26,7 +26,7 @@ namespace fifi
         uint32_t topbit;
         for(topbit = 31; topbit --> 0;)
         {
-            if(block_length >> topbit)
+            if (block_length >> topbit)
                 break;
         }
 
@@ -35,7 +35,7 @@ namespace fifi
         // 0000000..1111..1 where the MSBit is in the top bit position
         uint32_t prefix_values = ~(~0 << topbit) + 1;
 
-        if(prefix_values > block_length)
+        if (prefix_values > block_length)
         {
             return topbit;
         }

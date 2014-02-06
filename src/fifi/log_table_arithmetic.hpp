@@ -45,7 +45,7 @@ namespace fifi
             // inital value corresponds x^0
             value_type power = 1;
 
-            for(order_type i = 0; i < Field::order - 1; ++i)
+            for (order_type i = 0; i < Field::order - 1; ++i)
             {
                 m_log[power] = i;
                 m_antilog[i] = power;
@@ -69,7 +69,7 @@ namespace fifi
             assert(is_valid_element<field_type>(a));
             assert(is_valid_element<field_type>(b));
 
-            if(a == 0 || b == 0)
+            if (a == 0 || b == 0)
                 return 0;
 
             value_type one = m_log[a];
@@ -91,7 +91,7 @@ namespace fifi
 
             assert(denominator != 0);
 
-            if(numerator == 0)
+            if (numerator == 0)
                 return 0;
 
             value_type one = m_log[numerator];

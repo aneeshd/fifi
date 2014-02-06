@@ -22,7 +22,7 @@ namespace fifi
                              StorageIterator last,
                              uint32_t prefix)
     {
-        while(first != last)
+        while (first != last)
         {
             // Size must be multiple of 4 bytes due to the field
             // 2^32 - 5
@@ -33,7 +33,7 @@ namespace fifi
             uint32_t *block_data =
                 sak::cast_storage<uint32_t>(*first);
 
-            for(uint32_t i = 0; i < block_size; ++i)
+            for (uint32_t i = 0; i < block_size; ++i)
             {
                 block_data[i] ^= prefix;
             }

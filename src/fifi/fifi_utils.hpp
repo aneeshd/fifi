@@ -235,7 +235,7 @@ namespace fifi
 
         binary::value_type mask = 1 << offset;
 
-        if(value)
+        if (value)
         {
             elements[array_index] |= mask;
         }
@@ -299,7 +299,7 @@ namespace fifi
 
         value_type result = 0;
 
-        for(uint32_t i = 0; i < size_to_elements<Field>(sizeof(value_type)); ++i)
+        for (uint32_t i = 0; i < size_to_elements<Field>(sizeof(value_type)); ++i)
         {
             set_value<Field>(&result, i, constant);
         }

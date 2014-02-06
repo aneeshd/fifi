@@ -54,7 +54,7 @@ inline void check_results_binary(Function arithmetic)
 {
     typedef typename FieldImpl::field_type field_type;
     FieldImpl field;
-    for(uint32_t i = 0; i < Results<field_type>::m_size; ++i)
+    for (uint32_t i = 0; i < Results<field_type>::m_size; ++i)
     {
         expected_result_binary<field_type> res =
             Results<field_type>::m_results[i];
@@ -73,7 +73,7 @@ inline void check_results_unary(Function arithmetic)
 
     FieldImpl field;
 
-    for(uint32_t i = 0; i < Results<field_type>::m_size; ++i)
+    for (uint32_t i = 0; i < Results<field_type>::m_size; ++i)
     {
         expected_result_unary<field_type> res =
             Results<field_type>::m_results[i];
@@ -94,7 +94,7 @@ inline void check_results_random(
 
     FieldImpl field;
 
-    for(uint32_t i = 0; i < elements; ++i)
+    for (uint32_t i = 0; i < elements; ++i)
     {
         typename field_type::value_type v = rand() % field_type::order;
         if (v == 0)
@@ -185,7 +185,9 @@ inline void check_results_region_ptr_const(
         {
             expected[j] = (field.*packed_arithmetic)(dest[j], constant);
         }
+
         (field.*region_arithmetic)(dest.data(), constant);
+
         for (uint32_t j = 0; j < length; ++j)
         {
             EXPECT_EQ(expected[j], dest[j]);

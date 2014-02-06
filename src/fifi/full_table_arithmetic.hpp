@@ -50,15 +50,15 @@ namespace fifi
             m_multtable.resize(Field::order * Field::order, '\0');
             m_divitable.resize(Field::order * Field::order, '\0');
 
-            for(uint32_t i = 0; i < Field::order; ++i)
+            for (uint32_t i = 0; i < Field::order; ++i)
             {
                 int offset = i * Field::order;
 
-                for(uint32_t j = 0; j < Field::order; ++j)
+                for (uint32_t j = 0; j < Field::order; ++j)
                 {
                     m_multtable[offset + j] = Super::multiply(i,j);
 
-                    if(j == 0) // Cannot divide by zero
+                    if (j == 0) // Cannot divide by zero
                         continue;
 
                     m_divitable[offset + j] = Super::divide(i,j);

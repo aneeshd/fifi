@@ -87,7 +87,7 @@ namespace fifi
             int64_t r0 = field_type::prime;
             int64_t r1 = element;
 
-            while(r1 != 1)
+            while (r1 != 1)
             {
                 // Compute the next remainder
                 q = r0 / r1;

@@ -39,7 +39,7 @@ inline void test_region_info()
 
     fifi::dummy_stack<Field> stack;
 
-    for(uint32_t i = sizeof(value_type); i < 256; i += sizeof(value_type))
+    for (uint32_t i = sizeof(value_type); i < 256; i += sizeof(value_type))
     {
         stack.set_length(i);
         EXPECT_EQ(i, stack.length());

@@ -38,7 +38,7 @@ namespace fifi
             assert(dest != 0);
             assert(src  != 0);
             assert(Super::length() > 0);
-            for(uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_add(dest[i], src[i]);
             }
@@ -49,7 +49,7 @@ namespace fifi
             assert(dest != 0);
             assert(src  != 0);
             assert(Super::length() > 0);
-            for(uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_subtract(dest[i], src[i]);
             }
@@ -60,7 +60,7 @@ namespace fifi
             assert(dest != 0);
             assert(src  != 0);
             assert(Super::length() > 0);
-            for(uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_divide(dest[i], src[i]);
             }
@@ -71,7 +71,7 @@ namespace fifi
             assert(dest != 0);
             assert(src  != 0);
             assert(Super::length() > 0);
-            for(uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_multiply(dest[i], src[i]);
             }
@@ -83,7 +83,7 @@ namespace fifi
             assert(dest != 0);
             assert(Super::length() > 0);
             assert(is_packed_constant<field_type>(constant));
-            for(uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = Super::packed_multiply(dest[i], constant);
             }
@@ -96,7 +96,7 @@ namespace fifi
             assert(src  != 0);
             assert(Super::length() > 0);
             assert(is_packed_constant<field_type>(constant));
-            for(uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < Super::length(); ++i)
             {
                 value_type v = Super::packed_multiply(src[i], constant);
                 dest[i] = Super::packed_add(dest[i], v);
@@ -110,7 +110,7 @@ namespace fifi
             assert(src  != 0);
             assert(Super::length() > 0);
             assert(is_packed_constant<field_type>(constant));
-            for(uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < Super::length(); ++i)
             {
                 value_type v = Super::packed_multiply(src[i], constant);
                 dest[i] = Super::packed_subtract(dest[i], v);

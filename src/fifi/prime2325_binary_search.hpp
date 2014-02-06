@@ -85,12 +85,12 @@ namespace fifi
 
             uint32_t shift_sum = 0;
 
-            for(uint32_t i = 0; i < m_k_pass; ++i)
+            for (uint32_t i = 0; i < m_k_pass; ++i)
             {
 
                 m_prefix_mask[i] = ~(~0U >> shift_sum);
 
-                if(i < number_large_shifts)
+                if (i < number_large_shifts)
                 {
                     m_shift_mask[i] = ~(~0U << large_shifts);
                     shift_sum += large_shifts;
@@ -158,7 +158,7 @@ namespace fifi
 
             uint32_t prefix = 0;
 
-            for(uint32_t k = 0; k < m_k_pass; ++k)
+            for (uint32_t k = 0; k < m_k_pass; ++k)
             {
                 update_buckets(first, last, k, prefix);
                 update_prefix(k, &prefix);
@@ -180,9 +180,9 @@ namespace fifi
             uint32_t valid_buckets = 1 << m_k_pass_bits[k];
             assert(valid_buckets <= m_buckets.size());
 
-            for(uint32_t i = 1; i < valid_buckets; ++i)
+            for (uint32_t i = 1; i < valid_buckets; ++i)
             {
-                if(m_buckets[i] < m_buckets[min_index])
+                if (m_buckets[i] < m_buckets[min_index])
                 {
                     min_index = i;
                 }
@@ -218,7 +218,7 @@ namespace fifi
             uint32_t shift_mask = m_shift_mask[k];
             uint32_t prefix_mask = m_prefix_mask[k];
 
-            while(first != last)
+            while (first != last)
             {
                 // Size must be multiple of 4 bytes due to the field 2^32-5
                 assert((first->m_size % 4) == 0);
@@ -227,11 +227,11 @@ namespace fifi
                 const uint32_t *block_data =
                     sak::cast_storage<uint32_t>(*first);
 
-                for(uint32_t i = 0; i < block_size; ++i)
+                for (uint32_t i = 0; i < block_size; ++i)
                 {
                     // We only count for values which match the already
                     // found prefix
-                    if((block_data[i] & prefix_mask) == prefix)
+                    if ((block_data[i] & prefix_mask) == prefix)
                     {
                         uint32_t bucket_index =
                             (block_data[i] >> shift_prefix) & shift_mask;

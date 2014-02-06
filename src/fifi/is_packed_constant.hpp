@@ -16,7 +16,7 @@ namespace fifi
 
     /// This function determines whether the given constant is packed or not
     ///
-    /// if(fifi::is_packed_constant<fifi::binary4>(0xAA))
+    /// if (fifi::is_packed_constant<fifi::binary4>(0xAA))
     /// {
     ///     std::cout << "The constant is correctly packed" << std::endl;
     /// }

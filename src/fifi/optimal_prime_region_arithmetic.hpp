@@ -33,7 +33,7 @@ namespace fifi
             assert(src != 0);
             assert(Super::length() > 0);
 
-            for(uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < Super::length(); ++i)
             {
                 dest[i] = dest[i] + src[i];
 
@@ -83,7 +83,7 @@ namespace fifi
             assert(src != 0);
             assert(Super::length() > 0);
 
-            for(uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < Super::length(); ++i)
             {
                 // If dest[i] >= src[i] then we will not have an underflow
                 //

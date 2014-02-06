@@ -109,7 +109,7 @@ namespace fifi
             std::fill(m_bitmap.begin(), m_bitmap.end(), 0);
 
             // Update the bitmap
-            while(first != last)
+            while (first != last)
             {
                 // Size must be multiple of 4 bytes due to the field 2^32-5
                 assert((first->m_size % 4) == 0);
@@ -118,7 +118,7 @@ namespace fifi
                 const uint32_t *block_data =
                     sak::cast_storage<uint32_t>(*first);
 
-                for(uint32_t i = 0; i < block_size; ++i)
+                for (uint32_t i = 0; i < block_size; ++i)
                 {
                     update_bitmap(block_data[i]);
                 }
@@ -141,11 +141,11 @@ namespace fifi
         bool find_in_bitmap(uint32_t *prefix) const
         {
             // Find the missing prefix in the bitmap
-            for(uint32_t i = 0; i < m_bitmap.size(); ++i)
+            for (uint32_t i = 0; i < m_bitmap.size(); ++i)
             {
-                for(uint32_t j = 0; j < m_mapping_bits; ++j)
+                for (uint32_t j = 0; j < m_mapping_bits; ++j)
                 {
-                    if((m_bitmap[i] & (1 << j)) == 0)
+                    if ((m_bitmap[i] & (1 << j)) == 0)
                     {
                         *prefix = (i*m_mapping_bits + j) << m_shift_prefix;
                         return true;

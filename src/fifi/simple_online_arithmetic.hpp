@@ -39,7 +39,7 @@ namespace fifi
             assert(is_valid_element<field_type>(a));
             assert(is_valid_element<field_type>(b));
 
-            if((a == 0) || (b == 0))
+            if ((a == 0) || (b == 0))
                 return 0;
 
             value_type high_bit_flag = 0;
@@ -49,12 +49,12 @@ namespace fifi
 
             value_type result = 0;
 
-            for(typename field_type::degree_type i = 0;
+            for (typename field_type::degree_type i = 0;
                 i < field_type::degree; ++i)
             {
                 low_bit_flag = b & 0x1;
 
-                if( low_bit_flag != 0 )
+                if (low_bit_flag != 0)
                 {
                     result ^= a;
                 }
@@ -64,7 +64,7 @@ namespace fifi
                 a <<= 1;
                 b >>= 1;
 
-                if( high_bit_flag != 0 )
+                if (high_bit_flag != 0)
                 {
                     a ^= field_type::prime;
                 }
@@ -98,7 +98,7 @@ namespace fifi
             // If element is 1 the inverse is 1, since we had to
             // 'unwrap' the first iteration (see below), we make an
             // explicit check here.
-            if(a == 1)
+            if (a == 1)
                 return 1;
 
             value_type r_large = field_type::prime;
@@ -124,13 +124,13 @@ namespace fifi
             r_large &= field_type::max_value;
             y_large &= field_type::max_value;
 
-            while(r_large != 1)
+            while (r_large != 1)
             {
                 assert(r_large > 1);
 
                 j = Super::find_degree(r_large) - Super::find_degree(r_small);
 
-                if(j < 0)
+                if (j < 0)
                 {
                     std::swap(r_large, r_small);
                     std::swap(y_large, y_small);

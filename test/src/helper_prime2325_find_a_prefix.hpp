@@ -25,7 +25,7 @@ namespace fifi
         uint32_t prefix = p.find_prefix(sak::storage(data));
 
         // Check that the prefix does not appear in the data
-        for(uint32_t i = 0; i < block_length; ++i)
+        for (uint32_t i = 0; i < block_length; ++i)
         {
             EXPECT_NE(data[i], prefix);
         }
@@ -34,7 +34,7 @@ namespace fifi
         apply_prefix(sak::storage(data), ~prefix);
 
         // Check that all values are below the prefix
-        for(uint32_t i = 0; i < block_length; ++i)
+        for (uint32_t i = 0; i < block_length; ++i)
         {
             EXPECT_TRUE(data[i] < fifi::prime2325::prime);
         }
@@ -46,7 +46,7 @@ namespace fifi
         {
             std::vector<uint32_t> data(block_length);
 
-            for(uint32_t i = 0; i < block_length; ++i)
+            for (uint32_t i = 0; i < block_length; ++i)
             {
                 data[i] = rand();
             }

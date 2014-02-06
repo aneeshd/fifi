@@ -40,7 +40,7 @@ namespace fifi
             // Add a check for unsigned or arithmetic shifts
             a >>= 1;
 
-            while(a > 0)
+            while (a > 0)
             {
                 ++degree;
                 a >>= 1;

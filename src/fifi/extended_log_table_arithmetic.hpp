@@ -53,7 +53,7 @@ namespace fifi
             // initial value corresponds x^0
             value_type power = 1;
 
-            for(order_type i = 0; i < field_type::order - 1; ++i)
+            for (order_type i = 0; i < field_type::order - 1; ++i)
             {
                 m_log_data[power] = i;
                 m_antilog_data[mid_offset + i] = power;
@@ -63,7 +63,7 @@ namespace fifi
                 power = Super::multiply(2U, power);
             }
 
-            for(order_type i = 0; i < field_type::order - 2; ++i)
+            for (order_type i = 0; i < field_type::order - 2; ++i)
             {
                 m_antilog_data[low_offset  + i] =
                     m_antilog_data[mid_offset + i + 1];
@@ -83,7 +83,7 @@ namespace fifi
             assert(is_valid_element<field_type>(a));
             assert(is_valid_element<field_type>(b));
 
-            if(a == 0 || b == 0)
+            if (a == 0 || b == 0)
                 return 0;
 
             value_type one = m_log[a];
@@ -99,7 +99,7 @@ namespace fifi
             assert(is_valid_element<field_type>(denominator));
             assert(denominator != 0);
 
-            if(numerator == 0)
+            if (numerator == 0)
                 return 0;
 
             value_type one = m_log[numerator];

@@ -37,7 +37,7 @@ namespace fifi
             assert(src != 0);
             assert(Super::length() > 0);
 
-            if(constant == 0)
+            if (constant == 0)
                 return;
 
             // In the multiplication table the constant is used to identify
@@ -47,7 +47,7 @@ namespace fifi
             const value_type *offset =
                 &Super::m_multtable[(constant << binary8::degree)];
 
-            for(uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < Super::length(); ++i)
             {
                 value_type v = offset[src[i]];
                 dest[i] = Super::packed_add(v, dest[i]);
