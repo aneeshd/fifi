@@ -18,18 +18,6 @@
 #include <fifi/fifi_utils.hpp>
 #include <fifi/prime2325.hpp>
 
-// The expected result of an arithmetic operation
-// e.g. result == operation(arg1, arg2).
-// Where operation can be add, subtract, multiply
-// and divide.
-//
-// Note, we can use the same results for all algorithms
-// since they are over the same field they should
-// produce the same results.
-//
-// Feel free to add more results to the tables.
-//
-
 /// Expected results for unary functions i.e. functions taking one
 /// argument and producing one output
 template<class Field>
@@ -62,7 +50,8 @@ inline void check_results_binary(Function arithmetic)
         SCOPED_TRACE(res.m_input1);
         SCOPED_TRACE("b:");
         SCOPED_TRACE(res.m_input2);
-        EXPECT_EQ(res.m_result, (field.*arithmetic)(res.m_input1, res.m_input2));
+        EXPECT_EQ(res.m_result, (field.*arithmetic)(res.m_input1,
+                                                    res.m_input2));
     }
 }
 
@@ -132,6 +121,7 @@ inline void check_results_region_ptr_ptr(
         {
             v2++;
         }
+
         fifi::set_value<field_type>(dest.data(), i, v1);
         fifi::set_value<field_type>(src.data(), i, v2);
     }

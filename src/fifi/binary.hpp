@@ -14,7 +14,6 @@ namespace fifi
     /// field.
     struct binary
     {
-
         /// The data type used for each element
         typedef uint8_t value_type;
 

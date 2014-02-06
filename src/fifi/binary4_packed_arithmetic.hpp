@@ -11,7 +11,6 @@
 
 namespace fifi
 {
-
     /// Fall through case for other fields
     template<class Field, class Super>
     class binary4_packed_arithmetic : public Super
