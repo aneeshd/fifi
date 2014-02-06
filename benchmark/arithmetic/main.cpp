@@ -15,13 +15,12 @@
 #include <gauge/csv_printer.hpp>
 #include <gauge/python_printer.hpp>
 
-#include <fifi/arithmetics.hpp>
 #include <fifi/fifi_utils.hpp>
 #include <fifi/simple_online.hpp>
 #include <fifi/full_table.hpp>
 #include <fifi/log_table.hpp>
 #include <fifi/extended_log_table.hpp>
-#include <fifi/optimal_prime_arithmetic.hpp>
+#include <fifi/optimal_prime.hpp>
 #include <fifi/binary8.hpp>
 #include <fifi/binary16.hpp>
 #include <fifi/prime2325.hpp>
@@ -63,8 +62,6 @@ public:
 
         m_random_symbols_one.resize(max_vectors);
         m_random_symbols_two.resize(max_vectors);
-
-        m_temp.resize(max_length);
 
         for(uint32_t j = 0; j < max_vectors; ++j)
         {
@@ -154,15 +151,15 @@ public:
         uint32_t length = cs.get_value<uint32_t>("vector_length");
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
         std::string data_access = cs.get_value<std::string>("data_access");
-
+        m_field.set_length(length);
         if(data_access == "linear")
         {
             RUN{
-
                 for(uint32_t i = 0; i < vectors; ++i)
                 {
-                    f(m_field, &(m_symbols_one[i][0]),
-                      &(m_symbols_two[i][0]), length);
+                    (m_field.*f)(
+                        &(m_symbols_one[i][0]),
+                        &(m_symbols_two[i][0]));
                 }
 
             }
@@ -170,14 +167,13 @@ public:
         else if(data_access == "random")
         {
             RUN{
-
                 for(uint32_t i = 0; i < vectors; ++i)
                 {
                     uint32_t index_one = rand() % vectors;
                     uint32_t index_two = rand() % vectors;
 
-                    f(m_field, &(m_symbols_one[index_one][0]),
-                      &(m_symbols_two[index_two][0]), length);
+                    (m_field.*f)(&(m_symbols_one[index_one][0]),
+                      &(m_symbols_two[index_two][0]));
                 }
 
             }
@@ -196,7 +192,7 @@ public:
         uint32_t length = cs.get_value<uint32_t>("vector_length");
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
         std::string data_access = cs.get_value<std::string>("data_access");
-
+        m_field.set_length(length);
         if(data_access == "linear")
         {
             // Clock is ticking
@@ -206,11 +202,10 @@ public:
 
                 for(uint32_t i = 0; i < vectors; ++i)
                 {
-                    f(m_field, constant, &(m_symbols_one[i][0]),
-                      &(m_symbols_two[i][0]), &m_temp[0], length);
+                    (m_field.*f)(&(m_symbols_one[i][0]),
+                      &(m_symbols_two[i][0]), constant);
                 }
             }
-
         }
         else if(data_access == "random")
         {
@@ -224,11 +219,10 @@ public:
                     uint32_t index_one = rand() % vectors;
                     uint32_t index_two = rand() % vectors;
 
-                    f(m_field, constant, &(m_symbols_one[index_one][0]),
-                      &(m_symbols_two[index_two][0]), &m_temp[0], length);
+                    (m_field.*f)(&(m_symbols_one[index_one][0]),
+                      &(m_symbols_two[index_two][0]), constant);
                 }
             }
-
         }
         else
         {
@@ -244,7 +238,7 @@ public:
         uint32_t length = cs.get_value<uint32_t>("vector_length");
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
         std::string data_access = cs.get_value<std::string>("data_access");
-
+        m_field.set_length(length);
         if(data_access == "linear")
         {
 
@@ -254,7 +248,7 @@ public:
 
                 for(uint32_t i = 0; i < vectors; ++i)
                 {
-                    f(m_field, constant, &(m_symbols_one[i][0]), length);
+                    (m_field.*f)(&(m_symbols_one[i][0]), constant);
                 }
             }
         }
@@ -268,7 +262,7 @@ public:
                 {
                     uint32_t index = rand() % vectors;
 
-                    f(m_field, constant, &(m_symbols_one[index][0]), length);
+                    (m_field.*f)(&(m_symbols_one[index][0]), constant);
                 }
             }
 
@@ -287,27 +281,27 @@ public:
 
         if(operation == "dest[i] = dest[i] + src[i]")
         {
-            run_binary(&fifi::add<field_impl>);
+            run_binary(&field_impl::region_add);
         }
         else if(operation == "dest[i] = dest[i] - src[i]")
         {
-            run_binary(&fifi::subtract<field_impl>);
+            run_binary(&field_impl::region_subtract);
         }
         else if(operation == "dest[i] = dest[i] * src[i]")
         {
-            run_binary(&fifi::multiply<field_impl>);
+            run_binary(&field_impl::region_multiply);
         }
         else if(operation == "dest[i] = dest[i] + (constant * src[i])")
         {
-            run_binary_constant(&fifi::multiply_add<field_impl>);
+            run_binary_constant(&field_impl::region_multiply_add);
         }
         else if(operation == "dest[i] = dest[i] - (constant * src[i])")
         {
-            run_binary_constant(&fifi::multiply_subtract<field_impl>);
+            run_binary_constant(&field_impl::region_multiply_subtract);
         }
         else if(operation == "dest[i] = dest[i] * constant")
         {
-            run_unary_constant(&fifi::multiply_constant<field_impl>);
+            run_unary_constant(&field_impl::region_multiply_constant);
         }
         else
         {
@@ -331,10 +325,6 @@ protected:
 
     /// Random data for the second buffer of symbols
     std::vector< std::vector<value_type> > m_random_symbols_two;
-
-    /// Temp buffer required for composite algorithms
-    std::vector<value_type> m_temp;
-
 };
 
 
@@ -466,7 +456,7 @@ BENCHMARK_F(setup_extended_log_table_binary16, Arithmetic, ExtendedLogTable16, 5
 }
 
 
-typedef arithmetic_setup< fifi::optimal_prime_arithmetic<fifi::prime2325> >
+typedef arithmetic_setup< fifi::optimal_prime<fifi::prime2325> >
 setup_optimal_prime2325;
 
 BENCHMARK_F(setup_optimal_prime2325, Arithmetic, OptimalPrime2325, 5)

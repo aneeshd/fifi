@@ -100,7 +100,7 @@ def build(bld):
 
         bld.recurse('test')
         bld.recurse('benchmark/basic_operations')
-        #bld.recurse('benchmark/arithmetic')
+        bld.recurse('benchmark/arithmetic')
         bld.recurse('benchmark/prime2325')
 
     bld.recurse('src/fifi')
