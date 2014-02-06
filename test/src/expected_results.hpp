@@ -49,32 +49,8 @@ struct expected_result_binary
     typename Field::value_type m_result;
 };
 
-template<class FieldImpl>
-struct method
-{
-    typedef typename FieldImpl::value_type (FieldImpl::*unary) (
-        typename FieldImpl::value_type a) const;
-
-    typedef typename FieldImpl::value_type (FieldImpl::*binary) (
-        typename FieldImpl::value_type a,
-        typename FieldImpl::value_type b) const;
-
-    typedef void (FieldImpl::*binary_ptr_ptr) (
-        typename FieldImpl::value_type* a,
-        const typename FieldImpl::value_type* b) const;
-
-    typedef void (FieldImpl::*binary_ptr_const) (
-        typename FieldImpl::value_type* a,
-        typename FieldImpl::value_type b) const;
-
-    typedef void (FieldImpl::*binary_ptr_ptr_const) (
-        typename FieldImpl::value_type* a,
-        const typename FieldImpl::value_type* b,
-        typename FieldImpl::value_type  c) const;
-};
-
-template<class FieldImpl, template<class>class Results>
-inline void check_results_binary(typename method<FieldImpl>::binary arithmetic)
+template<class FieldImpl, template<class>class Results, class Function>
+inline void check_results_binary(Function arithmetic)
 {
     typedef typename FieldImpl::field_type field_type;
     FieldImpl field;
@@ -90,8 +66,8 @@ inline void check_results_binary(typename method<FieldImpl>::binary arithmetic)
     }
 }
 
-template<class FieldImpl, template<class>class Results>
-inline void check_results_unary(typename method<FieldImpl>::unary arithmetic)
+template<class FieldImpl, template<class>class Results, class Function>
+inline void check_results_unary(Function arithmetic)
 {
     typedef typename FieldImpl::field_type field_type;
 
@@ -107,12 +83,12 @@ inline void check_results_unary(typename method<FieldImpl>::unary arithmetic)
     }
 }
 
-template<class FieldImpl>
+template<class FieldImpl, class FunctionUnary, class FunctionBinary>
 inline void check_results_random(
     uint32_t elements,
-    typename method<FieldImpl>::binary multiply,
-    typename method<FieldImpl>::binary divide,
-    typename method<FieldImpl>::unary invert)
+    FunctionBinary multiply,
+    FunctionBinary divide,
+    FunctionUnary invert)
 {
     typedef typename FieldImpl::field_type field_type;
 
@@ -129,10 +105,10 @@ inline void check_results_random(
     }
 }
 
-template<class FieldImpl>
+template<class FieldImpl, class FunctionPacked, class FunctionRegion>
 inline void check_results_region_ptr_ptr(
-    typename method<FieldImpl>::binary packed_arithmetic,
-    typename method<FieldImpl>::binary_ptr_ptr region_arithmetic,
+    FunctionPacked packed_arithmetic,
+    FunctionRegion region_arithmetic,
     uint32_t elements,
     bool divison = false)
 {
@@ -174,10 +150,10 @@ inline void check_results_region_ptr_ptr(
     }
 }
 
-template<class FieldImpl>
+template<class FieldImpl, class FunctionPacked, class FunctionRegion>
 inline void check_results_region_ptr_const(
-    typename method<FieldImpl>::binary packed_arithmetic,
-    typename method<FieldImpl>::binary_ptr_const region_arithmetic,
+    FunctionPacked packed_arithmetic,
+    FunctionRegion region_arithmetic,
     uint32_t elements)
 {
     typedef typename FieldImpl::field_type field_type;
@@ -217,11 +193,11 @@ inline void check_results_region_ptr_const(
     }
 }
 
-template<class FieldImpl>
+template<class FieldImpl, class FunctionPacked, class FunctionRegion>
 inline void check_results_region_ptr_ptr_const(
-    typename method<FieldImpl>::binary packed_arithmetic1,
-    typename method<FieldImpl>::binary packed_arithmetic2,
-    typename method<FieldImpl>::binary_ptr_ptr_const region_arithmetic,
+    FunctionPacked packed_arithmetic1,
+    FunctionPacked packed_arithmetic2,
+    FunctionRegion region_arithmetic,
     uint32_t elements)
 {
     typedef typename FieldImpl::field_type field_type;
