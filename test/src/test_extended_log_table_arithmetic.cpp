@@ -55,7 +55,7 @@ TEST(TestExtendedLogTableArithmetic, fall_through)
         fifi::dummy_stack_fall_through<fifi::binary16> >(true, true, false, false, false);
     }
 }
-/*
+
 TEST(TestExtendedLogTableArithmetic, multiply)
 {
     {
@@ -119,4 +119,3 @@ TEST(TestExtendedLogTableArithmetic, random)
         check_random_default<fifi::dummy_stack<fifi::binary16> >();
     }
 }
-*/

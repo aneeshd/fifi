@@ -31,11 +31,11 @@ namespace fifi
 
         /// @param element A binary extension field element
         /// @return the degree of the polynomial representation of the element.
-        uint32_t find_degree(value_type a) const
+        value_type find_degree(value_type a) const
         {
             assert(is_valid_element<field_type>(a));
 
-            uint32_t degree = 0;
+            value_type degree = 0;
 
             // Add a check for unsigned or arithmetic shifts
             a >>= 1;

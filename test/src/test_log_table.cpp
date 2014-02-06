@@ -13,7 +13,7 @@
 #include "helper_test_arithmetic.hpp"
 #include "helper_test_packed_arithmetic.hpp"
 #include "helper_test_region_arithmetic.hpp"
-/*
+
 TEST(TestLogTable, binary4)
 {
     fifi::check_all<fifi::log_table<fifi::binary4> >();
@@ -58,4 +58,3 @@ TEST(TestLogTable, region_binary16)
 {
     fifi::check_region_all<fifi::log_table<fifi::binary16>>();
 }
-*/

@@ -42,7 +42,7 @@ namespace fifi
         { };
     }
 }
-/*
+
 TEST(TestOptimalPrimeRegionArithmetic, fall_through)
 {
     fifi::helper_region_fall_through_test<fifi::prime2325,
@@ -58,4 +58,3 @@ TEST(TestOptimalPrimeRegionArithmetic, subtract)
 {
     check_results_region_subtract<fifi::dummy_stack<fifi::prime2325> >();
 }
-*/

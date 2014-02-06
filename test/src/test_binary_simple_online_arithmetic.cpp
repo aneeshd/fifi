@@ -56,7 +56,7 @@ TEST(TestBinarySimpleOnlineArithmetic, fall_through)
         fifi::dummy_stack<fifi::prime2325> >();
     }
 }
-/*
+
 TEST(TestBinarySimpleOnlineArithmetic, multiply)
 {
     check_results_multiply<fifi::dummy_stack<fifi::binary> >();
@@ -76,4 +76,3 @@ TEST(TestBinarySimpleOnlineArithmetic, random)
 {
     check_random_default<fifi::dummy_stack<fifi::binary>>();
 }
-*/

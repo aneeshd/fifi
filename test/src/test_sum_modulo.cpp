@@ -32,7 +32,6 @@ TEST(TestSumModulo, sum_modulo)
         SCOPED_TRACE("binary");
         check_results_sum_modulo<fifi::dummy_stack<fifi::binary> >();
     }
-    /*
     {
         SCOPED_TRACE("binary4");
         check_results_sum_modulo<fifi::dummy_stack<fifi::binary4> >();
@@ -49,5 +48,4 @@ TEST(TestSumModulo, sum_modulo)
         SCOPED_TRACE("prime2325");
         check_results_sum_modulo<fifi::dummy_stack<fifi::prime2325> >();
     }
-    */
 }

@@ -58,7 +58,7 @@ TEST(TestBinaryPackedArithmetic, fall_through)
         fifi::dummy_stack<fifi::prime2325> >();
     }
 }
-/*
+
 TEST(TestBinaryPackedArithmetic, add)
 {
     check_results_packed_add<fifi::dummy_stack<fifi::binary>>();
@@ -83,4 +83,3 @@ TEST(TestBinaryPackedArithmetic, invert)
 {
     check_results_packed_invert<fifi::dummy_stack<fifi::binary>>();
 }
-*/

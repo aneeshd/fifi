@@ -81,7 +81,7 @@ TEST(TestBinaryRegionArithmetic, fall_through)
         fifi::dummy_stack_fall_through<fifi::prime2325> >();
     }
 }
-/*
+
 TEST(TestBinaryRegionArithmetic, multiply_constant)
 {
     check_results_region_multiply_constant<fifi::dummy_stack<fifi::binary> >();
@@ -96,4 +96,3 @@ TEST(TestBinaryRegionArithmetic, multiply_subtract)
 {
     check_results_region_multiply_subtract<fifi::dummy_stack<fifi::binary> >();
 }
-*/

@@ -45,5 +45,3 @@ TEST(TestDefaultField, prime2325_default_field)
 
     EXPECT_TRUE(test);
 }
-
-

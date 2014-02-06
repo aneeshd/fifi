@@ -21,7 +21,7 @@ namespace fifi
         { };
     }
 }
-/*
+
 TEST(TestOptimalPrimeArithmetic, multiply)
 {
     check_results_multiply<fifi::dummy_stack<fifi::prime2325> >();
@@ -42,4 +42,3 @@ TEST(TestOptimalPrimeArithmetic, random)
 {
     check_random_default<fifi::dummy_stack<fifi::prime2325> >();
 }
-*/

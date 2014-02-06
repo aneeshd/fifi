@@ -51,7 +51,7 @@ TEST(TestFullTableArithmetic, fall_through)
         fifi::dummy_stack_fall_through<fifi::binary8> >(true, true, false, false, false);
     }
 }
-/*
+
 TEST(TestFullTableArithmetic, multiply)
 {
     {
@@ -99,4 +99,3 @@ TEST(TestFullTableArithmetic, random)
         check_random_default<fifi::dummy_stack<fifi::binary8> >();
     }
 }
-*/

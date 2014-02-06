@@ -11,7 +11,7 @@
 #include "helper_test_arithmetic.hpp"
 #include "helper_test_packed_arithmetic.hpp"
 #include "helper_test_region_arithmetic.hpp"
-/*
+
 TEST(TestOptimalPrime, prime2325)
 {
     fifi::check_all<fifi::optimal_prime<fifi::prime2325> >();
@@ -26,4 +26,3 @@ TEST(TestLogTable, region_prime2325)
 {
     fifi::check_region_all<fifi::optimal_prime<fifi::prime2325>>();
 }
-*/

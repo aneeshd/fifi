@@ -60,7 +60,7 @@ TEST(TestSimpleOnlineArithmetic, fall_through)
             false, false, false, false, false);
     }
 }
-/*
+
 TEST(TestSimpleOnlineArithmetic, add)
 {
     {
@@ -164,4 +164,3 @@ TEST(TestSimpleOnlineArithmetic, random)
         check_random_default<fifi::dummy_stack<fifi::binary16> >();
     }
 }
-*/
