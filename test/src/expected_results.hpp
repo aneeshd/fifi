@@ -97,7 +97,7 @@ inline void check_results_random(
     for(uint32_t i = 0; i < elements; ++i)
     {
         typename field_type::value_type v = rand() % field_type::order;
-        if(v == 0)
+        if (v == 0)
             ++v;
 
         EXPECT_EQ((field.*multiply)(v, (field.*invert)(    v)), 1U);

@@ -35,7 +35,7 @@ namespace fifi
 
         for(uint32_t i = 0; i < block_length; ++i)
         {
-            if(i >= skip_value)
+            if (i >= skip_value)
             {
                 data[i] = (i+1) << shift_prefix;
             }
