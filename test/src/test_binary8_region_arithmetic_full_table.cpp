@@ -75,8 +75,9 @@ TEST(TestBinary8RegionArithmeticFullTable, multiply_add)
 {
     check_results_region_multiply_add<fifi::dummy_stack<fifi::binary8> >();
 }
-
+/*
 TEST(TestBinary8RegionArithmeticFullTable, multiply_subtract)
 {
     check_results_region_multiply_subtract<fifi::dummy_stack<fifi::binary8> >();
 }
+*/

@@ -59,17 +59,17 @@ struct method
         typename FieldImpl::value_type a,
         typename FieldImpl::value_type b) const;
 
-    typedef typename FieldImpl::value_type (FieldImpl::*binary_ptr_ptr) (
+    typedef void (FieldImpl::*binary_ptr_ptr) (
         typename FieldImpl::value_type* a,
-        typename FieldImpl::value_type* b) const;
+        const typename FieldImpl::value_type* b) const;
 
-    typedef typename FieldImpl::value_type (FieldImpl::*binary_ptr_const) (
+    typedef void (FieldImpl::*binary_ptr_const) (
         typename FieldImpl::value_type* a,
         typename FieldImpl::value_type b) const;
 
-    typedef typename FieldImpl::value_type (FieldImpl::*binary_ptr_ptr_const) (
+    typedef void (FieldImpl::*binary_ptr_ptr_const) (
         typename FieldImpl::value_type* a,
-        typename FieldImpl::value_type* b,
+        const typename FieldImpl::value_type* b,
         typename FieldImpl::value_type  c) const;
 };
 
@@ -103,7 +103,7 @@ inline void check_results_unary(typename method<FieldImpl>::unary arithmetic)
             Results<field_type>::m_results[i];
         SCOPED_TRACE("a:");
         SCOPED_TRACE(res.m_input1);
-        EXPECT_EQ(res.m_result, arithmetic(field, res.m_input1));
+        EXPECT_EQ(res.m_result, (field.*arithmetic)(res.m_input1));
     }
 }
 
@@ -124,8 +124,8 @@ inline void check_results_random(
         if(v == 0)
             ++v;
 
-        EXPECT_EQ(multiply(field, v, invert(field, v)), 1U);
-        EXPECT_EQ(multiply(field, v, divide(field, 1U, v)), 1U);
+        EXPECT_EQ((field.*multiply)(v, (field.*invert)(    v)), 1U);
+        EXPECT_EQ((field.*multiply)(v, (field.*divide)(1U, v)), 1U);
     }
 }
 
@@ -163,10 +163,10 @@ inline void check_results_region_ptr_ptr(
     std::vector<value_type> expected(length);
     for (uint32_t i = 0; i < length; ++i)
     {
-        expected[i] = packed_arithmetic(field, dest[i], src[i]);
+        expected[i] = (field.*packed_arithmetic)(dest[i], src[i]);
     }
 
-    region_arithmetic(field, dest.data(), src.data());
+    (field.*region_arithmetic)(dest.data(), src.data());
 
     for (uint32_t i = 0; i < length; ++i)
     {
@@ -209,10 +209,9 @@ inline void check_results_region_ptr_const(
         std::vector<value_type> expected(length);
         for (uint32_t j = 0; j < length; ++j)
         {
-            expected[j] = packed_arithmetic(field, dest[j], constant);
+            expected[j] = (field.*packed_arithmetic)(dest[j], constant);
         }
-
-        region_arithmetic(field, dest.data(), constant);
+        (field.*region_arithmetic)(dest.data(), constant);
         for (uint32_t j = 0; j < length; ++j)
         {
             EXPECT_EQ(expected[j], dest[j]);
@@ -258,11 +257,10 @@ inline void check_results_region_ptr_ptr_const(
         std::vector<value_type> expected(length);
         for (uint32_t j = 0; j < length; ++j)
         {
-            value_type v = packed_arithmetic1(field, src[j], constant);
-            expected[j] = packed_arithmetic2(field, dest[j], v);
+            value_type v = (field.*packed_arithmetic1)(src[j], constant);
+            expected[j] = (field.*packed_arithmetic2)(dest[j], v);
         }
-
-        region_arithmetic(field, dest.data(), src.data(), constant);
+        (field.*region_arithmetic)(dest.data(), src.data(), constant);
         for (uint32_t j = 0; j < length; ++j)
         {
             EXPECT_EQ(expected[j], dest[j]);
@@ -451,7 +449,7 @@ template<class FieldImpl>
 inline void check_results_sum_modulo()
 {
     check_results_binary<FieldImpl, sum_modulo_results>(
-        typename method<FieldImpl>::binary(&FieldImpl::template calculate_sum_modulo<>));
+        &FieldImpl::template calculate_sum_modulo<>);
 }
 
 //------------------------------------------------------------------
