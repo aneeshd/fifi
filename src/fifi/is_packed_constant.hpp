@@ -31,7 +31,7 @@ namespace fifi
     template<>
     inline bool is_packed_constant<binary>(typename binary::value_type constant)
     {
-        return constant == 0 | constant == 255;
+        return constant == 0 || constant == 255;
     }
 
     template<>
