@@ -52,15 +52,13 @@ struct expected_result_binary
 template<class FieldImpl>
 struct method
 {
-
     typedef std::function<typename FieldImpl::value_type(
             const FieldImpl&,
             typename FieldImpl::value_type a)> unary;
 
-    typedef std::function<typename FieldImpl::value_type(
-            const FieldImpl&,
-            typename FieldImpl::value_type a,
-            typename FieldImpl::value_type b)> binary;
+    typedef typename FieldImpl::value_type (FieldImpl::*binary)(
+        typename FieldImpl::value_type a,
+        typename FieldImpl::value_type b) const;
 
     typedef std::function<void(
             const FieldImpl&,
@@ -92,7 +90,7 @@ inline void check_results_binary(typename method<FieldImpl>::binary arithmetic)
         SCOPED_TRACE(res.m_input1);
         SCOPED_TRACE("b:");
         SCOPED_TRACE(res.m_input2);
-        EXPECT_EQ(res.m_result, arithmetic(field, res.m_input1, res.m_input2));
+        EXPECT_EQ(res.m_result, (field.*arithmetic)(res.m_input1, res.m_input2));
     }
 }
 
@@ -457,7 +455,7 @@ template<class FieldImpl>
 inline void check_results_sum_modulo()
 {
     check_results_binary<FieldImpl, sum_modulo_results>(
-        &FieldImpl::template calculate_sum_modulo<>);
+        typename method<FieldImpl>::binary(&FieldImpl::template calculate_sum_modulo<>));
 }
 
 //------------------------------------------------------------------
@@ -502,7 +500,7 @@ inline void check_results_region_multiply_subtract(uint32_t elements = 128)
 }
 
 //------------------------------------------------------------------
-// check_random
+// check random
 //------------------------------------------------------------------
 
 template<class FieldImpl>
