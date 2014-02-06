@@ -14,4 +14,5 @@ TEST(TestBinary16, binary16)
     EXPECT_EQ(65536U, fifi::binary16::order);
     EXPECT_EQ(16U, fifi::binary16::degree);
     EXPECT_EQ(4107U, fifi::binary16::prime);
+    EXPECT_TRUE(fifi::binary16::is_exact);
 }

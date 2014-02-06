@@ -14,4 +14,5 @@ TEST(TestBinary8, binary8)
     EXPECT_EQ(256U, fifi::binary8::order);
     EXPECT_EQ(8U, fifi::binary8::degree);
     EXPECT_EQ(29U, fifi::binary8::prime);
+    EXPECT_TRUE(fifi::binary8::is_exact);
 }

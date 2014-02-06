@@ -174,8 +174,6 @@ inline void check_results_region_ptr_ptr(
     }
 }
 
-#include <iostream>
-
 template<class FieldImpl>
 inline void check_results_region_ptr_const(
     typename method<FieldImpl>::binary packed_arithmetic,

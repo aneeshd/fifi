@@ -15,4 +15,5 @@ TEST(TestPrime2325, prime2325)
     EXPECT_EQ(4294967291U, fifi::prime2325::prime);
     EXPECT_EQ(2147483644U, fifi::prime2325::max_block_size);
     EXPECT_EQ(536870911U, fifi::prime2325::max_block_length);
+    EXPECT_FALSE(fifi::prime2325::is_exact);
 }

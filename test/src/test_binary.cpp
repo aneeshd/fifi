@@ -14,4 +14,5 @@ TEST(TestBinary, binary)
     EXPECT_EQ(1U, fifi::binary::max_value);
     EXPECT_EQ(0U, fifi::binary::min_value);
     EXPECT_EQ(2U, fifi::binary::order);
+    EXPECT_FALSE(fifi::binary::is_exact);
 }
