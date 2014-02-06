@@ -74,13 +74,23 @@ namespace fifi
 
     struct region_fall_through_result
     {
-        bool add = true;
-        bool subtract = true;
-        bool multiply = true;
-        bool divide = true;
-        bool multiply_constant = true;
-        bool multiply_add = true;
-        bool multiply_subtract = true;
+        region_fall_through_result() :
+            add(true),
+            subtract(true),
+            multiply(true),
+            divide(true),
+            multiply_constant(true),
+            multiply_add(true),
+            multiply_subtract(true)
+        { }
+
+        bool add;
+        bool subtract;
+        bool multiply;
+        bool divide;
+        bool multiply_constant;
+        bool multiply_add;
+        bool multiply_subtract;
     };
 
     template<class Field, class Stack>

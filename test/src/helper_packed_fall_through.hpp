@@ -55,11 +55,19 @@ namespace fifi
 
     struct fall_through_packed_result
     {
-        bool add = true;
-        bool subtract = true;
-        bool multiply = true;
-        bool divide = true;
-        bool invert = true;
+        fall_through_packed_result() :
+            add(true),
+            subtract(true),
+            multiply(true),
+            divide(true),
+            invert(true)
+        { }
+
+        bool add;
+        bool subtract;
+        bool multiply;
+        bool divide;
+        bool invert;
     };
 
     template<class Field, class Stack>
