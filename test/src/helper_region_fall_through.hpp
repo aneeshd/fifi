@@ -72,15 +72,20 @@ namespace fifi
         mutable bool m_fall_through;
     };
 
+    struct region_fall_through_result
+    {
+        bool add = true;
+        bool subtract = true;
+        bool multiply = true;
+        bool divide = true;
+        bool multiply_constant = true;
+        bool multiply_add = true;
+        bool multiply_subtract = true;
+    };
+
     template<class Field, class Stack>
     void helper_region_fall_through_test(
-        bool expect_add = true,
-        bool expect_subtract = true,
-        bool expect_multiply = true,
-        bool expect_divide = true,
-        bool expect_multiply_constant = true,
-        bool expect_multiply_add = true,
-        bool expect_multiply_subtract = true)
+        const region_fall_through_result& expected)
     {
         Stack stack;
 
@@ -94,31 +99,31 @@ namespace fifi
 
         stack.m_fall_through = false;
         stack.region_add(dest.data(), src.data());
-        EXPECT_EQ(expect_add, stack.m_fall_through);
+        EXPECT_EQ(expected.add, stack.m_fall_through);
 
         stack.m_fall_through = false;
         stack.region_subtract(dest.data(), src.data());
-        EXPECT_EQ(expect_subtract, stack.m_fall_through);
+        EXPECT_EQ(expected.subtract, stack.m_fall_through);
 
         stack.m_fall_through = false;
         stack.region_multiply(dest.data(), src.data());
-        EXPECT_EQ(expect_multiply, stack.m_fall_through);
+        EXPECT_EQ(expected.multiply, stack.m_fall_through);
 
         stack.m_fall_through = false;
         stack.region_divide(dest.data(), src.data());
-        EXPECT_EQ(expect_divide, stack.m_fall_through);
+        EXPECT_EQ(expected.divide, stack.m_fall_through);
 
         stack.m_fall_through = false;
         stack.region_multiply_constant(dest.data(), constant);
-        EXPECT_EQ(expect_multiply_constant, stack.m_fall_through);
+        EXPECT_EQ(expected.multiply_constant, stack.m_fall_through);
 
         stack.m_fall_through = false;
         stack.region_multiply_add(dest.data(), src.data(), constant);
-        EXPECT_EQ(expect_multiply_add, stack.m_fall_through);
+        EXPECT_EQ(expected.multiply_add, stack.m_fall_through);
 
         stack.m_fall_through = false;
         stack.region_multiply_subtract(dest.data(), src.data(), constant);
-        EXPECT_EQ(expect_multiply_subtract, stack.m_fall_through);
+        EXPECT_EQ(expected.multiply_subtract, stack.m_fall_through);
 
     }
 }

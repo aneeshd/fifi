@@ -48,6 +48,5 @@ namespace fifi
 
             return degree;
         }
-
     };
 }

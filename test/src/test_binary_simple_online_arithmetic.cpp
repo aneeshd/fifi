@@ -32,28 +32,36 @@ TEST(TestBinarySimpleOnlineArithmetic, fall_through)
 {
     {
         SCOPED_TRACE("binary");
+        fifi::fall_through_result expected;
+        expected.multiply = false;
+        expected.divide = false;
+        expected.invert = false;
         fifi::helper_fall_through_test<fifi::binary,
-        fifi::dummy_stack<fifi::binary> >(true, true, false, false, false);
+        fifi::dummy_stack<fifi::binary> >(expected);
     }
     {
         SCOPED_TRACE("binary4");
+        fifi::fall_through_result expected;
         fifi::helper_fall_through_test<fifi::binary4,
-        fifi::dummy_stack<fifi::binary4> >();
+        fifi::dummy_stack<fifi::binary4> >(expected);
     }
     {
         SCOPED_TRACE("binary8");
+        fifi::fall_through_result expected;
         fifi::helper_fall_through_test<fifi::binary8,
-        fifi::dummy_stack<fifi::binary8> >();
+        fifi::dummy_stack<fifi::binary8> >(expected);
     }
     {
         SCOPED_TRACE("binary16");
+        fifi::fall_through_result expected;
         fifi::helper_fall_through_test<fifi::binary16,
-        fifi::dummy_stack<fifi::binary16> >();
+        fifi::dummy_stack<fifi::binary16> >(expected);
     }
     {
         SCOPED_TRACE("prime2325");
+        fifi::fall_through_result expected;
         fifi::helper_fall_through_test<fifi::prime2325,
-        fifi::dummy_stack<fifi::prime2325> >();
+        fifi::dummy_stack<fifi::prime2325> >(expected);
     }
 }
 

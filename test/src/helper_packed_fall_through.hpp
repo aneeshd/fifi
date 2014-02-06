@@ -53,13 +53,18 @@ namespace fifi
         mutable bool m_fall_through;
     };
 
+    struct fall_through_packed_result
+    {
+        bool add = true;
+        bool subtract = true;
+        bool multiply = true;
+        bool divide = true;
+        bool invert = true;
+    };
+
     template<class Field, class Stack>
     void helper_packed_fall_through_test(
-        bool expect_add = true,
-        bool expect_subtract = true,
-        bool expect_multiply = true,
-        bool expect_divide = true,
-        bool expect_invert = true)
+        const fall_through_packed_result& expected)
     {
         Stack stack;
 
@@ -73,22 +78,22 @@ namespace fifi
 
         stack.m_fall_through = false;
         stack.packed_add(value, value);
-        EXPECT_EQ(expect_add, stack.m_fall_through);
+        EXPECT_EQ(expected.add, stack.m_fall_through);
 
         stack.m_fall_through = false;
         stack.packed_subtract(value, value);
-        EXPECT_EQ(expect_subtract, stack.m_fall_through);
+        EXPECT_EQ(expected.subtract, stack.m_fall_through);
 
         stack.m_fall_through = false;
         stack.packed_multiply(value, value);
-        EXPECT_EQ(expect_multiply, stack.m_fall_through);
+        EXPECT_EQ(expected.multiply, stack.m_fall_through);
 
         stack.m_fall_through = false;
         stack.packed_divide(value, all_ones);
-        EXPECT_EQ(expect_divide, stack.m_fall_through);
+        EXPECT_EQ(expected.divide, stack.m_fall_through);
 
         stack.m_fall_through = false;
         stack.packed_invert(all_ones);
-        EXPECT_EQ(expect_invert, stack.m_fall_through);
+        EXPECT_EQ(expected.invert, stack.m_fall_through);
     }
 }

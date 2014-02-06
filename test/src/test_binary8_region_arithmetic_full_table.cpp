@@ -53,15 +53,18 @@ namespace fifi
 TEST(TestBinary8RegionArithmeticFullTable, fall_through)
 {
     {
+        fifi::region_fall_through_result expected;
         SCOPED_TRACE("binary4");
         fifi::helper_region_fall_through_test<fifi::binary4,
-        fifi::dummy_stack_fall_through<fifi::binary4> >();
+        fifi::dummy_stack_fall_through<fifi::binary4> >(expected);
     }
     {
         SCOPED_TRACE("binary8");
+        fifi::region_fall_through_result expected;
+        expected.multiply_add = false;
+        expected.multiply_subtract = false;
         fifi::helper_region_fall_through_test<fifi::binary8,
-        fifi::dummy_stack_fall_through<fifi::binary8> >(
-            true, true, true, true, true, false, false);
+        fifi::dummy_stack_fall_through<fifi::binary8> >(expected);
     }
 }
 

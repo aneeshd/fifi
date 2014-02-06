@@ -45,8 +45,11 @@ namespace fifi
 
 TEST(TestOptimalPrimeRegionArithmetic, fall_through)
 {
+    fifi::region_fall_through_result expected;
+    expected.add = false;
+    expected.subtract = false;
     fifi::helper_region_fall_through_test<fifi::prime2325,
-    fifi::dummy_stack_fall_through<fifi::prime2325> >(false, false);
+    fifi::dummy_stack_fall_through<fifi::prime2325> >(expected);
 }
 
 TEST(TestOptimalPrimeRegionArithmetic, add)

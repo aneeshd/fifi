@@ -32,34 +32,37 @@ namespace fifi
 
 TEST(TestRegionArithmetic, fall_through)
 {
+    fifi::region_fall_through_result expected;
+    expected.add = false;
+    expected.subtract = false;
+    expected.multiply = false;
+    expected.divide = false;
+    expected.multiply_constant = false;
+    expected.multiply_add = false;
+    expected.multiply_subtract = false;
     {
         SCOPED_TRACE("binary");
         fifi::helper_region_fall_through_test<fifi::binary,
-        fifi::dummy_stack<fifi::binary> >(
-            false, false, false, false, false, false, false);
+        fifi::dummy_stack<fifi::binary> >(expected);
     }
     {
         SCOPED_TRACE("binary4");
         fifi::helper_region_fall_through_test<fifi::binary4,
-        fifi::dummy_stack<fifi::binary4> >(
-            false, false, false, false, false, false, false);
+        fifi::dummy_stack<fifi::binary4> >(expected);
     }
     {
         SCOPED_TRACE("binary8");
         fifi::helper_region_fall_through_test<fifi::binary8,
-        fifi::dummy_stack<fifi::binary8> >(
-            false, false, false, false, false, false, false);
+        fifi::dummy_stack<fifi::binary8> >(expected);
     }
     {
         SCOPED_TRACE("binary16");
         fifi::helper_region_fall_through_test<fifi::binary16,
-        fifi::dummy_stack<fifi::binary16> >(
-            false, false, false, false, false, false, false);
+        fifi::dummy_stack<fifi::binary16> >(expected);
     }
     {
         SCOPED_TRACE("prime2325");
         fifi::helper_region_fall_through_test<fifi::prime2325,
-        fifi::dummy_stack<fifi::prime2325> >(
-            false, false, false, false, false, false, false);
+        fifi::dummy_stack<fifi::prime2325> >(expected);
     }
 }

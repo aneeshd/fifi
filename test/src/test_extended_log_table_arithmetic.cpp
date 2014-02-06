@@ -39,20 +39,24 @@ namespace fifi
 
 TEST(TestExtendedLogTableArithmetic, fall_through)
 {
+    fifi::fall_through_result expected;
+    expected.multiply = false;
+    expected.divide = false;
+    expected.invert = false;
     {
         SCOPED_TRACE("binary4");
         fifi::helper_fall_through_test<fifi::binary4,
-        fifi::dummy_stack_fall_through<fifi::binary4> >(true, true, false, false, false);
+        fifi::dummy_stack_fall_through<fifi::binary4> >(expected);
     }
     {
         SCOPED_TRACE("binary8");
         fifi::helper_fall_through_test<fifi::binary8,
-        fifi::dummy_stack_fall_through<fifi::binary8> >(true, true, false, false, false);
+        fifi::dummy_stack_fall_through<fifi::binary8> >(expected);
     }
     {
         SCOPED_TRACE("binary16");
         fifi::helper_fall_through_test<fifi::binary16,
-        fifi::dummy_stack_fall_through<fifi::binary16> >(true, true, false, false, false);
+        fifi::dummy_stack_fall_through<fifi::binary16> >(expected);
     }
 }
 
