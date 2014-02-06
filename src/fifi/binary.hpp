@@ -36,5 +36,8 @@ namespace fifi
 
         /// The field order i.e. number of field elements
         const static order_type order = 2;
+
+        /// A boolean determing whether the fields value type is exact
+        const static bool is_exact = false;
     };
 }

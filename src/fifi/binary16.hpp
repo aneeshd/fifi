@@ -49,5 +49,7 @@ namespace fifi
         /// needed.
         const static value_type prime = 4107;
 
+        /// A boolean determing whether the fields value type is exact
+        const static bool is_exact = true;
     };
 }

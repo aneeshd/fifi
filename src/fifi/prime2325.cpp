@@ -15,4 +15,5 @@ namespace fifi
     const prime2325::value_type prime2325::prime;
     const uint32_t prime2325::max_block_size;
     const uint32_t prime2325::max_block_length;
+    const bool prime2325::is_exact;
 }

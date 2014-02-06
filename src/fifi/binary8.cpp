@@ -12,4 +12,5 @@ namespace fifi
     const binary8::order_type binary8::order;
     const binary8::degree_type binary8::degree;
     const binary8::value_type binary8::prime;
+    const bool binary8::is_exact;
 }

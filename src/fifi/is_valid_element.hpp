@@ -7,8 +7,6 @@
 
 #include <type_traits>
 
-#include "is_value_type_exact.hpp"
-
 namespace fifi
 {
 
@@ -18,7 +16,7 @@ namespace fifi
     /// @return True if the element is within the valid range, false otherwise.
     template<class Field>
     inline typename
-    std::enable_if<!is_value_type_exact<Field>::value, bool>::type
+    std::enable_if<!Field::is_exact, bool>::type
     is_valid_element(typename Field::value_type v)
     {
         return v <= Field::max_value;
@@ -27,11 +25,10 @@ namespace fifi
     /// @copydoc is_valid_element(typename Field::value_type v)
     template<class Field>
     inline typename
-    std::enable_if<is_value_type_exact<Field>::value, bool>::type
+    std::enable_if<Field::is_exact, bool>::type
     is_valid_element(typename Field::value_type v)
     {
         (void) v;
         return true;
     }
-
 }

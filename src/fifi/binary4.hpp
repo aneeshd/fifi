@@ -47,5 +47,7 @@ namespace fifi
         /// lower bits of the prime is needed.
         const static value_type prime = 3;
 
+        /// A boolean determing whether the fields value type is exact
+        const static bool is_exact = false;
     };
 }

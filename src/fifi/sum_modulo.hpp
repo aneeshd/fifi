@@ -7,8 +7,6 @@
 
 #include <type_traits>
 
-#include "is_value_type_exact.hpp"
-
 namespace fifi
 {
     /// @brief This layer implements a simple function for determining
@@ -32,7 +30,7 @@ namespace fifi
         /// @param v The value from the finite field
         /// @return True if the element is within the valid range, false otherwise.
         template<class T = field_type>
-        inline typename std::enable_if<is_value_type_exact<T>::value,
+        inline typename std::enable_if<T::is_exact,
             typename T::value_type>::type
         calculate_sum_modulo(value_type a, value_type b) const
         {
@@ -54,7 +52,7 @@ namespace fifi
         /// specialization for non exact types
         /// @copydoc calculate_sum_modulo(value_type, value_type)
         template<class T = field_type>
-        inline typename std::enable_if<!is_value_type_exact<T>::value,
+        inline typename std::enable_if<!T::is_exact,
             typename T::value_type>::type
         calculate_sum_modulo(value_type a, value_type b) const
         {

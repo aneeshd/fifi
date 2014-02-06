@@ -53,5 +53,8 @@ namespace fifi
         /// size in bytes a block can be 2^29 - 1 data words (where a
         /// word is 32 bits).
         const static uint32_t max_block_length = 536870911U;
+
+        /// A boolean determing whether the fields value type is exact
+        const static bool is_exact = false;
     };
 }

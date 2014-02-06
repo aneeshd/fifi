@@ -48,5 +48,7 @@ namespace fifi
         /// needed.
         const static value_type prime = 29;
 
+        /// A boolean determing whether the fields value type is exact
+        const static bool is_exact = true;
     };
 }

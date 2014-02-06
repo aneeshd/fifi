@@ -16,7 +16,6 @@
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
 #include <fifi/fifi_utils.hpp>
-#include <fifi/is_value_type_exact.hpp>
 #include <fifi/prime2325.hpp>
 
 // The expected result of an arithmetic operation
