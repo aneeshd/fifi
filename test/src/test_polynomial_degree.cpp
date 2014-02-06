@@ -25,7 +25,7 @@ namespace fifi
         { };
     }
 }
-
+/*
 TEST(TestPolynomialDegree, polynomial_degree)
 {
     {
@@ -49,3 +49,4 @@ TEST(TestPolynomialDegree, polynomial_degree)
         check_results_find_degree<fifi::dummy_stack<fifi::prime2325> >();
     }
 }
+*/
