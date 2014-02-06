@@ -25,7 +25,7 @@ namespace fifi
         { };
     }
 }
-
+/*
 TEST(TestSumModulo, sum_modulo)
 {
     {
@@ -49,3 +49,4 @@ TEST(TestSumModulo, sum_modulo)
         check_results_sum_modulo<fifi::dummy_stack<fifi::prime2325> >();
     }
 }
+*/
