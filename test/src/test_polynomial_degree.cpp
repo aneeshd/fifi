@@ -14,7 +14,7 @@
 #include <gtest/gtest.h>
 
 #include "expected_results.hpp"
-/*
+
 namespace fifi
 {
     namespace {
@@ -49,4 +49,3 @@ TEST(TestPolynomialDegree, polynomial_degree)
         check_results_find_degree<fifi::dummy_stack<fifi::prime2325> >();
     }
 }
-*/

@@ -15,7 +15,7 @@
 #include "expected_results.hpp"
 #include "helper_catch_all.hpp"
 #include "helper_fall_through.hpp"
-/*
+
 namespace fifi
 {
     namespace {
@@ -51,7 +51,7 @@ TEST(TestFullTableArithmetic, fall_through)
         fifi::dummy_stack_fall_through<fifi::binary8> >(true, true, false, false, false);
     }
 }
-
+/*
 TEST(TestFullTableArithmetic, multiply)
 {
     {

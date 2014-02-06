@@ -15,7 +15,7 @@
 #include <fifi/region_info.hpp>
 
 #include <gtest/gtest.h>
-/*
+
 namespace fifi
 {
 
@@ -73,4 +73,3 @@ TEST(TestRegionInfo, prime2325)
 {
     test_region_info<fifi::prime2325>();
 }
-*/

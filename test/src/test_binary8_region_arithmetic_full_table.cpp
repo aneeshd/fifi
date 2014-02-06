@@ -19,7 +19,7 @@
 #include "expected_results.hpp"
 #include "helper_catch_all.hpp"
 #include "helper_region_fall_through.hpp"
-/*
+
 namespace fifi
 {
     namespace {
@@ -70,7 +70,7 @@ TEST(TestBinary8RegionArithmeticFullTable, init)
     fifi::dummy_stack<fifi::binary8> stack;
     (void) stack;
 }
-
+/*
 TEST(TestBinary8RegionArithmeticFullTable, multiply_add)
 {
     check_results_region_multiply_add<fifi::dummy_stack<fifi::binary8> >();

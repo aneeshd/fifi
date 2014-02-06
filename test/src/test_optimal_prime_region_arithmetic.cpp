@@ -16,7 +16,7 @@
 #include "expected_results.hpp"
 #include "helper_catch_all.hpp"
 #include "helper_region_fall_through.hpp"
-/*
+
 namespace fifi
 {
     namespace {
@@ -42,7 +42,7 @@ namespace fifi
         { };
     }
 }
-
+/*
 TEST(TestOptimalPrimeRegionArithmetic, fall_through)
 {
     fifi::helper_region_fall_through_test<fifi::prime2325,

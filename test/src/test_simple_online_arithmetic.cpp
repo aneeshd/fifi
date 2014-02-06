@@ -16,7 +16,7 @@
 #include "expected_results.hpp"
 #include "helper_catch_all.hpp"
 #include "helper_fall_through.hpp"
-/*
+
 namespace fifi
 {
     namespace {
@@ -60,7 +60,7 @@ TEST(TestSimpleOnlineArithmetic, fall_through)
             false, false, false, false, false);
     }
 }
-
+/*
 TEST(TestSimpleOnlineArithmetic, add)
 {
     {

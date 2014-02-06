@@ -23,7 +23,7 @@
 #include "expected_results.hpp"
 #include "helper_catch_all.hpp"
 #include "helper_region_fall_through.hpp"
-/*
+
 namespace fifi
 {
     namespace {
@@ -81,8 +81,7 @@ TEST(TestBinaryRegionArithmetic, fall_through)
         fifi::dummy_stack_fall_through<fifi::prime2325> >();
     }
 }
-
-
+/*
 TEST(TestBinaryRegionArithmetic, multiply_constant)
 {
     check_results_region_multiply_constant<fifi::dummy_stack<fifi::binary> >();

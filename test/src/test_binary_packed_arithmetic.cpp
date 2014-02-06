@@ -16,7 +16,7 @@
 
 #include "expected_results.hpp"
 #include "helper_packed_fall_through.hpp"
-/*
+
 namespace fifi
 {
     namespace {
@@ -58,7 +58,7 @@ TEST(TestBinaryPackedArithmetic, fall_through)
         fifi::dummy_stack<fifi::prime2325> >();
     }
 }
-
+/*
 TEST(TestBinaryPackedArithmetic, add)
 {
     check_results_packed_add<fifi::dummy_stack<fifi::binary>>();

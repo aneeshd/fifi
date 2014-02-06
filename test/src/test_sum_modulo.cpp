@@ -14,7 +14,7 @@
 #include <gtest/gtest.h>
 
 #include "expected_results.hpp"
-/*
+
 namespace fifi
 {
     namespace {
@@ -49,4 +49,3 @@ TEST(TestSumModulo, sum_modulo)
         check_results_sum_modulo<fifi::dummy_stack<fifi::prime2325> >();
     }
 }
-*/

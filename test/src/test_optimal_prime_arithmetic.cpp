@@ -10,7 +10,7 @@
 #include <gtest/gtest.h>
 
 #include "expected_results.hpp"
-/*
+
 namespace fifi
 {
     namespace {
@@ -21,7 +21,7 @@ namespace fifi
         { };
     }
 }
-
+/*
 TEST(TestOptimalPrimeArithmetic, multiply)
 {
     check_results_multiply<fifi::dummy_stack<fifi::prime2325> >();
