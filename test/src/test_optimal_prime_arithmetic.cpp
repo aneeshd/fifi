@@ -10,7 +10,7 @@
 #include <gtest/gtest.h>
 
 #include "expected_results.hpp"
-
+/*
 namespace fifi
 {
     namespace {
@@ -42,3 +42,4 @@ TEST(TestOptimalPrimeArithmetic, random)
 {
     check_random_default<fifi::dummy_stack<fifi::prime2325> >();
 }
+*/

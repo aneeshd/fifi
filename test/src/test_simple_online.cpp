@@ -10,7 +10,7 @@
 #include "helper_test_arithmetic.hpp"
 #include "helper_test_packed_arithmetic.hpp"
 #include "helper_test_region_arithmetic.hpp"
-
+/*
 TEST(TestSimpleOnline, add)
 {
     fifi::check_add<fifi::simple_online>();
@@ -100,3 +100,4 @@ TEST(TestSimpleOnline, region_multiply_subtract)
 {
     fifi::check_region_multiply_subtract<fifi::simple_online>();
 }
+*/

@@ -16,7 +16,7 @@
 #include "expected_results.hpp"
 #include "helper_catch_all.hpp"
 #include "helper_region_fall_through.hpp"
-
+/*
 namespace fifi
 {
     namespace {
@@ -58,3 +58,4 @@ TEST(TestOptimalPrimeRegionArithmetic, subtract)
 {
     check_results_region_subtract<fifi::dummy_stack<fifi::prime2325> >();
 }
+*/

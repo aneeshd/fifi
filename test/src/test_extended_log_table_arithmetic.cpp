@@ -15,7 +15,7 @@
 #include "expected_results.hpp"
 #include "helper_catch_all.hpp"
 #include "helper_fall_through.hpp"
-
+/*
 namespace fifi
 {
     namespace {
@@ -119,3 +119,4 @@ TEST(TestExtendedLogTableArithmetic, random)
         check_random_default<fifi::dummy_stack<fifi::binary16> >();
     }
 }
+*/

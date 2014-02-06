@@ -16,7 +16,7 @@
 
 #include "expected_results.hpp"
 #include "helper_packed_fall_through.hpp"
-
+/*
 namespace fifi
 {
     namespace {
@@ -83,3 +83,4 @@ TEST(TestBinaryPackedArithmetic, invert)
 {
     check_results_packed_invert<fifi::dummy_stack<fifi::binary>>();
 }
+*/
