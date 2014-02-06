@@ -18,7 +18,7 @@
 #include "expected_results.hpp"
 #include "helper_catch_all.hpp"
 #include "helper_packed_fall_through.hpp"
-/*
+
 namespace fifi
 {
     namespace {
@@ -32,7 +32,7 @@ namespace fifi
         { };
     }
 }
-
+/*
 TEST(TestBinary4PackedArithmetic, fall_through)
 {
     {
