@@ -8,5 +8,5 @@ bld.stlib(features = 'cxx',
           source   = bld.path.ant_glob('**/*.cpp'),
           target = 'fifi',
           use    = ['boost_includes', 'boost_thread', 'boost_system',
-                    'sak_includes', 'sak'],
+                    'boost_chrono', 'sak_includes', 'sak'],
           export_includes = ['..'])
