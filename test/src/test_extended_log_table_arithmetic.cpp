@@ -18,7 +18,8 @@
 
 namespace fifi
 {
-    namespace {
+    namespace
+    {
         template<class Field>
         struct dummy_stack_fall_through : public
         extended_log_table_arithmetic<

@@ -18,7 +18,8 @@
 
 namespace fifi
 {
-    namespace {
+    namespace
+    {
         template<class Field>
         struct dummy_stack : public
         binary_simple_online_arithmetic<Field,
