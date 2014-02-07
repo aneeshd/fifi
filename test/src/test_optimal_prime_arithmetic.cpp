@@ -13,7 +13,8 @@
 
 namespace fifi
 {
-    namespace {
+    namespace
+    {
         template<class Field>
         struct dummy_stack : public
         optimal_prime_arithmetic<

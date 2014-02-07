@@ -26,7 +26,8 @@
 
 namespace fifi
 {
-    namespace {
+    namespace
+    {
         template<class Field>
         struct dummy_stack_fall_through : public
         binary_region_arithmetic<Field,
@@ -36,7 +37,8 @@ namespace fifi
         { };
     }
 
-    namespace {
+    namespace
+    {
         template<class Field>
         struct dummy_stack : public
         binary_region_arithmetic<Field,

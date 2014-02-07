@@ -17,16 +17,12 @@
 
 namespace fifi
 {
-
     namespace
     {
-
         template<class Field>
         struct dummy_stack : public region_alignment<final<Field> >
         { };
-
     }
-
 }
 
 template<class Field>

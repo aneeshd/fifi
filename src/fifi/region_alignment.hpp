@@ -31,9 +31,8 @@ namespace fifi
         /// @return The alignment requirement
         uint32_t alignment() const
         {
-            /// @todo Change to C++11 alignof when we upgrade Visual Studio 2013
+            /// @todo Change to C++11 alignof when available in MSVC
             return sizeof(value_type);
         }
-
     };
 }

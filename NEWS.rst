@@ -1,12 +1,16 @@
 News for fifi
-============
+=============
 
 This file lists the major changes between versions. For a more detailed list
 of every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Major: Made fifi a static library.
+* Major: Redid the fifi architecture to use mixin layers.
+* Major: Moved optimizations from ``arithmetics.hpp`` to separate layers.
+* Minor: Added unit tests for all classes.
+* Minor: Introduced the binary4 field.
 
 10.0.0
 ------

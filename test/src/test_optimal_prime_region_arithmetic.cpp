@@ -19,7 +19,8 @@
 
 namespace fifi
 {
-    namespace {
+    namespace
+    {
         template<class Field>
         struct dummy_stack_fall_through : public
         optimal_prime_region_arithmetic<Field,
@@ -30,7 +31,8 @@ namespace fifi
         { };
     }
 
-    namespace {
+    namespace
+    {
         template<class Field>
         struct dummy_stack : public
         optimal_prime_region_arithmetic<Field,

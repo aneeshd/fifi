@@ -19,7 +19,8 @@
 
 namespace fifi
 {
-    namespace {
+    namespace
+    {
         template<class Field>
         struct dummy_stack : public
         binary_packed_arithmetic<Field,
