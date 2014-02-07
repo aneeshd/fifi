@@ -22,7 +22,8 @@
 
 namespace fifi
 {
-    namespace {
+    namespace
+    {
         template<class Field>
         struct dummy_stack_fall_through : public
         binary8_region_arithmetic_full_table<Field,
@@ -35,7 +36,8 @@ namespace fifi
         { };
     }
 
-    namespace {
+    namespace
+    {
         template<class Field>
         struct dummy_stack : public
         binary8_region_arithmetic_full_table<Field,

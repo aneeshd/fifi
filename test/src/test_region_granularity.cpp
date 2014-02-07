@@ -17,16 +17,12 @@
 
 namespace fifi
 {
-
     namespace
     {
-
         template<class Field>
         struct dummy_stack : public region_granularity<final<Field> >
         { };
-
     }
-
 }
 
 template<class Field>
