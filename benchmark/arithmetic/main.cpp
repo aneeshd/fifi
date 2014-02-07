@@ -3,12 +3,12 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#include <cstdint>
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <ctime>
 #include <cmath>
-#include <stdexcept>
 
 #include <gauge/gauge.hpp>
 #include <gauge/console_printer.hpp>
@@ -48,11 +48,11 @@ public:
 
         gauge::config_set cs = get_current_configuration();
 
-        uint32_t length = cs.get_value<uint32_t>("vector_length");
+        uint32_t size = cs.get_value<uint32_t>("vector_size");
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
 
         // The number of bytes processed per iteration
-        uint64_t bytes = length * vectors;
+        uint64_t bytes = size * vectors;
 
         return bytes / time; // MB/s for each iteration
     }
@@ -172,7 +172,7 @@ public:
 
     /// Tests the dest[i] = dest[i] OP src[i] functions
     template<class Function>
-    void run_binary(Function func)
+    void run_binary(Function function)
     {
         gauge::config_set cs = get_current_configuration();
         uint32_t length = cs.get_value<uint32_t>("vector_length");
@@ -185,8 +185,8 @@ public:
             {
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
-                    func(m_field, &(m_symbols_one[i][0]),
-                         &(m_symbols_two[i][0]), length);
+                    function(m_field, &(m_symbols_one[i][0]),
+                             &(m_symbols_two[i][0]), length);
                 }
             }
         }
@@ -199,8 +199,8 @@ public:
                     uint32_t index_one = rand() % vectors;
                     uint32_t index_two = rand() % vectors;
 
-                    func(m_field, &(m_symbols_one[index_one][0]),
-                         &(m_symbols_two[index_two][0]), length);
+                    function(m_field, &(m_symbols_one[index_one][0]),
+                             &(m_symbols_two[index_two][0]), length);
                 }
             }
         }
@@ -212,7 +212,7 @@ public:
 
     /// Tests the dest[i] = dest[i] OP (src[i] * constant) functions
     template<class Function>
-    void run_binary_constant(Function func)
+    void run_binary_constant(Function function)
     {
         gauge::config_set cs = get_current_configuration();
         uint32_t length = cs.get_value<uint32_t>("vector_length");
@@ -228,8 +228,8 @@ public:
 
                 for(uint32_t i = 0; i < vectors; ++i)
                 {
-                    func(m_field, constant, &(m_symbols_one[i][0]),
-                         &(m_symbols_two[i][0]), &m_temp[0], length);
+                    function(m_field, constant, &(m_symbols_one[i][0]),
+                             &(m_symbols_two[i][0]), &m_temp[0], length);
                 }
             }
         }
@@ -245,8 +245,8 @@ public:
                     uint32_t index_one = rand() % vectors;
                     uint32_t index_two = rand() % vectors;
 
-                    func(m_field, constant, &(m_symbols_one[index_one][0]),
-                         &(m_symbols_two[index_two][0]), &m_temp[0], length);
+                    function(m_field, constant, &(m_symbols_one[index_one][0]),
+                             &(m_symbols_two[index_two][0]), &m_temp[0], length);
                 }
             }
         }
@@ -258,7 +258,7 @@ public:
 
     /// Tests the dest[i] = dest[i] * constant functions
     template<class Function>
-    void run_unary_constant(Function func)
+    void run_unary_constant(Function function)
     {
         gauge::config_set cs = get_current_configuration();
         uint32_t length = cs.get_value<uint32_t>("vector_length");
@@ -273,7 +273,7 @@ public:
 
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
-                    func(m_field, constant, &(m_symbols_one[i][0]), length);
+                    function(m_field, constant, &(m_symbols_one[i][0]), length);
                 }
             }
         }
@@ -287,7 +287,8 @@ public:
                 {
                     uint32_t index = rand() % vectors;
 
-                    func(m_field, constant, &(m_symbols_one[index][0]), length);
+                    function(m_field, constant, &(m_symbols_one[index][0]),
+                             length);
                 }
             }
         }
