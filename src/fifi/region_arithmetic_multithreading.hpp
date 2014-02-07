@@ -30,7 +30,7 @@ namespace fifi
 
         region_arithmetic_multithreading() :
             m_threads(1),
-            m_real_length(1)
+            m_length(1)
         { }
 
         uint32_t threads() const
@@ -41,31 +41,26 @@ namespace fifi
         void set_threads(uint32_t threads)
         {
             assert(threads > 0);
-            assert(m_real_length % threads == 0);
+            assert((m_length % threads) == 0);
 
             m_threads = threads;
 
-            Super::set_length(m_real_length / m_threads);
+            Super::set_length(m_length / m_threads);
         }
 
         void set_length(uint32_t length)
         {
             assert(length > 0);
-            assert(length % m_threads == 0);
+            assert((length % m_threads) == 0);
 
-            m_real_length = length;
+            m_length = length;
 
-            Super::set_length(m_real_length / m_threads);
+            Super::set_length(m_length / m_threads);
         }
 
         uint32_t length() const
         {
-            return m_real_length;
-        }
-
-        uint32_t slice() const
-        {
-            return Super::length();
+            return m_length;
         }
 
         void region_add(value_type* dest, const value_type* src) const
@@ -73,11 +68,7 @@ namespace fifi
             std::vector<std::thread> threads;
             for (uint32_t i = 0; i < m_threads; ++i)
             {
-                threads.push_back(std::thread(&Super::region_add, *this,
-                    dest+(i*slice()), src+(i*slice())));
-            }
-            for(auto& thread : threads){
-                thread.join();
+                Super::region_add(dest+(i*Super::length()), src+(i*Super::length()));
             }
         }
         /*
@@ -117,7 +108,7 @@ namespace fifi
     protected:
 
         uint32_t m_threads;
-        uint32_t m_real_length;
+        uint32_t m_length;
     };
     /*
     template<class Function, FieldImpl>
