@@ -9,6 +9,8 @@
 #include <cstdint>
 #include <vector>
 
+#include <boost/thread.hpp>
+
 #include "is_packed_constant.hpp"
 
 namespace fifi
@@ -116,16 +118,22 @@ namespace fifi
     };
 
     template<class Function, class FieldImpl>
-    inline void binary_ptr_ptr_const_parallel(FieldImpl field,
+    inline void binary_parallel(FieldImpl field,
                                 Function func,
                                 typename FieldImpl::value_type* dest,
-                                const typename FieldImpl::value_type* src,
-                                const typename FieldImpl::value_type constant)
+                                const typename FieldImpl::value_type* src)
     {
+        std::vector<boost::thread> threads;
         for (uint32_t i = 0; i < field.threads(); ++i)
         {
-            (field.*func)(dest+(i*field.slice()), src+(i*field.slice()),
-                          constant);
+            threads.push_back(boost::thread(
+                boost::bind(func, field, dest+(i*field.slice()),
+                            src+(i*field.slice()))
+            ));
+        }
+
+        for(auto& thread : threads){
+            thread.join();
         }
     }
 
@@ -135,21 +143,37 @@ namespace fifi
                                 typename FieldImpl::value_type* dest,
                                 const typename FieldImpl::value_type constant)
     {
+        std::vector<boost::thread> threads;
         for (uint32_t i = 0; i < field.threads(); ++i)
         {
-            (field.*func)(dest+(i*field.slice()), constant);
+            threads.push_back(boost::thread(
+                boost::bind(func, field, dest+(i*field.slice()), constant)
+            ));
+        }
+
+        for(auto& thread : threads){
+            thread.join();
         }
     }
 
     template<class Function, class FieldImpl>
-    inline void binary_parallel(FieldImpl field,
+    inline void binary_ptr_ptr_const_parallel(FieldImpl field,
                                 Function func,
                                 typename FieldImpl::value_type* dest,
-                                const typename FieldImpl::value_type* src)
+                                const typename FieldImpl::value_type* src,
+                                const typename FieldImpl::value_type constant)
     {
+        std::vector<boost::thread> threads;
         for (uint32_t i = 0; i < field.threads(); ++i)
         {
-            (field.*func)(dest+(i*field.slice()), src+(i*field.slice()));
+            threads.push_back(boost::thread(
+                boost::bind(func, field, dest+(i*field.slice()),
+                            src+(i*field.slice()), constant)
+            ));
+        }
+
+        for(auto& thread : threads){
+            thread.join();
         }
     }
 }

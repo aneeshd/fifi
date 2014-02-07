@@ -7,5 +7,6 @@ from os.path import abspath
 bld.stlib(features = 'cxx',
           source   = bld.path.ant_glob('**/*.cpp'),
           target = 'fifi',
-          use    = ['boost_includes', 'sak_includes', 'sak'],
+          use    = ['boost_includes', 'boost_thread', 'boost_system',
+                    'sak_includes', 'sak'],
           export_includes = ['..'])
