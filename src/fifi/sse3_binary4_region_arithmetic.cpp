@@ -6,6 +6,7 @@
 #include "sse3_binary4_region_arithmetic.hpp"
 
 #include <x86intrin.h>
+#include <iostream>
 
 namespace fifi
 {
@@ -16,6 +17,9 @@ namespace fifi
     {
         m_table_one.resize(16*16);
         m_table_two.resize(16*16);
+
+        assert( ( (uintptr_t)&m_table_one[0] % 16) == 0);
+        assert( ( (uintptr_t)&m_table_two[0] % 16) == 0);
 
         for(uint32_t i = 0; i < 16; ++i)
         {
@@ -33,6 +37,7 @@ namespace fifi
         value_type* dest, value_type constant) const
     {
         assert(dest != 0);
+        assert( ( (uintptr_t)dest % 16) == 0);
         // assert(alignment)
 
         // The constant is packed, so we need just either the high or
@@ -40,19 +45,18 @@ namespace fifi
         constant = constant & 0xf;
 
         // Initialize the look-up tables
-
         __m128i table1 = _mm_load_si128(
             (const __m128i*)(&m_table_one[0] + (constant * 16)));
 
         __m128i table2 = _mm_load_si128(
-            (const __m128i*)(&m_table_one[0] + (constant * 16)));
+            (const __m128i*)(&m_table_two[0] + (constant * 16)));
 
         __m128i mask1 = _mm_set1_epi8(0x0f);
         __m128i mask2 = _mm_set1_epi8(0xf0);
 
         for(uint32_t i = 0; i < m_sse3_size; ++i)
         {
-            __m128i xmm0 = _mm_load_si128((const __m128i*) dest + i);
+            __m128i xmm0 = _mm_load_si128(((const __m128i*) dest) + i);
 
             __m128i l = _mm_and_si128(xmm0, mask1);
 
@@ -64,28 +68,41 @@ namespace fifi
 
             xmm0 = _mm_xor_si128(h,l);
 
-            _mm_store_si128((__m128i*)(dest + i), xmm0);
+            _mm_store_si128(((__m128i*)dest) + i, xmm0);
         }
 
     }
 
     void sse3_binary4_region_arithmetic::set_length(uint32_t length)
     {
-        base::set_length(length);
-        set_size(length_to_size<binary4>(length));
+        assert(length > 0);
+        assert((length % length_granularity()) == 0);
+
+        // We loop 16 bytes at-a-time so we calculate how many loops we need
+        m_sse3_size = length / length_granularity();
     }
 
-    void sse3_binary4_region_arithmetic::set_size(uint32_t size)
+    // void sse3_binary4_region_arithmetic::set_size(uint32_t size)
+    // {
+    //     assert(size > 0);
+    //     assert((size % 16) == 0);
+
+    //     base::set_size(size);
+
+    //     m_sse3_size = size / 16;
+    //     assert(m_sse3_size > 0);
+    // }
+
+    /// @return The granularity requirements for specifying a length
+    uint32_t sse3_binary4_region_arithmetic::length_granularity() const
     {
-        assert(size > 0);
-        assert((size % 16) == 0);
-
-        base::set_size(size);
-
-        m_sse3_size = size / 16;
-        assert(m_sse3_size > 0);
+        // We are working over 16 bytes at a time i.e. 128 bits so we
+        // require a length granularity of 16. We expect that binary4
+        // uses uint8_t as value_type
+        static_assert(std::is_same<value_type, uint8_t>::value,
+                      "Here we expect binary4 to use uint8_t as value_type");
+        return 16U;
     }
-
 
     bool sse3_binary4_region_arithmetic::has_sse3() const
     {
@@ -107,6 +124,12 @@ namespace fifi
     bool sse3_binary4_region_arithmetic::has_sse3() const
     {
         return false;
+    }
+
+
+    void sse3_binary4_region_arithmetic::set_length(uint32_t length)
+    {
+        assert(0);
     }
 
 

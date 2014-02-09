@@ -4,8 +4,18 @@
 
 from os.path import abspath
 
+bld.objects(source='sse3_binary4_region_arithmetic.cpp',
+            target='sse3_binary4_region_arithmetic',
+            cxxflags=['-mssse3'],
+            use = 'sak_includes')
+
+source_files = bld.path.ant_glob('**/*.cpp', excl=['sse3_binary4_region_arithmetic.cpp'])
+
+print source_files
+
 bld.stlib(features = 'cxx',
-          source   = bld.path.ant_glob('**/*.cpp'),
+          source   = source_files,
           target = 'fifi',
-          use    = ['boost_includes', 'sak_includes', 'sak'],
+          use    = ['boost_includes', 'sak_includes', 'sak',
+                    'sse3_binary4_region_arithmetic'],
           export_includes = ['..'])

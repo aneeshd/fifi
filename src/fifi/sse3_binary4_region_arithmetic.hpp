@@ -40,7 +40,7 @@ namespace fifi
         bool has_sse3() const;
 
         void set_length(uint32_t length);
-        void set_size(uint32_t size);
+        uint32_t length_granularity() const;
 
     private:
 
