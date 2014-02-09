@@ -18,6 +18,10 @@
 #include <fifi/fifi_utils.hpp>
 #include <fifi/prime2325.hpp>
 
+#include <fifi/simple_online.hpp>
+
+#include "helper_region_reference.hpp"
+
 // The expected result of an arithmetic operation
 // e.g. result == operation(arg1, arg2).
 // Where operation can be add, subtract, multiply
@@ -162,6 +166,9 @@ inline void check_results_region_ptr_const(
     uint32_t length = fifi::elements_to_length<field_type>(elements);
 
     FieldImpl field;
+
+
+
     field.set_length(length);
 
     std::vector<value_type> data(length);
@@ -194,6 +201,88 @@ inline void check_results_region_ptr_const(
         }
     }
 }
+
+
+
+
+/// This function checks whether the region arithmetics for the
+/// dest[i] = dest[i] OPERATION constant function works. Where
+/// OPERATION can be addition, subtraction, multiplication or
+/// division.
+///
+/// @tparam Field The finite field that we are working in
+/// @tparam FunctionPacked This function implements the packed version
+///  of the operation this gives us a reference to the the region function
+/// @tparam FunctionRegion This function invokes the region version of the
+///  operation
+///
+/// @param packed_arithmetic The packed arithmetic function used to
+/// compute expected results
+/// @param region_arithmetic The region arithmetic function used to compute
+/// the expected region results
+/// @param elements The number of field elements in the region we will compute
+template
+<
+    class TestImpl, class ReferenceImpl,
+    class TestFunction, class ReferenceFunction
+>
+inline void check_results_region_ptr_const_NEW(
+    TestFunction test_arithmetic,
+    ReferenceFunction reference_arithmetic,
+    uint32_t length)
+{
+    typedef TestImpl test_impl;
+    typedef ReferenceImpl reference_impl;
+
+    typedef typename test_impl::field_type test_field;
+    typedef typename reference_impl::field_type reference_field;
+
+    static_assert(std::is_same<test_field, reference_field>::value,
+                  "Reference and field under test must use same field");
+
+    // Create the stack under test and the reference stack
+    test_impl test;
+    test.set_length(length);
+
+    reference_impl reference;
+    reference.set_length(length);
+
+    typedef typename test_field::value_type value_type;
+
+    // Create a random input vector to perform the chosen operation on
+    uint32_t elements = fifi::length_to_elements<test_field>(length);
+    assert(length > 0);
+
+    std::vector<value_type> data(length);
+
+    for (uint32_t i = 0; i < elements; ++i)
+    {
+        fifi::set_value<test_field>(data.data(), i, rand() % test_field::order);
+    }
+
+    // We repeat the test a number of times with different constants
+    uint32_t tests = 10;
+
+    for (uint32_t i = 0; i < tests; ++i)
+    {
+        // Get the constant to multiply with
+        value_type constant = fifi::pack<test_field>(rand() % test_field::order);
+
+        SCOPED_TRACE(testing::Message() << "constant: " << constant);
+
+        // Create buffer and created the expected results using the reference
+        // arithmetics
+        std::vector<value_type> test_data = data;
+        std::vector<value_type> reference_data = data;
+
+        // Perform the calculations using the region arithmetics
+        reference_arithmetic(reference, reference_data.data(), constant);
+        test_arithmetic(test, test_data.data(), constant);
+
+        EXPECT_TRUE(reference_data == test_data);
+    }
+}
+
 
 template<class FieldImpl, class FunctionPacked, class FunctionRegion>
 inline void check_results_region_ptr_ptr_const(
@@ -432,14 +521,22 @@ inline void check_results_sum_modulo()
 // multiply constant
 //------------------------------------------------------------------
 
-template<class FieldImpl>
-inline void check_results_region_multiply_constant(uint32_t elements = 128)
+template<class TestImpl, class ReferenceImpl>
+inline void check_results_region_multiply_constant(uint32_t length = 128)
 {
-    check_results_region_ptr_const<FieldImpl>(
-        &FieldImpl::packed_multiply,
-        &FieldImpl::region_multiply_constant,
-        elements);
+    check_results_region_ptr_const_NEW<TestImpl, ReferenceImpl>(
+        std::mem_fn(&TestImpl::region_multiply_constant),
+        std::mem_fn(&ReferenceImpl::region_multiply_constant),
+        length);
 }
+
+template<class TestImpl>
+inline void check_results_region_multiply_constant(uint32_t length = 128)
+{
+    check_results_region_multiply_constant<TestImpl,
+        fifi::helper_region_reference<typename TestImpl::field_type>>(length);
+}
+
 
 //------------------------------------------------------------------
 // multiply add
