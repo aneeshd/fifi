@@ -25,6 +25,8 @@
 #include <fifi/binary16.hpp>
 #include <fifi/prime2325.hpp>
 
+#include "stacks.hpp"
+
 /// Benchmark fixture for the arithmetic benchmark
 template<class FieldImpl>
 class arithmetic_setup : public gauge::time_benchmark
@@ -272,7 +274,8 @@ public:
         {
             RUN
             {
-                value_type constant = rand() % field_type::max_value;
+                value_type constant =
+                    fifi::pack<field_type>(rand() % field_type::max_value);
 
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
@@ -284,7 +287,8 @@ public:
         {
             RUN
             {
-                value_type constant = rand() % field_type::max_value;
+                value_type constant =
+                    fifi::pack<field_type>(rand() % field_type::max_value);
 
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
@@ -490,6 +494,14 @@ typedef arithmetic_setup< fifi::optimal_prime<fifi::prime2325> >
     setup_optimal_prime2325;
 
 BENCHMARK_F(setup_optimal_prime2325, Arithmetic, OptimalPrime2325, 5)
+{
+    benchmark();
+}
+
+typedef arithmetic_setup< fifi::dispatch_sse3_binary4<fifi::binary4> >
+    setup_dispatch_sse3_binary4;
+
+BENCHMARK_F(setup_dispatch_sse3_binary4, Arithmetic, DispatchSSSE3Binary4, 5)
 {
     benchmark();
 }
