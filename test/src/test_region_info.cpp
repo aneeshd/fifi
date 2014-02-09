@@ -43,9 +43,6 @@ inline void test_region_info()
         stack.set_length(i);
         EXPECT_EQ(i, stack.length());
         EXPECT_EQ(fifi::length_to_size<Field>(i), stack.size());
-        stack.set_size(i);
-        EXPECT_EQ(i, stack.size());
-        EXPECT_EQ(fifi::size_to_length<Field>(i), stack.length());
     }
 }
 
