@@ -19,7 +19,7 @@
 std::vector<uint32_t> block_lengths()
 {
     std::vector<uint32_t> l;
-    for(uint32_t b = 1000; b < 3750000; b += 500000)
+    for (uint32_t b = 1000; b < 3750000; b += 500000)
     {
         l.push_back(b);
     }
@@ -45,27 +45,27 @@ class run_prime2325_bitmap : public gauge::time_benchmark
 public:
 
     run_prime2325_bitmap()
-        {
-            std::vector<uint32_t> lengths = block_lengths();
+    {
+        std::vector<uint32_t> lengths = block_lengths();
 
-            for(uint32_t i = 0; i < lengths.size(); ++i)
-            {
-                gauge::config_set cs;
-                cs.set_value<uint32_t>("block_length", lengths[i]);
-                add_configuration(cs);
-            }
+        for (uint32_t i = 0; i < lengths.size(); ++i)
+        {
+            gauge::config_set cs;
+            cs.set_value<uint32_t>("block_length", lengths[i]);
+            add_configuration(cs);
         }
+    }
 
     void setup()
-        {
-            gauge::config_set cs = get_current_configuration();
+    {
+        gauge::config_set cs = get_current_configuration();
 
-            uint32_t length = cs.get_value<uint32_t>("block_length");
+        uint32_t length = cs.get_value<uint32_t>("block_length");
 
-            m_block.resize(length);
-            for(uint32_t i = 0; i < length; ++i)
-                m_block[i] = rand();
-        }
+        m_block.resize(length);
+        for (uint32_t i = 0; i < length; ++i)
+            m_block[i] = rand();
+    }
 
     std::vector<uint32_t> m_block;
 };
@@ -81,7 +81,8 @@ BENCHMARK_F(run_prime2325_bitmap, Prime2325Bitmap, FindPrefix, 5)
 
     volatile uint32_t prefix = 0;
     // This is where the clock runs
-    RUN{
+    RUN
+    {
         prefix = bitmap_search.find_prefix(sak::storage(m_block));
     }
 
@@ -96,32 +97,32 @@ class run_prime2325_binary_search : public gauge::time_benchmark
 public:
 
     run_prime2325_binary_search()
-        {
-            std::vector<uint32_t> lengths = block_lengths();
-            std::vector<uint32_t> ks = k_values();
+    {
+        std::vector<uint32_t> lengths = block_lengths();
+        std::vector<uint32_t> ks = k_values();
 
-            for(uint32_t i = 0; i < lengths.size(); ++i)
+        for (uint32_t i = 0; i < lengths.size(); ++i)
+        {
+            for (uint32_t j = 0; j < ks.size(); ++j)
             {
-                for(uint32_t j = 0; j < ks.size(); ++j)
-                {
-                    gauge::config_set cs;
-                    cs.set_value<uint32_t>("block_length", lengths[i]);
-                    cs.set_value<uint32_t>("k", ks[j]);
-                    add_configuration(cs);
-                }
+                gauge::config_set cs;
+                cs.set_value<uint32_t>("block_length", lengths[i]);
+                cs.set_value<uint32_t>("k", ks[j]);
+                add_configuration(cs);
             }
         }
+    }
 
     void setup()
-        {
-            gauge::config_set cs = get_current_configuration();
+    {
+        gauge::config_set cs = get_current_configuration();
 
-            uint32_t length = cs.get_value<uint32_t>("block_length");
+        uint32_t length = cs.get_value<uint32_t>("block_length");
 
-            m_block.resize(length);
-            for(uint32_t i = 0; i < length; ++i)
-                m_block[i] = rand();
-        }
+        m_block.resize(length);
+        for (uint32_t i = 0; i < length; ++i)
+            m_block[i] = rand();
+    }
 
     std::vector<uint32_t> m_block;
 };
@@ -138,7 +139,8 @@ BENCHMARK_F(run_prime2325_binary_search, Prime2325BinarySearch, FindPrefix, 5)
 
     volatile uint32_t prefix = 0;
     // This is where the clock runs
-    RUN{
+    RUN
+    {
         prefix = search.find_prefix(sak::storage(m_block));
     }
 
@@ -154,5 +156,3 @@ int main(int argc, const char* argv[])
     gauge::runner::run_benchmarks(argc, argv);
     return 0;
 }
-
-
