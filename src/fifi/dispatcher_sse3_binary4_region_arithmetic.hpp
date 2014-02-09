@@ -7,8 +7,11 @@
 
 #include <cassert>
 #include <cstdint>
+#include <iostream>
+#include <functional>
 
 #include "is_packed_constant.hpp"
+#include "sse3_binary4_region_arithmetic.hpp"
 
 namespace fifi
 {
@@ -32,106 +35,79 @@ namespace fifi
         /// Typedef of the data type used for each field element
         typedef typename Super::value_type value_type;
 
-        /// We expect the value_type to be uint8_t
-        static_assert(std::is_same<field_type, uint8_t>::value,
-                      "We expect uint8_t as value_type in this specialization");
+        /// We expect the field to be binary4
+        static_assert(std::is_same<field_type, binary4>::value,
+                      "We expected the Super to use the binary4 field");
 
     public:
 
-        // binary4_sse_region_arithmetic()
-        // {
-        //     if(has_sse3 && Super::has_sse3())
-        //     {
-        //         m_multiply = &sse3_region_multiply_constant;
-        //     }
-        //     else
-        //     {
-        //         m_multiply = Super::region_multiply_constant;
+        dispatcher_binary4_sse3_region_arithmetic()
+        {
+            if(m_ssse3_binary4.has_sse3())
+            {
+                std::cout << "Has ssse3" << std::endl;
+            }
+            else
+            {
+                std::cout << "NO ssse3" << std::endl;
+            }
 
-        // void region_add(value_type* dest, const value_type* src) const
-        // {
-        //     assert(dest != 0);
-        //     assert(src  != 0);
-        //     assert(Super::length() > 0);
+        }
 
-        //     for(uint32_t i = 0; i < Super::length(); ++i)
-        //     {
-        //         dest[i] = Super::packed_add(dest[i], src[i]);
-        //     }
+        bool binary4_ssse3() const
+        {
+            return false;
+        }
 
-        // }
+        void region_multiply_constant(
+            value_type* dest, value_type constant) const
+        {
+            assert(dest != 0);
+            assert(Super::length() > 0);
+            assert(is_packed_constant<field_type>(constant));
 
-        // void region_subtract(value_type* dest, const value_type* src) const
-        // {
-        //     assert(dest != 0);
-        //     assert(src  != 0);
-        //     assert(Super::length() > 0);
-        //     for(uint32_t i = 0; i < Super::length(); ++i)
-        //     {
-        //         dest[i] = Super::packed_subtract(dest[i], src[i]);
-        //     }
-        // }
+            static auto dispatch = dispatch_region_multiply_constant();
 
-        // void region_divide(value_type* dest, const value_type* src) const
-        // {
-        //     assert(dest != 0);
-        //     assert(src  != 0);
-        //     assert(Super::length() > 0);
-        //     for(uint32_t i = 0; i < Super::length(); ++i)
-        //     {
-        //         dest[i] = Super::packed_divide(dest[i], src[i]);
-        //     }
-        // }
+            dispatch(dest, constant);
+        }
 
-        // void region_multiply(value_type* dest, const value_type* src) const
-        // {
-        //     assert(dest != 0);
-        //     assert(src  != 0);
-        //     assert(Super::length() > 0);
-        //     for(uint32_t i = 0; i < Super::length(); ++i)
-        //     {
-        //         dest[i] = Super::packed_multiply(dest[i], src[i]);
-        //     }
-        // }
+        void set_length(uint32_t length)
+        {
+            assert(length > 0);
+            m_ssse3_binary4.set_length(length);
+            Super::set_length(length);
+        }
 
-        // void region_multiply_constant(
-        //     value_type* dest, value_type constant) const
-        // {
-        //     assert(dest != 0);
-        //     assert(Super::length() > 0);
-        //     assert(is_packed_constant<field_type>(constant));
-        //     for(uint32_t i = 0; i < Super::length(); ++i)
-        //     {
-        //         dest[i] = Super::packed_multiply(dest[i], constant);
-        //     }
-        // }
+        uint32_t length_granularity() const
+        {
+            return std::max(m_ssse3_binary4.length_granularity(),
+                            Super::length_granularity());
+        }
 
-        // void region_multiply_add(value_type* dest, const value_type* src,
-        //                   value_type constant) const
-        // {
-        //     assert(dest != 0);
-        //     assert(src  != 0);
-        //     assert(Super::length() > 0);
-        //     assert(is_packed_constant<field_type>(constant));
-        //     for(uint32_t i = 0; i < Super::length(); ++i)
-        //     {
-        //         value_type v = Super::packed_multiply(src[i], constant);
-        //         dest[i] = Super::packed_add(dest[i], v);
-        //     }
-        // }
+    private:
 
-        // void region_multiply_subtract(value_type* dest, const value_type* src,
-        //                         value_type constant) const
-        // {
-        //     assert(dest != 0);
-        //     assert(src  != 0);
-        //     assert(Super::length() > 0);
-        //     assert(is_packed_constant<field_type>(constant));
-        //     for(uint32_t i = 0; i < Super::length(); ++i)
-        //     {
-        //         value_type v = Super::packed_multiply(src[i], constant);
-        //         dest[i] = Super::packed_subtract(dest[i], v);
-        //     }
-        // }
+        std::function<void (value_type*, value_type)>
+        dispatch_region_multiply_constant() const
+        {
+            using namespace std::placeholders;  // for _1, _2, _3...
+
+            std::cout << "DISPATCH" << std::endl;
+
+            if(m_ssse3_binary4.has_sse3())
+            {
+                return std::bind(&sse3_binary4_region_arithmetic::region_multiply_constant,
+                          &m_ssse3_binary4, _1, _2);
+            }
+            else
+            {
+                return std::bind(&Super::region_multiply_constant, (Super*)this, _1, _2);
+            }
+        }
+
+
+    private:
+
+        sse3_binary4_region_arithmetic m_ssse3_binary4;
+
     };
 }
