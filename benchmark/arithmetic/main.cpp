@@ -3,12 +3,12 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#include <cstdint>
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <ctime>
 #include <cmath>
-#include <stdexcept>
 
 #include <gauge/gauge.hpp>
 #include <gauge/console_printer.hpp>
@@ -42,12 +42,41 @@ public:
 
 public:
 
+    double measurement()
+    {
+        // Get the time spent per iteration
+        double time = gauge::time_benchmark::measurement();
+
+        gauge::config_set cs = get_current_configuration();
+
+        uint32_t size = cs.get_value<uint32_t>("vector_size");
+        uint32_t vectors = cs.get_value<uint32_t>("vectors");
+
+        // The number of bytes processed per iteration
+        uint64_t bytes = size * vectors;
+
+        return bytes / time; // MB/s for each iteration
+    }
+
+    void store_run(tables::table& results)
+    {
+        if(!results.has_column("throughput"))
+            results.add_column("throughput");
+
+        results.set_value("throughput", measurement());
+    }
+
+    std::string unit_text() const
+    {
+        return "MB/s";
+    }
+
     void get_options(gauge::po::variables_map& options)
     {
-        auto sizes = options["size"].as<std::vector<uint32_t> >();
-        auto vectors = options["vectors"].as<std::vector<uint32_t> >();
-        auto operations =options["operations"].as<std::vector<std::string> >();
-        auto access = options["access"].as<std::vector<std::string> >();
+        auto sizes = options["size"].as<std::vector<uint32_t>>();
+        auto vectors = options["vectors"].as<std::vector<uint32_t>>();
+        auto operations = options["operations"].as<std::vector<std::string>>();
+        auto access = options["access"].as<std::vector<std::string>>();
 
         // We make one pool with random data as source for the
         // computations
@@ -68,7 +97,7 @@ public:
             m_random_symbols_one[j].resize(max_length);
             m_random_symbols_two[j].resize(max_length);
 
-            for(uint32_t i = 0; i < max_length; ++i)
+            for (uint32_t i = 0; i < max_length; ++i)
             {
                 m_random_symbols_one[j][i] = rand();
                 m_random_symbols_two[j][i] = rand();
@@ -80,13 +109,13 @@ public:
         assert(operations.size() > 0);
         assert(access.size() > 0);
 
-        for(const auto& s : sizes)
+        for (const auto& s : sizes)
         {
-            for(const auto& v : vectors)
+            for (const auto& v : vectors)
             {
-                for(const auto& o : operations)
+                for (const auto& o : operations)
                 {
-                    for(const auto& a : access)
+                    for (const auto& a : access)
                     {
                         gauge::config_set cs;
                         cs.set_value<uint32_t>("vector_size", s);
@@ -118,64 +147,62 @@ public:
         uint32_t length = cs.get_value<uint32_t>("vector_length");
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
 
-        if(vectors != m_symbols_one.size())
+        if (vectors != m_symbols_one.size())
         {
             m_symbols_one.resize(vectors);
             m_symbols_two.resize(vectors);
         }
 
-        for(uint32_t j = 0; j < vectors; ++j)
+        for (uint32_t j = 0; j < vectors; ++j)
         {
-            if(length != m_symbols_one[j].size())
+            if (length != m_symbols_one[j].size())
             {
                 m_symbols_one[j].resize(length);
                 m_symbols_two[j].resize(length);
             }
 
-            std::copy_n(&m_random_symbols_one[j][0],
-                        length,
+            std::copy_n(&m_random_symbols_one[j][0], length,
                         &m_symbols_one[j][0]);
 
-            std::copy_n(&m_random_symbols_two[j][0],
-                        length,
+            std::copy_n(&m_random_symbols_two[j][0], length,
                         &m_symbols_two[j][0]);
         }
-
     }
 
     /// Tests the dest[i] = dest[i] OP src[i] functions
     template<class Function>
-    void run_binary(Function f)
+    void run_binary(Function function)
     {
         gauge::config_set cs = get_current_configuration();
         uint32_t length = cs.get_value<uint32_t>("vector_length");
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
         std::string data_access = cs.get_value<std::string>("data_access");
+
         m_field.set_length(length);
         if(data_access == "linear")
         {
-            RUN{
+            RUN
+            {
                 for(uint32_t i = 0; i < vectors; ++i)
                 {
-                    (m_field.*f)(
+                    (m_field.*function)(
                         &(m_symbols_one[i][0]),
                         &(m_symbols_two[i][0]));
                 }
-
             }
         }
-        else if(data_access == "random")
+        else if (data_access == "random")
         {
-            RUN{
-                for(uint32_t i = 0; i < vectors; ++i)
+            RUN
+            {
+                for (uint32_t i = 0; i < vectors; ++i)
                 {
                     uint32_t index_one = rand() % vectors;
                     uint32_t index_two = rand() % vectors;
 
-                    (m_field.*f)(&(m_symbols_one[index_one][0]),
+                    (m_field.*function)(&(m_symbols_one[index_one][0]),
                       &(m_symbols_two[index_two][0]));
                 }
-
             }
         }
         else
@@ -186,40 +213,41 @@ public:
 
     /// Tests the dest[i] = dest[i] OP (src[i] * constant) functions
     template<class Function>
-    void run_binary_constant(Function f)
+    void run_binary_constant(Function function)
     {
         gauge::config_set cs = get_current_configuration();
         uint32_t length = cs.get_value<uint32_t>("vector_length");
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
         std::string data_access = cs.get_value<std::string>("data_access");
+
         m_field.set_length(length);
         if(data_access == "linear")
         {
             // Clock is ticking
-            RUN{
-
+            RUN
+            {
                 value_type constant = rand() % field_type::max_value;
 
                 for(uint32_t i = 0; i < vectors; ++i)
                 {
-                    (m_field.*f)(&(m_symbols_one[i][0]),
+                    (m_field.*function)(&(m_symbols_one[i][0]),
                       &(m_symbols_two[i][0]), constant);
                 }
             }
         }
-        else if(data_access == "random")
+        else if (data_access == "random")
         {
             // Clock is ticking
-            RUN{
-
+            RUN
+            {
                 value_type constant = rand() % field_type::max_value;
 
-                for(uint32_t i = 0; i < vectors; ++i)
+                for (uint32_t i = 0; i < vectors; ++i)
                 {
                     uint32_t index_one = rand() % vectors;
                     uint32_t index_two = rand() % vectors;
 
-                    (m_field.*f)(&(m_symbols_one[index_one][0]),
+                    (m_field.*function)(&(m_symbols_one[index_one][0]),
                       &(m_symbols_two[index_two][0]), constant);
                 }
             }
@@ -232,40 +260,39 @@ public:
 
     /// Tests the dest[i] = dest[i] * constant functions
     template<class Function>
-    void run_unary_constant(Function f)
+    void run_unary_constant(Function function)
     {
         gauge::config_set cs = get_current_configuration();
         uint32_t length = cs.get_value<uint32_t>("vector_length");
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
         std::string data_access = cs.get_value<std::string>("data_access");
+
         m_field.set_length(length);
         if(data_access == "linear")
         {
-
-            RUN{
-
+            RUN
+            {
                 value_type constant = rand() % field_type::max_value;
 
-                for(uint32_t i = 0; i < vectors; ++i)
+                for (uint32_t i = 0; i < vectors; ++i)
                 {
-                    (m_field.*f)(&(m_symbols_one[i][0]), constant);
+                    (m_field.*function)(&(m_symbols_one[i][0]), constant);
                 }
             }
         }
-        else if(data_access == "random")
+        else if (data_access == "random")
         {
-            RUN{
-
+            RUN
+            {
                 value_type constant = rand() % field_type::max_value;
 
-                for(uint32_t i = 0; i < vectors; ++i)
+                for (uint32_t i = 0; i < vectors; ++i)
                 {
                     uint32_t index = rand() % vectors;
 
-                    (m_field.*f)(&(m_symbols_one[index][0]), constant);
+                    (m_field.*function)(&(m_symbols_one[index][0]), constant);
                 }
             }
-
         }
         else
         {
@@ -279,28 +306,34 @@ public:
         gauge::config_set cs = get_current_configuration();
         std::string operation = cs.get_value<std::string>("operation");
 
-        if(operation == "dest[i] = dest[i] + src[i]")
+        if (operation == "add")
         {
+            // dest[i] = dest[i] + src[i]
             run_binary(&field_impl::region_add);
         }
-        else if(operation == "dest[i] = dest[i] - src[i]")
+        else if (operation == "subtract")
         {
+            // dest[i] = dest[i] - src[i]
             run_binary(&field_impl::region_subtract);
         }
-        else if(operation == "dest[i] = dest[i] * src[i]")
+        else if (operation == "multiply")
         {
+            // dest[i] = dest[i] * src[i]
             run_binary(&field_impl::region_multiply);
         }
-        else if(operation == "dest[i] = dest[i] + (constant * src[i])")
+        else if (operation == "multiply_add")
         {
+            // dest[i] = dest[i] + (constant * src[i])
             run_binary_constant(&field_impl::region_multiply_add);
         }
-        else if(operation == "dest[i] = dest[i] - (constant * src[i])")
+        else if (operation == "multiply_subtract")
         {
+            // dest[i] = dest[i] - (constant * src[i])
             run_binary_constant(&field_impl::region_multiply_subtract);
         }
-        else if(operation == "dest[i] = dest[i] * constant")
+        else if (operation == "multiply_constant")
         {
+            // dest[i] = dest[i] * constant
             run_unary_constant(&field_impl::region_multiply_constant);
         }
         else
@@ -340,7 +373,7 @@ BENCHMARK_OPTION(arithmetic_options)
     size.push_back(2000);
 
     auto default_size =
-        gauge::po::value<std::vector<uint32_t> >()->default_value(
+        gauge::po::value<std::vector<uint32_t>>()->default_value(
             size, "")->multitoken();
 
     std::vector<uint32_t> vectors;
@@ -350,16 +383,16 @@ BENCHMARK_OPTION(arithmetic_options)
     vectors.push_back(512);
 
     auto default_vectors =
-        gauge::po::value<std::vector<uint32_t> >()->default_value(
+        gauge::po::value<std::vector<uint32_t>>()->default_value(
             vectors, "")->multitoken();
 
     std::vector<std::string> operations;
-    operations.push_back("dest[i] = dest[i] + src[i]");
-    operations.push_back("dest[i] = dest[i] - src[i]");
-    operations.push_back("dest[i] = dest[i] * src[i]");
-    operations.push_back("dest[i] = dest[i] + (constant * src[i])");
-    operations.push_back("dest[i] = dest[i] - (constant * src[i])");
-    operations.push_back("dest[i] = dest[i] * constant");
+    operations.push_back("add");
+    operations.push_back("subtract");
+    operations.push_back("multiply");
+    operations.push_back("multiply_add");
+    operations.push_back("multiply_subtract");
+    operations.push_back("multiply_constant");
 
     auto default_operations =
         gauge::po::value<std::vector<std::string> >()->default_value(
@@ -377,15 +410,14 @@ BENCHMARK_OPTION(arithmetic_options)
         ("size", default_size, "Set the size of a vector in bytes");
 
     options.add_options()
-        ("vectors", default_vectors, "Set the number of vectors to "
-         "perform the operations on");
+        ("vectors", default_vectors,
+         "Set the number of vectors to perform the operations on");
 
     options.add_options()
         ("operations", default_operations, "Set operations type");
 
     options.add_options()
         ("access", default_access, "Set the data access pattern");
-
 
     gauge::runner::instance().register_options(options);
 }
@@ -399,7 +431,7 @@ BENCHMARK_OPTION(arithmetic_options)
 // }
 
 typedef arithmetic_setup< fifi::simple_online<fifi::binary8> >
-setup_simple_online_binary8;
+    setup_simple_online_binary8;
 
 BENCHMARK_F(setup_simple_online_binary8, Arithmetic, SimpleOnline8, 5)
 {
@@ -407,7 +439,7 @@ BENCHMARK_F(setup_simple_online_binary8, Arithmetic, SimpleOnline8, 5)
 }
 
 typedef arithmetic_setup< fifi::simple_online<fifi::binary16> >
-setup_simple_online_binary16;
+    setup_simple_online_binary16;
 
 BENCHMARK_F(setup_simple_online_binary16, Arithmetic, SimpleOnline16, 5)
 {
@@ -415,7 +447,7 @@ BENCHMARK_F(setup_simple_online_binary16, Arithmetic, SimpleOnline16, 5)
 }
 
 typedef arithmetic_setup< fifi::full_table<fifi::binary8> >
-setup_full_table_binary8;
+    setup_full_table_binary8;
 
 BENCHMARK_F(setup_full_table_binary8, Arithmetic, FullTable8, 5)
 {
@@ -423,7 +455,7 @@ BENCHMARK_F(setup_full_table_binary8, Arithmetic, FullTable8, 5)
 }
 
 typedef arithmetic_setup< fifi::log_table<fifi::binary8> >
-setup_log_table_binary8;
+    setup_log_table_binary8;
 
 BENCHMARK_F(setup_log_table_binary8, Arithmetic, LogTable8, 5)
 {
@@ -431,7 +463,7 @@ BENCHMARK_F(setup_log_table_binary8, Arithmetic, LogTable8, 5)
 }
 
 typedef arithmetic_setup< fifi::log_table<fifi::binary16> >
-setup_log_table_binary16;
+    setup_log_table_binary16;
 
 BENCHMARK_F(setup_log_table_binary16, Arithmetic, LogTable16, 5)
 {
@@ -439,25 +471,23 @@ BENCHMARK_F(setup_log_table_binary16, Arithmetic, LogTable16, 5)
 }
 
 typedef arithmetic_setup< fifi::extended_log_table<fifi::binary8> >
-setup_extended_log_table_binary8;
+    setup_extended_log_table_binary8;
 
 BENCHMARK_F(setup_extended_log_table_binary8, Arithmetic, ExtendedLogTable8, 5)
 {
     benchmark();
 }
 
-
 typedef arithmetic_setup< fifi::extended_log_table<fifi::binary16> >
-setup_extended_log_table_binary16;
+    setup_extended_log_table_binary16;
 
 BENCHMARK_F(setup_extended_log_table_binary16, Arithmetic, ExtendedLogTable16, 5)
 {
     benchmark();
 }
 
-
 typedef arithmetic_setup< fifi::optimal_prime<fifi::prime2325> >
-setup_optimal_prime2325;
+    setup_optimal_prime2325;
 
 BENCHMARK_F(setup_optimal_prime2325, Arithmetic, OptimalPrime2325, 5)
 {
@@ -466,7 +496,6 @@ BENCHMARK_F(setup_optimal_prime2325, Arithmetic, OptimalPrime2325, 5)
 
 int main(int argc, const char* argv[])
 {
-
     srand(static_cast<uint32_t>(time(0)));
 
     gauge::runner::add_default_printers();
@@ -475,4 +504,3 @@ int main(int argc, const char* argv[])
 
     return 0;
 }
-

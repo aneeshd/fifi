@@ -41,8 +41,9 @@ void multiply_loop(const Field &field,
                    const typename Field::value_type *pb,
                    uint64_t elements)
 {
-    RUN{
-        for(uint64_t i = 0; i < elements; ++i)
+    RUN
+    {
+        for (uint64_t i = 0; i < elements; ++i)
         {
             pr[i] = field.multiply(pa[i], pb[i]);
         }
@@ -56,8 +57,9 @@ void divide_loop(const Field &field,
                  const typename Field::value_type *pb,
                  uint64_t elements)
 {
-    RUN{
-        for(uint64_t i = 0; i < elements; ++i)
+    RUN
+    {
+        for (uint64_t i = 0; i < elements; ++i)
         {
             pr[i] = field.divide(pa[i], pb[i]);
         }
@@ -71,8 +73,9 @@ void add_loop(const Field &field,
               const typename Field::value_type *pb,
               uint64_t elements)
 {
-    RUN{
-        for(uint64_t i = 0; i < elements; ++i)
+    RUN
+    {
+        for (uint64_t i = 0; i < elements; ++i)
         {
             pr[i] = field.add(pa[i], pb[i]);
         }
@@ -86,8 +89,9 @@ void subtract_loop(const Field &field,
                    const typename Field::value_type *pb,
                    uint64_t elements)
 {
-    RUN{
-        for(uint64_t i = 0; i < elements; ++i)
+    RUN
+    {
+        for (uint64_t i = 0; i < elements; ++i)
         {
             pr[i] = field.subtract(pa[i], pb[i]);
         }
@@ -107,100 +111,98 @@ public:
 public:
 
     basic_operations_setup()
-        {
-            std::vector<uint32_t> lengths = setup_lengths();
-            //std::vector<std::string> operations = setup_operations();
+    {
+        std::vector<uint32_t> lengths = setup_lengths();
+        //std::vector<std::string> operations = setup_operations();
 
-            for(uint32_t i = 0; i < lengths.size(); ++i)
-            {
-//                for(uint32_t k = 0; k < operations.size(); ++k)
-//                {
-                    gauge::config_set cs;
-                    cs.set_value<uint32_t>("vector_length", lengths[i]);
-                    //                  cs.set_value<std::string>("operation", operations[k]);
-                    cs.set_value<uint32_t>("element_size", sizeof(value_type));
-                    add_configuration(cs);
-                    //    }
-            }
+        for (uint32_t i = 0; i < lengths.size(); ++i)
+        {
+            //for(uint32_t k = 0; k < operations.size(); ++k)
+            //{
+            gauge::config_set cs;
+            cs.set_value<uint32_t>("vector_length", lengths[i]);
+            //  cs.set_value<std::string>("operation", operations[k]);
+            cs.set_value<uint32_t>("element_size", sizeof(value_type));
+            add_configuration(cs);
+            //}
         }
+    }
 
     void setup()
+    {
+        gauge::config_set cs = get_current_configuration();
+
+        uint32_t length = cs.get_value<uint32_t>("vector_length");
+
+        m_results.resize(length);
+        m_symbols_one.resize(length);
+        m_symbols_two.resize(length);
+        m_symbols_two_nonzero.resize(length);
+
+        for (uint32_t i = 0; i < length; ++i)
         {
-            gauge::config_set cs = get_current_configuration();
+            value_type s1 = rand() %
+                std::numeric_limits<value_type>::max();
 
-            uint32_t length = cs.get_value<uint32_t>("vector_length");
+            value_type s2 = rand() %
+                std::numeric_limits<value_type>::max();
 
-            m_results.resize(length);
-            m_symbols_one.resize(length);
-            m_symbols_two.resize(length);
-            m_symbols_two_nonzero.resize(length);
+            value_type s3 = rand() %
+                (std::numeric_limits<value_type>::max() - 1);
 
-            for(uint32_t i = 0; i < length; ++i)
-            {
-                value_type s1 = rand() %
-                    std::numeric_limits<value_type>::max();
-
-                value_type s2 = rand() %
-                    std::numeric_limits<value_type>::max();
-
-                value_type s3 = rand() %
-                    (std::numeric_limits<value_type>::max() - 1);
-
-
-                m_symbols_one[i] = s1;
-                m_symbols_two[i] = s2;
-                m_symbols_two_nonzero[i] = s3 + 1;
-            }
-
+            m_symbols_one[i] = s1;
+            m_symbols_two[i] = s2;
+            m_symbols_two_nonzero[i] = s3 + 1;
         }
+    }
 
     void run_multiply()
-        {
-            gauge::config_set cs = get_current_configuration();
-            uint32_t length = cs.get_value<uint32_t>("vector_length");
+    {
+        gauge::config_set cs = get_current_configuration();
+        uint32_t length = cs.get_value<uint32_t>("vector_length");
 
-            multiply_loop(m_field,
-                          &m_results[0],
-                          &m_symbols_one[0],
-                          &m_symbols_two[0],
-                          length);
-        }
+        multiply_loop(m_field,
+            &m_results[0],
+            &m_symbols_one[0],
+            &m_symbols_two[0],
+            length);
+    }
 
     void run_divide()
-        {
-            gauge::config_set cs = get_current_configuration();
-            uint32_t length = cs.get_value<uint32_t>("vector_length");
+    {
+        gauge::config_set cs = get_current_configuration();
+        uint32_t length = cs.get_value<uint32_t>("vector_length");
 
-            divide_loop(m_field,
-                        &m_results[0],
-                        &m_symbols_one[0],
-                        &m_symbols_two_nonzero[0],
-                        length);
-        }
+        divide_loop(m_field,
+            &m_results[0],
+            &m_symbols_one[0],
+            &m_symbols_two_nonzero[0],
+            length);
+    }
 
     void run_add()
-        {
-            gauge::config_set cs = get_current_configuration();
-            uint32_t length = cs.get_value<uint32_t>("vector_length");
+    {
+        gauge::config_set cs = get_current_configuration();
+        uint32_t length = cs.get_value<uint32_t>("vector_length");
 
-            add_loop(m_field,
-                     &m_results[0],
-                     &m_symbols_one[0],
-                     &m_symbols_two[0],
-                     length);
-        }
+        add_loop(m_field,
+            &m_results[0],
+            &m_symbols_one[0],
+            &m_symbols_two[0],
+            length);
+    }
 
     void run_subtract()
-        {
-            gauge::config_set cs = get_current_configuration();
-            uint32_t length = cs.get_value<uint32_t>("vector_length");
+    {
+        gauge::config_set cs = get_current_configuration();
+        uint32_t length = cs.get_value<uint32_t>("vector_length");
 
-            subtract_loop(m_field,
-                          &m_results[0],
-                          &m_symbols_one[0],
-                          &m_symbols_two[0],
-                          length);
-        }
+        subtract_loop(m_field,
+            &m_results[0],
+            &m_symbols_one[0],
+            &m_symbols_two[0],
+            length);
+    }
 
 protected:
 
@@ -416,4 +418,3 @@ int main(int argc, const char* argv[])
 
     return 0;
 }
-
