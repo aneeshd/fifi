@@ -16,7 +16,7 @@ namespace fifi
 {
     /// Performs region arithmetic in parallel.
     template<class Super>
-    class region_arithmetic_multithreading : public Super
+    class multithreading_region_arithmetic : public Super
     {
     public:
 
@@ -29,8 +29,8 @@ namespace fifi
     public:
 
         multithreading_region_arithmetic() :
-            m_length(1),
-            m_threads(1)
+            m_threads(1),
+            m_length(1)
         { }
 
         uint32_t threads() const
@@ -51,11 +51,11 @@ namespace fifi
         void set_length(uint32_t length)
         {
             assert(length > 0);
-            assert((length % threads()) == 0);
+            assert((length % m_threads) == 0);
 
             m_length = length;
 
-            Super::set_length(length / threads());
+            Super::set_length(length / m_threads);
         }
 
         uint32_t length() const
@@ -63,116 +63,106 @@ namespace fifi
             return m_length;
         }
 
-        uint32_t slice() const
-        {
-            return Super::length();
-        }
-
         void region_add(value_type* dest, const value_type* src) const
         {
-            binary_parallel(*this, &Super::region_add, dest, src);
+            binary_parallel(&Super::region_add, dest, src);
         }
 
         void region_subtract(value_type* dest, const value_type* src) const
         {
-            binary_parallel(*this, &Super::region_subtract, dest, src);
+            binary_parallel(&Super::region_subtract, dest, src);
         }
 
         void region_divide(value_type* dest, const value_type* src) const
         {
-            binary_parallel(*this, &Super::region_divide, dest, src);
+            binary_parallel(&Super::region_divide, dest, src);
         }
 
         void region_multiply(value_type* dest, const value_type* src) const
         {
-            binary_parallel(*this, &Super::region_multiply, dest, src);
+            binary_parallel(&Super::region_multiply, dest, src);
         }
 
         void region_multiply_constant(value_type* dest,
                                       value_type constant) const
         {
-            binary_const_parallel(*this, &Super::region_multiply_constant, dest,
+            binary_const_parallel(&Super::region_multiply_constant, dest,
                                   constant);
         }
 
-        void region_multiply_add(value_type* dest,
-                                           const value_type* src,
-                                           value_type constant) const
+        void region_multiply_add(value_type* dest, const value_type* src,
+                                 value_type constant) const
         {
-            binary_ptr_ptr_const_parallel(*this, &Super::region_multiply_add, dest, src,
-                            constant);
+            binary_ptr_ptr_const_parallel(&Super::region_multiply_add, dest,
+                                          src, constant);
         }
 
         void region_multiply_subtract(value_type* dest, const value_type* src,
-                                value_type constant) const
+                                      value_type constant) const
         {
-            binary_ptr_ptr_const_parallel(*this, &Super::region_multiply_subtract, dest, src,
-                            constant);
+            binary_ptr_ptr_const_parallel(&Super::region_multiply_subtract,
+                                          dest, src, constant);
+        }
+
+    private:
+
+        template<class Function>
+        void binary_parallel(Function function, value_type* dest,
+                             const value_type* src) const
+        {
+            std::vector<boost::thread> threads;
+            for (uint32_t i = 0; i < m_threads; ++i)
+            {
+                threads.push_back(boost::thread(
+                    boost::bind(function, *this, dest+(i*Super::length()),
+                                src+(i*Super::length()))
+                ));
+            }
+
+            for(auto& thread : threads){
+                thread.join();
+            }
+        }
+
+        template<class Function>
+        void binary_const_parallel(Function function, value_type* dest,
+                                   value_type constant) const
+        {
+            std::vector<boost::thread> threads;
+            for (uint32_t i = 0; i < m_threads; ++i)
+            {
+                threads.push_back(boost::thread(
+                    boost::bind(function, *this, dest+(i*Super::length()), constant)
+                ));
+            }
+
+            for(auto& thread : threads){
+                thread.join();
+            }
+        }
+
+        template<class Function>
+        void binary_ptr_ptr_const_parallel(Function function, value_type* dest,
+                                           const value_type* src,
+                                           value_type constant) const
+        {
+            std::vector<boost::thread> threads;
+            for (uint32_t i = 0; i < m_threads; ++i)
+            {
+                threads.push_back(boost::thread(
+                    boost::bind(function, *this, dest+(i*Super::length()),
+                                src+(i*Super::length()), constant)
+                ));
+            }
+
+            for(auto& thread : threads){
+                thread.join();
+            }
         }
 
     protected:
 
-        boost::threadpool::fifo_pool m_pool;
+        uint32_t m_threads;
         uint32_t m_length;
     };
-
-    template<class Function, class FieldImpl>
-    inline void binary_parallel(FieldImpl field,
-                                Function func,
-                                typename FieldImpl::value_type* dest,
-                                const typename FieldImpl::value_type* src)
-    {
-        std::vector<boost::thread> threads;
-        for (uint32_t i = 0; i < field.threads(); ++i)
-        {
-            threads.push_back(boost::thread(
-                boost::bind(func, field, dest+(i*field.slice()),
-                            src+(i*field.slice()))
-            ));
-        }
-
-        for(auto& thread : threads){
-            thread.join();
-        }
-    }
-
-    template<class Function, class FieldImpl>
-    inline void binary_const_parallel(FieldImpl field,
-                                Function func,
-                                typename FieldImpl::value_type* dest,
-                                const typename FieldImpl::value_type constant)
-    {
-        std::vector<boost::thread> threads;
-        for (uint32_t i = 0; i < field.threads(); ++i)
-        {
-            threads.push_back(boost::thread(
-                boost::bind(func, field, dest+(i*field.slice()), constant)
-            ));
-        }
-
-        for(auto& thread : threads){
-            thread.join();
-        }
-    }
-
-    template<class Function, class FieldImpl>
-    inline void binary_ptr_ptr_const_parallel(FieldImpl field,
-                                Function func,
-                                typename FieldImpl::value_type* dest,
-                                const typename FieldImpl::value_type* src,
-                                const typename FieldImpl::value_type constant)
-    {
-        std::vector<boost::thread> threads;
-        for (uint32_t i = 0; i < field.threads(); ++i)
-        {
-            threads.push_back(boost::thread(
-                boost::bind(func, field, dest+(i*field.slice()),
-                            src+(i*field.slice()), constant)
-            ));
-        }
-
-        for(auto& thread : threads){
-            thread.join();
-        }
-    }
 }
