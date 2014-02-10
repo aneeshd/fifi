@@ -7,9 +7,12 @@
 
 #include <cassert>
 #include <cstdint>
+#include <iostream>
 #include <vector>
 
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread.hpp>
+
 #include "is_packed_constant.hpp"
 
 namespace fifi
@@ -41,11 +44,11 @@ namespace fifi
         void set_threads(uint32_t threads)
         {
             assert(threads > 0);
-            assert((length() % threads) == 0);
+            assert((length % threads) == 0);
 
             m_threads = threads;
 
-            Super::set_length(length() / threads);
+            Super::set_length(length / threads);
         }
 
         void set_length(uint32_t length)
@@ -106,6 +109,43 @@ namespace fifi
 
     private:
 
+        void worker() const
+        {
+            bool initial = true;
+
+            while(1)
+            {
+                {
+                    boost::unique_lock<boost::mutex> lock( coordination );
+                    std::cout << "Waiting for work " << boost::this_thread::get_id()
+                              << std::endl;
+
+                    if(initial)
+                    {
+                        ++m_workers_ready;
+                        initial = false;
+                    }
+
+                    work_start.wait(lock);
+
+                    std::cout << "Work starting " << boost::this_thread::get_id()
+                              << std::endl;
+                }
+
+                while (!m_queue.empty())
+                {
+                    m_queue.back()();
+                    m_queue.pop_back();
+                }
+
+                boost::this_thread::sleep(boost::posix_time::milliseconds(time));
+
+                --m_workers_active;
+                if(m_workers_active == 0)
+                    work_done.notify_one();
+            }
+        }
+
         template<class Function>
         void binary_parallel(Function function, value_type* dest,
                              const value_type* src) const
@@ -161,6 +201,8 @@ namespace fifi
         }
 
     protected:
+
+        std::vector<boost::function<void()> > m_queue;
 
         uint32_t m_threads;
         uint32_t m_length;
