@@ -6,7 +6,7 @@
 #pragma once
 
 #include "binary4_packed_arithmetic.hpp"
-#include "binary8_region_arithmetic_full_table.hpp"
+#include "binary8_full_table_region_arithmetic.hpp"
 #include "final.hpp"
 #include "full_table_arithmetic.hpp"
 #include "packed_arithmetic.hpp"
@@ -22,7 +22,7 @@ namespace fifi
     /// the multiplication and division operations.
     template<class Field>
     class full_table :
-        public binary8_region_arithmetic_full_table<Field,
+        public binary8_full_table_region_arithmetic<Field,
                region_arithmetic<
                region_info<Field,
                binary4_packed_arithmetic<Field,

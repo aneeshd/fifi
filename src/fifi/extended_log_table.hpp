@@ -11,7 +11,6 @@
 #include "packed_arithmetic.hpp"
 #include "polynomial_degree.hpp"
 #include "region_arithmetic.hpp"
-#include "region_arithmetic_multithreading.hpp"
 #include "region_info.hpp"
 #include "simple_online_arithmetic.hpp"
 
@@ -20,15 +19,14 @@ namespace fifi
 
     template<class Field>
     class extended_log_table :
-        public region_arithmetic_multithreading<
-               region_arithmetic<
+        public region_arithmetic<
                region_info<Field,
                binary4_packed_arithmetic<Field,
                packed_arithmetic<
                extended_log_table_arithmetic<
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > > > >
+               final<Field> > > > > > > >
     { };
 
 }

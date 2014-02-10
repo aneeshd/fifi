@@ -5,7 +5,7 @@
 
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
-#include <fifi/binary8_region_arithmetic_full_table.hpp>
+#include <fifi/binary8_full_table_region_arithmetic.hpp>
 #include <fifi/final.hpp>
 #include <fifi/full_table_arithmetic.hpp>
 #include <fifi/packed_arithmetic.hpp>
@@ -26,7 +26,7 @@ namespace fifi
     {
         template<class Field>
         struct dummy_stack_fall_through : public
-        binary8_region_arithmetic_full_table<Field,
+        binary8_full_table_region_arithmetic<Field,
         helper_region_fall_through<Field,
         region_info<Field,
         full_table_arithmetic<Field,
@@ -40,7 +40,7 @@ namespace fifi
     {
         template<class Field>
         struct dummy_stack : public
-        binary8_region_arithmetic_full_table<Field,
+        binary8_full_table_region_arithmetic<Field,
         region_arithmetic<
         region_info<Field,
         packed_arithmetic<
@@ -52,7 +52,7 @@ namespace fifi
     }
 }
 
-TEST(TestBinary8RegionArithmeticFullTable, fall_through)
+TEST(TestBinary8FullTableRegionArithmetic, fall_through)
 {
     {
         fifi::region_fall_through_result expected;
@@ -70,18 +70,18 @@ TEST(TestBinary8RegionArithmeticFullTable, fall_through)
     }
 }
 
-TEST(TestBinary8RegionArithmeticFullTable, init)
+TEST(TestBinary8FullTableRegionArithmetic, init)
 {
     fifi::dummy_stack<fifi::binary8> stack;
     (void) stack;
 }
 
-TEST(TestBinary8RegionArithmeticFullTable, multiply_add)
+TEST(TestBinary8FullTableRegionArithmetic, multiply_add)
 {
     check_results_region_multiply_add<fifi::dummy_stack<fifi::binary8> >();
 }
 
-TEST(TestBinary8RegionArithmeticFullTable, multiply_subtract)
+TEST(TestBinary8FullTableRegionArithmetic, multiply_subtract)
 {
     check_results_region_multiply_subtract<fifi::dummy_stack<fifi::binary8> >();
 }

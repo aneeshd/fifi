@@ -14,11 +14,11 @@ namespace fifi
 {
 
     template<class Field, class Super>
-    class binary8_region_arithmetic_full_table : public Super
+    class binary8_full_table_region_arithmetic : public Super
     { };
 
     template<class Super>
-    class binary8_region_arithmetic_full_table<fifi::binary8, Super>
+    class binary8_full_table_region_arithmetic<fifi::binary8, Super>
         : public Super
     {
     public:
