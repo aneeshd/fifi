@@ -10,6 +10,7 @@
 #include <fifi/binary_simple_online_arithmetic.hpp>
 #include <fifi/final.hpp>
 #include <fifi/multithreading_region_arithmetic.hpp>
+#include <fifi/multithreading_region_info.hpp>
 #include <fifi/optimal_prime_arithmetic.hpp>
 #include <fifi/packed_arithmetic.hpp>
 #include <fifi/polynomial_degree.hpp>
@@ -30,15 +31,16 @@ namespace fifi
         template<class Field>
         struct dummy_stack_fall_through : public
         multithreading_region_arithmetic<
-        region_arithmetic<
-        region_info<Field,
+        multithreading_region_info<
         helper_region_fall_through<Field,
+        region_info<Field,
         helper_catch_all<Field> > > > >
         { };
 
         template<class Field>
         struct dummy_stack : public
         multithreading_region_arithmetic<
+        multithreading_region_info<
         region_arithmetic<
         region_info<Field,
         binary4_packed_arithmetic<Field,
@@ -47,17 +49,18 @@ namespace fifi
         binary_simple_online_arithmetic<Field,
         simple_online_arithmetic<
         polynomial_degree<
-        final<Field> > > > > > > > > >
+        final<Field> > > > > > > > > > >
         { };
 
         template<class Field>
         struct optimal_dummy_stack : public
         multithreading_region_arithmetic<
+        multithreading_region_info<
         region_arithmetic<
         region_info<Field,
         packed_arithmetic<
         optimal_prime_arithmetic<
-        final<Field> > > > > >
+        final<Field> > > > > > >
         { };
 
     }
@@ -66,13 +69,6 @@ namespace fifi
 TEST(TestMultithreadingRegionArithmetic, fall_through)
 {
     fifi::region_fall_through_result expected;
-    expected.add = false;
-    expected.subtract = false;
-    expected.multiply = false;
-    expected.divide = false;
-    expected.multiply_constant = false;
-    expected.multiply_add = false;
-    expected.multiply_subtract = false;
     {
         SCOPED_TRACE("binary");
         fifi::helper_region_fall_through_test<fifi::binary,
@@ -100,26 +96,7 @@ TEST(TestMultithreadingRegionArithmetic, fall_through)
     }
 }
 
-TEST(TestMultithreadingRegionArithmetic, arithmetics)
+TEST(TestMultithreadingRegionArithmetic, add)
 {
-    {
-        SCOPED_TRACE("binary");
-        fifi::check_region_all<fifi::dummy_stack<fifi::binary>>();
-    }
-    {
-        SCOPED_TRACE("binary4");
-        fifi::check_region_all<fifi::dummy_stack<fifi::binary4>>();
-    }
-    {
-        SCOPED_TRACE("binary8");
-        fifi::check_region_all<fifi::dummy_stack<fifi::binary8>>();
-    }
-    {
-        SCOPED_TRACE("binary16");
-        fifi::check_region_all<fifi::dummy_stack<fifi::binary16>>();
-    }
-    {
-        SCOPED_TRACE("prime2325");
-        fifi::check_region_all<fifi::optimal_dummy_stack<fifi::prime2325>>();
-    }
+    fifi::check_region_add<fifi::dummy_stack>();
 }

@@ -101,7 +101,7 @@ namespace fifi
 
         typedef typename Field::value_type value_type;
 
-        uint32_t length = 8;
+        uint32_t length = 128;
         std::vector<value_type> dest(length, 1);
         std::vector<value_type> src(length, ~0);
         value_type constant = 0;
