@@ -125,18 +125,22 @@ namespace fifi
             {
                 {
                     boost::unique_lock<boost::mutex> lock( m_coordination );
-                    print(std::string("Waiting for work ") + std::to_string(index));
+
 
                     if (initial)
                     {
+                        print(std::string("initializing ") + std::to_string(index));
                         m_workers_started_lock.lock();
                         ++m_workers_ready;
                         if (m_workers_ready == Super::threads())
+                            // THIS...
                             m_workers_started.notify_one();
                         m_workers_started_lock.unlock();
                         initial = false;
                     }
 
+                    print(std::string("Waiting for work ") + std::to_string(index));
+                    // AND THIS, could mean trouble..
                     m_work_start.wait(lock);
                 }
 
