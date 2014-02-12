@@ -133,14 +133,12 @@ namespace fifi
                         m_workers_started_lock.lock();
                         ++m_workers_ready;
                         if (m_workers_ready == Super::threads())
-                            // THIS...
                             m_workers_started.notify_one();
                         m_workers_started_lock.unlock();
                         initial = false;
                     }
 
-                    print(std::string("Waiting for work ") + std::to_string(index));
-                    // AND THIS, could mean trouble..
+                    print(std::string("Waiting for work ") + std::to_string(m_work_left) + std::string(" id:") + std::to_string(index));
                     m_work_start.wait(lock);
                 }
 
@@ -149,15 +147,22 @@ namespace fifi
 
                 print(std::string("Work starting ") + std::to_string(index));
 
-                Super::region_add(m_dest + (index * Super::length()),
-                                  m_src  + (index * Super::length()));
+                Super::region_add(m_dest + (index * Super::slice()),
+                                  m_src  + (index * Super::slice()));
 
                 print(std::string("after region add ") + std::to_string(index));
 
                 m_work_done_lock.lock();
                 m_work_left--;
                 if (m_work_left == 0)
+                {
+                    print(std::string("last thread finished ") + std::to_string(index));
                     m_work_done.notify_one();
+                }
+                else
+                {
+                    print(std::string("i finished ") + std::to_string(m_work_left) + std::string(" id:") +  std::to_string(index));
+                }
                 m_work_done_lock.unlock();
             }
         }

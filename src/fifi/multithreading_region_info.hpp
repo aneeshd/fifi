@@ -51,6 +51,11 @@ namespace fifi
             return m_length;
         }
 
+        uint32_t slice() const
+        {
+            return Super::length();
+        }
+
     private:
 
         uint32_t m_threads;
