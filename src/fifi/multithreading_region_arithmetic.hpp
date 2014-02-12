@@ -12,6 +12,7 @@
 #include <vector>
 #include <utility>
 #include <functional>
+#include <string>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <queue>
@@ -35,25 +36,29 @@ namespace fifi
 
         multithreading_region_arithmetic() :
             m_started(false)
-        { }
+        {
+             print(std::string("constructor"));
+        }
 
         void set_length(uint32_t length)
         {
             stop();
             Super::set_length(length);
+            start();
         }
 
         void set_threads(uint32_t threads)
         {
             stop();
             Super::set_threads(threads);
+            start();
         }
 
         void region_add(value_type* dest, const value_type* src) const
         {
-            std::cout << "region_add" << std::endl;
-            if (!m_started)
-                start();
+            assert(m_started);
+            print(std::string("region_add"));
+
 
             m_dest = dest;
             m_src = const_cast<value_type*>(src);
@@ -62,14 +67,15 @@ namespace fifi
 
             boost::unique_lock<boost::mutex> lock( m_coordination );
 
-            std::cout << "Before notifying workers" << std::endl;
+            print(std::string("Before notifying workers"));
             m_work_start.notify_all();
             m_work_done.wait(lock);
-            std::cout << "All done!" << std::endl;
+            print(std::string("All done!"));
         }
 
-        ~multithreading_region_arithmetic()
+        virtual ~multithreading_region_arithmetic()
         {
+            print(std::string("destructor"));
             stop();
         }
 
@@ -77,12 +83,13 @@ namespace fifi
 
         void start() const
         {
-            std::cout << "start" << std::endl;
+            print(std::string("start"));
             m_started = true;
             m_workers_ready = 0;
 
             for(uint32_t i = 0; i < Super::threads(); ++i)
             {
+                print(std::string("adding thread ") + std::to_string(i));
                 m_threads.push_back(boost::thread(
                     boost::bind(
                         &multithreading_region_arithmetic::worker_thread,
@@ -90,13 +97,15 @@ namespace fifi
                 ));
             }
 
-            while(m_workers_ready < Super::threads())
-                continue;
+            boost::unique_lock<boost::mutex> lock( m_coordination );
+
+            m_workers_started.wait(lock);
+            print(std::string("started"));
         }
 
         void stop() const
         {
-            std::cout << "stop" << std::endl;
+            print(std::string("stop"));
             m_started = false;
             m_work_start.notify_all();
             for (auto& thread : m_threads)
@@ -104,23 +113,27 @@ namespace fifi
                 thread.join();
             }
             m_threads.clear();
+            print(std::string("stopped"));
         }
 
         void worker_thread(uint32_t index) const
         {
 
             bool initial = true;
-            std::cout << "worker_thread" << std::endl;
+            print(std::string("worker_thread"));
             while (1)
             {
                 {
                     boost::unique_lock<boost::mutex> lock( m_coordination );
-                    std::cout << "Waiting for work " << boost::this_thread::get_id()
-                              << std::endl;
+                    print(std::string("Waiting for work ") + std::to_string(index));
 
                     if (initial)
                     {
+                        m_workers_started_lock.lock();
                         ++m_workers_ready;
+                        if (m_workers_ready == Super::threads())
+                            m_workers_started.notify_one();
+                        m_workers_started_lock.unlock();
                         initial = false;
                     }
 
@@ -130,13 +143,12 @@ namespace fifi
                 if(!m_started)
                     return;
 
-                std::cout << "Work starting " << boost::this_thread::get_id()
-                              << std::endl;
+                print(std::string("Work starting ") + std::to_string(index));
 
                 Super::region_add(m_dest + (index * Super::length()),
                                   m_src  + (index * Super::length()));
 
-                std::cout << "after region add" << std::endl;
+                print(std::string("after region add ") + std::to_string(index));
 
                 m_work_done_lock.lock();
                 m_work_left--;
@@ -144,6 +156,13 @@ namespace fifi
                     m_work_done.notify_one();
                 m_work_done_lock.unlock();
             }
+        }
+
+        void print(const std::string& text) const
+        {
+            m_print_lock.lock();
+            std::cout << text << std::endl;
+            m_print_lock.unlock();
         }
 
     private:
@@ -155,11 +174,15 @@ namespace fifi
         mutable value_type* m_src;
         mutable std::atomic<uint32_t> m_work_left;
         mutable boost::mutex m_work_done_lock;
+        mutable boost::mutex m_workers_started_lock;
 
         mutable boost::condition_variable m_work_start;
+        mutable boost::condition_variable m_workers_started;
         mutable boost::condition_variable m_work_done;
         mutable boost::mutex m_coordination;
 
         mutable std::vector<boost::thread> m_threads;
+
+        mutable boost::mutex m_print_lock;
     };
 }

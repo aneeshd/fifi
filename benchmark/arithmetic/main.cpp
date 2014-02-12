@@ -3,12 +3,13 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <cstdint>
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <ctime>
 #include <cmath>
+#include <cstdint>
+#include <ctime>
+#include <fstream>
+#include <iostream>
+#include <type_traits>
+#include <vector>
 
 #include <gauge/gauge.hpp>
 #include <gauge/console_printer.hpp>
@@ -25,8 +26,10 @@
 #include <fifi/binary16.hpp>
 #include <fifi/prime2325.hpp>
 
+#include "stacks.hpp"
+
 /// Benchmark fixture for the arithmetic benchmark
-template<class FieldImpl>
+template<class FieldImpl, int Threads = 0>
 class arithmetic_setup : public gauge::time_benchmark
 {
 public:
@@ -179,6 +182,8 @@ public:
         std::string data_access = cs.get_value<std::string>("data_access");
 
         m_field.set_length(length);
+        set_threads();
+
         if(data_access == "linear")
         {
             RUN
@@ -210,6 +215,16 @@ public:
             assert(0);
         }
     }
+
+    template<int T = Threads>
+    inline typename std::enable_if<T != 0, void>::type set_threads()
+    {
+        m_field.set_threads(Threads);
+    }
+
+    template<int T = Threads>
+    inline typename std::enable_if<T == 0, void>::type set_threads()
+    { }
 
     /// Tests the dest[i] = dest[i] OP (src[i] * constant) functions
     template<class Function>
@@ -490,6 +505,15 @@ typedef arithmetic_setup< fifi::optimal_prime<fifi::prime2325> >
     setup_optimal_prime2325;
 
 BENCHMARK_F(setup_optimal_prime2325, Arithmetic, OptimalPrime2325, 5)
+{
+    benchmark();
+}
+
+
+typedef arithmetic_setup< fifi::multithreading_full_table<fifi::binary8>, 3>
+    setup_multithreading_full_table;
+
+BENCHMARK_F(setup_multithreading_full_table, Arithmetic, MultiThreadingFullTable8, 5)
 {
     benchmark();
 }
