@@ -58,7 +58,6 @@ namespace fifi
             m_dest = dest;
             m_src = const_cast<value_type*>(src);
 
-            m_work_iterations = Super::threads();
             m_work_left = Super::threads();
 
             boost::unique_lock<boost::mutex> lock( m_coordination );
@@ -87,7 +86,7 @@ namespace fifi
                 m_threads.push_back(boost::thread(
                     boost::bind(
                         &multithreading_region_arithmetic::worker_thread,
-                        this)
+                        this, i)
                 ));
             }
 
@@ -107,7 +106,7 @@ namespace fifi
             m_threads.clear();
         }
 
-        void worker_thread() const
+        void worker_thread(uint32_t index) const
         {
 
             bool initial = true;
@@ -134,18 +133,16 @@ namespace fifi
                 std::cout << "Work starting " << boost::this_thread::get_id()
                               << std::endl;
 
-                m_work_lock.lock();
-                uint32_t work = --m_work_iterations;
-                m_work_lock.unlock();
-
-                Super::region_add(m_dest + (work * Super::length()),
-                                  m_src  + (work * Super::length()));
+                Super::region_add(m_dest + (index * Super::length()),
+                                  m_src  + (index * Super::length()));
 
                 std::cout << "after region add" << std::endl;
 
+                m_work_done_lock.lock();
                 m_work_left--;
                 if (m_work_left == 0)
                     m_work_done.notify_one();
+                m_work_done_lock.unlock();
             }
         }
 
@@ -156,9 +153,8 @@ namespace fifi
 
         mutable value_type* m_dest;
         mutable value_type* m_src;
-        mutable std::atomic<uint32_t> m_work_iterations;
         mutable std::atomic<uint32_t> m_work_left;
-        mutable boost::mutex m_work_lock;
+        mutable boost::mutex m_work_done_lock;
 
         mutable boost::condition_variable m_work_start;
         mutable boost::condition_variable m_work_done;
