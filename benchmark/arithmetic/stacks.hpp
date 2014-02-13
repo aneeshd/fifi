@@ -14,6 +14,7 @@
 #include <fifi/region_arithmetic.hpp>
 #include <fifi/multithreading_region_arithmetic.hpp>
 #include <fifi/simple_multithreading_region_arithmetic.hpp>
+#include <fifi/fancy_multithreading_region_arithmetic.hpp>
 #include <fifi/region_info.hpp>
 #include <fifi/multithreading_region_info.hpp>
 #include <fifi/simple_online_arithmetic.hpp>
@@ -38,6 +39,21 @@ namespace fifi
     template<class Field>
     class simple_multithreading_full_table :
         public simple_multithreading_region_arithmetic<
+               multithreading_region_info<
+               binary8_full_table_region_arithmetic<Field,
+               region_arithmetic<
+               region_info<Field,
+               binary4_packed_arithmetic<Field,
+               packed_arithmetic<
+               full_table_arithmetic<Field,
+               simple_online_arithmetic<
+               polynomial_degree<
+               final<Field> > > > > > > > > > >
+    { };
+
+    template<class Field>
+    class fancy_multithreading_full_table :
+        public fancy_multithreading_region_arithmetic<
                multithreading_region_info<
                binary8_full_table_region_arithmetic<Field,
                region_arithmetic<

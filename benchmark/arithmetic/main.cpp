@@ -513,7 +513,7 @@ BENCHMARK_F(setup_optimal_prime2325, Arithmetic, OptimalPrime2325, 5)
 typedef arithmetic_setup< fifi::multithreading_full_table<fifi::binary8>, 2>
     setup_multithreading_full_table;
 
-BENCHMARK_F(setup_multithreading_full_table, Arithmetic, MultiThreadingFullTable8, 5)
+BENCHMARK_F(setup_multithreading_full_table, Arithmetic, MultithreadingFullTable8, 5)
 {
     benchmark();
 }
@@ -521,7 +521,15 @@ BENCHMARK_F(setup_multithreading_full_table, Arithmetic, MultiThreadingFullTable
 typedef arithmetic_setup< fifi::simple_multithreading_full_table<fifi::binary8>, 4>
     setup_simple_multithreading_full_table;
 
-BENCHMARK_F(setup_simple_multithreading_full_table, Arithmetic, SimpleMultiThreadingFullTable8, 5)
+BENCHMARK_F(setup_simple_multithreading_full_table, Arithmetic, SimpleMultithreadingFullTable8, 5)
+{
+    benchmark();
+}
+
+typedef arithmetic_setup< fifi::fancy_multithreading_full_table<fifi::binary8>, 2>
+    setup_fancy_multithreading_full_table;
+
+BENCHMARK_F(setup_fancy_multithreading_full_table, Arithmetic, FancyMultithreadingFullTable8, 5)
 {
     benchmark();
 }

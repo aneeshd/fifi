@@ -69,6 +69,7 @@ namespace fifi
 
             print(std::string("Before notifying workers"));
             m_work_start.notify_all();
+            print(std::string("Workers notified"));
             m_work_done.wait(lock);
             print(std::string("All done!"));
         }
@@ -98,7 +99,7 @@ namespace fifi
             }
 
             boost::unique_lock<boost::mutex> lock( m_coordination );
-
+            print(std::string("waiting for workers to start"));
             m_workers_started.wait(lock);
             print(std::string("started"));
         }
@@ -129,11 +130,15 @@ namespace fifi
 
                     if (initial)
                     {
-                        print(std::string("initializing ") + std::to_string(index));
+                        print(std::string("initializing id:") + std::to_string(index));
                         m_workers_started_lock.lock();
                         ++m_workers_ready;
                         if (m_workers_ready == Super::threads())
+                        {
+                            print(std::string("All initailized notifying main thread"));
                             m_workers_started.notify_one();
+                            print(std::string("main thread notified"));
+                        }
                         m_workers_started_lock.unlock();
                         initial = false;
                     }
@@ -145,18 +150,18 @@ namespace fifi
                 if(!m_started)
                     return;
 
-                print(std::string("Work starting ") + std::to_string(index));
+                print(std::string("Work starting id:") + std::to_string(index));
 
                 Super::region_add(m_dest + (index * Super::slice()),
                                   m_src  + (index * Super::slice()));
 
-                print(std::string("after region add ") + std::to_string(index));
+                print(std::string("after region add id:") + std::to_string(index));
 
                 m_work_done_lock.lock();
                 m_work_left--;
                 if (m_work_left == 0)
                 {
-                    print(std::string("last thread finished ") + std::to_string(index));
+                    print(std::string("last thread finished id:") + std::to_string(index));
                     m_work_done.notify_one();
                 }
                 else
