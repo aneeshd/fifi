@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <iostream>
+
 namespace fifi
 {
     template<class Field, class Super>
@@ -97,18 +99,23 @@ namespace fifi
     void helper_region_fall_through_test(
         const region_fall_through_result& expected)
     {
+        std::cout << "creating stack" << std::endl;
         Stack stack;
-
+        std::cout << "created" << std::endl;
         typedef typename Field::value_type value_type;
 
         uint32_t length = 128;
         std::vector<value_type> dest(length, 1);
         std::vector<value_type> src(length, ~0);
         value_type constant = 0;
+        std::cout << "setting length" << std::endl;
         stack.set_length(length);
+        std::cout << "length set" << std::endl;
 
         stack.m_fall_through = false;
+        std::cout << "calling region add" << std::endl;
         stack.region_add(dest.data(), src.data());
+        std::cout << "region add called" << std::endl;
         EXPECT_EQ(expected.add, stack.m_fall_through);
 
         stack.m_fall_through = false;

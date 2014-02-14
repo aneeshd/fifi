@@ -81,6 +81,8 @@ TEST(TestMultithreadingRegionArithmetic, set_length)
     stack.set_length(length);
 }
 
+#include <iostream>
+
 TEST(TestMultithreadingRegionArithmetic, fall_through)
 {
     fifi::region_fall_through_result expected;
@@ -93,11 +95,13 @@ TEST(TestMultithreadingRegionArithmetic, fall_through)
     expected.multiply_subtract = false;
 
     {
+        std::cout << "binary" << std::endl;
         SCOPED_TRACE("binary");
         fifi::helper_region_fall_through_test<fifi::binary,
         fifi::dummy_stack_fall_through<fifi::binary> >(expected);
     }
     {
+        std::cout << "binary4" << std::endl;
         SCOPED_TRACE("binary4");
         fifi::helper_region_fall_through_test<fifi::binary4,
         fifi::dummy_stack_fall_through<fifi::binary4> >(expected);

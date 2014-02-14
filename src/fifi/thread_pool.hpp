@@ -4,18 +4,17 @@
 // http://www.steinwurf.com/licensing
 
 
+#include <boost/thread.hpp>
 #include <cassert>
-#include <condition_variable>
 #include <cstdint>
 #include <functional>
 #include <future>
-#include <mutex>
 #include <queue>
-#include <thread>
 #include <vector>
 
 #include <chrono>
 #include <iostream>
+#include <string>
 
 namespace fifi
 {
@@ -29,94 +28,114 @@ namespace fifi
         template<class Function>
         std::future<void> enqueue(Function function) const
         {
-            std::cout << "enqueue" << std::endl;
+            print("enqueue");
             assert(!m_stop);
+            print("not stopped");
+            auto task = std::make_shared<std::packaged_task<void()>>(function);
+            print("task created");
 
-            auto task = std::make_shared<std::packaged_task<void()>>(
-                std::move(function));
-
+            // AARGH THIS TRHOWS!
             std::future<void> result = task->get_future();
+            print("I GOT HEREEEE!!!!");
             {
-                std::unique_lock<std::mutex> lock(m_queue_mutex);
+                print("got future");
+                boost::unique_lock<boost::mutex> lock(m_queue_mutex);
+                print("locked queue");
                 m_tasks.push([task](){ (*task)(); });
+                print("task pushed");
             }
+            print("task added");
             m_condition.notify_one();
+            print("worker notified");
             return result;
         }
 
-        ~thread_pool()
+        virtual ~thread_pool()
         {
-            std::cout << "~thread_pool" << std::endl;
+            print("~thread_pool");
             stop();
+            print("~ended");
         }
 
         void start(uint32_t threads)
         {
-            std::cout << "start " << threads << std::endl;
+            print("start ");
+            print(std::to_string(threads));
             m_stop = false;
             for(uint32_t i = 0; i < threads; ++i)
             {
-                std::cout << "add thread" << std::endl;
-                m_threads.emplace_back(std::thread(
-                    std::bind(&thread_pool::worker, this)));
-                std::cout << "thread added" << std::endl;
+                print("add thread");
+                m_threads.emplace_back(boost::thread(
+                    boost::bind(&thread_pool::worker, this)));
+                print("thread added");
             }
-            std::cout << "waiting" << std::endl;
-            std::chrono::milliseconds dura( 500 );
-            std::this_thread::sleep_for( dura );
-            std::cout << "started" << std::endl;
+            print("started");
         }
 
         void stop()
         {
-            std::cout << "stop" << std::endl;
+            print("stop");
             {
-                std::unique_lock<std::mutex> lock(m_queue_mutex);
+                boost::unique_lock<boost::mutex> lock(m_queue_mutex);
                 m_stop = true;
             }
-            std::cout << "notify_all" << std::endl;
+            print("notify_all");
             m_condition.notify_all();
 
             for(auto& thread : m_threads)
             {
-                std::cout << "join" << std::endl;
+                print("join");
                 thread.join();
-                std::cout << "joined" << std::endl;
+                print("joined");
             }
+            print("all joined");
+            print(std::to_string(m_threads.size()));
             m_threads.clear();
+            print("all cleared");
         }
 
     private:
 
         void worker()
         {
-            std::cout << "worker" << std::endl;
+            print("worker");
             while(true)
             {
-                std::unique_lock<std::mutex> lock(m_queue_mutex);
+                print("working");
+                boost::unique_lock<boost::mutex> lock(m_queue_mutex);
                 while(!m_stop && m_tasks.empty())
                 {
-                    std::cout << "while(!m_stop && m_tasks.empty())" << std::endl;
+                    print("while(!m_stop && m_tasks.empty())");
                     m_condition.wait(lock);
+                    print("after lock");
                 }
+                print("after while");
                 if(m_stop && m_tasks.empty())
                 {
-                    std::cout << "if(m_stop && m_tasks.empty())" << std::endl;
+                    print("if(m_stop && m_tasks.empty())");
                     return;
                 }
+                print("getting task");
                 std::function<void()> task(m_tasks.front());
                 m_tasks.pop();
                 lock.unlock();
-                std::cout << "task" << std::endl;
+                print("got task");
                 task();
+                print("task ran");
             }
         }
 
+        void print(const std::string& text) const
+        {
+            std::cout << text << std::endl;
+            boost::this_thread::sleep_for(boost::chrono::milliseconds(100));
+        }
+
     private:
-        std::vector<std::thread> m_threads;
+        std::vector<boost::thread> m_threads;
         mutable std::queue<std::function<void()>> m_tasks;
-        mutable std::mutex m_queue_mutex;
-        mutable std::condition_variable m_condition;
+        mutable boost::mutex m_queue_mutex;
+        mutable boost::condition_variable m_condition;
         bool m_stop;
     };
 }

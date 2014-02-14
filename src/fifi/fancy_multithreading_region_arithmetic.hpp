@@ -7,7 +7,7 @@
 
 #include <cstdint>
 #include <functional>
-#include <future>
+#include <boost/thread/future.hpp>
 #include <thread>
 #include <vector>
 #include <vector>
@@ -56,14 +56,37 @@ namespace fifi
             for (uint32_t i = 0; i < Super::threads(); ++i)
             {
                 std::cout << i << std::endl;
-                auto functor = std::bind(&Super::region_add, std::move(this), dest+(i*Super::slice()), src+(i*Super::slice()));
-                results.push_back(m_pool.enqueue(functor));
+                std::cout << "create functor" << std::endl;
+                auto functor = std::bind(&fancy_multithreading_region_arithmetic::test, this, dest+(i*Super::slice()), src+(i*Super::slice()));
+                std::cout << "add functor" << std::endl;
+                auto task = std::packaged_task<int()>(functor);
+                std::future<int> result = task.get_future();
+                std::cout << "OMGOMGOMGOMGOMGOM" << std::endl;
+                //results.push_back(m_pool.enqueue(functor));
+                std::cout << "functor added" << std::endl;
             }
 
+            std::cout << "waiting for threads to finish" << std::endl;
+
             for(auto& result : results){
-                result.get();
+                std::cout << "..." << std::endl;
+                try {
+                    std::cout << result.valid() << std::endl;
+                    result.get();
+                } catch (const std::future_error& e) {
+                    std::cout << "Caught a future_error with code \"" << e.code()
+                              << "\"\nMessage: \"" << e.what() << "\"\n";
+                }
+                std::cout << "one finished!" << std::endl;
             }
         }
+
+        int test(value_type* dest, const value_type* src) const
+        {
+            return 1337;
+        }
+
+        ERROR!
 
     private:
 
