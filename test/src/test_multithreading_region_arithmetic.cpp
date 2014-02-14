@@ -9,7 +9,7 @@
 #include <fifi/binary_packed_arithmetic.hpp>
 #include <fifi/binary_simple_online_arithmetic.hpp>
 #include <fifi/final.hpp>
-#include <fifi/simple_multithreading_region_arithmetic.hpp>
+#include <fifi/fancy_multithreading_region_arithmetic.hpp>
 #include <fifi/multithreading_region_info.hpp>
 #include <fifi/optimal_prime_arithmetic.hpp>
 #include <fifi/packed_arithmetic.hpp>
@@ -30,7 +30,7 @@ namespace fifi
     {
         template<class Field>
         struct dummy_stack_fall_through : public
-        simple_multithreading_region_arithmetic<
+        fancy_multithreading_region_arithmetic<
         multithreading_region_info<Field,
         helper_region_fall_through<Field,
         region_info<Field,
@@ -39,7 +39,7 @@ namespace fifi
 
         template<class Field>
         struct dummy_stack : public
-        simple_multithreading_region_arithmetic<
+        fancy_multithreading_region_arithmetic<
         multithreading_region_info<Field,
         region_arithmetic<
         region_info<Field,
@@ -54,7 +54,7 @@ namespace fifi
 
         template<class Field>
         struct optimal_dummy_stack : public
-        simple_multithreading_region_arithmetic<
+        fancy_multithreading_region_arithmetic<
         multithreading_region_info<Field,
         region_arithmetic<
         region_info<Field,
@@ -64,6 +64,21 @@ namespace fifi
         { };
 
     }
+}
+
+
+TEST(TestMultithreadingRegionArithmetic, init)
+{
+    fifi::dummy_stack<fifi::binary8> stack;
+}
+
+TEST(TestMultithreadingRegionArithmetic, set_length)
+{
+    fifi::dummy_stack<fifi::binary8> stack;
+
+    uint32_t length = 16;
+
+    stack.set_length(length);
 }
 
 TEST(TestMultithreadingRegionArithmetic, fall_through)

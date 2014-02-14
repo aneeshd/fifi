@@ -14,6 +14,7 @@
 #include <thread>
 #include <vector>
 
+#include <chrono>
 #include <iostream>
 
 namespace fifi
@@ -31,7 +32,8 @@ namespace fifi
             std::cout << "enqueue" << std::endl;
             assert(!m_stop);
 
-            auto task = std::make_shared<std::packaged_task<void()>>(std::move(function));
+            auto task = std::make_shared<std::packaged_task<void()>>(
+                std::move(function));
 
             std::future<void> result = task->get_future();
             {
@@ -55,8 +57,14 @@ namespace fifi
             for(uint32_t i = 0; i < threads; ++i)
             {
                 std::cout << "add thread" << std::endl;
-                m_threads.emplace_back(std::bind(&thread_pool::worker, std::move(this)));
+                m_threads.emplace_back(std::thread(
+                    std::bind(&thread_pool::worker, this)));
+                std::cout << "thread added" << std::endl;
             }
+            std::cout << "waiting" << std::endl;
+            std::chrono::milliseconds dura( 500 );
+            std::this_thread::sleep_for( dura );
+            std::cout << "started" << std::endl;
         }
 
         void stop()
@@ -77,10 +85,12 @@ namespace fifi
             }
             m_threads.clear();
         }
+
     private:
 
         void worker()
         {
+            std::cout << "worker" << std::endl;
             while(true)
             {
                 std::unique_lock<std::mutex> lock(m_queue_mutex);
