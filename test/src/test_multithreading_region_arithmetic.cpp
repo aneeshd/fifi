@@ -9,7 +9,7 @@
 #include <fifi/binary_packed_arithmetic.hpp>
 #include <fifi/binary_simple_online_arithmetic.hpp>
 #include <fifi/final.hpp>
-#include <fifi/multithreading_region_arithmetic.hpp>
+#include <fifi/simple_multithreading_region_arithmetic.hpp>
 #include <fifi/multithreading_region_info.hpp>
 #include <fifi/optimal_prime_arithmetic.hpp>
 #include <fifi/packed_arithmetic.hpp>
@@ -30,8 +30,8 @@ namespace fifi
     {
         template<class Field>
         struct dummy_stack_fall_through : public
-        multithreading_region_arithmetic<
-        multithreading_region_info<
+        simple_multithreading_region_arithmetic<
+        multithreading_region_info<Field,
         helper_region_fall_through<Field,
         region_info<Field,
         helper_catch_all<Field> > > > >
@@ -39,8 +39,8 @@ namespace fifi
 
         template<class Field>
         struct dummy_stack : public
-        multithreading_region_arithmetic<
-        multithreading_region_info<
+        simple_multithreading_region_arithmetic<
+        multithreading_region_info<Field,
         region_arithmetic<
         region_info<Field,
         binary4_packed_arithmetic<Field,
@@ -54,8 +54,8 @@ namespace fifi
 
         template<class Field>
         struct optimal_dummy_stack : public
-        multithreading_region_arithmetic<
-        multithreading_region_info<
+        simple_multithreading_region_arithmetic<
+        multithreading_region_info<Field,
         region_arithmetic<
         region_info<Field,
         packed_arithmetic<
@@ -69,6 +69,14 @@ namespace fifi
 TEST(TestMultithreadingRegionArithmetic, fall_through)
 {
     fifi::region_fall_through_result expected;
+    expected.add = false;
+    expected.subtract = false;
+    expected.multiply = false;
+    expected.divide = false;
+    expected.multiply_constant = false;
+    expected.multiply_add = false;
+    expected.multiply_subtract = false;
+
     {
         SCOPED_TRACE("binary");
         fifi::helper_region_fall_through_test<fifi::binary,

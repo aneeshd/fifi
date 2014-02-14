@@ -102,8 +102,6 @@ namespace fifi
             }
         }
 
-        ERROR!
-
     private:
         std::vector<std::thread> m_threads;
         mutable std::queue<std::function<void()>> m_tasks;

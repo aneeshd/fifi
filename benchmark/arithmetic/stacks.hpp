@@ -24,7 +24,7 @@ namespace fifi
     template<class Field>
     class multithreading_full_table :
         public multithreading_region_arithmetic<
-               multithreading_region_info<
+               multithreading_region_info<Field,
                binary8_full_table_region_arithmetic<Field,
                region_arithmetic<
                region_info<Field,
@@ -39,7 +39,7 @@ namespace fifi
     template<class Field>
     class simple_multithreading_full_table :
         public simple_multithreading_region_arithmetic<
-               multithreading_region_info<
+               multithreading_region_info<Field,
                binary8_full_table_region_arithmetic<Field,
                region_arithmetic<
                region_info<Field,
@@ -54,7 +54,7 @@ namespace fifi
     template<class Field>
     class fancy_multithreading_full_table :
         public fancy_multithreading_region_arithmetic<
-               multithreading_region_info<
+               multithreading_region_info<Field,
                binary8_full_table_region_arithmetic<Field,
                region_arithmetic<
                region_info<Field,
