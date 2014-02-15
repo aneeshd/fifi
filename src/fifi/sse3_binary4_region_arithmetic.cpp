@@ -14,6 +14,7 @@ namespace fifi
 #ifdef __SSE3__
 
     sse3_binary4_region_arithmetic::sse3_binary4_region_arithmetic()
+        : m_ssse3_size(0)
     {
         m_table_one.resize(16*16);
         m_table_two.resize(16*16);
@@ -54,7 +55,7 @@ namespace fifi
         __m128i mask1 = _mm_set1_epi8(0x0f);
         __m128i mask2 = _mm_set1_epi8(0xf0);
 
-        for(uint32_t i = 0; i < m_sse3_size; ++i)
+        for(uint32_t i = 0; i < m_ssse3_size; ++i)
         {
             __m128i xmm0 = _mm_load_si128(((const __m128i*) dest) + i);
 
@@ -79,7 +80,7 @@ namespace fifi
         assert((length % length_granularity()) == 0);
 
         // We loop 16 bytes at-a-time so we calculate how many loops we need
-        m_sse3_size = length / length_granularity();
+        m_ssse3_size = length / length_granularity();
     }
 
     /// @return The granularity requirements for specifying a length
@@ -93,7 +94,7 @@ namespace fifi
         return 16U;
     }
 
-    bool sse3_binary4_region_arithmetic::has_sse3() const
+    bool sse3_binary4_region_arithmetic::executable_has_ssse3() const
     {
         return true;
     }
@@ -110,7 +111,7 @@ namespace fifi
         assert(0);
     }
 
-    bool sse3_binary4_region_arithmetic::has_sse3() const
+    bool sse3_binary4_region_arithmetic::executable_has_ssse3() const
     {
         return false;
     }

@@ -43,15 +43,8 @@ namespace fifi
 
         dispatcher_binary4_sse3_region_arithmetic()
         {
-            if(m_ssse3_binary4.has_sse3())
-            {
-                std::cout << "Has ssse3" << std::endl;
-            }
-            else
-            {
-                std::cout << "NO ssse3" << std::endl;
-            }
-
+            m_region_multiply_constant =
+                dispatch_region_multiply_constant();
         }
 
         bool binary4_ssse3() const
@@ -93,14 +86,16 @@ namespace fifi
 
             std::cout << "DISPATCH" << std::endl;
 
-            if(m_ssse3_binary4.has_sse3())
+            if(m_ssse3_binary4.executable_has_ssse3())
             {
-                return std::bind(&sse3_binary4_region_arithmetic::region_multiply_constant,
-                          &m_ssse3_binary4, _1, _2);
+                return std::bind(
+                    &sse3_binary4_region_arithmetic::region_multiply_constant,
+                    &m_ssse3_binary4, _1, _2);
             }
             else
             {
-                return std::bind(&Super::region_multiply_constant, (Super*)this, _1, _2);
+                return std::bind(&Super::region_multiply_constant,
+                                 (Super*)this, _1, _2);
             }
         }
 
@@ -108,6 +103,8 @@ namespace fifi
     private:
 
         sse3_binary4_region_arithmetic m_ssse3_binary4;
+
+        std::function<void (value_type*, value_type)> m_region_multiply_constant;
 
     };
 }

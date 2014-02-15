@@ -34,7 +34,23 @@
 
 TEST(TestSSE3Binary4RegionArithmetic, region_multiply_constant)
 {
-    check_results_region_multiply_constant<fifi::sse3_binary4_region_arithmetic>();
+    check_results_region_multiply_constant<
+        fifi::sse3_binary4_region_arithmetic>();
+
+    check_results_region_multiply_constant<
+        fifi::sse3_binary4_region_arithmetic>();
+
+        check_results_region_multiply_constant<
+        fifi::sse3_binary4_region_arithmetic>();
+    check_results_region_multiply_constant<
+        fifi::sse3_binary4_region_arithmetic>();
+    check_results_region_multiply_constant<
+        fifi::sse3_binary4_region_arithmetic>();
+    check_results_region_multiply_constant<
+        fifi::sse3_binary4_region_arithmetic>();
+    check_results_region_multiply_constant<
+        fifi::sse3_binary4_region_arithmetic>();
+
 }
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_multiply_add)

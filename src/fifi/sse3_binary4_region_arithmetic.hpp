@@ -47,18 +47,28 @@ namespace fifi
 
     public:
 
+        /// Constructor for the stack
         sse3_binary4_region_arithmetic();
 
-        void region_multiply_constant(value_type* dest, value_type constant) const;
+        /// Optimized function for multiply constant
+        /// @copydoc layer::region_multiply_constant(
+        ///      value_type*, value_type*) const
+        void region_multiply_constant(value_type* dest,
+                                      value_type constant) const;
 
-        bool has_sse3() const;
+        /// @return true if the executable was built with SSSE3 support
+        bool executable_has_ssse3() const;
 
+        /// @copydoc layer::set_length(uint32_t)
         void set_length(uint32_t length);
+
+        /// @copydoc layer::length_granularity() const
         uint32_t length_granularity() const;
 
     private:
 
-        uint32_t m_sse3_size;
+        /// The size of each step in the region loops
+        uint32_t m_ssse3_size;
 
         std::vector<uint8_t> m_table_one;
         std::vector<uint8_t> m_table_two;
