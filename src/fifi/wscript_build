@@ -11,8 +11,6 @@ bld.objects(source='sse3_binary4_region_arithmetic.cpp',
 
 source_files = bld.path.ant_glob('**/*.cpp', excl=['sse3_binary4_region_arithmetic.cpp'])
 
-print source_files
-
 bld.stlib(features = 'cxx',
           source   = source_files,
           target = 'fifi',
