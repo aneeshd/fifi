@@ -26,7 +26,7 @@ TEST(TestPrime2325ApplyPrefix, prime2325_apply_prefix)
 
     uint32_t prefix = rand() % fifi::prime2325::order;
 
-    SCOPED_TRACE(prefix);
+    SCOPED_TRACE(testing::message() << "prefix: " << prefix);
 
     std::vector<uint32_t> original_data = data;
 
@@ -34,7 +34,8 @@ TEST(TestPrime2325ApplyPrefix, prime2325_apply_prefix)
 
     for (uint32_t i = 0; i < 10; ++i)
     {
-        SCOPED_TRACE(original_data[i]);
+        SCOPED_TRACE(testing::message() << "original data: "
+                                        << original_data[i]);
         EXPECT_EQ(data[i], original_data[i] ^ prefix);
     }
 }

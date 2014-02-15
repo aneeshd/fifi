@@ -62,10 +62,8 @@ inline void check_results_binary(Function arithmetic)
     {
         expected_result_binary<field_type> res =
             Results<field_type>::m_results[i];
-        SCOPED_TRACE("a:");
-        SCOPED_TRACE(res.m_input1);
-        SCOPED_TRACE("b:");
-        SCOPED_TRACE(res.m_input2);
+        SCOPED_TRACE(testing::Message() << "a:" << res.m_input1);
+        SCOPED_TRACE(testing::Message() << "b:" << res.m_input2);
         EXPECT_EQ(res.m_result, (field.*arithmetic)(res.m_input1, res.m_input2));
     }
 }
@@ -81,8 +79,7 @@ inline void check_results_unary(Function arithmetic)
     {
         expected_result_unary<field_type> res =
             Results<field_type>::m_results[i];
-        SCOPED_TRACE("a:");
-        SCOPED_TRACE(res.m_input1);
+        SCOPED_TRACE(testing::message() << "a:" << res.m_input1);
         EXPECT_EQ(res.m_result, (field.*arithmetic)(res.m_input1));
     }
 }
@@ -182,8 +179,8 @@ inline void check_results_region_ptr_const(
     for (uint32_t i = 0; i < tests; ++i)
     {
         value_type constant = fifi::pack<field_type>(rand() % field_type::order);
-        SCOPED_TRACE("constant:");
-        SCOPED_TRACE(constant);
+
+        SCOPED_TRACE(testing::Message() << "constant: " << constant);
 
         std::vector<value_type> dest = data;
 
@@ -201,9 +198,6 @@ inline void check_results_region_ptr_const(
         }
     }
 }
-
-
-
 
 /// This function checks whether the region arithmetics for the
 /// dest[i] = dest[i] OPERATION constant function works. Where
@@ -314,8 +308,7 @@ inline void check_results_region_ptr_ptr_const(
     {
         value_type constant = fifi::pack<field_type>(rand() % field_type::order);
 
-        SCOPED_TRACE("constant:");
-        SCOPED_TRACE(constant);
+        SCOPED_TRACE(testing::Message() << "constant: " << constant);
 
         std::vector<value_type> dest = data;
 
