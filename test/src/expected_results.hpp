@@ -124,6 +124,25 @@ inline void check_results_random(
 /// the expected region results
 /// @param elements The number of field elements in the region we will compute
 
+template<class Field>
+std::vector<typename Field::value_type> create_data(uint32_t elements,
+                                                    bool no_zero = false)
+{
+    typedef typename Field::value_type value_type;
+
+    std::vector<value_type> data(fifi::elements_to_length<Field>(elements));
+    for (uint32_t i = 0; i < elements; ++i)
+    {
+        value_type v = rand() % Field::order;
+        if (no_zero && v == 0)
+        {
+            v++;
+        }
+
+        fifi::set_value<Field>(data.data(), i, v);
+    }
+    return data;
+}
 
 
 template
@@ -135,7 +154,7 @@ inline void check_results_region_ptr_ptr(
     TestFunction test_arithmetic,
     ReferenceFunction reference_arithmetic,
     uint32_t elements,
-    bool divison = false)
+    bool division = false)
 {
     typedef typename TestImpl::field_type test_field;
     typedef typename ReferenceImpl::field_type reference_field;
@@ -153,21 +172,8 @@ inline void check_results_region_ptr_ptr(
     test_stack.set_length(length);
     reference_stack.set_length(length);
 
-    std::vector<value_type> data(length);
-    std::vector<value_type> src(length);
-
-    for (uint32_t i = 0; i < elements; ++i)
-    {
-        value_type v1 = rand() % test_field::order;
-        value_type v2 = rand() % test_field::order;
-
-        if (divison && v2 == 0)
-        {
-            v2++;
-        }
-        fifi::set_value<test_field>(data.data(), i, v1);
-        fifi::set_value<test_field>(src.data(), i, v2);
-    }
+    std::vector<value_type> data = create_data<test_field>(elements);
+    std::vector<value_type> src = create_data<test_field>(elements, division);
 
     // Create buffer and created the expected results using the reference
     // arithmetics
@@ -212,11 +218,7 @@ inline void check_results_region_ptr_const(
     test_stack.set_length(length);
     reference_stack.set_length(length);
 
-    std::vector<value_type> data(length);
-    for (uint32_t i = 0; i < elements; ++i)
-    {
-        fifi::set_value<test_field>(data.data(), i, rand() % test_field::order);
-    }
+    std::vector<value_type> data = create_data<test_field>(elements);
 
     // We repeat the test a number of times with different constants
     uint32_t tests = 10;
@@ -267,14 +269,8 @@ inline void check_results_region_ptr_ptr_const(
     test_stack.set_length(length);
     reference_stack.set_length(length);
 
-    std::vector<value_type> data(length);
-    std::vector<value_type> src(length);
-
-    for (uint32_t i = 0; i < elements; ++i)
-    {
-        fifi::set_value<test_field>(data.data(), i, rand() % test_field::order);
-        fifi::set_value<test_field>(src.data(), i, rand() % test_field::order);
-    }
+    std::vector<value_type> data = create_data<test_field>(elements);
+    std::vector<value_type> src = create_data<test_field>(elements);
 
     uint32_t tests = 10;
 
