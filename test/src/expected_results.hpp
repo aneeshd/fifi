@@ -79,7 +79,7 @@ inline void check_results_unary(Function arithmetic)
     {
         expected_result_unary<field_type> res =
             Results<field_type>::m_results[i];
-        SCOPED_TRACE(testing::message() << "a:" << res.m_input1);
+        SCOPED_TRACE(testing::Message() << "a:" << res.m_input1);
         EXPECT_EQ(res.m_result, (field.*arithmetic)(res.m_input1));
     }
 }
@@ -106,79 +106,99 @@ inline void check_results_random(
     }
 }
 
-template<class FieldImpl, class FunctionPacked, class FunctionRegion>
+
+template
+<
+    class TestImpl, class ReferenceImpl = TestImpl,
+    class ReferenceFunction, class TestFunction
+>
 inline void check_results_region_ptr_ptr(
-    FunctionPacked packed_arithmetic,
-    FunctionRegion region_arithmetic,
+    ReferenceFunction packed_reference_arithmetic,
+    TestFunction region_arithmetic,
     uint32_t elements,
     bool divison = false)
 {
-    typedef typename FieldImpl::field_type field_type;
-    typedef typename field_type::value_type value_type;
+    typedef typename TestImpl::field_type test_field;
+    typedef typename ReferenceImpl::field_type reference_field;
 
-    uint32_t length = fifi::elements_to_length<field_type>(elements);
+    static_assert(std::is_same<test_field, reference_field>::value,
+                  "Reference and field under test must use same field");
 
-    FieldImpl field;
-    field.set_length(length);
+    typedef typename test_field::value_type value_type;
+
+    uint32_t length = fifi::elements_to_length<test_field>(elements);
+
+    TestImpl test_stack;
+    ReferenceImpl reference_stack;
+
+    test_stack.set_length(length);
+    reference_stack.set_length(length);
 
     std::vector<value_type> dest(length);
     std::vector<value_type> src(length);
 
     for (uint32_t i = 0; i < elements; ++i)
     {
-        value_type v1 = rand() % field_type::order;
-        value_type v2 = rand() % field_type::order;
+        value_type v1 = rand() % test_field::order;
+        value_type v2 = rand() % test_field::order;
 
         if (divison && v2 == 0)
         {
             v2++;
         }
-        fifi::set_value<field_type>(dest.data(), i, v1);
-        fifi::set_value<field_type>(src.data(), i, v2);
+        fifi::set_value<test_field>(dest.data(), i, v1);
+        fifi::set_value<test_field>(src.data(), i, v2);
     }
 
     std::vector<value_type> expected(length);
     for (uint32_t i = 0; i < length; ++i)
     {
-        expected[i] = (field.*packed_arithmetic)(dest[i], src[i]);
+        expected[i] = (reference_stack.*packed_reference_arithmetic)(dest[i], src[i]);
     }
 
-    (field.*region_arithmetic)(dest.data(), src.data());
+    (test_stack.*region_arithmetic)(dest.data(), src.data());
 
-    for (uint32_t i = 0; i < length; ++i)
-    {
-        EXPECT_EQ(expected[i], dest[i]);
-    }
+    EXPECT_EQ(expected, dest);
 }
 
-template<class FieldImpl, class FunctionPacked, class FunctionRegion>
+template
+<
+    class TestImpl, class ReferenceImpl = TestImpl,
+    class ReferenceFunction, class TestFunction
+>
 inline void check_results_region_ptr_const(
-    FunctionPacked packed_arithmetic,
-    FunctionRegion region_arithmetic,
+    ReferenceFunction packed_reference_arithmetic,
+    TestFunction region_arithmetic,
     uint32_t elements)
 {
-    typedef typename FieldImpl::field_type field_type;
-    typedef typename field_type::value_type value_type;
+    typedef typename TestImpl::field_type test_field;
+    typedef typename ReferenceImpl::field_type reference_field;
 
-    uint32_t length = fifi::elements_to_length<field_type>(elements);
+    static_assert(std::is_same<test_field, reference_field>::value,
+                  "Reference and field under test must use same field");
 
-    FieldImpl field;
+    typedef typename test_field::value_type value_type;
 
+    uint32_t length = fifi::elements_to_length<test_field>(elements);
 
+    // Create the stack under test and the reference stack
+    TestImpl test_stack;
+    ReferenceImpl reference_stack;
 
-    field.set_length(length);
+    test_stack.set_length(length);
+    reference_stack.set_length(length);
 
     std::vector<value_type> data(length);
     for (uint32_t i = 0; i < elements; ++i)
     {
-        fifi::set_value<field_type>(data.data(), i, rand() % field_type::order);
+        fifi::set_value<test_field>(data.data(), i, rand() % test_field::order);
     }
 
     uint32_t tests = 10;
 
     for (uint32_t i = 0; i < tests; ++i)
     {
-        value_type constant = fifi::pack<field_type>(rand() % field_type::order);
+        value_type constant = fifi::pack<test_field>(rand() % test_field::order);
 
         SCOPED_TRACE(testing::Message() << "constant: " << constant);
 
@@ -187,15 +207,12 @@ inline void check_results_region_ptr_const(
         std::vector<value_type> expected(length);
         for (uint32_t j = 0; j < length; ++j)
         {
-            expected[j] = (field.*packed_arithmetic)(dest[j], constant);
+            expected[j] = (reference_stack.*packed_reference_arithmetic)(dest[j], constant);
         }
 
-        (field.*region_arithmetic)(dest.data(), constant);
+        (test_stack.*region_arithmetic)(dest.data(), constant);
 
-        for (uint32_t j = 0; j < length; ++j)
-        {
-            EXPECT_EQ(expected[j], dest[j]);
-        }
+        EXPECT_EQ(expected, dest);
     }
 }
 
@@ -225,6 +242,7 @@ inline void check_results_region_ptr_const_NEW(
     ReferenceFunction reference_arithmetic,
     uint32_t length)
 {
+    assert(length > 0);
     typedef TestImpl test_impl;
     typedef ReferenceImpl reference_impl;
 
@@ -236,16 +254,16 @@ inline void check_results_region_ptr_const_NEW(
 
     // Create the stack under test and the reference stack
     test_impl test;
-    test.set_length(length);
-
     reference_impl reference;
+
+    test.set_length(length);
     reference.set_length(length);
 
     typedef typename test_field::value_type value_type;
 
     // Create a random input vector to perform the chosen operation on
     uint32_t elements = fifi::length_to_elements<test_field>(length);
-    assert(length > 0);
+    assert(elements > 0);
 
     std::vector<value_type> data(length);
 
@@ -273,40 +291,51 @@ inline void check_results_region_ptr_const_NEW(
         reference_arithmetic(reference, reference_data.data(), constant);
         test_arithmetic(test, test_data.data(), constant);
 
-        EXPECT_TRUE(reference_data == test_data);
+        EXPECT_EQ(reference_data, test_data);
     }
 }
 
-
-template<class FieldImpl, class FunctionPacked, class FunctionRegion>
+template
+<
+    class TestImpl, class ReferenceImpl = TestImpl,
+    class ReferenceFunction, class TestFunction
+>
 inline void check_results_region_ptr_ptr_const(
-    FunctionPacked packed_arithmetic1,
-    FunctionPacked packed_arithmetic2,
-    FunctionRegion region_arithmetic,
+    ReferenceFunction packed_reference_arithmetic1,
+    ReferenceFunction packed_reference_arithmetic2,
+    TestFunction region_arithmetic,
     uint32_t elements)
 {
-    typedef typename FieldImpl::field_type field_type;
-    typedef typename field_type::value_type value_type;
+    typedef typename TestImpl::field_type test_field;
+    typedef typename ReferenceImpl::field_type reference_field;
 
-    uint32_t length = fifi::elements_to_length<field_type>(elements);
+    static_assert(std::is_same<test_field, reference_field>::value,
+                  "Reference and field under test must use same field");
 
-    FieldImpl field;
-    field.set_length(length);
+    typedef typename test_field::value_type value_type;
+
+    uint32_t length = fifi::elements_to_length<test_field>(elements);
+
+    TestImpl test_stack;
+    ReferenceImpl reference_stack;
+
+    test_stack.set_length(length);
+    reference_stack.set_length(length);
 
     std::vector<value_type> data(length);
     std::vector<value_type> src(length);
 
     for (uint32_t i = 0; i < elements; ++i)
     {
-        fifi::set_value<field_type>(data.data(), i, rand() % field_type::order);
-        fifi::set_value<field_type>(src.data(), i, rand() % field_type::order);
+        fifi::set_value<test_field>(data.data(), i, rand() % test_field::order);
+        fifi::set_value<test_field>(src.data(), i, rand() % test_field::order);
     }
 
     uint32_t tests = 10;
 
     for (uint32_t i = 0; i < tests; ++i)
     {
-        value_type constant = fifi::pack<field_type>(rand() % field_type::order);
+        value_type constant = fifi::pack<test_field>(rand() % test_field::order);
 
         SCOPED_TRACE(testing::Message() << "constant: " << constant);
 
@@ -315,10 +344,10 @@ inline void check_results_region_ptr_ptr_const(
         std::vector<value_type> expected(length);
         for (uint32_t j = 0; j < length; ++j)
         {
-            value_type v = (field.*packed_arithmetic1)(src[j], constant);
-            expected[j] = (field.*packed_arithmetic2)(dest[j], v);
+            value_type v = (reference_stack.*packed_reference_arithmetic1)(src[j], constant);
+            expected[j] = (reference_stack.*packed_reference_arithmetic2)(dest[j], v);
         }
-        (field.*region_arithmetic)(dest.data(), src.data(), constant);
+        (test_stack.*region_arithmetic)(dest.data(), src.data(), constant);
         for (uint32_t j = 0; j < length; ++j)
         {
             EXPECT_EQ(expected[j], dest[j]);
