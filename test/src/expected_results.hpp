@@ -144,6 +144,50 @@ std::vector<typename Field::value_type> create_data(uint32_t elements,
     return data;
 }
 
+template
+<
+    class Field,
+    class TestImpl, class ReferenceImpl,
+    class TestFunction, class ReferenceFunction,
+    class... Args
+>
+void run_test(
+    uint32_t elements,
+    TestFunction test_function,
+    ReferenceFunction reference_function,
+    Args... args)
+{
+    assert(elements > 0);
+
+    typedef typename TestImpl::field_type test_field;
+    typedef typename ReferenceImpl::field_type reference_field;
+
+    static_assert(std::is_same<test_field, reference_field>::value,
+                  "Reference and field under test must use same field");
+
+    typedef typename Field::value_type value_type;
+
+    uint32_t length = fifi::elements_to_length<Field>(elements);
+
+    TestImpl test_stack;
+    ReferenceImpl reference_stack;
+
+    test_stack.set_length(length);
+    reference_stack.set_length(length);
+
+    std::vector<value_type> data = create_data<Field>(elements);
+
+    // Create buffer and created the expected results using the reference
+    // arithmetics
+    std::vector<value_type> test_data = data;
+    std::vector<value_type> reference_data = data;
+
+    // Perform the calculations using the region arithmetics
+    test_function(test_stack, test_data.data(), args...);
+    reference_function(reference_stack, reference_data.data(), args...);
+
+    EXPECT_EQ(reference_data, test_data);
+}
 
 template
 <
@@ -156,35 +200,13 @@ inline void check_results_region_ptr_ptr(
     uint32_t elements,
     bool division = false)
 {
-    typedef typename TestImpl::field_type test_field;
-    typedef typename ReferenceImpl::field_type reference_field;
+    typedef typename TestImpl::field_type field_type;
 
-    static_assert(std::is_same<test_field, reference_field>::value,
-                  "Reference and field under test must use same field");
+    auto src = create_data<field_type>(elements, division);
 
-    typedef typename test_field::value_type value_type;
-
-    uint32_t length = fifi::elements_to_length<test_field>(elements);
-
-    TestImpl test_stack;
-    ReferenceImpl reference_stack;
-
-    test_stack.set_length(length);
-    reference_stack.set_length(length);
-
-    std::vector<value_type> data = create_data<test_field>(elements);
-    std::vector<value_type> src = create_data<test_field>(elements, division);
-
-    // Create buffer and created the expected results using the reference
-    // arithmetics
-    std::vector<value_type> test_data = data;
-    std::vector<value_type> reference_data = data;
-
-    // Perform the calculations using the region arithmetics
-    test_arithmetic(test_stack, test_data.data(), src.data());
-    reference_arithmetic(reference_stack, reference_data.data(), src.data());
-
-    EXPECT_EQ(reference_data, test_data);
+    run_test<field_type, TestImpl, ReferenceImpl>(elements, test_arithmetic,
+                                                  reference_arithmetic,
+                                                  src.data());
 }
 
 template
@@ -198,27 +220,8 @@ inline void check_results_region_ptr_const(
     uint32_t elements)
 {
     assert(elements > 0);
-    typedef TestImpl test_impl;
-    typedef ReferenceImpl reference_impl;
 
-    typedef typename test_impl::field_type test_field;
-    typedef typename reference_impl::field_type reference_field;
-
-    static_assert(std::is_same<test_field, reference_field>::value,
-                  "Reference and field under test must use same field");
-
-    typedef typename test_field::value_type value_type;
-
-    uint32_t length = fifi::elements_to_length<test_field>(elements);
-
-    // Create the stack under test and the reference stack
-    test_impl test_stack;
-    reference_impl reference_stack;
-
-    test_stack.set_length(length);
-    reference_stack.set_length(length);
-
-    std::vector<value_type> data = create_data<test_field>(elements);
+    typedef typename TestImpl::field_type field_type;
 
     // We repeat the test a number of times with different constants
     uint32_t tests = 10;
@@ -226,70 +229,48 @@ inline void check_results_region_ptr_const(
     for (uint32_t i = 0; i < tests; ++i)
     {
         // Get the constant to multiply with
-        value_type constant = fifi::pack<test_field>(rand() % test_field::order);
-
+        auto constant = fifi::pack<field_type>(rand() % field_type::order);
         SCOPED_TRACE(testing::Message() << "constant: " << constant);
 
-        // Create buffer and created the expected results using the reference
-        // arithmetics
-        std::vector<value_type> test_data = data;
-        std::vector<value_type> reference_data = data;
-
-        // Perform the calculations using the region arithmetics
-        test_arithmetic(test_stack, test_data.data(), constant);
-        reference_arithmetic(reference_stack, reference_data.data(), constant);
-
-        EXPECT_EQ(reference_data, test_data);
+        run_test<field_type, TestImpl, ReferenceImpl>(
+            elements,
+            test_arithmetic,
+            reference_arithmetic,
+            constant);
     }
 }
 
 template
 <
     class TestImpl, class ReferenceImpl,
-    class ReferenceFunction, class TestFunction
+    class TestFunction, class ReferenceFunction
 >
 inline void check_results_region_ptr_ptr_const(
     TestFunction test_arithmetic,
     ReferenceFunction reference_arithmetic,
     uint32_t elements)
 {
-    typedef typename TestImpl::field_type test_field;
-    typedef typename ReferenceImpl::field_type reference_field;
+    assert(elements > 0);
 
-    static_assert(std::is_same<test_field, reference_field>::value,
-                  "Reference and field under test must use same field");
+    typedef typename TestImpl::field_type field_type;
 
-    typedef typename test_field::value_type value_type;
+    auto src = create_data<field_type>(elements);
 
-    uint32_t length = fifi::elements_to_length<test_field>(elements);
-
-    TestImpl test_stack;
-    ReferenceImpl reference_stack;
-
-    test_stack.set_length(length);
-    reference_stack.set_length(length);
-
-    std::vector<value_type> data = create_data<test_field>(elements);
-    std::vector<value_type> src = create_data<test_field>(elements);
-
+    // We repeat the test a number of times with different constants
     uint32_t tests = 10;
 
     for (uint32_t i = 0; i < tests; ++i)
     {
         // Get the constant to multiply with
-        value_type constant = fifi::pack<test_field>(rand() % test_field::order);
+        auto constant = fifi::pack<field_type>(rand() % field_type::order);
         SCOPED_TRACE(testing::Message() << "constant: " << constant);
 
-        // Create buffer and created the expected results using the reference
-        // arithmetics
-        std::vector<value_type> test_data = data;
-        std::vector<value_type> reference_data = data;
-
-        // Perform the calculations using the region arithmetics
-        test_arithmetic(test_stack, test_data.data(), src.data(), constant);
-        reference_arithmetic(reference_stack, reference_data.data(), src.data(), constant);
-
-        EXPECT_EQ(reference_data, test_data);
+        run_test<field_type, TestImpl, ReferenceImpl>(
+            elements,
+            test_arithmetic,
+            reference_arithmetic,
+            src.data(),
+            constant);
     }
 }
 
