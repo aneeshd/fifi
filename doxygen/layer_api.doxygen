@@ -1,0 +1,17 @@
+/// @brief Doxygen dummy class specifying the API available at different
+///        layers
+class layer
+{
+public:
+
+    /// @typedef field_type
+    /// The finite field type used e.g. fifi::binary8 for the Finite
+    /// Field 2^8
+    typedef fifi_finite_field field_type;
+
+    /// @typedef value_type
+    /// The value type storing the field elements used for the
+    /// specified field. E.g. the binary extension field 2^8 uses
+    /// uint8_t as the value_type.
+    typedef field::value_type value_type;
+};
