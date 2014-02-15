@@ -82,17 +82,6 @@ namespace fifi
         m_sse3_size = length / length_granularity();
     }
 
-    // void sse3_binary4_region_arithmetic::set_size(uint32_t size)
-    // {
-    //     assert(size > 0);
-    //     assert((size % 16) == 0);
-
-    //     base::set_size(size);
-
-    //     m_sse3_size = size / 16;
-    //     assert(m_sse3_size > 0);
-    // }
-
     /// @return The granularity requirements for specifying a length
     uint32_t sse3_binary4_region_arithmetic::length_granularity() const
     {

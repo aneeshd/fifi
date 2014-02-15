@@ -16,7 +16,21 @@
 namespace fifi
 {
 
-    /// Stack implementing SSE3 SIMD accelerated arithmetics
+    /// Stack implementing SSSE3 SIMD accelerated finite field
+    /// arithmetic. The following intrinsics are used available in the
+    /// follwoing SIMD versions:
+    ///
+    /// _mm_load_si128 (SSE2)
+    /// _mm_set1_epi8 (SSE2)
+    /// _mm_and_si128 (SSE2)
+    /// _mm_shuffle_epi8 (SSSE3)
+    /// _mm_srli_epi64 (SSE2)
+    /// _mm_xor_si128 (SSE2)
+    /// _mm_store_si128 (SSE2)
+    ///
+    /// Based on this we see that the minimum required instruction for
+    /// this optimization is the Supplemental Streaming SIMD Extension
+    /// 3 (SSSE3).
     class sse3_binary4_region_arithmetic
         : public simple_online_arithmetic<final<binary4> >
     {
