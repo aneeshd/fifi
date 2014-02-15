@@ -4,16 +4,43 @@
 
 from os.path import abspath
 
-bld.objects(source='sse3_binary4_region_arithmetic.cpp',
-            target='sse3_binary4_region_arithmetic',
-            cxxflags=['-mssse3'],
-            use = 'sak_includes')
+#print(bld.env)
 
-source_files = bld.path.ant_glob('**/*.cpp', excl=['sse3_binary4_region_arithmetic.cpp'])
+# Guard by compiler and dest cpu
+
+cpu = bld.env['DEST_CPU']
+os = bld.env['MKSPEC_PLATFORM']
+
+ssse3_flags = []
+
+if os == 'linux':
+
+    if cpu == 'x86' or cpu == 'x86_64':
+        ssse3_flags = ['-mssse3']
+
+
+optimized_sources = {'sse3_binary4_region_arithmetic': ssse3_flags}
+
+for source, flags in optimized_sources.items():
+    bld.objects(source= source + '.cpp',
+                target='sse3_binary4_region_arithmetic',
+                cxxflags = flags,
+                use = 'sak_includes')
+
+
+source_files = bld.path.ant_glob(
+    '**/*.cpp', excl=[s + '.cpp' for s in optimized_sources.keys()])
 
 bld.stlib(features = 'cxx',
           source   = source_files,
           target = 'fifi',
-          use    = ['boost_includes', 'sak_includes', 'sak',
-                    'sse3_binary4_region_arithmetic'],
+          use    = ['boost_includes', 'sak_includes', 'sak'] + optimized_sources.keys(),
+          export_includes = ['..'])
+
+
+# We want to make sure we can still build the library without any specific
+bld.stlib(features = 'cxx',
+          source   = bld.path.ant_glob('**/*.cpp'),
+          target = 'fifi_no_dispatch',
+          use    = ['boost_includes', 'sak_includes', 'sak'],
           export_includes = ['..'])
