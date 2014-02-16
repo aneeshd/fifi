@@ -9,6 +9,11 @@
 #include <cstdint>
 #include <vector>
 
+/// @todo fix cannot compile sak::aligned_allocator without
+#include <limits>
+
+#include <sak/aligned_allocator.hpp>
+
 #include "binary4.hpp"
 #include "simple_online_arithmetic.hpp"
 #include "final.hpp"
@@ -73,8 +78,13 @@ namespace fifi
         /// The size of each step in the region loops
         uint32_t m_ssse3_size;
 
-        std::vector<uint8_t> m_table_one;
-        std::vector<uint8_t> m_table_two;
+        /// The storage type
+        typedef std::vector<uint8_t, sak::aligned_allocator<uint8_t> >
+            aligned_vector;
+
+
+        aligned_vector m_table_one;
+        aligned_vector m_table_two;
 
 
     };
