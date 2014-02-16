@@ -16,10 +16,10 @@ public:
     /// @return Addition result
     value_type add(value_type a, value_type b) const
 
-    /// @brief Get the substraction of two field elements
-    /// @param First operand to substract
-    /// @param Second operand to substract
-    /// @return Substraction result
+    /// @brief Get the subtraction of two field elements
+    /// @param First operand to subtract from
+    /// @param Second operand to subtract
+    /// @return Subtraction result
     value_type subtract(value_type a, value_type b) const
 
     /// @brief Get the multiplication of two field elements
