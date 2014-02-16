@@ -29,9 +29,9 @@ namespace fifi
         public:
 
             void region_multiply_constant(
-                value_type* dest, value_type constant) const
+                value_type* /*dest*/, value_type /*constant*/) const
             {
-                assert(0);
+
             }
 
             uint32_t length_granularity() const
