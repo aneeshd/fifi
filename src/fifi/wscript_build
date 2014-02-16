@@ -35,7 +35,7 @@ bld.stlib(features = 'cxx',
           source   = source_files,
           target = 'fifi',
           use    = ['boost_includes', 'sak_includes', 'sak',
-                    'cpuid'] + optimized_sources.keys(),
+                    'cpuid'] + list(optimized_sources.keys()),
           export_includes = ['..'])
 
 

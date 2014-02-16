@@ -8,7 +8,7 @@
 #include <iostream>
 #include <cpuid/config.hpp>
 
-#ifdef defined(CPUID_LINUX_GCC_X86)
+#if defined(CPUID_LINUX_GCC_X86)
     #include <x86intrin.h>
 #elif defined(CPUID_LINUX_CLANG_X86)
     #include <x86intrin.h>
