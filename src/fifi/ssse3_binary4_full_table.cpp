@@ -8,13 +8,16 @@
 #include <iostream>
 #include <cpuid/config.hpp>
 
-#include <x86intrin.h>
-
+#ifdef defined(CPUID_LINUX_GCC_X86)
+    #include <x86intrin.h>
+#elif defined(CPUID_LINUX_CLANG_X86)
+    #include <x86intrin.h>
+#endif
 
 namespace fifi
 {
 
-#ifdef __SSE3__
+#ifdef __SSSE3__
 
     ssse3_binary4_full_table::ssse3_binary4_full_table()
         : m_ssse3_size(0)
@@ -123,6 +126,13 @@ namespace fifi
     void ssse3_binary4_full_table::set_length(uint32_t length)
     {
         assert(0);
+    }
+
+
+    uint32_t ssse3_binary4_full_table::length_granularity() const
+    {
+        assert(0);
+        return 0;
     }
 
 

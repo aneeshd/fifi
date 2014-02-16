@@ -19,7 +19,7 @@ if os == 'linux':
         ssse3_flags = ['-mssse3']
 
 
-optimized_sources = {}#{'ssse3_binary4_full_table': ssse3_flags}
+optimized_sources = {'ssse3_binary4_full_table': ssse3_flags}
 
 for source, flags in optimized_sources.items():
     bld.objects(source= source + '.cpp',

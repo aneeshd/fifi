@@ -82,6 +82,8 @@ def configure(conf):
         recurse_helper(conf, 'sak')
         recurse_helper(conf, 'gauge')
         recurse_helper(conf, 'tables')
+        recurse_helper(conf, 'cpuid')
+
 
 def build(bld):
 
@@ -99,6 +101,7 @@ def build(bld):
         recurse_helper(bld, 'sak')
         recurse_helper(bld, 'gauge')
         recurse_helper(bld, 'tables')
+        recurse_helper(bld, 'cpuid')
 
         # Only build test and benchmarks when executed from the
         # top-level wscript i.e. not when included as a dependency
