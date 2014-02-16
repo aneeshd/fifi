@@ -68,14 +68,24 @@ namespace fifi
         void set_length(uint32_t length)
         {
             assert(length > 0);
-            m_ssse3_binary4.set_length(length);
+
+            if(m_ssse3_binary4.executable_has_ssse3())
+                m_ssse3_binary4.set_length(length);
+
             Super::set_length(length);
         }
 
         uint32_t length_granularity() const
         {
-            return std::max(m_ssse3_binary4.length_granularity(),
-                            Super::length_granularity());
+            if(m_ssse3_binary4.executable_has_ssse3())
+            {
+                return std::max(m_ssse3_binary4.length_granularity(),
+                                Super::length_granularity());
+            }
+            else
+            {
+                return Super::length_granularity();
+            }
         }
 
     private:
