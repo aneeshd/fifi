@@ -60,8 +60,7 @@ inline void check_results_binary(Function arithmetic)
     FieldImpl field;
     for (uint32_t i = 0; i < Results<field_type>::m_size; ++i)
     {
-        expected_result_binary<field_type> res =
-            Results<field_type>::m_results[i];
+        auto res = Results<field_type>::m_results[i];
         SCOPED_TRACE(testing::Message() << "a:" << res.m_input1);
         SCOPED_TRACE(testing::Message() << "b:" << res.m_input2);
         EXPECT_EQ(res.m_result, (field.*arithmetic)(res.m_input1, res.m_input2));
@@ -72,13 +71,10 @@ template<class FieldImpl, template<class>class Results, class Function>
 inline void check_results_unary(Function arithmetic)
 {
     typedef typename FieldImpl::field_type field_type;
-
     FieldImpl field;
-
     for (uint32_t i = 0; i < Results<field_type>::m_size; ++i)
     {
-        expected_result_unary<field_type> res =
-            Results<field_type>::m_results[i];
+        auto res = Results<field_type>::m_results[i];
         SCOPED_TRACE(testing::Message() << "a:" << res.m_input1);
         EXPECT_EQ(res.m_result, (field.*arithmetic)(res.m_input1));
     }
@@ -97,7 +93,7 @@ inline void check_results_random(
 
     for (uint32_t i = 0; i < elements; ++i)
     {
-        typename field_type::value_type v = rand() % field_type::order;
+        auto v = rand() % field_type::order;
         if (v == 0)
             ++v;
 
@@ -105,24 +101,6 @@ inline void check_results_random(
         EXPECT_EQ((field.*multiply)(v, (field.*divide)(1U, v)), 1U);
     }
 }
-
-
-/// This function checks whether the region arithmetics for the
-/// dest[i] = dest[i] OPERATION constant function works. Where
-/// OPERATION can be addition, subtraction, multiplication or
-/// division.
-///
-/// @tparam Field The finite field that we are working in
-/// @tparam FunctionPacked This function implements the packed version
-///  of the operation this gives us a reference to the the region function
-/// @tparam FunctionRegion This function invokes the region version of the
-///  operation
-///
-/// @param packed_arithmetic The packed arithmetic function used to
-/// compute expected results
-/// @param region_arithmetic The region arithmetic function used to compute
-/// the expected region results
-/// @param elements The number of field elements in the region we will compute
 
 template<class Field>
 std::vector<typename Field::value_type> create_data(uint32_t elements,
@@ -144,6 +122,27 @@ std::vector<typename Field::value_type> create_data(uint32_t elements,
     return data;
 }
 
+/// This function checks whether the region arithmetics for the
+/// "dest[i] = dest[i] _OPERATION_ src[i]" function works. Where
+/// _OPERATION_ can be addition, subtraction, multiplication or
+/// division.
+///
+/// @tparam TestImpl The stack class to test
+/// @tparam ReferenceImpl The reference stack class to test against
+/// @tparam TestFunction The function type to be invoked on the test stack. It
+/// is assumed that the function takes two arguments; a pointer to the
+/// destination buffer and a pointer to the source buffer.
+/// @tparam ReferenceFunction The function type to be invoked on the reference
+/// stack. It's assumed that the function takes two arguments; a pointer to the
+/// destination buffer and a pointer to the source buffer.
+///
+/// @param test_arithmetic The arithmetic function used to compute the results
+/// to test
+/// @param reference_arithmetic The arithmetic function used to compute the
+/// reference results to test against
+/// @param elements The number of field elements in the region we will compute
+/// @param devision A boolean determing wether arithmetic functions are
+/// division. This is needed to prevent division by zero errors.
 template
 <
     class TestImpl, class ReferenceImpl,
@@ -188,6 +187,24 @@ inline void check_results_region_ptr_ptr(
     EXPECT_EQ(reference_data, test_data);
 }
 
+/// This function checks whether the region arithmetics for the
+/// "dest[i] = dest[i] _OPERATION_ constant" function works. Where
+/// _OPERATION_ is multiplication.
+///
+/// @tparam TestImpl The stack class to test
+/// @tparam ReferenceImpl The reference stack class to test against
+/// @tparam TestFunction The function type to be invoked on the test stack. It
+/// is assumed that the function takes two arguments; a pointer to the
+/// destination buffer and a constant.
+/// @tparam ReferenceFunction The function type to be invoked on the reference
+/// stack. It's assumed that the function takes two arguments; a pointer to the
+/// destination buffer and a constant.
+///
+/// @param test_arithmetic The arithmetic function used to compute the results
+/// to test
+/// @param reference_arithmetic The arithmetic function used to compute the
+/// reference results to test against
+/// @param elements The number of field elements in the region we will compute
 template
 <
     class TestImpl, class ReferenceImpl,
@@ -237,6 +254,24 @@ inline void check_results_region_ptr_const(
     }
 }
 
+/// This function checks whether the region arithmetics for the
+/// "dest[i] = (dest[i] * constant) _OPERATION_ src[i]" function works. Where
+/// _OPERATION_ can be addition or subtraction.
+///
+/// @tparam TestImpl The stack class to test
+/// @tparam ReferenceImpl The reference stack class to test against
+/// @tparam TestFunction The function type to be invoked on the test stack. It
+/// is assumed that the function takes three arguments; a pointer to the
+/// destination buffer, a pointer to the source buffer, and a constant.
+/// @tparam ReferenceFunction The function type to be invoked on the reference
+/// stack. It's assumed that the function takes three arguments; a pointer to
+/// the destination buffer, a pointer to the source buffer, and a constant.
+///
+/// @param test_arithmetic The arithmetic function used to compute the results
+/// to test
+/// @param reference_arithmetic The arithmetic function used to compute the
+/// reference results to test against
+/// @param elements The number of field elements in the region we will compute
 template
 <
     class TestImpl, class ReferenceImpl,
