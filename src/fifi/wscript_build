@@ -19,13 +19,13 @@ if os == 'linux':
         ssse3_flags = ['-mssse3']
 
 
-optimized_sources = {'sse3_binary4_region_arithmetic': ssse3_flags}
+optimized_sources = {}#{'ssse3_binary4_full_table': ssse3_flags}
 
 for source, flags in optimized_sources.items():
     bld.objects(source= source + '.cpp',
-                target='sse3_binary4_region_arithmetic',
+                target='ssse3_binary4_full_table',
                 cxxflags = flags,
-                use = 'sak_includes')
+                use = ['sak_includes', 'cpuid'])
 
 
 source_files = bld.path.ant_glob(
@@ -34,7 +34,8 @@ source_files = bld.path.ant_glob(
 bld.stlib(features = 'cxx',
           source   = source_files,
           target = 'fifi',
-          use    = ['boost_includes', 'sak_includes', 'sak'] + optimized_sources.keys(),
+          use    = ['boost_includes', 'sak_includes', 'sak',
+                    'cpuid'] + optimized_sources.keys(),
           export_includes = ['..'])
 
 
@@ -42,5 +43,5 @@ bld.stlib(features = 'cxx',
 bld.stlib(features = 'cxx',
           source   = bld.path.ant_glob('**/*.cpp'),
           target = 'fifi_no_dispatch',
-          use    = ['boost_includes', 'sak_includes', 'sak'],
+          use    = ['boost_includes', 'sak_includes', 'sak', 'cpuid'],
           export_includes = ['..'])

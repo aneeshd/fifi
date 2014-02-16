@@ -498,10 +498,10 @@ BENCHMARK_F(setup_optimal_prime2325, Arithmetic, OptimalPrime2325, 5)
     benchmark();
 }
 
-typedef arithmetic_setup< fifi::dispatch_sse3_binary4<fifi::binary4> >
-    setup_dispatch_sse3_binary4;
+typedef arithmetic_setup< fifi::ssse3_binary4<fifi::binary4> >
+    setup_ssse3_binary4;
 
-BENCHMARK_F(setup_dispatch_sse3_binary4, Arithmetic, DispatchSSSE3Binary4, 5)
+BENCHMARK_F(setup_ssse3_binary4, Arithmetic, SSSE3Binary4, 5)
 {
     benchmark();
 }

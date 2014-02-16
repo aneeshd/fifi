@@ -3,7 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <fifi/sse3_binary4_region_arithmetic.hpp>
+#include <fifi/ssse3_binary4_full_table.hpp>
 
 #include <gtest/gtest.h>
 
@@ -14,51 +14,51 @@
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_add)
 // {
-//     fifi::check_region_add<fifi::sse3_binary4_region_arithmetic>();
+//     fifi::check_region_add<fifi::ssse3_binary4_full_table>();
 // }
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_subtract)
 // {
-//     fifi::check_region_subtract<fifi::sse3_binary4_region_arithmetic>();
+//     fifi::check_region_subtract<fifi::ssse3_binary4_full_table>();
 // }
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_multiply)
 // {
-//     fifi::check_region_multiply<fifi::sse3_binary4_region_arithmetic>();
+//     fifi::check_region_multiply<fifi::ssse3_binary4_full_table>();
 // }
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_divide)
 // {
-//     fifi::check_region_divide<fifi::sse3_binary4_region_arithmetic>();
+//     fifi::check_region_divide<fifi::ssse3_binary4_full_table>();
 // }
 
 TEST(TestSSE3Binary4RegionArithmetic, region_multiply_constant)
 {
     check_results_region_multiply_constant<
-        fifi::sse3_binary4_region_arithmetic>();
+        fifi::ssse3_binary4_full_table>();
 
     check_results_region_multiply_constant<
-        fifi::sse3_binary4_region_arithmetic>();
+        fifi::ssse3_binary4_full_table>();
 
-        check_results_region_multiply_constant<
-        fifi::sse3_binary4_region_arithmetic>();
     check_results_region_multiply_constant<
-        fifi::sse3_binary4_region_arithmetic>();
+        fifi::ssse3_binary4_full_table>();
     check_results_region_multiply_constant<
-        fifi::sse3_binary4_region_arithmetic>();
+        fifi::ssse3_binary4_full_table>();
     check_results_region_multiply_constant<
-        fifi::sse3_binary4_region_arithmetic>();
+        fifi::ssse3_binary4_full_table>();
     check_results_region_multiply_constant<
-        fifi::sse3_binary4_region_arithmetic>();
+        fifi::ssse3_binary4_full_table>();
+    check_results_region_multiply_constant<
+        fifi::ssse3_binary4_full_table>();
 
 }
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_multiply_add)
 // {
-//     fifi::check_region_multiply_add<fifi::sse3_binary4_region_arithmetic>();
+//     fifi::check_region_multiply_add<fifi::ssse3_binary4_full_table>();
 // }
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_multiply_subtract)
 // {
-//     fifi::check_region_multiply_subtract<fifi::sse3_binary4_region_arithmetic>();
+//     fifi::check_region_multiply_subtract<fifi::ssse3_binary4_full_table>();
 // }

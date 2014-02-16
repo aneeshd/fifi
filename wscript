@@ -56,6 +56,12 @@ def options(opt):
             git_repository = 'github.com/steinwurf/tables.git',
             major_version = 4))
 
+    bundle.add_dependency(opt,
+        resolve.ResolveGitMajorVersion(
+            name = 'cpuid',
+            git_repository = 'github.com/steinwurf/cpuid.git',
+            major_version = 1))
+
     opt.load('wurf_dependency_bundle')
     opt.load('wurf_tools')
 

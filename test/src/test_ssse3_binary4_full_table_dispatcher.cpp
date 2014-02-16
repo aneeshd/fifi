@@ -3,7 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <fifi/dispatcher_sse3_binary4_region_arithmetic.hpp>
+#include <fifi/ssse3_binary4_full_table_dispatcher.hpp>
 
 #include <gtest/gtest.h>
 
@@ -55,7 +55,7 @@ namespace fifi
 
         template<class Field>
         class dummy_stack :
-            public dispatcher_binary4_sse3_region_arithmetic<Field,
+            public ssse3_binary4_full_table_dispatcher<Field,
                    dummy_layer<Field> >
         { };
 
@@ -68,25 +68,25 @@ namespace fifi
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_add)
 // {
-//     fifi::check_region_add<fifi::sse3_binary4_region_arithmetic>();
+//     fifi::check_region_add<fifi::ssse3_binary4_full_table>();
 // }
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_subtract)
 // {
-//     fifi::check_region_subtract<fifi::sse3_binary4_region_arithmetic>();
+//     fifi::check_region_subtract<fifi::ssse3_binary4_full_table>();
 // }
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_multiply)
 // {
-//     fifi::check_region_multiply<fifi::sse3_binary4_region_arithmetic>();
+//     fifi::check_region_multiply<fifi::ssse3_binary4_full_table>();
 // }
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_divide)
 // {
-//     fifi::check_region_divide<fifi::sse3_binary4_region_arithmetic>();
+//     fifi::check_region_divide<fifi::ssse3_binary4_full_table>();
 // }
 
-TEST(TestDispatcherSSE3Binary4RegionArithmetic, api)
+TEST(TestSSE3Binary4FullTableDispacther, api)
 {
     fifi::dummy_stack<fifi::binary4> stack;
 
@@ -106,10 +106,10 @@ TEST(TestDispatcherSSE3Binary4RegionArithmetic, api)
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_multiply_add)
 // {
-//     fifi::check_region_multiply_add<fifi::sse3_binary4_region_arithmetic>();
+//     fifi::check_region_multiply_add<fifi::ssse3_binary4_full_table>();
 // }
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_multiply_subtract)
 // {
-//     fifi::check_region_multiply_subtract<fifi::sse3_binary4_region_arithmetic>();
+//     fifi::check_region_multiply_subtract<fifi::ssse3_binary4_full_table>();
 // }

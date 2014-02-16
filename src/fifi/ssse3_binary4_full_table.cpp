@@ -3,17 +3,20 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include "sse3_binary4_region_arithmetic.hpp"
+#include "ssse3_binary4_full_table.hpp"
+
+#include <iostream>
+#include <cpuid/config.hpp>
 
 #include <x86intrin.h>
-#include <iostream>
+
 
 namespace fifi
 {
 
 #ifdef __SSE3__
 
-    sse3_binary4_region_arithmetic::sse3_binary4_region_arithmetic()
+    ssse3_binary4_full_table::ssse3_binary4_full_table()
         : m_ssse3_size(0)
     {
         m_table_one.resize(16*16);
@@ -34,7 +37,7 @@ namespace fifi
         }
     }
 
-    void sse3_binary4_region_arithmetic::region_multiply_constant(
+    void ssse3_binary4_full_table::region_multiply_constant(
         value_type* dest, value_type constant) const
     {
         assert(dest != 0);
@@ -74,7 +77,7 @@ namespace fifi
 
     }
 
-    void sse3_binary4_region_arithmetic::set_length(uint32_t length)
+    void ssse3_binary4_full_table::set_length(uint32_t length)
     {
         assert(length > 0);
         assert((length % length_granularity()) == 0);
@@ -84,7 +87,7 @@ namespace fifi
     }
 
     /// @return The granularity requirements for specifying a length
-    uint32_t sse3_binary4_region_arithmetic::length_granularity() const
+    uint32_t ssse3_binary4_full_table::length_granularity() const
     {
         // We are working over 16 bytes at a time i.e. 128 bits so we
         // require a length granularity of 16. We expect that binary4
@@ -94,30 +97,30 @@ namespace fifi
         return 16U;
     }
 
-    bool sse3_binary4_region_arithmetic::executable_has_ssse3() const
+    bool ssse3_binary4_full_table::executable_has_ssse3() const
     {
         return true;
     }
 
 #else
 
-    sse3_binary4_region_arithmetic::sse3_binary4_region_arithmetic()
+    ssse3_binary4_full_table::ssse3_binary4_full_table()
     { }
 
-    void sse3_binary4_region_arithmetic::region_multiply_constant(
+    void ssse3_binary4_full_table::region_multiply_constant(
         value_type* /*dest*/, value_type /*constant*/) const
     {
         // Not implemented
         assert(0);
     }
 
-    bool sse3_binary4_region_arithmetic::executable_has_ssse3() const
+    bool ssse3_binary4_full_table::executable_has_ssse3() const
     {
         return false;
     }
 
 
-    void sse3_binary4_region_arithmetic::set_length(uint32_t length)
+    void ssse3_binary4_full_table::set_length(uint32_t length)
     {
         assert(0);
     }

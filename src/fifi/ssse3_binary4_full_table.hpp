@@ -16,6 +16,9 @@
 namespace fifi
 {
 
+    /// ssse3_binary4_full_table_dispatch
+    /// ssse3_binary4_full_table
+    ///
     /// Stack implementing SSSE3 SIMD accelerated finite field
     /// arithmetic. The following intrinsics are used available in the
     /// follwoing SIMD versions:
@@ -31,7 +34,7 @@ namespace fifi
     /// Based on this we see that the minimum required instruction for
     /// this optimization is the Supplemental Streaming SIMD Extension
     /// 3 (SSSE3).
-    class sse3_binary4_region_arithmetic
+    class ssse3_binary4_full_table
         : public simple_online_arithmetic<final<binary4> >
     {
     public:
@@ -48,7 +51,7 @@ namespace fifi
     public:
 
         /// Constructor for the stack
-        sse3_binary4_region_arithmetic();
+        ssse3_binary4_full_table();
 
         /// Optimized function for multiply constant
         /// @copydoc layer::region_multiply_constant(

@@ -11,20 +11,20 @@
 #include <functional>
 
 #include "is_packed_constant.hpp"
-#include "sse3_binary4_region_arithmetic.hpp"
+#include "ssse3_binary4_full_table.hpp"
 
 namespace fifi
 {
 
     /// Fall through for other fields
     template<class Field, class Super>
-    class dispatcher_binary4_sse3_region_arithmetic : public Super
+    class ssse3_binary4_full_table_dispatcher : public Super
     { };
 
 
     /// @todo
     template<class Super>
-    class dispatcher_binary4_sse3_region_arithmetic<binary4, Super>
+    class ssse3_binary4_full_table_dispatcher<binary4, Super>
         : public Super
     {
     public:
@@ -41,7 +41,7 @@ namespace fifi
 
     public:
 
-        dispatcher_binary4_sse3_region_arithmetic()
+        ssse3_binary4_full_table_dispatcher()
         {
             m_region_multiply_constant =
                 dispatch_region_multiply_constant();
@@ -58,10 +58,9 @@ namespace fifi
             assert(dest != 0);
             assert(Super::length() > 0);
             assert(is_packed_constant<field_type>(constant));
+            assert(m_region_multiply_constant);
 
-            static auto dispatch = dispatch_region_multiply_constant();
-
-            dispatch(dest, constant);
+            m_region_multiply_constant(dest, constant);
         }
 
         void set_length(uint32_t length)
@@ -89,7 +88,7 @@ namespace fifi
             if(m_ssse3_binary4.executable_has_ssse3())
             {
                 return std::bind(
-                    &sse3_binary4_region_arithmetic::region_multiply_constant,
+                    &ssse3_binary4_full_table::region_multiply_constant,
                     &m_ssse3_binary4, _1, _2);
             }
             else
@@ -102,7 +101,7 @@ namespace fifi
 
     private:
 
-        sse3_binary4_region_arithmetic m_ssse3_binary4;
+        ssse3_binary4_full_table m_ssse3_binary4;
 
         std::function<void (value_type*, value_type)> m_region_multiply_constant;
 

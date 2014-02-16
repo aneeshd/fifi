@@ -6,7 +6,7 @@
 #pragma once
 
 #include <fifi/simple_online.hpp>
-#include <fifi/dispatcher_sse3_binary4_region_arithmetic.hpp>
+#include <fifi/ssse3_binary4_full_table_dispatcher.hpp>
 
 namespace fifi
 {
@@ -14,8 +14,8 @@ namespace fifi
     /// Simple online finite field algorithms - computes the results
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
-    class dispatch_sse3_binary4 :
-        public dispatcher_binary4_sse3_region_arithmetic<Field,
+    class ssse3_binary4 :
+        public ssse3_binary4_full_table_dispatcher<Field,
                binary_region_arithmetic<Field,
                region_arithmetic<
                region_info<Field,
