@@ -4,13 +4,13 @@
 // http://www.steinwurf.com/licensing
 
 #include <fifi/ssse3_binary4_full_table.hpp>
+#include <cpuid/cpuinfo.hpp>
 
 #include <gtest/gtest.h>
 
 #include "helper_test_arithmetic.hpp"
 #include "helper_test_packed_arithmetic.hpp"
 #include "helper_test_region_arithmetic.hpp"
-
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_add)
 // {
@@ -34,22 +34,19 @@
 
 TEST(TestSSE3Binary4RegionArithmetic, region_multiply_constant)
 {
-    check_results_region_multiply_constant<
-        fifi::ssse3_binary4_full_table>();
+    cpuid::cpuinfo info;
 
-    check_results_region_multiply_constant<
-        fifi::ssse3_binary4_full_table>();
+    if(!info.has_ssse3())
+        return;
 
-    check_results_region_multiply_constant<
-        fifi::ssse3_binary4_full_table>();
-    check_results_region_multiply_constant<
-        fifi::ssse3_binary4_full_table>();
-    check_results_region_multiply_constant<
-        fifi::ssse3_binary4_full_table>();
-    check_results_region_multiply_constant<
-        fifi::ssse3_binary4_full_table>();
-    check_results_region_multiply_constant<
-        fifi::ssse3_binary4_full_table>();
+    fifi::ssse3_binary4_full_table impl;
+
+    // Needs check on CPU
+    if(impl.executable_has_ssse3())
+    {
+        check_results_region_multiply_constant<
+            fifi::ssse3_binary4_full_table>();
+    }
 
 }
 
