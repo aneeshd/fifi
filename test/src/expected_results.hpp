@@ -60,12 +60,9 @@ inline void check_results_binary(Function arithmetic)
     FieldImpl field;
     for (uint32_t i = 0; i < Results<field_type>::m_size; ++i)
     {
-        expected_result_binary<field_type> res =
-            Results<field_type>::m_results[i];
-        SCOPED_TRACE("a:");
-        SCOPED_TRACE(res.m_input1);
-        SCOPED_TRACE("b:");
-        SCOPED_TRACE(res.m_input2);
+        auto res = Results<field_type>::m_results[i];
+        SCOPED_TRACE(testing::Message() << "a:" << res.m_input1);
+        SCOPED_TRACE(testing::Message() << "b:" << res.m_input2);
         EXPECT_EQ(res.m_result, (field.*arithmetic)(res.m_input1, res.m_input2));
     }
 }
@@ -74,15 +71,11 @@ template<class FieldImpl, template<class>class Results, class Function>
 inline void check_results_unary(Function arithmetic)
 {
     typedef typename FieldImpl::field_type field_type;
-
     FieldImpl field;
-
     for (uint32_t i = 0; i < Results<field_type>::m_size; ++i)
     {
-        expected_result_unary<field_type> res =
-            Results<field_type>::m_results[i];
-        SCOPED_TRACE("a:");
-        SCOPED_TRACE(res.m_input1);
+        auto res = Results<field_type>::m_results[i];
+        SCOPED_TRACE(testing::Message() << "a:" << res.m_input1);
         EXPECT_EQ(res.m_result, (field.*arithmetic)(res.m_input1));
     }
 }
@@ -100,7 +93,7 @@ inline void check_results_random(
 
     for (uint32_t i = 0; i < elements; ++i)
     {
-        typename field_type::value_type v = rand() % field_type::order;
+        auto v = rand() % field_type::order;
         if (v == 0)
             ++v;
 
@@ -109,156 +102,144 @@ inline void check_results_random(
     }
 }
 
-template<class FieldImpl, class FunctionPacked, class FunctionRegion>
-inline void check_results_region_ptr_ptr(
-    FunctionPacked packed_arithmetic,
-    FunctionRegion region_arithmetic,
-    uint32_t elements,
-    bool divison = false)
+
+/// This function creates a random buffer of field elements to use for tests.
+///
+/// @tparam Field The field elements to create.
+///
+/// @param elements The number of field elements to create.
+/// @param no_zero A boolean determing whether the buffer is allowed to contain
+/// zero or not.
+template<class Field>
+std::vector<typename Field::value_type> create_data(uint32_t elements,
+                                                    bool no_zero = false)
 {
-    typedef typename FieldImpl::field_type field_type;
-    typedef typename field_type::value_type value_type;
+    typedef typename Field::value_type value_type;
 
-    uint32_t length = fifi::elements_to_length<field_type>(elements);
-
-    FieldImpl field;
-    field.set_length(length);
-
-    std::vector<value_type> dest(length);
-    std::vector<value_type> src(length);
-
+    std::vector<value_type> data(fifi::elements_to_length<Field>(elements));
     for (uint32_t i = 0; i < elements; ++i)
     {
-        value_type v1 = rand() % field_type::order;
-        value_type v2 = rand() % field_type::order;
-
-        if (divison && v2 == 0)
+        value_type v = rand() % Field::order;
+        if (no_zero && v == 0)
         {
-            v2++;
+            v++;
         }
-        fifi::set_value<field_type>(dest.data(), i, v1);
-        fifi::set_value<field_type>(src.data(), i, v2);
-    }
 
-    std::vector<value_type> expected(length);
-    for (uint32_t i = 0; i < length; ++i)
-    {
-        expected[i] = (field.*packed_arithmetic)(dest[i], src[i]);
+        fifi::set_value<Field>(data.data(), i, v);
     }
-
-    (field.*region_arithmetic)(dest.data(), src.data());
-
-    for (uint32_t i = 0; i < length; ++i)
-    {
-        EXPECT_EQ(expected[i], dest[i]);
-    }
+    return data;
 }
-
-template<class FieldImpl, class FunctionPacked, class FunctionRegion>
-inline void check_results_region_ptr_const(
-    FunctionPacked packed_arithmetic,
-    FunctionRegion region_arithmetic,
-    uint32_t elements)
-{
-    typedef typename FieldImpl::field_type field_type;
-    typedef typename field_type::value_type value_type;
-
-    uint32_t length = fifi::elements_to_length<field_type>(elements);
-
-    FieldImpl field;
-
-
-
-    field.set_length(length);
-
-    std::vector<value_type> data(length);
-    for (uint32_t i = 0; i < elements; ++i)
-    {
-        fifi::set_value<field_type>(data.data(), i, rand() % field_type::order);
-    }
-
-    uint32_t tests = 10;
-
-    for (uint32_t i = 0; i < tests; ++i)
-    {
-        value_type constant = fifi::pack<field_type>(rand() % field_type::order);
-        SCOPED_TRACE("constant:");
-        SCOPED_TRACE(constant);
-
-        std::vector<value_type> dest = data;
-
-        std::vector<value_type> expected(length);
-        for (uint32_t j = 0; j < length; ++j)
-        {
-            expected[j] = (field.*packed_arithmetic)(dest[j], constant);
-        }
-
-        (field.*region_arithmetic)(dest.data(), constant);
-
-        for (uint32_t j = 0; j < length; ++j)
-        {
-            EXPECT_EQ(expected[j], dest[j]);
-        }
-    }
-}
-
-
-
 
 /// This function checks whether the region arithmetics for the
-/// dest[i] = dest[i] OPERATION constant function works. Where
-/// OPERATION can be addition, subtraction, multiplication or
+/// "dest[i] = dest[i] _OPERATION_ src[i]" function works. Where
+/// _OPERATION_ can be addition, subtraction, multiplication or
 /// division.
 ///
-/// @tparam Field The finite field that we are working in
-/// @tparam FunctionPacked This function implements the packed version
-///  of the operation this gives us a reference to the the region function
-/// @tparam FunctionRegion This function invokes the region version of the
-///  operation
+/// @tparam TestImpl The stack class to test
+/// @tparam ReferenceImpl The reference stack class to test against
+/// @tparam TestFunction The function type to be invoked on the test stack. It
+/// is assumed that the function takes two arguments; a pointer to the
+/// destination buffer and a pointer to the source buffer.
+/// @tparam ReferenceFunction The function type to be invoked on the reference
+/// stack. It's assumed that the function takes two arguments; a pointer to the
+/// destination buffer and a pointer to the source buffer.
 ///
-/// @param packed_arithmetic The packed arithmetic function used to
-/// compute expected results
-/// @param region_arithmetic The region arithmetic function used to compute
-/// the expected region results
+/// @param test_arithmetic The arithmetic function used to compute the results
+/// to test
+/// @param reference_arithmetic The arithmetic function used to compute the
+/// reference results to test against
+/// @param elements The number of field elements in the region we will compute
+/// @param devision A boolean determing wether arithmetic functions are
+/// division. This is needed to prevent division by zero errors.
+template
+<
+    class TestImpl, class ReferenceImpl,
+    class TestFunction, class ReferenceFunction
+>
+inline void check_results_region_ptr_ptr(
+    TestFunction test_arithmetic,
+    ReferenceFunction reference_arithmetic,
+    uint32_t elements,
+    bool division = false)
+{
+    assert(elements > 0);
+
+    elements = 8;
+
+    typedef typename TestImpl::field_type test_field;
+    typedef typename ReferenceImpl::field_type reference_field;
+
+    static_assert(std::is_same<test_field, reference_field>::value,
+                  "Reference and field under test must use same field");
+
+    uint32_t length = fifi::elements_to_length<test_field>(elements);
+
+    TestImpl test_stack;
+    ReferenceImpl reference_stack;
+
+    test_stack.set_length(length);
+    reference_stack.set_length(length);
+
+    auto data = create_data<test_field>(elements);
+    auto src = create_data<test_field>(elements, division);
+
+    // Create buffer and created the expectedresults using the reference
+    // arithmetics
+    auto test_data = data;
+    auto reference_data = data;
+
+    // Perform the calculations using the region arithmetics
+    test_arithmetic(test_stack, test_data.data(), src.data());
+    reference_arithmetic(reference_stack, reference_data.data(), src.data());
+
+    EXPECT_EQ(reference_data, test_data);
+}
+
+/// This function checks whether the region arithmetics for the
+/// "dest[i] = dest[i] _OPERATION_ constant" function works. Where
+/// _OPERATION_ is multiplication.
+///
+/// @tparam TestImpl The stack class to test
+/// @tparam ReferenceImpl The reference stack class to test against
+/// @tparam TestFunction The function type to be invoked on the test stack. It
+/// is assumed that the function takes two arguments; a pointer to the
+/// destination buffer and a constant.
+/// @tparam ReferenceFunction The function type to be invoked on the reference
+/// stack. It's assumed that the function takes two arguments; a pointer to the
+/// destination buffer and a constant.
+///
+/// @param test_arithmetic The arithmetic function used to compute the results
+/// to test
+/// @param reference_arithmetic The arithmetic function used to compute the
+/// reference results to test against
 /// @param elements The number of field elements in the region we will compute
 template
 <
     class TestImpl, class ReferenceImpl,
     class TestFunction, class ReferenceFunction
 >
-inline void check_results_region_ptr_const_NEW(
+inline void check_results_region_ptr_const(
     TestFunction test_arithmetic,
     ReferenceFunction reference_arithmetic,
-    uint32_t length)
+    uint32_t elements)
 {
-    typedef TestImpl test_impl;
-    typedef ReferenceImpl reference_impl;
+    assert(elements > 0);
 
-    typedef typename test_impl::field_type test_field;
-    typedef typename reference_impl::field_type reference_field;
+    typedef typename TestImpl::field_type test_field;
+    typedef typename ReferenceImpl::field_type reference_field;
 
     static_assert(std::is_same<test_field, reference_field>::value,
                   "Reference and field under test must use same field");
 
-    // Create the stack under test and the reference stack
-    test_impl test;
-    test.set_length(length);
+    uint32_t length = fifi::elements_to_length<test_field>(elements);
 
-    reference_impl reference;
-    reference.set_length(length);
+    TestImpl test_stack;
+    ReferenceImpl reference_stack;
 
-    typedef typename test_field::value_type value_type;
+    test_stack.set_length(length);
+    reference_stack.set_length(length);
 
-    // Create a random input vector to perform the chosen operation on
-    uint32_t elements = fifi::length_to_elements<test_field>(length);
-    assert(length > 0);
-
-    std::vector<value_type> data(length);
-
-    for (uint32_t i = 0; i < elements; ++i)
-    {
-        fifi::set_value<test_field>(data.data(), i, rand() % test_field::order);
-    }
+    auto data = create_data<test_field>(elements);
 
     // We repeat the test a number of times with different constants
     uint32_t tests = 10;
@@ -266,70 +247,86 @@ inline void check_results_region_ptr_const_NEW(
     for (uint32_t i = 0; i < tests; ++i)
     {
         // Get the constant to multiply with
-        value_type constant = fifi::pack<test_field>(rand() % test_field::order);
-
+        auto constant = fifi::pack<test_field>(rand() % test_field::order);
         SCOPED_TRACE(testing::Message() << "constant: " << constant);
 
-        // Create buffer and created the expected results using the reference
+        // Create buffer and created the expectedresults using the reference
         // arithmetics
-        std::vector<value_type> test_data = data;
-        std::vector<value_type> reference_data = data;
-
+        auto test_data = data;
+        auto reference_data = data;
         // Perform the calculations using the region arithmetics
-        reference_arithmetic(reference, reference_data.data(), constant);
-        test_arithmetic(test, test_data.data(), constant);
+        test_arithmetic(test_stack, test_data.data(), constant);
+        reference_arithmetic(reference_stack, reference_data.data(), constant);
 
-        EXPECT_TRUE(reference_data == test_data);
+        EXPECT_EQ(reference_data, test_data);
     }
 }
 
-
-template<class FieldImpl, class FunctionPacked, class FunctionRegion>
+/// This function checks whether the region arithmetics for the
+/// "dest[i] = (dest[i] * constant) _OPERATION_ src[i]" function works. Where
+/// _OPERATION_ can be addition or subtraction.
+///
+/// @tparam TestImpl The stack class to test
+/// @tparam ReferenceImpl The reference stack class to test against
+/// @tparam TestFunction The function type to be invoked on the test stack. It
+/// is assumed that the function takes three arguments; a pointer to the
+/// destination buffer, a pointer to the source buffer, and a constant.
+/// @tparam ReferenceFunction The function type to be invoked on the reference
+/// stack. It's assumed that the function takes three arguments; a pointer to
+/// the destination buffer, a pointer to the source buffer, and a constant.
+///
+/// @param test_arithmetic The arithmetic function used to compute the results
+/// to test
+/// @param reference_arithmetic The arithmetic function used to compute the
+/// reference results to test against
+/// @param elements The number of field elements in the region we will compute
+template
+<
+    class TestImpl, class ReferenceImpl,
+    class TestFunction, class ReferenceFunction
+>
 inline void check_results_region_ptr_ptr_const(
-    FunctionPacked packed_arithmetic1,
-    FunctionPacked packed_arithmetic2,
-    FunctionRegion region_arithmetic,
+    TestFunction test_arithmetic,
+    ReferenceFunction reference_arithmetic,
     uint32_t elements)
 {
-    typedef typename FieldImpl::field_type field_type;
-    typedef typename field_type::value_type value_type;
+    assert(elements > 0);
 
-    uint32_t length = fifi::elements_to_length<field_type>(elements);
+    typedef typename TestImpl::field_type test_field;
+    typedef typename ReferenceImpl::field_type reference_field;
 
-    FieldImpl field;
-    field.set_length(length);
+    static_assert(std::is_same<test_field, reference_field>::value,
+                  "Reference and field under test must use same field");
 
-    std::vector<value_type> data(length);
-    std::vector<value_type> src(length);
+    uint32_t length = fifi::elements_to_length<test_field>(elements);
 
-    for (uint32_t i = 0; i < elements; ++i)
-    {
-        fifi::set_value<field_type>(data.data(), i, rand() % field_type::order);
-        fifi::set_value<field_type>(src.data(), i, rand() % field_type::order);
-    }
+    TestImpl test_stack;
+    ReferenceImpl reference_stack;
 
+    test_stack.set_length(length);
+    reference_stack.set_length(length);
+
+    auto data = create_data<test_field>(elements);
+    auto src = create_data<test_field>(elements);
+
+    // We repeat the test a number of times with different constants
     uint32_t tests = 10;
 
     for (uint32_t i = 0; i < tests; ++i)
     {
-        value_type constant = fifi::pack<field_type>(rand() % field_type::order);
+        // Get the constant to multiply with
+        auto constant = fifi::pack<test_field>(rand() % test_field::order);
+        SCOPED_TRACE(testing::Message() << "constant: " << constant);
 
-        SCOPED_TRACE("constant:");
-        SCOPED_TRACE(constant);
+        // Create buffer and created the expectedresults using the reference
+        // arithmetics
+        auto test_data = data;
+        auto reference_data = data;
+        // Perform the calculations using the region arithmetics
+        test_arithmetic(test_stack, test_data.data(), src.data(), constant);
+        reference_arithmetic(reference_stack, reference_data.data(), src.data(), constant);
 
-        std::vector<value_type> dest = data;
-
-        std::vector<value_type> expected(length);
-        for (uint32_t j = 0; j < length; ++j)
-        {
-            value_type v = (field.*packed_arithmetic1)(src[j], constant);
-            expected[j] = (field.*packed_arithmetic2)(dest[j], v);
-        }
-        (field.*region_arithmetic)(dest.data(), src.data(), constant);
-        for (uint32_t j = 0; j < length; ++j)
-        {
-            EXPECT_EQ(expected[j], dest[j]);
-        }
+        EXPECT_EQ(reference_data, test_data);
     }
 }
 
@@ -358,12 +355,17 @@ inline void check_results_packed_multiply()
         &FieldImpl::packed_multiply);
 }
 
-template<class FieldImpl>
+template
+<
+    class TestImpl,
+    class ReferenceImpl = fifi::helper_region_reference<
+        typename TestImpl::field_type>
+>
 inline void check_results_region_multiply(uint32_t elements = 128)
 {
-    check_results_region_ptr_ptr<FieldImpl>(
-        &FieldImpl::packed_multiply,
-        &FieldImpl::region_multiply,
+    check_results_region_ptr_ptr<TestImpl, ReferenceImpl>(
+        std::mem_fn(&TestImpl::region_multiply),
+        std::mem_fn(&ReferenceImpl::region_multiply),
         elements);
 }
 
@@ -391,12 +393,17 @@ inline void check_results_packed_divide()
         &FieldImpl::packed_divide);
 }
 
-template<class FieldImpl>
+template
+<
+    class TestImpl,
+    class ReferenceImpl = fifi::helper_region_reference<
+        typename TestImpl::field_type>
+>
 inline void check_results_region_divide(uint32_t elements = 128)
 {
-    check_results_region_ptr_ptr<FieldImpl>(
-        &FieldImpl::packed_divide,
-        &FieldImpl::region_divide,
+    check_results_region_ptr_ptr<TestImpl, ReferenceImpl>(
+        std::mem_fn(&TestImpl::region_divide),
+        std::mem_fn(&ReferenceImpl::region_divide),
         elements,
         true);
 }
@@ -424,12 +431,17 @@ inline void check_results_packed_add()
         &FieldImpl::packed_add);
 }
 
-template<class FieldImpl>
+template
+<
+    class TestImpl,
+    class ReferenceImpl = fifi::helper_region_reference<
+        typename TestImpl::field_type>
+>
 inline void check_results_region_add(uint32_t elements = 128)
 {
-    check_results_region_ptr_ptr<FieldImpl>(
-        &FieldImpl::packed_add,
-        &FieldImpl::region_add,
+    check_results_region_ptr_ptr<TestImpl, ReferenceImpl>(
+        std::mem_fn(&TestImpl::region_add),
+        std::mem_fn(&ReferenceImpl::region_add),
         elements);
 }
 
@@ -457,12 +469,17 @@ inline void check_results_packed_subtract()
         &FieldImpl::packed_subtract);
 }
 
-template<class FieldImpl>
+template
+<
+    class TestImpl,
+    class ReferenceImpl = fifi::helper_region_reference<
+        typename TestImpl::field_type>
+>
 inline void check_results_region_subtract(uint32_t elements = 128)
 {
-    check_results_region_ptr_ptr<FieldImpl >(
-        &FieldImpl::packed_subtract,
-        &FieldImpl::region_subtract,
+    check_results_region_ptr_ptr<TestImpl, ReferenceImpl>(
+        std::mem_fn(&TestImpl::region_subtract),
+        std::mem_fn(&ReferenceImpl::region_subtract),
         elements);
 }
 
@@ -521,34 +538,35 @@ inline void check_results_sum_modulo()
 // multiply constant
 //------------------------------------------------------------------
 
-template<class TestImpl, class ReferenceImpl>
+template
+<
+    class TestImpl,
+    class ReferenceImpl = fifi::helper_region_reference<
+        typename TestImpl::field_type>
+>
 inline void check_results_region_multiply_constant(uint32_t length = 128)
 {
-    check_results_region_ptr_const_NEW<TestImpl, ReferenceImpl>(
+    check_results_region_ptr_const<TestImpl, ReferenceImpl>(
         std::mem_fn(&TestImpl::region_multiply_constant),
         std::mem_fn(&ReferenceImpl::region_multiply_constant),
         length);
 }
 
-template<class TestImpl>
-inline void check_results_region_multiply_constant(uint32_t length = 128)
-{
-    check_results_region_multiply_constant<TestImpl,
-        fifi::helper_region_reference<typename TestImpl::field_type>>(length);
-}
-
-
 //------------------------------------------------------------------
 // multiply add
 //------------------------------------------------------------------
 
-template<class FieldImpl>
+template
+<
+    class TestImpl,
+    class ReferenceImpl = fifi::helper_region_reference<
+        typename TestImpl::field_type>
+>
 inline void check_results_region_multiply_add(uint32_t elements = 128)
 {
-    check_results_region_ptr_ptr_const<FieldImpl>(
-        &FieldImpl::packed_multiply,
-        &FieldImpl::packed_add,
-        &FieldImpl::region_multiply_add,
+    check_results_region_ptr_ptr_const<TestImpl, ReferenceImpl>(
+        std::mem_fn(&TestImpl::region_multiply_add),
+        std::mem_fn(&ReferenceImpl::region_multiply_add),
         elements);
 }
 
@@ -556,13 +574,17 @@ inline void check_results_region_multiply_add(uint32_t elements = 128)
 // multiply subtract
 //------------------------------------------------------------------
 
-template<class FieldImpl>
+template
+<
+    class TestImpl,
+    class ReferenceImpl = fifi::helper_region_reference<
+        typename TestImpl::field_type>
+>
 inline void check_results_region_multiply_subtract(uint32_t elements = 128)
 {
-    check_results_region_ptr_ptr_const<FieldImpl>(
-        &FieldImpl::packed_multiply,
-        &FieldImpl::packed_subtract,
-        &FieldImpl::region_multiply_subtract,
+    check_results_region_ptr_ptr_const<TestImpl, ReferenceImpl>(
+        std::mem_fn(&TestImpl::region_multiply_subtract),
+        std::mem_fn(&ReferenceImpl::region_multiply_subtract),
         elements);
 }
 
