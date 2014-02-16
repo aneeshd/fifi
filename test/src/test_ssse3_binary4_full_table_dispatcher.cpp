@@ -6,6 +6,7 @@
 #include <fifi/ssse3_binary4_full_table_dispatcher.hpp>
 
 #include <gtest/gtest.h>
+#include <sak/aligned_allocator.hpp>
 
 #include "helper_test_arithmetic.hpp"
 #include "helper_test_packed_arithmetic.hpp"
@@ -92,7 +93,10 @@ TEST(TestSSE3Binary4FullTableDispacther, api)
 
     typedef fifi::binary4::value_type value_type;
 
-    std::vector<value_type> data(stack.length_granularity());
+    typedef std::vector<value_type, sak::aligned_allocator<value_type> >
+        aligned_vector;
+
+    aligned_vector data(stack.length_granularity());
     value_type constant = fifi::pack<fifi::binary4>(2);
 
     stack.set_length(data.size());
