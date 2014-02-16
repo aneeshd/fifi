@@ -10,6 +10,8 @@
 #include <iostream>
 #include <functional>
 
+#include <cpuid/cpuinfo.hpp>
+
 #include "is_packed_constant.hpp"
 #include "ssse3_binary4_full_table.hpp"
 
@@ -85,7 +87,9 @@ namespace fifi
 
             std::cout << "DISPATCH" << std::endl;
 
-            if(m_ssse3_binary4.executable_has_ssse3())
+            cpuid::cpuinfo info;
+
+            if(info.has_ssse3() && m_ssse3_binary4.executable_has_ssse3())
             {
                 return std::bind(
                     &ssse3_binary4_full_table::region_multiply_constant,
@@ -100,6 +104,8 @@ namespace fifi
 
 
     private:
+
+
 
         ssse3_binary4_full_table m_ssse3_binary4;
 
