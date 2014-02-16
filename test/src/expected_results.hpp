@@ -102,6 +102,14 @@ inline void check_results_random(
     }
 }
 
+
+/// This function creates a random buffer of field elements to use for tests.
+///
+/// @tparam Field The field elements to create.
+///
+/// @param elements The number of field elements to create.
+/// @param no_zero A boolean determing whether the buffer is allowed to contain
+/// zero or not.
 template<class Field>
 std::vector<typename Field::value_type> create_data(uint32_t elements,
                                                     bool no_zero = false)
