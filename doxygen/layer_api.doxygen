@@ -4,15 +4,15 @@ class layer
 {
 public:
 
-    //------------------------------------------------------------------
-    // LAYER API
-    //------------------------------------------------------------------
-
     /// @typedef value_type
     /// The value type storing the field elements used for the
     /// specified field inherited from the Super class. E.g. the binary
     /// extension field 2^8 uses uint8_t as the value_type.
     typedef typename Super::value_type value_type;
+
+    //------------------------------------------------------------------
+    // BASE ARITHMETICS API
+    //------------------------------------------------------------------
 
     /// Get the addition of two field elements
     /// @param a First operand to add
@@ -44,7 +44,7 @@ public:
     value_type invert(value_type a) const
 
     //------------------------------------------------------------------
-    // PACKED ARITHMETICS
+    // PACKED ARITHMETICS API
     //------------------------------------------------------------------
 
     /// Get the addition of two field elements when the data type might not
@@ -81,4 +81,39 @@ public:
     /// @param a Element to invert
     /// @return Inversion result
     value_type packer_invert(value_type a) const
+
+    //------------------------------------------------------------------
+    // REGION ARITHMETICS API
+    //------------------------------------------------------------------
+
+    /// Get the addition of two memory regions composed of field elements
+    /// instead of field elements itself. It is assumed regions are "packed"
+    /// as mentioned in the packet arithmetics API
+    /// @param dest Pointer to value_type for the destination memory block
+    /// @param src  Const pointer to value_type for the source memory block
+    void region_add(value_type* dest, const value_type* src) const
+
+
+    /// Get the subtract of two memory regions composed of field elements
+    /// instead of field elements itself. It is assumed regions are "packed"
+    /// as mentioned in the packet arithmetics API
+    /// @param dest Pointer to value_type for the destination memory block
+    /// @param src  Const pointer to value_type for the source memory block
+    void region_subtract(value_type* dest, const value_type* src) const
+
+
+    /// Get the multiplication of two memory regions composed of field elements
+    /// instead of field elements itself. It is assumed regions are "packed"
+    /// as mentioned in the packet arithmetics API
+    /// @param dest Pointer to value_type for the destination memory block
+    /// @param src  Const pointer to value_type for the source memory block
+    void region_multiply(value_type* dest, const value_type* src) const
+
+
+    /// Get the division of two memory regions composed of field elements
+    /// instead of field elements itself. It is assumed regions are "packed"
+    /// as mentioned in the packet arithmetics API
+    /// @param dest Pointer to value_type for the destination memory block
+    /// @param src  Const pointer to value_type for the source memory block
+    void region_divide(value_type* dest, const value_type* src) const
 };
