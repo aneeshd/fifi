@@ -41,13 +41,11 @@ TEST(TestSSE3Binary4RegionArithmetic, region_multiply_constant)
 
     fifi::ssse3_binary4_full_table impl;
 
-    // Needs check on CPU
-    if(impl.executable_has_ssse3())
+    if(impl.ssse3_binary4_full_table_enabled())
     {
         check_results_region_multiply_constant<
             fifi::ssse3_binary4_full_table>();
     }
-
 }
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_multiply_add)

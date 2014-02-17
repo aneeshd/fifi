@@ -18,7 +18,7 @@ namespace fifi
         public ssse3_binary4_full_table_dispatcher<Field,
                binary_region_arithmetic<Field,
                region_arithmetic<
-               region_info<Field,
+               region_info<
                binary4_packed_arithmetic<Field,
                binary_packed_arithmetic<Field,
                packed_arithmetic<

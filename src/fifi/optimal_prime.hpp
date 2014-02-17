@@ -9,7 +9,9 @@
 #include "optimal_prime_arithmetic.hpp"
 #include "packed_arithmetic.hpp"
 #include "region_arithmetic.hpp"
+#include "region_info.hpp"
 #include "optimal_prime_region_arithmetic.hpp"
+
 namespace fifi
 {
     /// This implementation allows finite field arithmetics in the
@@ -19,8 +21,9 @@ namespace fifi
     class optimal_prime :
         public optimal_prime_region_arithmetic<Field,
                region_arithmetic<
+               region_info<
                packed_arithmetic<
                optimal_prime_arithmetic<
-               final<Field> > > > >
+               final<Field> > > > > >
     { };
 }

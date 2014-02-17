@@ -12,7 +12,6 @@
 #include "helper_test_packed_arithmetic.hpp"
 #include "helper_test_region_arithmetic.hpp"
 
-
 namespace fifi
 {
 
@@ -30,28 +29,22 @@ namespace fifi
         public:
 
             void region_multiply_constant(
-                value_type* /*dest*/, value_type /*constant*/) const
+                value_type* dest, value_type constant, uint32_t length) const
             {
-
+                (void) dest;
+                (void) constant;
+                (void) length;
             }
 
-            uint32_t length_granularity() const
+            uint32_t granularity() const
             {
                 return 1U;
             }
 
-            uint32_t length() const
+            uint32_t alignment() const
             {
-                return m_length;
+                return 1U;
             }
-
-            void set_length(uint32_t length)
-            {
-                m_length = length;
-            }
-
-            uint32_t m_length;
-
         };
 
         template<class Field>
@@ -59,13 +52,8 @@ namespace fifi
             public ssse3_binary4_full_table_dispatcher<Field,
                    dummy_layer<Field> >
         { };
-
-
-
     }
-
 }
-
 
 // TEST(TestSSE3Binary4RegionArithmetic, region_add)
 // {
@@ -96,15 +84,13 @@ TEST(TestSSE3Binary4FullTableDispacther, api)
     typedef std::vector<value_type, sak::aligned_allocator<value_type> >
         aligned_vector;
 
-    aligned_vector data(stack.length_granularity());
+    aligned_vector data(stack.granularity());
     value_type constant = fifi::pack<fifi::binary4>(2);
 
-    stack.set_length(data.size());
-
-    stack.region_multiply_constant(&data[0], constant);
-    stack.region_multiply_constant(&data[0], constant);
-    stack.region_multiply_constant(&data[0], constant);
-    stack.region_multiply_constant(&data[0], constant);
+    stack.region_multiply_constant(&data[0], constant, data.size());
+    stack.region_multiply_constant(&data[0], constant, data.size());
+    stack.region_multiply_constant(&data[0], constant, data.size());
+    stack.region_multiply_constant(&data[0], constant, data.size());
 
 }
 

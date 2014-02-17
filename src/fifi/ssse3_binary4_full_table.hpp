@@ -61,17 +61,18 @@ namespace fifi
         /// Optimized function for multiply constant
         /// @copydoc layer::region_multiply_constant(
         ///      value_type*, value_type*) const
-        void region_multiply_constant(value_type* dest,
-                                      value_type constant) const;
+        void region_multiply_constant(value_type* dest, value_type constant,
+            uint32_t length) const;
 
-        /// @return true if the executable was built with SSSE3 support
-        bool executable_has_ssse3() const;
+        /// @return true if the executable was built with SSSE3 binary4
+        ///         fulltable support
+        bool ssse3_binary4_full_table_enabled() const;
 
-        /// @copydoc layer::set_length(uint32_t)
-        void set_length(uint32_t length);
+        /// @copydoc layer::granularity() const
+        uint32_t granularity() const;
 
-        /// @copydoc layer::length_granularity() const
-        uint32_t length_granularity() const;
+        /// @copydoc layer::alignment() const
+        uint32_t alignment() const;
 
     private:
 

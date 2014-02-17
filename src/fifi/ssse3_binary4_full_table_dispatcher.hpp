@@ -49,77 +49,71 @@ namespace fifi
                 dispatch_region_multiply_constant();
         }
 
-        bool binary4_ssse3() const
-        {
-            return false;
-        }
-
         void region_multiply_constant(
-            value_type* dest, value_type constant) const
+            value_type* dest, value_type constant, uint32_t length) const
         {
             assert(dest != 0);
-            assert(Super::length() > 0);
+            assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
             assert(m_region_multiply_constant);
 
-            m_region_multiply_constant(dest, constant);
+            m_region_multiply_constant(dest, constant, length);
         }
 
-        void set_length(uint32_t length)
+        uint32_t granularity() const
         {
-            assert(length > 0);
-
-            if(m_ssse3_binary4.executable_has_ssse3())
-                m_ssse3_binary4.set_length(length);
-
-            Super::set_length(length);
-        }
-
-        uint32_t length_granularity() const
-        {
-            if(m_ssse3_binary4.executable_has_ssse3())
+            if(m_ssse3_binary4.ssse3_binary4_full_table_enabled())
             {
-                return std::max(m_ssse3_binary4.length_granularity(),
-                                Super::length_granularity());
+                return std::max(m_ssse3_binary4.granularity(),
+                                Super::granularity());
             }
             else
             {
-                return Super::length_granularity();
+                return Super::granularity();
+            }
+        }
+
+        uint32_t alignment() const
+        {
+            if(m_ssse3_binary4.ssse3_binary4_full_table_enabled())
+            {
+                return std::max(m_ssse3_binary4.alignment(),
+                                Super::alignment());
+            }
+            else
+            {
+                return Super::alignment();
             }
         }
 
     private:
 
-        std::function<void (value_type*, value_type)>
-        dispatch_region_multiply_constant() const
+        std::function<void (value_type*, value_type, uint32_t)>
+            dispatch_region_multiply_constant() const
         {
             using namespace std::placeholders;  // for _1, _2, _3...
 
-            std::cout << "DISPATCH" << std::endl;
-
             cpuid::cpuinfo info;
 
-            if(info.has_ssse3() && m_ssse3_binary4.executable_has_ssse3())
+            if(info.has_ssse3() && m_ssse3_binary4.ssse3_binary4_full_table_enabled())
             {
                 return std::bind(
                     &ssse3_binary4_full_table::region_multiply_constant,
-                    &m_ssse3_binary4, _1, _2);
+                    &m_ssse3_binary4, _1, _2, _3);
             }
             else
             {
                 return std::bind(&Super::region_multiply_constant,
-                                 (Super*)this, _1, _2);
+                                 (Super*)this, _1, _2, _3);
             }
         }
 
-
     private:
-
-
 
         ssse3_binary4_full_table m_ssse3_binary4;
 
-        std::function<void (value_type*, value_type)> m_region_multiply_constant;
+        std::function<void (value_type*, value_type, uint32_t)>
+            m_region_multiply_constant;
 
     };
 }
