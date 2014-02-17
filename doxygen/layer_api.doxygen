@@ -15,32 +15,32 @@ public:
     //------------------------------------------------------------------
 
     /// Get the addition of two field elements
-    /// @param a First operand to add
-    /// @param b Second operand to add
-    /// @return Addition result
+    /// @param  a First operand to add
+    /// @param  b Second operand to add
+    /// @return   Addition result
     value_type add(value_type a, value_type b) const
 
     /// Get the subtraction of two field elements
-    /// @param a First operand to subtract from
-    /// @param b Second operand to subtract
-    /// @return Subtraction result
+    /// @param  a First operand to subtract from
+    /// @param  b Second operand to subtract
+    /// @return   Subtraction result
     value_type subtract(value_type a, value_type b) const
 
     /// Get the multiplication of two field elements
-    /// @param a First operand to multiply
-    /// @param b Second operand to multiply
-    /// @return Multiplication result
+    /// @param  a First operand to multiply
+    /// @param  b Second operand to multiply
+    /// @return   Multiplication result
     value_type multiply(value_type a, value_type b) const
 
     /// Get the division of two field elements
-    /// @param a Numerator
-    /// @param b Denominator
-    /// @return Division result
+    /// @param  a Numerator
+    /// @param  b Denominator
+    /// @return   Division result
     value_type divide(value_type numerator, value_type denominator) const
 
     /// Get the inverse of a field element
-    /// @param a Element to invert
-    /// @return Inversion result
+    /// @param  a Element to invert
+    /// @return   Inversion result
     value_type invert(value_type a) const
 
     //------------------------------------------------------------------
@@ -49,37 +49,37 @@ public:
 
     /// Get the addition of two field elements when the data type might not
     /// represents a field element, i.e. not using the whole bits of the type.
-    /// @param a First operand to add
-    /// @param b Second operand to add
-    /// @return Addition result
+    /// @param  a First operand to add
+    /// @param  b Second operand to add
+    /// @return   Addition result
     value_type packed_add(value_type a, value_type b) const
 
     /// Get the subtraction of two field elements when the data type might not
     /// represents a field element, i.e. not using the whole bits of the type.
-    /// @param a First operand to subtract from
-    /// @param b Second operand to subtract
-    /// @return Subtraction result
+    /// @param  a First operand to subtract from
+    /// @param  b Second operand to subtract
+    /// @return   Subtraction result
     value_type packed_subtract(value_type a, value_type b) const
 
     /// Get the multiplication of two field elements when the data type might
     /// not represents a field element, i.e. not using the whole bits of the
     /// type.
-    /// @param a First operand to multiply
-    /// @param b Second operand to multiply
-    /// @return Multiplication result
+    /// @param  a First operand to multiply
+    /// @param  b Second operand to multiply
+    /// @return   Multiplication result
     value_type packed_multiply(value_type a, value_type b) const
 
     /// Get the division of two field elements when the data type might not
     /// represents a field element, i.e. not using the whole bits of the type.
-    /// @param a First operand to divide
-    /// @param b Second operand to divide
-    /// @return Division result
+    /// @param  a First operand to divide
+    /// @param  b Second operand to divide
+    /// @return   Division result
     value_type packed_divide(value_type a, value_type b) const
 
     /// Get the inverse of a field element when the data type might not
     /// represent a field element, i.e. not using the whole bits of the type.
-    /// @param a Element to invert
-    /// @return Inversion result
+    /// @param  a Element to invert
+    /// @return   Inversion result
     value_type packer_invert(value_type a) const
 
     //------------------------------------------------------------------
@@ -116,4 +116,32 @@ public:
     /// @param dest Pointer to value_type for the destination memory block
     /// @param src  Const pointer to value_type for the source memory block
     void region_divide(value_type* dest, const value_type* src) const
+
+    /// Get the multiplication of a memory region composed of field elements
+    /// instead of field elements itself. It is assumed regions are "packed"
+    /// as mentioned in the packet arithmetics API
+    /// @param dest     Pointer to value_type for the destination memory block
+    /// @param constant Constant of type value_type to be multiplied on dest
+    void region_multiply_constant(value_type* dest, value_type constant) const
+
+
+    /// Get the multiplication with a constant and addition of two memory
+    /// regions composed of field elements instead of field elements itself.
+    /// It is assumed regions are "packed" as mentioned in the packet
+    /// arithmetics API. The operation is: dest = dest + (constant * src)
+    /// @param dest     Pointer to value_type for the destination memory block
+    /// @param src      Const pointer to value_type for the source memory block
+    /// @param constant Constant of type value_type to be multiplied on src
+    void region_multiply_add(value_type* dest, const value_type* src,
+                             value_type constant) const
+
+    /// Get the multiplication with a constant and subtraction of two memory
+    /// regions composed of field elements instead of field elements itself.
+    /// It is assumed regions are "packed" as mentioned in the packet
+    /// arithmetics API. The operation is: dest = dest - (constant * src)
+    /// @param dest     Pointer to value_type for the destination memory block
+    /// @param src      Const pointer to value_type for the source memory block
+    /// @param constant Constant of type value_type to be multiplied on src
+    void region_multiply_subtract(value_type* dest, const value_type* src,
+                                  value_type constant) const
 };
