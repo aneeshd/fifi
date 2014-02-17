@@ -11,6 +11,7 @@
 #include "packed_arithmetic.hpp"
 #include "polynomial_degree.hpp"
 #include "region_arithmetic.hpp"
+#include "region_info.hpp"
 #include "simple_online_arithmetic.hpp"
 #include "sum_modulo.hpp"
 
@@ -21,12 +22,13 @@ namespace fifi
     template<class Field>
     class log_table :
         public region_arithmetic<
+               region_info<
                binary4_packed_arithmetic<Field,
                packed_arithmetic<
                log_table_arithmetic<Field,
                simple_online_arithmetic<
                polynomial_degree<
                sum_modulo<
-               final<Field> > > > > > > >
+               final<Field> > > > > > > > >
     { };
 }

@@ -21,6 +21,16 @@ TEST(TestDefaultField, binary_default_field)
 
     EXPECT_TRUE(test);
 }
+
+TEST(TestDefaultField, binary4_default_field)
+{
+    bool test= std::is_same<
+        fifi::default_field<fifi::binary4>::type,
+        fifi::full_table<fifi::binary4> >::value;
+
+    EXPECT_TRUE(test);
+}
+
 TEST(TestDefaultField, binary8_default_field)
 {
     bool test= std::is_same<

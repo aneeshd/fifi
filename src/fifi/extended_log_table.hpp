@@ -11,6 +11,7 @@
 #include "packed_arithmetic.hpp"
 #include "polynomial_degree.hpp"
 #include "region_arithmetic.hpp"
+#include "region_info.hpp"
 #include "simple_online_arithmetic.hpp"
 
 namespace fifi
@@ -19,12 +20,13 @@ namespace fifi
     template<class Field>
     class extended_log_table :
         public region_arithmetic<
+               region_info<
                binary4_packed_arithmetic<Field,
                packed_arithmetic<
                extended_log_table_arithmetic<
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > >
+               final<Field> > > > > > > >
     { };
 
 }
