@@ -14,11 +14,12 @@
 
 namespace fifi
 {
-
+    /// Fall through case for other fields
     template<class Field, class Super>
     class binary_region_arithmetic : public Super
     { };
 
+    /// Specialization for region arithmetic for the binary field.
     template<class Super>
     class binary_region_arithmetic<fifi::binary, Super> : public Super
     {
