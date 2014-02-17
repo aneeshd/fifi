@@ -6,6 +6,7 @@
 #pragma once
 
 #include "binary.hpp"
+#include "binary4.hpp"
 #include "binary16.hpp"
 #include "binary8.hpp"
 #include "extended_log_table.hpp"
@@ -29,6 +30,14 @@ namespace fifi
     {
         /// default field implementation type
         typedef simple_online<binary> type;
+    };
+
+    /// For the binary4 field
+    template<>
+    struct default_field<binary4>
+    {
+        /// default field implementation type
+        typedef full_table<binary4> type;
     };
 
     /// For the binary8 field

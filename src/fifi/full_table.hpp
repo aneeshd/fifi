@@ -14,6 +14,7 @@
 #include "region_arithmetic.hpp"
 #include "region_info.hpp"
 #include "simple_online_arithmetic.hpp"
+#include "ssse3_binary4_full_table_dispatcher.hpp"
 
 namespace fifi
 {
@@ -22,7 +23,9 @@ namespace fifi
     /// the multiplication and division operations.
     template<class Field>
     class full_table :
-        public binary8_region_arithmetic_full_table<Field,
+        public
+               ssse3_binary4_full_table_dispatcher<Field,
+               binary8_region_arithmetic_full_table<Field,
                region_arithmetic<
                region_info<
                binary4_packed_arithmetic<Field,
@@ -30,6 +33,6 @@ namespace fifi
                full_table_arithmetic<Field,
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > > > >
+               final<Field> > > > > > > > > >
     { };
 }
