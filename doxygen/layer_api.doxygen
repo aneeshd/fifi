@@ -4,6 +4,10 @@ class layer
 {
 public:
 
+    //------------------------------------------------------------------
+    // LAYER API
+    //------------------------------------------------------------------
+
     /// @typedef value_type
     /// The value type storing the field elements used for the
     /// specified field inherited from the Super class. E.g. the binary
@@ -38,6 +42,10 @@ public:
     /// @param a Element to invert
     /// @return Inversion result
     value_type invert(value_type a) const
+
+    //------------------------------------------------------------------
+    // PACKED ARITHMETICS
+    //------------------------------------------------------------------
 
     /// Get the addition of two field elements when the data type might not
     /// represents a field element, i.e. not using the whole bits of the type.
