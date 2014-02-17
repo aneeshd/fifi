@@ -114,15 +114,12 @@ inline void check_results_random(
 /// @param no_zero A boolean determing whether the buffer is allowed to contain
 /// zero or not.
 template<class Field>
-std::vector<typename Field::value_type, sak::aligned_allocator<typename Field::value_type> >
+std::vector<typename Field::value_type>
 create_data(uint32_t elements, bool no_zero = false)
 {
     typedef typename Field::value_type value_type;
 
-    typedef std::vector<value_type, sak::aligned_allocator<value_type> >
-        aligned_vector;
-
-    aligned_vector data(fifi::elements_to_length<Field>(elements));
+    std::vector<value_type> data(fifi::elements_to_length<Field>(elements));
     for (uint32_t i = 0; i < elements; ++i)
     {
         value_type v = rand() % Field::order;
