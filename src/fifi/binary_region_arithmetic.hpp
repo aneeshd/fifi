@@ -33,28 +33,28 @@ namespace fifi
     public:
 
         /// @copydoc region_arithmetic::region_multiply_constant(value_type*,
-        ///              value_type)
+        ///              value_type, uint32_t)
         void region_multiply_constant(value_type* dest,
-            value_type constant) const
+            value_type constant, uint32_t length) const
         {
             assert(dest != 0);
-            assert(Super::length() > 0);
+            assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
 
             if (constant == 0)
             {
-                std::fill_n(dest, Super::length(), 0);
+                std::fill_n(dest, length, 0);
             }
         }
 
         /// @copydoc region_arithmetic::region_multiply_add(value_type*,
-        ///              value_type*, value_type)
+        ///              value_type*, value_type, uint32_t)
         void region_multiply_add(value_type* dest, const value_type* src,
-                          value_type constant) const
+                          value_type constant, uint32_t length) const
         {
             assert(dest != 0);
             assert(src  != 0);
-            assert(Super::length() > 0);
+            assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
 
             if (constant == 0) // Do nothing
@@ -63,22 +63,22 @@ namespace fifi
             }
             else // Add the two buffers
             {
-                Super::region_add(dest, src);
+                Super::region_add(dest, src, length);
             }
         }
 
         /// @copydoc region_arithmetic::region_multiply_subtract(value_type*,
-        ///              value_type*, value_type)
+        ///              value_type*, value_type, uint32_t)
         void region_multiply_subtract(value_type* dest, const value_type* src,
-            value_type constant) const
+            value_type constant, uint32_t length) const
         {
             assert(dest != 0);
             assert(src  != 0);
-            assert(Super::length() > 0);
+            assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
 
             // In the binary extension fields add and subtract are the same
-            region_multiply_add(dest, src, constant);
+            region_multiply_add(dest, src, constant, length);
         }
     };
 }

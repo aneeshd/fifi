@@ -29,13 +29,13 @@ namespace fifi
     public:
 
         /// @copydoc region_arithmetic::region_multiply_add(value_type*,
-        ///              value_type*, value_type)
+        ///              value_type*, value_type, uint32_t)
         void region_multiply_add(value_type* dest, const value_type* src,
-                          value_type constant) const
+                          value_type constant, uint32_t length) const
         {
             assert(dest != 0);
             assert(src != 0);
-            assert(Super::length() > 0);
+            assert(length > 0);
 
             if (constant == 0)
                 return;
@@ -47,7 +47,7 @@ namespace fifi
             const value_type *offset =
                 &Super::m_multtable[(constant << binary8::degree)];
 
-            for (uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < length; ++i)
             {
                 value_type v = offset[src[i]];
                 dest[i] = Super::packed_add(v, dest[i]);
@@ -55,12 +55,12 @@ namespace fifi
         }
 
         /// @copydoc region_arithmetic::region_multiply_subtract(value_type*,
-        ///              value_type*, value_type)
+        ///              value_type*, value_type, uint32_t)
         void region_multiply_subtract(value_type* dest, const value_type* src,
-            value_type constant) const
+            value_type constant, uint32_t length) const
         {
             // In the binary extension fields add and subtract are the same
-            region_multiply_add(dest, src, constant);
+            region_multiply_add(dest, src, constant, length);
         }
     };
 }

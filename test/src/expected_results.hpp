@@ -63,7 +63,8 @@ inline void check_results_binary(Function arithmetic)
         auto res = Results<field_type>::m_results[i];
         SCOPED_TRACE(testing::Message() << "a:" << res.m_input1);
         SCOPED_TRACE(testing::Message() << "b:" << res.m_input2);
-        EXPECT_EQ(res.m_result, (field.*arithmetic)(res.m_input1, res.m_input2));
+        EXPECT_EQ(res.m_result, (field.*arithmetic)(res.m_input1,
+            res.m_input2));
     }
 }
 
@@ -172,13 +173,8 @@ inline void check_results_region_ptr_ptr(
     static_assert(std::is_same<test_field, reference_field>::value,
                   "Reference and field under test must use same field");
 
-    uint32_t length = fifi::elements_to_length<test_field>(elements);
-
     TestImpl test_stack;
     ReferenceImpl reference_stack;
-
-    test_stack.set_length(length);
-    reference_stack.set_length(length);
 
     auto data = create_data<test_field>(elements);
     auto src = create_data<test_field>(elements, division);
@@ -188,9 +184,12 @@ inline void check_results_region_ptr_ptr(
     auto test_data = data;
     auto reference_data = data;
 
+    uint32_t length = fifi::elements_to_length<test_field>(elements);
+
     // Perform the calculations using the region arithmetics
-    test_arithmetic(test_stack, test_data.data(), src.data());
-    reference_arithmetic(reference_stack, reference_data.data(), src.data());
+    test_arithmetic(test_stack, test_data.data(), src.data(), length);
+    reference_arithmetic(reference_stack, reference_data.data(), src.data(),
+        length);
 
     EXPECT_EQ(reference_data, test_data);
 }
@@ -231,15 +230,12 @@ inline void check_results_region_ptr_const(
     static_assert(std::is_same<test_field, reference_field>::value,
                   "Reference and field under test must use same field");
 
-    uint32_t length = fifi::elements_to_length<test_field>(elements);
-
     TestImpl test_stack;
     ReferenceImpl reference_stack;
 
-    test_stack.set_length(length);
-    reference_stack.set_length(length);
-
     auto data = create_data<test_field>(elements);
+
+    uint32_t length = fifi::elements_to_length<test_field>(elements);
 
     // We repeat the test a number of times with different constants
     uint32_t tests = 10;
@@ -255,8 +251,9 @@ inline void check_results_region_ptr_const(
         auto test_data = data;
         auto reference_data = data;
         // Perform the calculations using the region arithmetics
-        test_arithmetic(test_stack, test_data.data(), constant);
-        reference_arithmetic(reference_stack, reference_data.data(), constant);
+        test_arithmetic(test_stack, test_data.data(), constant, length);
+        reference_arithmetic(reference_stack, reference_data.data(), constant,
+            length);
 
         EXPECT_EQ(reference_data, test_data);
     }
@@ -298,16 +295,13 @@ inline void check_results_region_ptr_ptr_const(
     static_assert(std::is_same<test_field, reference_field>::value,
                   "Reference and field under test must use same field");
 
-    uint32_t length = fifi::elements_to_length<test_field>(elements);
-
     TestImpl test_stack;
     ReferenceImpl reference_stack;
 
-    test_stack.set_length(length);
-    reference_stack.set_length(length);
-
     auto data = create_data<test_field>(elements);
     auto src = create_data<test_field>(elements);
+
+    uint32_t length = fifi::elements_to_length<test_field>(elements);
 
     // We repeat the test a number of times with different constants
     uint32_t tests = 10;
@@ -323,8 +317,10 @@ inline void check_results_region_ptr_ptr_const(
         auto test_data = data;
         auto reference_data = data;
         // Perform the calculations using the region arithmetics
-        test_arithmetic(test_stack, test_data.data(), src.data(), constant);
-        reference_arithmetic(reference_stack, reference_data.data(), src.data(), constant);
+        test_arithmetic(test_stack, test_data.data(), src.data(), constant,
+            length);
+        reference_arithmetic(reference_stack, reference_data.data(), src.data(),
+            constant, length);
 
         EXPECT_EQ(reference_data, test_data);
     }
