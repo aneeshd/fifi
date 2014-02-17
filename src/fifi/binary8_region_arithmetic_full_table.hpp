@@ -12,11 +12,16 @@
 
 namespace fifi
 {
-
+    /// Fall through case for other fields
     template<class Field, class Super>
     class binary8_region_arithmetic_full_table : public Super
     { };
 
+    /// Specialization for the binary8 field. The layer implements an
+    /// optimization for binary8 full table region arithmetics. The
+    /// optimization relies on the fact that when multiplying with a
+    /// constant this yields a constant offset into the multiplication
+    /// table (see below for further details).
     template<class Super>
     class binary8_region_arithmetic_full_table<fifi::binary8, Super>
         : public Super
