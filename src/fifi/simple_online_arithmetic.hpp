@@ -22,10 +22,10 @@ namespace fifi
     {
     public:
 
-        /// Typedef of the field type used
+        /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
 
     public:

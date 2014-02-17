@@ -21,7 +21,7 @@ namespace fifi
     {
     public:
 
-        /// The field type
+        /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
         /// @copydoc layer::value_type

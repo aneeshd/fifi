@@ -25,10 +25,10 @@ namespace fifi
     {
     public:
 
-        /// The field type
+        /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
-        /// The value type
+        /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
 
         /// Check that the Super uses the same field

@@ -31,7 +31,7 @@ namespace fifi
     {
     public:
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
 
     public:
