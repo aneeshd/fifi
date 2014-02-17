@@ -65,7 +65,5 @@ namespace fifi
             assert(a != 0);
             return a;
         }
-
     };
-
 }
