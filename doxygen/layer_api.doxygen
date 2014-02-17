@@ -10,32 +10,67 @@ public:
     /// extension field 2^8 uses uint8_t as the value_type.
     typedef typename Super::value_type value_type;
 
-    /// @brief Get the addition of two field elements
-    /// @param First operand to add
-    /// @param Second operand to add
+    /// Get the addition of two field elements
+    /// @param a First operand to add
+    /// @param b Second operand to add
     /// @return Addition result
     value_type add(value_type a, value_type b) const
 
-    /// @brief Get the subtraction of two field elements
-    /// @param First operand to subtract from
-    /// @param Second operand to subtract
+    /// Get the subtraction of two field elements
+    /// @param a First operand to subtract from
+    /// @param b Second operand to subtract
     /// @return Subtraction result
     value_type subtract(value_type a, value_type b) const
 
-    /// @brief Get the multiplication of two field elements
-    /// @param First operand to multiply
-    /// @param Second operand to multiply
+    /// Get the multiplication of two field elements
+    /// @param a First operand to multiply
+    /// @param b Second operand to multiply
     /// @return Multiplication result
     value_type multiply(value_type a, value_type b) const
 
-    /// @brief Get the division of two field elements
-    /// @param Numerator
-    /// @param Denominator
+    /// Get the division of two field elements
+    /// @param a Numerator
+    /// @param b Denominator
     /// @return Division result
     value_type divide(value_type numerator, value_type denominator) const
 
-    /// @brief Get the inverse of a field element
-    /// @param Element to invert
+    /// Get the inverse of a field element
+    /// @param a Element to invert
     /// @return Inversion result
     value_type invert(value_type a) const
+
+    /// Get the addition of two field elements when the data type might not
+    /// represents a field element, i.e. not using the whole bits of the type.
+    /// @param a First operand to add
+    /// @param b Second operand to add
+    /// @return Addition result
+    value_type packed_add(value_type a, value_type b) const
+
+    /// Get the subtraction of two field elements when the data type might not
+    /// represents a field element, i.e. not using the whole bits of the type.
+    /// @param a First operand to subtract from
+    /// @param b Second operand to subtract
+    /// @return Subtraction result
+    value_type packed_subtract(value_type a, value_type b) const
+
+    /// Get the multiplication of two field elements when the data type might
+    /// not represents a field element, i.e. not using the whole bits of the
+    /// type.
+    /// @param a First operand to multiply
+    /// @param b Second operand to multiply
+    /// @return Multiplication result
+    value_type packed_multiply(value_type a, value_type b) const
+
+    /// Get the division of two field elements when the data type might not
+    /// represents a field element, i.e. not using the whole bits of the type.
+    /// @param a First operand to divide
+    /// @param b Second operand to divide
+    /// @return Division result
+    value_type packed_divide(value_type a, value_type b) const
+
+    /// Get the inverse of a field element when the data type might not
+    /// represent a field element, i.e. not using the whole bits of the type.
+    /// @param a Element to invert
+    /// @return Inversion result
+    value_type packer_invert(value_type a) const
 };
