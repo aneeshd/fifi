@@ -11,7 +11,6 @@
 
 namespace fifi
 {
-
     /// Fall through case for other fields
     template<class Field, class Super>
     class binary4_packed_arithmetic : public Super
@@ -82,7 +81,5 @@ namespace fifi
             // In the binary extension fields add and subtract are the same
             return packed_add(a, b);
         }
-
     };
-
 }
