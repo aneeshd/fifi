@@ -9,7 +9,6 @@
 #include <fifi/packed_arithmetic.hpp>
 #include <fifi/prime2325.hpp>
 #include <fifi/region_arithmetic.hpp>
-#include <fifi/region_info.hpp>
 
 #include <gtest/gtest.h>
 
@@ -25,9 +24,8 @@ namespace fifi
         struct dummy_stack_fall_through : public
         optimal_prime_region_arithmetic<Field,
         helper_region_fall_through<Field,
-        region_info<Field,
         optimal_prime_arithmetic<
-        helper_catch_all<Field> > > > >
+        helper_catch_all<Field> > > >
         { };
     }
 
@@ -37,10 +35,9 @@ namespace fifi
         struct dummy_stack : public
         optimal_prime_region_arithmetic<Field,
         region_arithmetic<
-        region_info<Field,
         packed_arithmetic<
         optimal_prime_arithmetic<
-        final<Field> > > > > >
+        final<Field> > > > >
         { };
     }
 }

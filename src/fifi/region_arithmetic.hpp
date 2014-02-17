@@ -33,70 +33,75 @@ namespace fifi
 
     public:
 
-        void region_add(value_type* dest, const value_type* src) const
+        void region_add(value_type* dest, const value_type* src,
+            uint32_t length) const
         {
             assert(dest != 0);
             assert(src  != 0);
-            assert(Super::length() > 0);
-            for (uint32_t i = 0; i < Super::length(); ++i)
+            assert(length > 0);
+            for (uint32_t i = 0; i < length; ++i)
             {
                 dest[i] = Super::packed_add(dest[i], src[i]);
             }
         }
 
-        void region_subtract(value_type* dest, const value_type* src) const
+        void region_subtract(value_type* dest, const value_type* src,
+            uint32_t length) const
         {
             assert(dest != 0);
             assert(src  != 0);
-            assert(Super::length() > 0);
-            for (uint32_t i = 0; i < Super::length(); ++i)
+            assert(length > 0);
+            for (uint32_t i = 0; i < length; ++i)
             {
                 dest[i] = Super::packed_subtract(dest[i], src[i]);
             }
         }
 
-        void region_divide(value_type* dest, const value_type* src) const
+        void region_divide(value_type* dest, const value_type* src,
+            uint32_t length) const
         {
             assert(dest != 0);
             assert(src  != 0);
-            assert(Super::length() > 0);
-            for (uint32_t i = 0; i < Super::length(); ++i)
+            assert(length > 0);
+            for (uint32_t i = 0; i < length; ++i)
             {
                 dest[i] = Super::packed_divide(dest[i], src[i]);
             }
         }
 
-        void region_multiply(value_type* dest, const value_type* src) const
+        void region_multiply(value_type* dest, const value_type* src,
+            uint32_t length) const
         {
             assert(dest != 0);
             assert(src  != 0);
-            assert(Super::length() > 0);
-            for (uint32_t i = 0; i < Super::length(); ++i)
+            assert(length > 0);
+            for (uint32_t i = 0; i < length; ++i)
             {
                 dest[i] = Super::packed_multiply(dest[i], src[i]);
             }
         }
 
         void region_multiply_constant(
-            value_type* dest, value_type constant) const
+            value_type* dest, value_type constant,
+            uint32_t length) const
         {
             assert(dest != 0);
-            assert(Super::length() > 0);
+            assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
-            for (uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < length; ++i)
             {
                 dest[i] = Super::packed_multiply(dest[i], constant);
             }
         }
 
         void region_multiply_add(value_type* dest, const value_type* src,
-                          value_type constant) const
+                          value_type constant, uint32_t length) const
         {
             assert(dest != 0);
             assert(src  != 0);
-            assert(Super::length() > 0);
+            assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
-            for (uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < length; ++i)
             {
                 value_type v = Super::packed_multiply(src[i], constant);
                 dest[i] = Super::packed_add(dest[i], v);
@@ -104,13 +109,13 @@ namespace fifi
         }
 
         void region_multiply_subtract(value_type* dest, const value_type* src,
-                                value_type constant) const
+                                value_type constant, uint32_t length) const
         {
             assert(dest != 0);
             assert(src  != 0);
-            assert(Super::length() > 0);
+            assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
-            for (uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < length; ++i)
             {
                 value_type v = Super::packed_multiply(src[i], constant);
                 dest[i] = Super::packed_subtract(dest[i], v);

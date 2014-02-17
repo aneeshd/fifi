@@ -15,57 +15,68 @@ namespace fifi
 
         typedef typename Field::value_type value_type;
 
-        void region_multiply(value_type* dest, const value_type* src) const
+        void region_multiply(value_type* dest, const value_type* src,
+            uint32_t length) const
         {
             (void) dest;
             (void) src;
+            (void) length;
             m_fall_through = true;
         }
 
-        void region_divide(value_type* dest, const value_type* src) const
+        void region_divide(value_type* dest, const value_type* src,
+            uint32_t length) const
         {
             (void) dest;
             (void) src;
+            (void) length;
             m_fall_through = true;
         }
 
-        void region_add(value_type* dest, const value_type* src) const
+        void region_add(value_type* dest, const value_type* src,
+            uint32_t length) const
         {
             (void) dest;
             (void) src;
+            (void) length;
             m_fall_through = true;
         }
 
-        void region_subtract(value_type* dest, const value_type* src) const
+        void region_subtract(value_type* dest, const value_type* src,
+            uint32_t length) const
         {
             (void) dest;
             (void) src;
+            (void) length;
             m_fall_through = true;
         }
 
-        void region_multiply_constant(
-            value_type* dest, const value_type constant) const
+        void region_multiply_constant(value_type* dest,
+            const value_type constant, uint32_t length) const
         {
             (void) dest;
             (void) constant;
+            (void) length;
             m_fall_through = true;
         }
 
         void region_multiply_add(value_type* dest, const value_type* src,
-                          value_type constant) const
+                          value_type constant, uint32_t length) const
         {
             (void) dest;
             (void) src;
             (void) constant;
+            (void) length;
             m_fall_through = true;
         }
 
         void region_multiply_subtract(value_type* dest, const value_type* src,
-                                value_type constant) const
+                                value_type constant, uint32_t length) const
         {
             (void) dest;
             (void) src;
             (void) constant;
+            (void) length;
             m_fall_through = true;
         }
 
@@ -105,34 +116,34 @@ namespace fifi
         std::vector<value_type> dest(length, 1);
         std::vector<value_type> src(length, ~0);
         value_type constant = 0;
-        stack.set_length(length);
 
         stack.m_fall_through = false;
-        stack.region_add(dest.data(), src.data());
+        stack.region_add(dest.data(), src.data(), length);
         EXPECT_EQ(expected.add, stack.m_fall_through);
 
         stack.m_fall_through = false;
-        stack.region_subtract(dest.data(), src.data());
+        stack.region_subtract(dest.data(), src.data(), length);
         EXPECT_EQ(expected.subtract, stack.m_fall_through);
 
         stack.m_fall_through = false;
-        stack.region_multiply(dest.data(), src.data());
+        stack.region_multiply(dest.data(), src.data(), length);
         EXPECT_EQ(expected.multiply, stack.m_fall_through);
 
         stack.m_fall_through = false;
-        stack.region_divide(dest.data(), src.data());
+        stack.region_divide(dest.data(), src.data(), length);
         EXPECT_EQ(expected.divide, stack.m_fall_through);
 
         stack.m_fall_through = false;
-        stack.region_multiply_constant(dest.data(), constant);
+        stack.region_multiply_constant(dest.data(), constant, length);
         EXPECT_EQ(expected.multiply_constant, stack.m_fall_through);
 
         stack.m_fall_through = false;
-        stack.region_multiply_add(dest.data(), src.data(), constant);
+        stack.region_multiply_add(dest.data(), src.data(), constant, length);
         EXPECT_EQ(expected.multiply_add, stack.m_fall_through);
 
         stack.m_fall_through = false;
-        stack.region_multiply_subtract(dest.data(), src.data(), constant);
+        stack.region_multiply_subtract(dest.data(), src.data(), constant,
+            length);
         EXPECT_EQ(expected.multiply_subtract, stack.m_fall_through);
 
     }

@@ -12,7 +12,6 @@
 #include "packed_arithmetic.hpp"
 #include "polynomial_degree.hpp"
 #include "region_arithmetic.hpp"
-#include "region_info.hpp"
 #include "simple_online_arithmetic.hpp"
 
 namespace fifi
@@ -24,12 +23,11 @@ namespace fifi
     class full_table :
         public binary8_region_arithmetic_full_table<Field,
                region_arithmetic<
-               region_info<Field,
                binary4_packed_arithmetic<Field,
                packed_arithmetic<
                full_table_arithmetic<Field,
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > > > >
+               final<Field> > > > > > > >
     { };
 }

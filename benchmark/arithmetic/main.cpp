@@ -180,7 +180,6 @@ public:
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
         std::string data_access = cs.get_value<std::string>("data_access");
 
-        m_field.set_length(length);
         if(data_access == "linear")
         {
             RUN
@@ -189,7 +188,8 @@ public:
                 {
                     (m_field.*function)(
                         &(m_symbols_one[i][0]),
-                        &(m_symbols_two[i][0]));
+                        &(m_symbols_two[i][0]),
+                        length);
                 }
             }
         }
@@ -203,7 +203,8 @@ public:
                     uint32_t index_two = rand() % vectors;
 
                     (m_field.*function)(&(m_symbols_one[index_one][0]),
-                      &(m_symbols_two[index_two][0]));
+                      &(m_symbols_two[index_two][0]),
+                      length);
                 }
             }
         }
@@ -222,7 +223,6 @@ public:
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
         std::string data_access = cs.get_value<std::string>("data_access");
 
-        m_field.set_length(length);
         if(data_access == "linear")
         {
             // Clock is ticking
@@ -233,7 +233,7 @@ public:
                 for(uint32_t i = 0; i < vectors; ++i)
                 {
                     (m_field.*function)(&(m_symbols_one[i][0]),
-                      &(m_symbols_two[i][0]), constant);
+                      &(m_symbols_two[i][0]), constant, length);
                 }
             }
         }
@@ -250,7 +250,7 @@ public:
                     uint32_t index_two = rand() % vectors;
 
                     (m_field.*function)(&(m_symbols_one[index_one][0]),
-                      &(m_symbols_two[index_two][0]), constant);
+                      &(m_symbols_two[index_two][0]), constant, length);
                 }
             }
         }
@@ -269,7 +269,6 @@ public:
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
         std::string data_access = cs.get_value<std::string>("data_access");
 
-        m_field.set_length(length);
         if(data_access == "linear")
         {
             RUN
@@ -279,7 +278,8 @@ public:
 
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
-                    (m_field.*function)(&(m_symbols_one[i][0]), constant);
+                    (m_field.*function)(&(m_symbols_one[i][0]), constant,
+                        length);
                 }
             }
         }
@@ -294,7 +294,8 @@ public:
                 {
                     uint32_t index = rand() % vectors;
 
-                    (m_field.*function)(&(m_symbols_one[index][0]), constant);
+                    (m_field.*function)(&(m_symbols_one[index][0]), constant,
+                        length);
                 }
             }
         }
