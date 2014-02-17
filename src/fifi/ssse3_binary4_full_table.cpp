@@ -12,7 +12,7 @@
     #include <x86intrin.h>
 #elif defined(CPUID_LINUX_CLANG_X86)
     #include <x86intrin.h>
-#elif defined(CPUID_MAC_CLANG_X86)
+#elif defined(CPUID_MAC_GCC_X86)
     #include <x86intrin.h>
 #elif defined(CPUID_MAC_CLANG_X86)
     #include <x86intrin.h>

@@ -60,7 +60,7 @@ def options(opt):
         resolve.ResolveGitMajorVersion(
             name = 'cpuid',
             git_repository = 'github.com/steinwurf/cpuid.git',
-            major_version = 1))
+            major_version = 2))
 
     opt.load('wurf_dependency_bundle')
     opt.load('wurf_tools')

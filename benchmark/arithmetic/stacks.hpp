@@ -27,8 +27,4 @@ namespace fifi
                polynomial_degree<
                final<Field> > > > > > > > > > >
     { };
-
-
-
 }
-
