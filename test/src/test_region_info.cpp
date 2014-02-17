@@ -9,7 +9,7 @@
 #include <fifi/binary8.hpp>
 #include <fifi/final.hpp>
 #include <fifi/prime2325.hpp>
-#include <fifi/region_alignment.hpp>
+#include <fifi/region_info.hpp>
 
 #include <gtest/gtest.h>
 
@@ -20,9 +20,16 @@ namespace fifi
     namespace
     {
         template<class Field>
-        struct dummy_stack : public region_alignment<final<Field> >
+        struct dummy_stack : public region_info<final<Field> >
         { };
     }
+}
+
+template<class Field>
+void test_region_granularity()
+{
+    fifi::dummy_stack<Field> stack;
+    EXPECT_TRUE(stack.granularity() > 0);
 }
 
 template<class Field>
@@ -32,7 +39,31 @@ void test_region_alignment()
     EXPECT_TRUE(stack.alignment() > 0);
 }
 
-TEST(TestRegionAlignment, api)
+TEST(TestRegionInfo, granularity)
+{
+    {
+        SCOPED_TRACE("binary");
+        test_region_granularity<fifi::binary>();
+    }
+    {
+        SCOPED_TRACE("binary4");
+        test_region_granularity<fifi::binary4>();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        test_region_granularity<fifi::binary8>();
+    }
+    {
+        SCOPED_TRACE("binary16");
+        test_region_granularity<fifi::binary16>();
+    }
+    {
+        SCOPED_TRACE("prime2325");
+        test_region_granularity<fifi::prime2325>();
+    }
+}
+
+TEST(TestRegionInfo, alignment)
 {
     {
         SCOPED_TRACE("binary");
