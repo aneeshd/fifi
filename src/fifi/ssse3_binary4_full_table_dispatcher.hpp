@@ -91,20 +91,24 @@ namespace fifi
         std::function<void (value_type*, value_type, uint32_t)>
             dispatch_region_multiply_constant() const
         {
-            using namespace std::placeholders;  // for _1, _2, _3...
-
             cpuid::cpuinfo info;
 
             if(info.has_ssse3() && m_ssse3_binary4.ssse3_binary4_full_table_enabled())
             {
                 return std::bind(
                     &ssse3_binary4_full_table::region_multiply_constant,
-                    &m_ssse3_binary4, _1, _2, _3);
+                    &m_ssse3_binary4,
+                    std::placeholders::_1,
+                    std::placeholders::_2,
+                    std::placeholders::_3);
             }
             else
             {
                 return std::bind(&Super::region_multiply_constant,
-                                 (Super*)this, _1, _2, _3);
+                                 (Super*)this,
+                                 std::placeholders::_1,
+                                 std::placeholders::_2,
+                                 std::placeholders::_3);
             }
         }
 
