@@ -13,7 +13,6 @@
 
 namespace fifi
 {
-
     /// Fall through case for other fields
     template<class Field, class Super>
     class binary_packed_arithmetic : public Super
@@ -48,7 +47,8 @@ namespace fifi
             // be all ones
             assert(denominator == std::numeric_limits<value_type>::max());
 
-            return numerator & denominator;
+            // Since we can only divide by one the numerator will not change
+            return numerator;
         }
 
         /// @copydoc layer::packed_invert(value_type) const
@@ -72,7 +72,5 @@ namespace fifi
             // In the binary extension fields add and subtract are the same
             return packed_add(a, b);
         }
-
     };
-
 }
