@@ -10,7 +10,7 @@
 #include "binary8.hpp"
 #include "extended_log_table.hpp"
 #include "full_table.hpp"
-#include "optimal_prime_arithmetic.hpp"
+#include "optimal_prime.hpp"
 #include "prime2325.hpp"
 #include "simple_online.hpp"
 
@@ -52,7 +52,7 @@ namespace fifi
     struct default_field<prime2325>
     {
         /// default field implementation type
-        typedef optimal_prime_arithmetic<prime2325> type;
+        typedef optimal_prime<prime2325> type;
     };
 
 }

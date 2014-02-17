@@ -8,7 +8,7 @@
 #include <fifi/default_field.hpp>
 #include <fifi/extended_log_table.hpp>
 #include <fifi/full_table.hpp>
-#include <fifi/optimal_prime_arithmetic.hpp>
+#include <fifi/optimal_prime.hpp>
 #include <fifi/simple_online.hpp>
 
 #include <gtest/gtest.h>
@@ -41,7 +41,7 @@ TEST(TestDefaultField, prime2325_default_field)
 {
     bool test= std::is_same<
         fifi::default_field<fifi::prime2325>::type,
-        fifi::optimal_prime_arithmetic<fifi::prime2325> >::value;
+        fifi::optimal_prime<fifi::prime2325> >::value;
 
     EXPECT_TRUE(test);
 }
