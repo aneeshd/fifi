@@ -48,15 +48,24 @@ namespace fifi
             assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
 
-            uint32_t bypass_length = length % RealSuper::granularity();
+            auto aligned_start = (uintptr_t)dest % RealSuper::alignment();
+            auto aligned_length =
+                (length - aligned_start) / RealSuper::granularity() * RealSuper::granularity();
+            auto aligned_end = aligned_start + aligned_length;
 
-            if(bypass_length == 0)
+            if (aligned_start != 0)
             {
-                RealSuper::region_multiply_constant(dest, constant, length);
+                Super::region_multiply_constant(dest, constant, aligned_start);
             }
-            else
+
+            if (aligned_length != 0)
             {
-                Super::region_multiply_constant(dest, constant, length);
+                RealSuper::region_multiply_constant(dest + aligned_start, constant, aligned_length);
+            }
+
+            if (length - aligned_end != 0)
+            {
+                Super::region_multiply_constant(dest + aligned_end, constant, length - aligned_end);
             }
         }
 
