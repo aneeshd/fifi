@@ -15,7 +15,6 @@
 #include <fifi/polynomial_degree.hpp>
 #include <fifi/prime2325.hpp>
 #include <fifi/region_arithmetic.hpp>
-#include <fifi/region_info.hpp>
 #include <fifi/simple_online_arithmetic.hpp>
 
 #include <gtest/gtest.h>
@@ -32,8 +31,7 @@ namespace fifi
         struct dummy_stack_fall_through : public
         binary_region_arithmetic<Field,
         helper_region_fall_through<Field,
-        region_info<Field,
-        helper_catch_all<Field> > > >
+        helper_catch_all<Field> > >
         { };
     }
 
@@ -43,13 +41,12 @@ namespace fifi
         struct dummy_stack : public
         binary_region_arithmetic<Field,
         region_arithmetic<
-        region_info<Field,
         binary_packed_arithmetic<Field,
         packed_arithmetic<
         binary_simple_online_arithmetic<Field,
         simple_online_arithmetic<
         polynomial_degree<
-        final<Field> > > > > > > > >
+        final<Field> > > > > > > >
         { };
     }
 }

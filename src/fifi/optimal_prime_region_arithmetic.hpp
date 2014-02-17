@@ -27,13 +27,14 @@ namespace fifi
 
     public:
 
-        void region_add(value_type* dest, const value_type* src) const
+        void region_add(value_type* dest, const value_type* src,
+            uint32_t length) const
         {
             assert(dest != 0);
             assert(src != 0);
-            assert(Super::length() > 0);
+            assert(length > 0);
 
-            for (uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < length; ++i)
             {
                 dest[i] = dest[i] + src[i];
 
@@ -77,13 +78,14 @@ namespace fifi
                     (prime2325::prime & ((prime2325::prime > dest[i]) - 1));
             }
         }
-        void region_subtract(value_type* dest, const value_type* src) const
+        void region_subtract(value_type* dest, const value_type* src,
+            uint32_t length) const
         {
             assert(dest != 0);
             assert(src != 0);
-            assert(Super::length() > 0);
+            assert(length > 0);
 
-            for (uint32_t i = 0; i < Super::length(); ++i)
+            for (uint32_t i = 0; i < length; ++i)
             {
                 // If dest[i] >= src[i] then we will not have an underflow
                 //

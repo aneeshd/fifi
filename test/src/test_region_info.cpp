@@ -3,69 +3,86 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <cstdint>
-
 #include <fifi/binary.hpp>
 #include <fifi/binary16.hpp>
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
-#include <fifi/fifi_utils.hpp>
 #include <fifi/final.hpp>
 #include <fifi/prime2325.hpp>
 #include <fifi/region_info.hpp>
 
 #include <gtest/gtest.h>
 
+#include "expected_results.hpp"
+
 namespace fifi
 {
-    // Put dummy layers and tests classes in an anonymous namespace
-    // to avoid violations of ODF (one-definition-rule) in other
-    // translation units
     namespace
     {
         template<class Field>
-        struct dummy_stack : public
-        region_info<Field,
-        final<Field> >
+        struct dummy_stack : public region_info<final<Field> >
         { };
     }
 }
 
 template<class Field>
-inline void test_region_info()
+void test_region_granularity()
 {
-    typedef typename Field::value_type value_type;
-
     fifi::dummy_stack<Field> stack;
+    EXPECT_TRUE(stack.granularity() > 0);
+}
 
-    for (uint32_t i = sizeof(value_type); i < 256; i += sizeof(value_type))
+template<class Field>
+void test_region_alignment()
+{
+    fifi::dummy_stack<Field> stack;
+    EXPECT_TRUE(stack.alignment() > 0);
+}
+
+TEST(TestRegionInfo, granularity)
+{
     {
-        stack.set_length(i);
-        EXPECT_EQ(i, stack.length());
-        EXPECT_EQ(fifi::length_to_size<Field>(i), stack.size());
+        SCOPED_TRACE("binary");
+        test_region_granularity<fifi::binary>();
+    }
+    {
+        SCOPED_TRACE("binary4");
+        test_region_granularity<fifi::binary4>();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        test_region_granularity<fifi::binary8>();
+    }
+    {
+        SCOPED_TRACE("binary16");
+        test_region_granularity<fifi::binary16>();
+    }
+    {
+        SCOPED_TRACE("prime2325");
+        test_region_granularity<fifi::prime2325>();
     }
 }
 
-TEST(TestRegionInfo, binary)
+TEST(TestRegionInfo, alignment)
 {
-    test_region_info<fifi::binary>();
-}
-
-TEST(TestRegionInfo, binary4)
-{
-    test_region_info<fifi::binary4>();
-}
-
-TEST(TestRegionInfo, binary8)
-{
-    test_region_info<fifi::binary8>();
-}
-TEST(TestRegionInfo, binary16)
-{
-    test_region_info<fifi::binary16>();
-}
-
-TEST(TestRegionInfo, prime2325)
-{
-    test_region_info<fifi::prime2325>();
+    {
+        SCOPED_TRACE("binary");
+        test_region_alignment<fifi::binary>();
+    }
+    {
+        SCOPED_TRACE("binary4");
+        test_region_alignment<fifi::binary4>();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        test_region_alignment<fifi::binary8>();
+    }
+    {
+        SCOPED_TRACE("binary16");
+        test_region_alignment<fifi::binary16>();
+    }
+    {
+        SCOPED_TRACE("prime2325");
+        test_region_alignment<fifi::prime2325>();
+    }
 }
