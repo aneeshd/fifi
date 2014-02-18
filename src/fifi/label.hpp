@@ -29,14 +29,14 @@ namespace fifi
         }
 
         template<uint32_t SuperLabel>
-        auto _get_this(select<false>) const -> decltype(((Super*)this)->template get_this<SuperLabel>())
+        auto _get_this(select<false>) const -> decltype(((Super*)0)->template get_this<SuperLabel>())
         {
             std::cout << "_get_this false, Label: " << Label << " SuperLabel: " << SuperLabel << std::endl;
             return ((Super*)this)->template get_this<SuperLabel>();
         }
 
         template<uint32_t SuperLabel>
-        auto get_this() const -> decltype(this->template _get_this<SuperLabel>( select<Label == SuperLabel>() ))
+        auto get_this() const -> decltype(((label*)0)->template _get_this<SuperLabel>( select<Label == SuperLabel>() ))
         {
             return this->template _get_this<SuperLabel>(select<Label == SuperLabel>());
         }
