@@ -5,16 +5,15 @@ class layer
 public:
 
     /// @typedef field_type
-    /// The data type storing the field type from which finite field
-    /// computations are peformed, inherited from the Super class. E.g.
-    /// the binary extension field 2^8 uses binary8 as the field type.
-    typedef typename Super::field_type field_type;
+    /// The finite field type used e.g. fifi::binary8 for the Finite
+    /// Field 2^8
+    typedef fifi_finite_field field_type;
 
     /// @typedef value_type
     /// The value type storing the field elements used for the
-    /// specified field inherited from the Super class. E.g. the binary
-    /// extension field 2^8 uses uint8_t as the value_type.
-    typedef typename Super::value_type value_type;
+    /// specified field. E.g. the binary extension field 2^8 uses uint8_t as
+    /// the value_type.
+    typedef field::value_type value_type;
 
     //------------------------------------------------------------------
     // BASE ARITHMETICS API
