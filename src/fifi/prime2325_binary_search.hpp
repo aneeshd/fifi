@@ -33,8 +33,9 @@ namespace fifi
         ///
         /// @param max_block_length denotes the largest block size in bytes
         ///        that can be searched using this algorithm.
-        /// @param k_pass denotes the number times to iterate over the data. The
-        ///        larger k_pass the less memory but more computations are needed.
+        /// @param k_pass denotes the number times to iterate over the data.
+        ///        The larger k_pass the less memory but more computations
+        ///        are needed.
         prime2325_binary_search(uint32_t max_block_length, uint32_t k_pass = 2)
             : m_max_block_length(max_block_length),
               m_max_block_size(m_max_block_length * 4),
