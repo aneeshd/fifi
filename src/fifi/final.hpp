@@ -14,10 +14,10 @@ namespace fifi
 
     public:
 
-        /// The field type
+        /// @copydoc layer::field_type
         typedef Field field_type;
 
-        /// The data type storing field elements
+        /// @copydoc layer::value_type
         typedef typename field_type::value_type value_type;
     };
 }
