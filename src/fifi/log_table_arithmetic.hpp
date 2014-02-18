@@ -140,7 +140,5 @@ namespace fifi
 
         /// The AntiLog table
         std::vector<value_type> m_antilog;
-
     };
-
 }
