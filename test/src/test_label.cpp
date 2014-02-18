@@ -13,17 +13,9 @@ namespace fifi
 {
     namespace
     {
-/*
-        struct dummy
-        {
-            template<uint32_t N>
-            const dummy& get_this() const
-            {
-                std::cout << "ASSERT" << std::endl;
-                assert(0);
-                return *this;
-            }
-        };
+
+        struct final
+        { };
 
         template<class Super>
         class test1 : public Super
@@ -31,7 +23,6 @@ namespace fifi
         public:
             uint32_t test() const
             {
-                std::cout << "test:1" << std::endl;
                 return 1;
             }
         };
@@ -42,73 +33,83 @@ namespace fifi
         public:
             uint32_t test() const
             {
-                std::cout << "test:2" << std::endl;
                 return 2;
             }
         };
 
-        template<uint32_t Label, class Super>
-        class the_goto : public Super
+        template<class Super>
+        class test3 : public Super
         {
         public:
-            uint32_t test(bool jump) const
+            uint32_t test() const
             {
-                std::cout << "test jmp" << std::endl;
+                return 3;
+            }
+        };
+
+        template<class Super>
+        class test4 : public Super
+        {
+        public:
+            uint32_t test() const
+            {
+                return 4;
+            }
+        };
+
+        template<uint32_t Label, class Super>
+        class goto1 : public Super
+        {
+        public:
+            uint32_t run1(bool jump) const
+            {
                 if(jump)
                 {
-                    std::cout << "jmp" << std::endl;
-                    return Super::template get_this<Label>().test();
-                    //Super::test();
+                    return Super::template get_label<Label>().test();
                 }
                 else
                 {
-                    std::cout << "no jmp" << std::endl;
                     return Super::test();
                 }
             }
         };
 
-        class my_stack : public
-            the_goto<1,
-            test2<
-            label<1,
-            test1<
-            dummy> > > >
+        template<uint32_t Label, class Super>
+        class goto2 : public Super
         {
-
+        public:
+            uint32_t run2(bool jump) const
+            {
+                if(jump)
+                {
+                    return Super::template get_label<Label>().test();
+                }
+                else
+                {
+                    return Super::test();
+                }
+            }
         };
-*/
-    struct dummy
-    {
 
-        template<uint32_t SuperLabel>
-        const dummy& get_this() const
-        {
-            assert(false);
-            return *this;
-        }
-
-        void print() const
-        {
-            std::cout << "hello in dummy " << std::endl;
-        }
-    };
-
-    class test : public label<2, label<4, dummy> >
-    { };
+        class dummy_stack : public
+            goto2<2,
+            test4<
+            goto1<1,
+            test3<
+            label<1,
+            test2<
+            label<2,
+            test1<
+            final> > > > > > > >
+        { };
     }
 }
 
 TEST(TestLabel, label)
 {
-    /*
-    fifi::my_stack s;
-    std::cout << "test1" << std::endl;
-    EXPECT_EQ(1, s.test(true));
-    std::cout << "test2" << std::endl;
-    EXPECT_EQ(2, s.test(false));
-    */
-    fifi::test t;
-    t.get_this<4>().print();
-    t.get_this<2>().print();
+    fifi::dummy_stack stack;
+    EXPECT_EQ(3, stack.run1(false));
+    EXPECT_EQ(2, stack.run1(true));
+    EXPECT_EQ(4, stack.run2(false));
+    EXPECT_EQ(1, stack.run2(true));
 }
