@@ -36,10 +36,10 @@ namespace fifi
 
     public:
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename Field::value_type value_type;
 
-        /// Typedef of the field type used
+        /// @copydoc layer::field_type
         typedef Field field_type;
 
     public:
@@ -66,7 +66,7 @@ namespace fifi
             }
         }
 
-        /// @copydoc finite_field::multiply()
+        /// @copydoc layer::multiply(value_type, value_type) const
         value_type multiply(value_type a, value_type b) const
         {
             assert(is_valid_element<field_type>(a));
@@ -75,7 +75,7 @@ namespace fifi
             return m_multtable[(a << Field::degree) + b];
         }
 
-        /// @copydoc finite_field::divide()
+        /// @copydoc layer::divide(value_type, value_type) const
         value_type divide(value_type numerator, value_type denominator) const
         {
             assert(is_valid_element<field_type>(numerator));
@@ -84,7 +84,7 @@ namespace fifi
             return m_divitable[(numerator << Field::degree) + denominator];
         }
 
-        /// @copydoc finite_field::invert()
+        /// @copydoc layer::invert(value_type) const
         value_type invert(value_type a) const
         {
             assert(is_valid_element<field_type>(a));
