@@ -25,12 +25,20 @@ namespace fifi
     template<class Field, class Super>
     class full_table_arithmetic : public Super
     {
+        // Static check for the prime2325 field, the full lookup table
+        // only works with binary extension fields
         static_assert(
             !std::is_same<prime2325, typename Super::field_type>::value,
             "This layer does not support the 2^32 - 5 prime field");
+
+        // Check for the binary16 field the full lookup table cannot
+        // be used with binary16 due to the excessive amounts of
+        // memory it would require to create the look-up table.
         static_assert(
             !std::is_same<binary16, typename Super::field_type>::value,
             "This layer does not support the binary16 field");
+
+        // The full lookup table does not support the binary field
         static_assert(!std::is_same<binary, typename Super::field_type>::value,
             "This layer does not support the binary field");
 
@@ -99,7 +107,5 @@ namespace fifi
 
         /// The division table
         std::vector<value_type> m_divitable;
-
     };
-
 }

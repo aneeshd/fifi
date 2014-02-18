@@ -18,21 +18,19 @@
 
 namespace fifi
 {
-
-    /// The full look-up table - computes a full lookup table of
-    /// the multiplication and division operations.
+    /// The full look-up table stack. This stack does most
+    /// computations base on full look-up tables.
     template<class Field>
-    class full_table :
-        public
-               ssse3_binary4_full_table_bypass_dispatcher<Field,
-               binary8_region_arithmetic_full_table<Field,
-               region_arithmetic<
-               region_info<
-               binary4_packed_arithmetic<Field,
-               packed_arithmetic<
-               full_table_arithmetic<Field,
-               simple_online_arithmetic<
-               polynomial_degree<
-               final<Field> > > > > > > > > >
+    class full_table : public
+        ssse3_binary4_full_table_bypass_dispatcher<Field,
+        binary8_region_arithmetic_full_table<Field,
+        region_arithmetic<
+        region_info<
+        binary4_packed_arithmetic<Field,
+        packed_arithmetic<
+        full_table_arithmetic<Field,
+        simple_online_arithmetic<
+        polynomial_degree<
+        final<Field> > > > > > > > > >
     { };
 }
