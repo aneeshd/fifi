@@ -9,7 +9,6 @@
 
 namespace fifi
 {
-
     /// Checks whether a value is within the valid range of the chosen
     /// finite field
     /// @param v The value from the finite field
