@@ -15,7 +15,14 @@ namespace fifi
     {
 
         struct final
-        { };
+        {
+            template<uint32_t>
+            const final& get_label() const
+            {
+                assert(false);
+                return *this;
+            }
+        };
 
         template<class Super>
         class test1 : public Super
