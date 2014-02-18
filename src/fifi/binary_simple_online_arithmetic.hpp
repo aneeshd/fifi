@@ -38,7 +38,7 @@ namespace fifi
 
     public:
 
-        /// @copydoc layer::multiply(value_type a, value_type b) const
+        /// @copydoc layer::multiply(value_type, value_type) const
         value_type multiply(value_type a, value_type b) const
         {
             assert(is_valid_element<field_type>(a));
@@ -47,8 +47,7 @@ namespace fifi
             return a & b;
         }
 
-        /// @copydoc layer::divide(value_type numerator,
-        ///                        value_type denominator) const
+        /// @copydoc layer::divide(value_type, value_type) const
         value_type divide(value_type numerator, value_type denominator) const
         {
             assert(is_valid_element<field_type>(numerator));
@@ -59,7 +58,7 @@ namespace fifi
         }
 
         /// Zero has no inverse and one is its own inverse
-        /// @copydoc layer::invert(value_type a) const
+        /// @copydoc layer::invert(value_type) const
         value_type invert(value_type a) const
         {
             assert(is_valid_element<field_type>(a));

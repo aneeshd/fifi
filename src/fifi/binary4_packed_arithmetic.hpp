@@ -39,7 +39,7 @@ namespace fifi
 
     public:
 
-        /// @copydoc layer::packed_multiply(value_type a, value_type b) const
+        /// @copydoc layer::packed_multiply(value_type, value_type) const
         value_type packed_multiply(value_type a, value_type b) const
         {
             value_type high = Super::multiply(a >> 4, b >> 4);
@@ -48,8 +48,7 @@ namespace fifi
             return (high << 4) | low;
         }
 
-        /// @copydoc layer::packed_divide(value_type numerator,
-        ///                               value_type denominator) const
+        /// @copydoc layer::packed_divide(value_type, value_type) const
         value_type packed_divide(value_type numerator,
                                  value_type denominator) const
         {
@@ -62,7 +61,7 @@ namespace fifi
             return (high << 4) | low;
         }
 
-        /// @copydoc layer::packed_invert(value_type a) const
+        /// @copydoc layer::packed_invert(value_type) const
         value_type packed_invert(value_type a) const
         {
             value_type high = Super::invert(a >> 4);
@@ -71,13 +70,13 @@ namespace fifi
             return (high << 4) | low;
         }
 
-        /// @copydoc layer::packed_add(value_type a, value_type b) const
+        /// @copydoc layer::packed_add(value_type, value_type) const
         value_type packed_add(value_type a, value_type b) const
         {
             return a ^ b;
         }
 
-        /// @copydoc layer::packed_subtract(value_type a, value_type b) const
+        /// @copydoc layer::packed_subtract(value_type, value_type) const
         value_type packed_subtract(value_type a, value_type b) const
         {
             // In the binary extension fields add and subtract are the same
