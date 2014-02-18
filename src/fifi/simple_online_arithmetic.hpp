@@ -14,7 +14,6 @@
 
 namespace fifi
 {
-
     /// Simple online finite field algorithms - computes the results
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Super>
@@ -26,16 +25,20 @@ namespace fifi
         typedef typename Super::field_type field_type;
 
         /// Typedef of the data type used for each field element
-        typedef typename Super::value_type value_type;
+        typedef typename field_type::value_type value_type;
+
+        /// Typedef of the data type used for each the degree of the field
+        typedef typename field_type::degree_type degree_type;
 
     public:
 
         /// @copydoc layer::multiply()
         value_type multiply(value_type a, value_type b) const
         {
-            static_assert(
-                !std::is_same<binary, typename Super::field_type>::value,
-                "This member function does not support the binary field");
+            static_assert(!std::is_same<binary, field_type>::value,
+                          "This member function does not support the "
+                          "binary  field");
+
             assert(is_valid_element<field_type>(a));
             assert(is_valid_element<field_type>(b));
 
@@ -49,8 +52,7 @@ namespace fifi
 
             value_type result = 0;
 
-            for (typename field_type::degree_type i = 0;
-                i < field_type::degree; ++i)
+            for (degree_type i = 0; i < field_type::degree; ++i)
             {
                 low_bit_flag = b & 0x1;
 
@@ -77,9 +79,9 @@ namespace fifi
         /// @copydoc layer::divide()
         value_type divide(value_type numerator, value_type denominator) const
         {
-            static_assert(
-                !std::is_same<binary, typename Super::field_type>::value,
+            static_assert(!std::is_same<binary, field_type>::value,
                 "This member function does not support the binary field");
+
             assert(is_valid_element<field_type>(numerator));
             assert(is_valid_element<field_type>(denominator));
 
@@ -89,9 +91,9 @@ namespace fifi
         /// @copydoc layer::invert()
         value_type invert(value_type a) const
         {
-            static_assert(
-                !std::is_same<binary, typename Super::field_type>::value,
+            static_assert(!std::is_same<binary, field_type>::value,
                 "This member function does not support the binary field");
+
             assert(a != 0); // Zero has no inverse
             assert(is_valid_element<field_type>(a));
 
