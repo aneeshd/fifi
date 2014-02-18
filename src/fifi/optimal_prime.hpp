@@ -10,7 +10,6 @@
 #include "packed_arithmetic.hpp"
 #include "region_arithmetic.hpp"
 #include "region_info.hpp"
-#include "optimal_prime_region_arithmetic.hpp"
 
 namespace fifi
 {
