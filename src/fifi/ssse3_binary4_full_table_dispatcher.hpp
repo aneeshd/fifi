@@ -23,8 +23,7 @@ namespace fifi
     class ssse3_binary4_full_table_dispatcher : public Super
     { };
 
-
-    /// @todo
+    /// Specialization for the SSSE3 dispatcher for the binary4 field
     template<class Super>
     class ssse3_binary4_full_table_dispatcher<binary4, Super>
         : public Super
@@ -62,7 +61,7 @@ namespace fifi
 
         uint32_t granularity() const
         {
-            if(m_ssse3_binary4.ssse3_binary4_full_table_enabled())
+            if (m_ssse3_binary4.ssse3_binary4_full_table_enabled())
             {
                 return std::max(m_ssse3_binary4.granularity(),
                                 Super::granularity());
@@ -75,7 +74,7 @@ namespace fifi
 
         uint32_t alignment() const
         {
-            if(m_ssse3_binary4.ssse3_binary4_full_table_enabled())
+            if (m_ssse3_binary4.ssse3_binary4_full_table_enabled())
             {
                 return std::max(m_ssse3_binary4.alignment(),
                                 Super::alignment());
@@ -88,12 +87,17 @@ namespace fifi
 
     private:
 
+        /// @return A function that dispatches to the "right" function
+        /// depending on whether the binary has been compiled with
+        /// SSSE3 support and whether the CPU has SSSE3.
         std::function<void (value_type*, value_type, uint32_t)>
             dispatch_region_multiply_constant() const
         {
             cpuid::cpuinfo info;
 
-            if(info.has_ssse3() && m_ssse3_binary4.ssse3_binary4_full_table_enabled())
+            bool enabled = m_ssse3_binary4.ssse3_binary4_full_table_enabled();
+
+            if (info.has_ssse3() && enabled)
             {
                 return std::bind(
                     &ssse3_binary4_full_table::region_multiply_constant,
@@ -104,18 +108,21 @@ namespace fifi
             }
             else
             {
-                return std::bind(&Super::region_multiply_constant,
-                                 (Super*)this,
-                                 std::placeholders::_1,
-                                 std::placeholders::_2,
-                                 std::placeholders::_3);
+                return std::bind(
+                    &Super::region_multiply_constant,
+                    (Super*)this,
+                    std::placeholders::_1,
+                    std::placeholders::_2,
+                    std::placeholders::_3);
             }
         }
 
     private:
 
+        /// The SSSE3 implementation for the binary4 field
         ssse3_binary4_full_table m_ssse3_binary4;
 
+        /// Store the function to invoke when calling region_multiply_constant
         std::function<void (value_type*, value_type, uint32_t)>
             m_region_multiply_constant;
 
