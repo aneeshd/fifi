@@ -32,8 +32,9 @@ namespace fifi
 
     public:
 
-        /// @copydoc region_arithmetic::region_multiply_constant(value_type*,
-        ///              value_type, uint32_t)
+        /// @copydoc layer::region_multiply_constant(value_type* dest,
+        ///                                          value_type constant,
+        ///                                          uint32_t length) const
         void region_multiply_constant(value_type* dest,
             value_type constant, uint32_t length) const
         {
@@ -47,8 +48,10 @@ namespace fifi
             }
         }
 
-        /// @copydoc region_arithmetic::region_multiply_add(value_type*,
-        ///              value_type*, value_type, uint32_t)
+        /// @copydoc layer::region_multiply_add(value_type* dest,
+        ///                                     value_type* src,
+        ///                                     value_type constant,
+        ///                                     uint32_t length) const
         void region_multiply_add(value_type* dest, const value_type* src,
                           value_type constant, uint32_t length) const
         {
@@ -67,8 +70,10 @@ namespace fifi
             }
         }
 
-        /// @copydoc region_arithmetic::region_multiply_subtract(value_type*,
-        ///              value_type*, value_type, uint32_t)
+        /// @copydoc layer::region_multiply_subtract(value_type* dest,
+        ///                                          value_type* src,
+        ///                                          value_type constant,
+        ///                                          uint32_t length) const
         void region_multiply_subtract(value_type* dest, const value_type* src,
             value_type constant, uint32_t length) const
         {
