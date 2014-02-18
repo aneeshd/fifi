@@ -53,7 +53,7 @@ namespace fifi
                 (length - aligned_start) / RealSuper::granularity() * RealSuper::granularity();
             auto aligned_end = aligned_start + aligned_length;
 
-
+            /*
             std::cout << "sizeof(value_type): " << std::to_string(sizeof(value_type)) << std::endl;
             std::cout << "length: " << std::to_string(length) << std::endl;
             std::cout << "dest: " << std::to_string((uintptr_t)dest) << std::endl;
@@ -67,24 +67,24 @@ namespace fifi
             std::cout << "aligned_start: " << std::to_string(aligned_start) << std::endl;
             std::cout << "aligned_length: " << std::to_string(aligned_length) << std::endl;
             std::cout << "aligned_end: " << std::to_string(aligned_end) << std::endl;
-
+            */
 
             if (aligned_start != 0)
             {
-                std::cout << "aligned_start" << std::endl;
+                //std::cout << "aligned_start" << std::endl;
                 Super::region_multiply_constant(dest, constant, aligned_start);
             }
 
             if (aligned_length != 0)
             {
-                std::cout << "aligned_length" << std::endl;
-                std::cout << "(uintptr_t)dest mod RealSuper::alignment()): " << (uintptr_t)dest % RealSuper::alignment() << std::endl;
+                //std::cout << "aligned_length" << std::endl;
+                //std::cout << "(uintptr_t)dest mod RealSuper::alignment()): " << (uintptr_t)dest % RealSuper::alignment() << std::endl;
                 RealSuper::region_multiply_constant(dest + aligned_start, constant, aligned_length);
             }
 
             if (length - aligned_end != 0)
             {
-                std::cout << "length - aligned_end" << std::endl;
+                //std::cout << "length - aligned_end" << std::endl;
                 Super::region_multiply_constant(dest + aligned_end, constant, length - aligned_end);
             }
         }
