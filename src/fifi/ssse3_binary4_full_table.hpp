@@ -20,7 +20,6 @@
 
 namespace fifi
 {
-
     /// ssse3_binary4_full_table_dispatch
     /// ssse3_binary4_full_table
     ///
@@ -83,11 +82,10 @@ namespace fifi
         typedef std::vector<uint8_t, sak::aligned_allocator<uint8_t> >
             aligned_vector;
 
-
+        /// Storage for the high 4 bit multiplication table
         aligned_vector m_table_one;
+
+        /// Storage for the low 4 bit multiplication table
         aligned_vector m_table_two;
-
-
     };
-
 }

@@ -27,9 +27,6 @@ namespace fifi
         /// Typedef of the data type used for each field element
         typedef typename field_type::value_type value_type;
 
-        /// Typedef of the data type used for each the degree of the field
-        typedef typename field_type::degree_type degree_type;
-
     public:
 
         /// @copydoc layer::multiply()
@@ -51,6 +48,9 @@ namespace fifi
             value_type high_bit_mask = 1U << (field_type::degree - 1);
 
             value_type result = 0;
+
+            /// Typedef of the data type used for each the degree of the field
+            typedef typename field_type::degree_type degree_type;
 
             for (degree_type i = 0; i < field_type::degree; ++i)
             {
