@@ -24,16 +24,7 @@ namespace fifi
     {
     public:
 
-        /// Static check for prime2325 field
-        static_assert(!std::is_same<prime2325,
-                          typename Super::field_type>::value,
-              "This layer does not support the 2^32 - 5 prime field");
-
-        /// Static check for binary field
-        static_assert(!std::is_same<binary, typename Super::field_type>::value,
-              "This layer does not support the binary field");
-
-        /// The field type
+        /// The field type used
         typedef typename Super::field_type field_type;
 
         /// Typedef of the data type used for each field element
@@ -41,6 +32,14 @@ namespace fifi
 
         /// Typedef of the data type used for each field element
         typedef typename field_type::order_type order_type;
+
+        /// Check for prime2325 field
+        static_assert(!std::is_same<prime2325,field_type>::value,
+            "This layer does not support the 2^32 - 5 prime field");
+
+        /// Check for binary field
+        static_assert(!std::is_same<binary, field_type>::value,
+                      "This layer does not support the binary field");
 
     public:
 
