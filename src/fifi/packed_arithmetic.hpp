@@ -7,7 +7,6 @@
 
 namespace fifi
 {
-
     /// Packed arithmetic is used to perform standard arithmetic
     /// operations but where field elements are expected to be
     /// "packed" in the value_type. This ensures that we correctly
@@ -66,7 +65,5 @@ namespace fifi
         {
             return Super::subtract(a, b);
         }
-
     };
-
 }
