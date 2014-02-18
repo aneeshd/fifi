@@ -20,7 +20,7 @@ namespace fifi
     {
     public:
 
-        /// Typedef of the field type used
+        /// The field type used
         typedef Field field_type;
 
         /// Typedef of the data type used for each field element
