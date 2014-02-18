@@ -14,7 +14,6 @@
 
 namespace fifi
 {
-
     /// Returns the number of value_type elements needed to store a certain
     /// number of field elements
     /// @param elements the number of field elements
@@ -288,6 +287,9 @@ namespace fifi
         set_value<Field>(elements, index2, value1);
     }
 
+    /// @todo This function can be optimized by specializing it to
+    /// fields that do not need packing.
+    ///
     /// Useful abstraction function for creating packed constants
     /// @param constant the constant to pack.
     template<class Field>
@@ -299,7 +301,8 @@ namespace fifi
 
         value_type result = 0;
 
-        for (uint32_t i = 0; i < size_to_elements<Field>(sizeof(value_type)); ++i)
+        uint32_t elements = size_to_elements<Field>(sizeof(value_type));
+        for (uint32_t i = 0; i < elements; ++i)
         {
             set_value<Field>(&result, i, constant);
         }

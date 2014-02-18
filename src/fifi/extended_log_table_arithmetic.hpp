@@ -23,8 +23,13 @@ namespace fifi
     class extended_log_table_arithmetic : public Super
     {
     public:
-        static_assert(!std::is_same<prime2325, typename Super::field_type>::value,
+
+        /// Static check for prime2325 field
+        static_assert(!std::is_same<prime2325,
+                          typename Super::field_type>::value,
               "This layer does not support the 2^32 - 5 prime field");
+
+        /// Static check for binary field
         static_assert(!std::is_same<binary, typename Super::field_type>::value,
               "This layer does not support the binary field");
 
