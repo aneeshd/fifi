@@ -12,7 +12,6 @@
 
 namespace fifi
 {
-
     /// Region arithmetic makes it easy to perform finite field
     /// arithmetic over memory regions instead of single finite field
     /// elements. Note, that the region arithmetic assumes that the
