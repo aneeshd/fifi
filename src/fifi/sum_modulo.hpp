@@ -27,8 +27,10 @@ namespace fifi
 
     public:
 
-        /// @param v The value from the finite field
-        /// @return True if the element is within the valid range, false otherwise.
+        /// @param a First value from the finite field
+        /// @param b Second value from the finite field
+        /// @return True if the element is within the valid range, false
+        /// otherwise.
         template<class T = field_type>
         inline typename std::enable_if<T::is_exact,
             typename T::value_type>::type
@@ -49,8 +51,8 @@ namespace fifi
             return sum;
         }
 
-        /// specialization for non exact types
-        /// @copydoc calculate_sum_modulo(value_type, value_type)
+        /// Specialization for non exact types
+        /// @copydoc calculate_sum_modulo(value_type, value_type) const
         template<class T = field_type>
         inline typename std::enable_if<!T::is_exact,
             typename T::value_type>::type
