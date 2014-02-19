@@ -114,8 +114,7 @@ namespace fifi
         /// Specialization for the (2^32 - 5) prime field
         value_type add(value_type element_one, value_type element_two) const
         {
-            element_one =
-                element_one + element_two;
+            element_one += element_two;
 
             // If element_one >= element_two the we did not have a 32 bit
             // overflow
@@ -131,8 +130,7 @@ namespace fifi
             // An overflow is equivalent to a mod 2^32 since
             // we are working 2^32 - 5 we simply add 5 to
             // compensate
-            element_one =
-                element_one + (5 & ((element_one >= element_two) - 1));
+            element_one += (5 & ((element_one >= element_two) - 1));
 
             // Conditional move version
             // element_one = element_one >= field_type::prime ?
@@ -155,7 +153,7 @@ namespace fifi
             // Our measurements show that this branch-less version
             // yields a significant performance gain over both the
             // branched and conditional move versions
-            element_one = element_one -
+            element_one -=
                 (field_type::prime & ((field_type::prime > element_one) - 1));
 
             return element_one;

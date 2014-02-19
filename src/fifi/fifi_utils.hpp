@@ -163,7 +163,7 @@ namespace fifi
     /// @return the value of the element at specified index
     template<class Field>
     inline typename Field::value_type
-    get_value(const typename Field::value_type *elements, uint32_t index)
+    get_value(const typename Field::value_type* elements, uint32_t index)
     {
         assert(elements != 0);
         return elements[index];
@@ -172,7 +172,7 @@ namespace fifi
     /// get_value specialization for the binary field
     template<>
     inline binary::value_type
-    get_value<binary>(const binary::value_type *elements, uint32_t index)
+    get_value<binary>(const binary::value_type* elements, uint32_t index)
     {
         assert(elements != 0);
 
@@ -188,7 +188,7 @@ namespace fifi
     /// get_value specialization for the binary4 field
     template<>
     inline binary4::value_type
-    get_value<binary4>(const binary4::value_type *elements, uint32_t index)
+    get_value<binary4>(const binary4::value_type* elements, uint32_t index)
     {
         assert(elements != 0);
 

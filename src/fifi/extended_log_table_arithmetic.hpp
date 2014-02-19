@@ -126,7 +126,7 @@ namespace fifi
         std::vector<value_type> m_log_data;
 
         /// Pointer to the Log table data
-        value_type *m_log;
+        value_type* m_log;
 
         /// The AntiLog table
         std::vector<value_type> m_antilog_data;
@@ -134,7 +134,7 @@ namespace fifi
         /// Pointer to the AntiLog table data, adjusted so that
         /// negative exponent sums are handled.
         /// I.e. m_antilog[-1] is valid.
-        value_type *m_antilog;
+        value_type* m_antilog;
 
     };
 }

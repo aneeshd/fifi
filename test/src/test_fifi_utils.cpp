@@ -364,7 +364,7 @@ TEST(TestFifiUtils, get_value_binary)
 
     EXPECT_EQ(1U, fifi::get_value<fifi::binary>(&test[0], 7));
 
-    const fifi::binary::value_type *test_const = test;
+    const fifi::binary::value_type* test_const = test;
     EXPECT_EQ(1U, fifi::get_value<fifi::binary>(&test_const[0], 7));
 }
 
@@ -380,7 +380,7 @@ TEST(TestFifiUtils, get_value_binary4)
     EXPECT_EQ(79U, test[0]);
     EXPECT_EQ(4U, fifi::get_value<fifi::binary4>(&test[0], 1));
 
-    const fifi::binary4::value_type *test_const = &test[0];
+    const fifi::binary4::value_type* test_const = &test[0];
     EXPECT_EQ(4U, fifi::get_value<fifi::binary4>(&test_const[0],1));
 }
 
@@ -394,7 +394,7 @@ TEST(TestFifiUtils, get_value_binary8)
     fifi::set_value<fifi::binary8>(&test[0], 1, 183);
     EXPECT_EQ(183U, fifi::get_value<fifi::binary8>(&test[0], 1));
 
-    const fifi::binary8::value_type *test_const = &test[0];
+    const fifi::binary8::value_type* test_const = &test[0];
     EXPECT_EQ(183U, fifi::get_value<fifi::binary8>(&test_const[0],1));
 }
 
@@ -408,7 +408,7 @@ TEST(TestFifiUtils, get_value_binary16)
     fifi::set_value<fifi::binary16>(&test[0], 1, 1873);
     EXPECT_EQ(1873U, fifi::get_value<fifi::binary16>(&test[0], 1));
 
-    const fifi::binary16::value_type *test_const = &test[0];
+    const fifi::binary16::value_type* test_const = &test[0];
     EXPECT_EQ(1873U, fifi::get_value<fifi::binary16>(&test_const[0],1));
 }
 
@@ -424,7 +424,7 @@ TEST(TestFifiUtils, swap_values_binary)
     EXPECT_EQ(0xff, test[0]);
     EXPECT_EQ(0x00, test[1]);
 
-    const fifi::binary::value_type *test_const = &test[0];
+    const fifi::binary::value_type* test_const = &test[0];
     EXPECT_EQ(0xff, test_const[0]);
     EXPECT_EQ(0x00, test_const[1]);
 }
@@ -441,7 +441,7 @@ TEST(TestFifiUtils, swap_values_binary4)
     EXPECT_EQ(0xff, test[0]);
     EXPECT_EQ(0x00, test[1]);
 
-    const fifi::binary4::value_type *test_const = &test[0];
+    const fifi::binary4::value_type* test_const = &test[0];
     EXPECT_EQ(0xff, test_const[0]);
     EXPECT_EQ(0x00, test_const[1]);
 }
@@ -454,7 +454,7 @@ TEST(TestFifiUtils, swap_values_binary8)
     EXPECT_EQ(0xff, test[0]);
     EXPECT_EQ(0x00, test[1]);
 
-    const fifi::binary8::value_type *test_const = &test[0];
+    const fifi::binary8::value_type* test_const = &test[0];
     EXPECT_EQ(0xff, test_const[0]);
     EXPECT_EQ(0x00, test_const[1]);
 }
