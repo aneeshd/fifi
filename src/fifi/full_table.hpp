@@ -14,7 +14,8 @@
 #include "region_arithmetic.hpp"
 #include "region_info.hpp"
 #include "simple_online_arithmetic.hpp"
-#include "ssse3_binary4_full_table_dispatcher.hpp"
+#include "region_dispatcher.hpp"
+#include "ssse3_binary4_full_table.hpp"
 #include "correct_alignment.hpp"
 #include "correct_granularity.hpp"
 #include "name_super.hpp"
@@ -28,7 +29,7 @@ namespace fifi
     class full_table :
         public correct_alignment<
                correct_granularity<
-               ssse3_binary4_full_table_dispatcher<Field,
+               region_dispatcher<Field, ssse3_binary4_full_table,
                name_super<
                binary8_region_arithmetic_full_table<Field,
                region_arithmetic<

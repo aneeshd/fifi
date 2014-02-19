@@ -41,7 +41,7 @@ TEST(TestSSE3Binary4FullTable, region_multiply_constant)
 
     fifi::ssse3_binary4_full_table impl;
 
-    if(impl.ssse3_binary4_full_table_enabled())
+    if(impl.enabled())
     {
         check_results_region_multiply_constant<
             fifi::ssse3_binary4_full_table>();

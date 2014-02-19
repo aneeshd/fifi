@@ -3,10 +3,10 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include "ssse3_binary4_full_table.hpp"
-
-#include <iostream>
 #include <cpuid/config.hpp>
+#include <cpuid/cpuinfo.hpp>
+
+#include "ssse3_binary4_full_table.hpp"
 
 #if defined(CPUID_LINUX_GCC_X86)
     #include <x86intrin.h>
@@ -25,6 +25,8 @@ namespace fifi
 
     ssse3_binary4_full_table::ssse3_binary4_full_table()
     {
+        cpuid::cpuinfo info;
+        m_has_ssse3 = info.has_ssse3();
         m_table_one.resize(16*16);
         m_table_two.resize(16*16);
 
@@ -106,9 +108,10 @@ namespace fifi
         return 16U;
     }
 
-    bool ssse3_binary4_full_table::ssse3_binary4_full_table_enabled() const
+    bool ssse3_binary4_full_table::enabled() const
     {
-        return true;
+
+        return m_has_ssse3;
     }
 
 #else
@@ -127,7 +130,7 @@ namespace fifi
         assert(0);
     }
 
-    bool ssse3_binary4_full_table::ssse3_binary4_full_table_enabled() const
+    bool ssse3_binary4_full_table::enabled() const
     {
         return false;
     }

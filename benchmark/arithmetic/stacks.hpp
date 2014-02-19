@@ -6,7 +6,10 @@
 #pragma once
 
 #include <fifi/simple_online.hpp>
-#include <fifi/ssse3_binary4_full_table_dispatcher.hpp>
+#include <fifi/ssse3_binary4_full_table.hpp>
+#include <fifi/correct_alignment.hpp>
+#include <fifi/correct_granularity.hpp>
+#include <fifi/region_dispatcher.hpp>
 
 namespace fifi
 {
@@ -15,7 +18,10 @@ namespace fifi
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
     class ssse3_binary4 :
-        public ssse3_binary4_full_table_dispatcher<Field,
+        public correct_alignment<
+               correct_granularity<
+               region_dispatcher<Field, ssse3_binary4_full_table,
+               name_super<
                binary_region_arithmetic<Field,
                region_arithmetic<
                region_info<
@@ -25,6 +31,6 @@ namespace fifi
                binary_simple_online_arithmetic<Field,
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > > > > > >
+               final<Field> > > > > > > > > > > > > >
     { };
 }

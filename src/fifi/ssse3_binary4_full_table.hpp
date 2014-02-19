@@ -65,8 +65,8 @@ namespace fifi
             uint32_t length) const;
 
         /// @return true if the executable was built with SSSE3 binary4
-        ///         fulltable support
-        bool ssse3_binary4_full_table_enabled() const;
+        ///         full table support
+        bool enabled() const;
 
         /// @copydoc layer::granularity() const
         uint32_t granularity() const;
@@ -75,6 +75,9 @@ namespace fifi
         uint32_t alignment() const;
 
     private:
+
+        /// Boolean specifying whether the cpu has ssse3
+        bool m_has_ssse3;
 
         /// The size of each step in the region loops
         uint32_t m_ssse3_size;
