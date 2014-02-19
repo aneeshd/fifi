@@ -55,6 +55,29 @@ namespace fifi
     }
 }
 
+
+TEST(TestSSE3Binary4FullTableDispacther, alignment)
+{
+    fifi::dummy_stack<fifi::binary4> stack;
+    uint32_t expected = 1U;
+
+    if (stack.ssse3_binary4_full_table_enabled())
+        expected = 16U;
+
+    EXPECT_EQ(stack.alignment(), expected);
+}
+
+TEST(TestSSE3Binary4FullTableDispacther, granularity)
+{
+    fifi::dummy_stack<fifi::binary4> stack;
+    uint32_t expected = 1U;
+
+    if (stack.ssse3_binary4_full_table_enabled())
+        expected = 16U;
+
+    EXPECT_EQ(stack.granularity(), expected);
+}
+
 TEST(TestSSE3Binary4FullTableDispacther, api)
 {
     fifi::dummy_stack<fifi::binary4> stack;

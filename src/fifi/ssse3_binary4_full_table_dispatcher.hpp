@@ -86,6 +86,13 @@ namespace fifi
             }
         }
 
+        bool ssse3_binary4_full_table_enabled() const
+        {
+            cpuid::cpuinfo info;
+            return info.has_ssse3() &&
+                   m_ssse3_binary4.ssse3_binary4_full_table_enabled();
+        }
+
     private:
 
         std::function<void (value_type*, value_type, uint32_t)>
@@ -93,7 +100,8 @@ namespace fifi
         {
             cpuid::cpuinfo info;
 
-            if(info.has_ssse3() && m_ssse3_binary4.ssse3_binary4_full_table_enabled())
+            if(info.has_ssse3() &&
+               m_ssse3_binary4.ssse3_binary4_full_table_enabled())
             {
                 return std::bind(
                     &ssse3_binary4_full_table::region_multiply_constant,
