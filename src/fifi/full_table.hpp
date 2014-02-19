@@ -14,7 +14,10 @@
 #include "region_arithmetic.hpp"
 #include "region_info.hpp"
 #include "simple_online_arithmetic.hpp"
-#include "ssse3_binary4_full_table_bypass_dispatcher.hpp"
+#include "valid_alignment_or_goto.hpp"
+#include "valid_granularity_or_goto.hpp"
+#include "label.hpp"
+#include "final_label.hpp"
 
 namespace fifi
 {
@@ -24,8 +27,10 @@ namespace fifi
     template<class Field>
     class full_table :
         public
-               ssse3_binary4_full_table_bypass_dispatcher<Field,
+               valid_alignment_or_goto<1,
+               valid_granularity_or_goto<1,
                binary8_region_arithmetic_full_table<Field,
+               label<1,
                region_arithmetic<
                region_info<
                binary4_packed_arithmetic<Field,
@@ -33,6 +38,7 @@ namespace fifi
                full_table_arithmetic<Field,
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > > > > >
+               final_label<
+               final<Field> > > > > > > > > > > > >
     { };
 }

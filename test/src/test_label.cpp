@@ -58,7 +58,7 @@ namespace fifi
         {
             uint32_t goto1(bool jump) const
             {
-                if(jump)
+                if (jump)
                     return Super::template get_label<Label>().test();
                 else
                     return Super::test();
@@ -70,7 +70,7 @@ namespace fifi
         {
             uint32_t goto2(bool jump) const
             {
-                if(jump)
+                if (jump)
                     return Super::template get_label<Label>().test();
                 else
                     return Super::test();
