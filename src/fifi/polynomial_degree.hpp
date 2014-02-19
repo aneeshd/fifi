@@ -12,7 +12,6 @@
 
 namespace fifi
 {
-
     /// @brief This layer implements a simple function for determining
     ///        the degree of a binary extension field polynomial
     ///        representation.

@@ -17,8 +17,8 @@
 
 namespace fifi
 {
-
-    /// Produces an log table for multiplication and division.
+    /// Finite field stack using a log table as calculation method.
+    /// This stack supports binary extension fields.
     template<class Field>
     class log_table :
         public region_arithmetic<

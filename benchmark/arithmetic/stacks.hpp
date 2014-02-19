@@ -11,8 +11,9 @@
 namespace fifi
 {
 
-    /// Simple online finite field algorithms - computes the results
-    /// on the fly without relying on pre-computed look-up tables etc.
+    /// Stack containing the SSSE3 binary4 SIMD optimized
+    /// operations. Using the CPU dispatcher optimizations should only
+    /// be enabled on SSSE3 capable CPUs.
     template<class Field>
     class ssse3_binary4 :
         public ssse3_binary4_full_table_dispatcher<Field,
@@ -27,4 +28,5 @@ namespace fifi
                polynomial_degree<
                final<Field> > > > > > > > > > >
     { };
+
 }

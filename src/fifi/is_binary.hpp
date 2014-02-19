@@ -11,7 +11,6 @@
 
 namespace fifi
 {
-
     /// Will inherit from true-type if Field equal fifi::binary
     /// Can be used e.g.:
     ///
@@ -23,5 +22,4 @@ namespace fifi
     template<class Field>
     struct is_binary : public std::is_same<Field, fifi::binary>
     { };
-
 }

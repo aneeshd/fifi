@@ -10,7 +10,7 @@
 namespace fifi
 {
 
-    /// @brief This layer provides the default region infomation.
+    /// @brief This layer provides the default region information.
     template<class Super>
     class region_info : public Super
     {

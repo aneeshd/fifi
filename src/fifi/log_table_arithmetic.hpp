@@ -18,21 +18,24 @@ namespace fifi
     template<class Field, class Super>
     class log_table_arithmetic : public Super
     {
-        static_assert(!std::is_same<prime2325, typename Super::field_type>::value,
-              "This layer does not support the 2^32 - 5 prime field");
-        static_assert(!std::is_same<binary, typename Super::field_type>::value,
-              "This layer does not support the binary field");
-
     public:
 
-        /// Typedef of the data type used for each field element
-        typedef typename Field::value_type value_type;
-
-        /// Typedef of the data type used for each field element
-        typedef typename Field::order_type order_type;
-
-        /// Typedef of the field type used
+        /// The field type used
         typedef Field field_type;
+
+        /// Typedef of the data type used for each field element
+        typedef typename field_type::value_type value_type;
+
+        /// Typedef of the data type used for each field element
+        typedef typename field_type::order_type order_type;
+
+        /// Check for prime2325 field
+        static_assert(!std::is_same<prime2325, field_type>::value,
+            "This layer does not support the 2^32 - 5 prime field");
+
+        /// Check for binary field
+        static_assert(!std::is_same<binary, field_type>::value,
+                      "This layer does not support the binary field");
 
     public:
 
@@ -42,7 +45,7 @@ namespace fifi
             m_log.resize(Field::order, '\0');
             m_antilog.resize(Field::order, '\0');
 
-            // inital value corresponds x^0
+            // initial value corresponds x^0
             value_type power = 1;
 
             for (order_type i = 0; i < Field::order - 1; ++i)
@@ -137,7 +140,5 @@ namespace fifi
 
         /// The AntiLog table
         std::vector<value_type> m_antilog;
-
     };
-
 }

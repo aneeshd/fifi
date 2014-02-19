@@ -19,8 +19,6 @@ namespace fifi
     template<class Super>
     class optimal_prime_arithmetic : public Super
     {
-        static_assert(std::is_same<prime2325, typename Super::field_type>::value,
-              "This layer only support the 2^32 - 5 prime field");
     public:
 
         /// Typedef of the data type used for each field element
@@ -29,7 +27,11 @@ namespace fifi
         /// Typedef of the field type used
         typedef typename Super::field_type field_type;
 
+        static_assert(std::is_same<prime2325, field_type>::value,
+                      "This layer only support the 2^32 - 5 prime field");
+
     public:
+
         /// Specialization for the (2^32 - 5) prime field. Multiplication is
         /// based on a clever way of doing modulo. See:
         ///
@@ -37,10 +39,10 @@ namespace fifi
         ///   implementing rsa public key cryptosystem" Electronics  Letters,
         ///   vol.  21, 1985.
         value_type multiply(value_type element_one,
-                                           value_type element_two) const
+                            value_type element_two) const
         {
             uint64_t c = static_cast<uint64_t>(element_one) *
-                         static_cast<uint64_t>(element_two);
+                static_cast<uint64_t>(element_two);
 
             uint32_t l1 = c & 0xffffffff;
             c = c >> 32;
@@ -58,20 +60,23 @@ namespace fifi
 
         }
 
-        /// Specialization for the (2^32 - 5) prime field. In this case division is
-        /// simply implemented using multiplication with the inverse.
+        /// Specialization for the (2^32 - 5) prime field. In this
+        /// case division is simply implemented using multiplication
+        /// with the inverse.
         value_type divide(value_type numerator, value_type denominator) const
         {
             value_type inverse = invert(denominator);
             return multiply(numerator, inverse);
         }
 
-        /// Specialization for the (2^32 - 5) prime field. This algorithm used a
-        /// modified version of the Extended Euclidean algorithm, which essentially
-        /// solves the a*x + b*y = gcd(a,b) in this case b = 2^32 - 5 which is a
-        /// prime therefore we know that gcd(a,b) = 1 also since we do all
-        /// calculations mod 2^32 - 5 we see that b*y must become 0. We are left
-        /// with calculating a*x = 1 in which case x must be the inverse of a.
+        /// Specialization for the (2^32 - 5) prime field. This
+        /// algorithm used a modified version of the Extended
+        /// Euclidean algorithm, which essentially solves the a*x +
+        /// b*y = gcd(a,b) in this case b = 2^32 - 5 which is a prime
+        /// therefore we know that gcd(a,b) = 1 also since we do all
+        /// calculations mod 2^32 - 5 we see that b*y must become
+        /// 0. We are left with calculating a*x = 1 in which case x
+        /// must be the inverse of a.
         value_type invert(value_type element) const
         {
             assert(element > 0);
@@ -109,10 +114,47 @@ namespace fifi
         /// Specialization for the (2^32 - 5) prime field
         value_type add(value_type element_one, value_type element_two) const
         {
-            element_one = element_one + element_two;
-            element_one = element_one + (5 & ((element_one >= element_two) - 1));
+            element_one =
+                element_one + element_two;
 
+            // If element_one >= element_two the we did not have a 32 bit
+            // overflow
+            //
+            //     1 if no overflow
+            //     0 if overflow
+            //
+            // This means that (element_one >= element_two) - 1 becomes:
+            //
+            //     0 or 0x00000000 if no overflow
+            //     -1 or 0xffffffff if overflow
+            //
+            // An overflow is equivalent to a mod 2^32 since
+            // we are working 2^32 - 5 we simply add 5 to
+            // compensate
+            element_one =
+                element_one + (5 & ((element_one >= element_two) - 1));
 
+            // Conditional move version
+            // element_one = element_one >= field_type::prime ?
+            //    element_one - field_type::prime : element_one;
+
+            // The line below does the following:
+            // field_type::prime > element_one becomes:
+            //
+            //     1 if prime is larger
+            //     0 if prime is smaller or equal
+            //
+            // If that means the (field_type::prime > element_one) - 1 becomes:
+            //
+            //     0 or 0x00000000 if prime is larger
+            //     -1 or 0xffffffff if the prime is smaller or equal
+            //
+            // This mask is then used to determine whether the subtraction
+            // with the prime statement is in effect of not
+            //
+            // Our measurements show that this branch-less version
+            // yields a significant performance gain over both the
+            // branched and conditional move versions
             element_one = element_one -
                 (field_type::prime & ((field_type::prime > element_one) - 1));
 
@@ -120,12 +162,29 @@ namespace fifi
         }
 
         /// Specialization for the (2^32 - 5) prime field
-        value_type subtract(value_type element_one, value_type element_two) const
+        value_type subtract(value_type element_one,
+                            value_type element_two) const
         {
-            // Se explanation for the funny business below in arithmetics.h
-            // specialization of subtract for optimal_prime<prime2325>
-            return (element_one - element_two)
-                + (-5 & ((element_one >= element_two) - 1));
+            // If element_one >= element_two then we will not have an
+            // underflow
+            //
+            //     1 if no underflow
+            //     0 if underflow
+            //
+            // This means that (element_one >= element_two) - 1 becomes:
+            //
+            //     0 or 0x00000000 if no underflow
+            //     -1 or 0xffffffff if underflow
+            //
+            // An underflow is equivalent to a mod 2^32 since
+            // we are working 2^32 - 5 we simply subtract 5 to
+            // compensate
+
+            // Different from addition there is no way we can end up
+            // above the prime so we don't have to do anything else
+
+            return (element_one - element_two) +
+                (-5 & ((element_one >= element_two) - 1));
         }
     };
 }

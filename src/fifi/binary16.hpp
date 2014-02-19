@@ -12,7 +12,6 @@ namespace fifi
     /// A binary extension field with 2^16 elements
     struct binary16
     {
-
         /// The data type used for each element
         typedef uint16_t value_type;
 

@@ -16,7 +16,8 @@
 
 namespace fifi
 {
-
+    /// Finite field stack using the Extended Log table as calculation method.
+    /// This stack supports binary extension fields.
     template<class Field>
     class extended_log_table :
         public region_arithmetic<
@@ -28,5 +29,4 @@ namespace fifi
                polynomial_degree<
                final<Field> > > > > > > >
     { };
-
 }

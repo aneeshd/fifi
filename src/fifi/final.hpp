@@ -7,11 +7,11 @@
 
 namespace fifi
 {
-    /// @todo docs
+    /// This is used as the bottom layer of most stacks as it stops
+    /// the chain of mix-ins.
     template<class Field>
     class final
     {
-
     public:
 
         /// The field type
