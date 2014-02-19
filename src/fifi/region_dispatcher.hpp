@@ -23,7 +23,7 @@ namespace fifi
 
     /// @todo
     template<class Stack, class Super>
-    class region_dispatcher<Stack::field_type, Stack, Super>
+    class region_dispatcher<typename Stack::field_type, Stack, Super>
         : public Super
     {
     public:
