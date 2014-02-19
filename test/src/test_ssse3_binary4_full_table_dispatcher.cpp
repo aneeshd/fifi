@@ -55,26 +55,6 @@ namespace fifi
     }
 }
 
-// TEST(TestSSE3Binary4RegionArithmetic, region_add)
-// {
-//     fifi::check_region_add<fifi::ssse3_binary4_full_table>();
-// }
-
-// TEST(TestSSE3Binary4RegionArithmetic, region_subtract)
-// {
-//     fifi::check_region_subtract<fifi::ssse3_binary4_full_table>();
-// }
-
-// TEST(TestSSE3Binary4RegionArithmetic, region_multiply)
-// {
-//     fifi::check_region_multiply<fifi::ssse3_binary4_full_table>();
-// }
-
-// TEST(TestSSE3Binary4RegionArithmetic, region_divide)
-// {
-//     fifi::check_region_divide<fifi::ssse3_binary4_full_table>();
-// }
-
 TEST(TestSSE3Binary4FullTableDispacther, api)
 {
     fifi::dummy_stack<fifi::binary4> stack;
@@ -93,13 +73,3 @@ TEST(TestSSE3Binary4FullTableDispacther, api)
     stack.region_multiply_constant(&data[0], constant, data.size());
 
 }
-
-// TEST(TestSSE3Binary4RegionArithmetic, region_multiply_add)
-// {
-//     fifi::check_region_multiply_add<fifi::ssse3_binary4_full_table>();
-// }
-
-// TEST(TestSSE3Binary4RegionArithmetic, region_multiply_subtract)
-// {
-//     fifi::check_region_multiply_subtract<fifi::ssse3_binary4_full_table>();
-// }

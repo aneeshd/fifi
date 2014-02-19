@@ -14,8 +14,8 @@ namespace fifi
 {
 
     /// Fall through for other fields
-    template<uint32_t Label, class Super>
-    class valid_granularity_or_goto : public Super
+    template<class Super>
+    class correct_granularity : public Super
     {
     public:
 
@@ -39,7 +39,7 @@ namespace fifi
 
             if (optimizable_length != 0)
             {
-                Super::template get_label<Label>().region_multiply_constant(
+                Super::NamedSuper::region_multiply_constant(
                     dest, constant, optimizable_length);
             }
 
@@ -52,7 +52,7 @@ namespace fifi
 
         uint32_t granularity() const
         {
-            return Super::template get_label<Label>().granularity();
+            return Super::NamedSuper::granularity();
         }
     };
 }

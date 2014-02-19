@@ -14,10 +14,10 @@
 #include "region_arithmetic.hpp"
 #include "region_info.hpp"
 #include "simple_online_arithmetic.hpp"
-#include "valid_alignment_or_goto.hpp"
-#include "valid_granularity_or_goto.hpp"
-#include "label.hpp"
-#include "final_label.hpp"
+#include "ssse3_binary4_full_table_dispatcher.hpp"
+#include "correct_alignment.hpp"
+#include "correct_granularity.hpp"
+#include "name_super.hpp"
 
 namespace fifi
 {
@@ -26,11 +26,11 @@ namespace fifi
     /// the multiplication and division operations.
     template<class Field>
     class full_table :
-        public
-               valid_alignment_or_goto<1,
-               valid_granularity_or_goto<1,
+        public correct_alignment<
+               correct_granularity<
+               ssse3_binary4_full_table_dispatcher<Field,
+               name_super<
                binary8_region_arithmetic_full_table<Field,
-               label<1,
                region_arithmetic<
                region_info<
                binary4_packed_arithmetic<Field,
@@ -38,7 +38,6 @@ namespace fifi
                full_table_arithmetic<Field,
                simple_online_arithmetic<
                polynomial_degree<
-               final_label<
                final<Field> > > > > > > > > > > > >
     { };
 }

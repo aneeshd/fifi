@@ -12,8 +12,8 @@
 
 namespace fifi
 {
-    template<uint32_t Label, class Super>
-    class valid_alignment_or_goto : public Super
+    template<class Super>
+    class correct_alignment : public Super
     {
     public:
 
@@ -37,7 +37,7 @@ namespace fifi
 
             if (aligned_start != 0)
             {
-                Super::template get_label<Label>().region_multiply_constant(
+                Super::NamedSuper::region_multiply_constant(
                     dest, constant, aligned_start);
             }
 
@@ -50,7 +50,7 @@ namespace fifi
 
         uint32_t alignment() const
         {
-            return Super::template get_label<Label>().alignment();
+            return Super::NamedSuper::alignment();
         }
     };
 }
