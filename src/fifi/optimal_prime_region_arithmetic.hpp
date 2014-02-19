@@ -22,11 +22,12 @@ namespace fifi
     {
     public:
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
 
     public:
 
+        /// @copydoc layer::region_add(value_type*, value_type*, uint32_t) const
         void region_add(value_type* dest, const value_type* src,
             uint32_t length) const
         {
@@ -78,6 +79,9 @@ namespace fifi
                     (prime2325::prime & ((prime2325::prime > dest[i]) - 1));
             }
         }
+
+        /// @copydoc layer::region_subtract(value_type*, value_type*,
+        ///                                 uint32_t) const
         void region_subtract(value_type* dest, const value_type* src,
             uint32_t length) const
         {

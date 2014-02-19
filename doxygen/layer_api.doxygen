@@ -15,6 +15,11 @@ public:
     /// the value_type.
     typedef field::value_type value_type;
 
+    /// @typedef order_type
+    /// The data type used to hold the order of the field i.e. the
+    /// number of elements. E.g. binary8 uses uint32_t as the order_type
+    typedef field::order_type order_type
+
     //------------------------------------------------------------------
     // BASE ARITHMETICS API
     //------------------------------------------------------------------

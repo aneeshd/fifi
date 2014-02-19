@@ -25,13 +25,13 @@ namespace fifi
 
     public:
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename Field::value_type value_type;
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::order_type
         typedef typename Field::order_type order_type;
 
-        /// Typedef of the field type used
+        /// @copydoc layer::field_type
         typedef Field field_type;
 
     public:
@@ -63,7 +63,7 @@ namespace fifi
 
         }
 
-        /// @copydoc layer::multiply()
+        /// @copydoc layer::multiply(value_type, value_type) const
         value_type multiply(value_type a, value_type b) const
         {
             assert(is_valid_element<field_type>(a));
@@ -83,7 +83,7 @@ namespace fifi
             return m_antilog[sum];
         }
 
-        /// @copydoc layer::divide()
+        /// @copydoc layer::divide(value_type, value_type) const
         value_type divide(value_type numerator, value_type denominator) const
         {
             assert(is_valid_element<field_type>(numerator));
@@ -116,7 +116,7 @@ namespace fifi
             return m_antilog[sum];
         }
 
-        /// @copydoc layer::invert()
+        /// @copydoc layer::invert(value_type) const
         value_type invert(value_type a) const
         {
             assert(is_valid_element<field_type>(a));

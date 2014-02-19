@@ -28,13 +28,13 @@ namespace fifi
         static_assert(!std::is_same<binary, typename Super::field_type>::value,
               "This layer does not support the binary field");
 
-        /// The field type
+        /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename field_type::value_type value_type;
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::order_type
         typedef typename field_type::order_type order_type;
 
     public:
@@ -77,7 +77,7 @@ namespace fifi
             m_antilog = &m_antilog_data[0] + field_type::order - 2;
         }
 
-        /// @copydoc layer::multiply()
+        /// @copydoc layer::multiply(value_type, value_type) const
         value_type multiply(value_type a, value_type b) const
         {
             assert(is_valid_element<field_type>(a));
@@ -92,7 +92,7 @@ namespace fifi
             return m_antilog[one + two];
         }
 
-        /// @copydoc layer::divide()
+        /// @copydoc layer::divide(value_type, value_type) const
         value_type divide(value_type numerator, value_type denominator) const
         {
             assert(is_valid_element<field_type>(numerator));
@@ -108,7 +108,7 @@ namespace fifi
             return m_antilog[one - two];
         }
 
-        /// @copydoc layer::invert()
+        /// @copydoc layer::invert(value_type) const
         value_type invert(value_type a) const
         {
             assert(is_valid_element<field_type>(a));

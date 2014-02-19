@@ -23,10 +23,10 @@ namespace fifi
               "This layer only support the 2^32 - 5 prime field");
     public:
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
 
-        /// Typedef of the field type used
+        /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
     public:
@@ -36,6 +36,7 @@ namespace fifi
         ///   S. B. Mohan  and  B. S. Adiga, Electronics  “Fast algorithms for
         ///   implementing rsa public key cryptosystem" Electronics  Letters,
         ///   vol.  21, 1985.
+        /// @copydoc layer::multiply(value_type, value_type) const
         value_type multiply(value_type element_one,
                                            value_type element_two) const
         {
@@ -58,8 +59,9 @@ namespace fifi
 
         }
 
-        /// Specialization for the (2^32 - 5) prime field. In this case division is
-        /// simply implemented using multiplication with the inverse.
+        /// Specialization for the (2^32 - 5) prime field. In this case division
+        /// is simply implemented using multiplication with the inverse.
+        /// @copydoc layer::divide(value_type, value_type) const
         value_type divide(value_type numerator, value_type denominator) const
         {
             value_type inverse = invert(denominator);
@@ -67,11 +69,13 @@ namespace fifi
         }
 
         /// Specialization for the (2^32 - 5) prime field. This algorithm used a
-        /// modified version of the Extended Euclidean algorithm, which essentially
-        /// solves the a*x + b*y = gcd(a,b) in this case b = 2^32 - 5 which is a
-        /// prime therefore we know that gcd(a,b) = 1 also since we do all
-        /// calculations mod 2^32 - 5 we see that b*y must become 0. We are left
-        /// with calculating a*x = 1 in which case x must be the inverse of a.
+        /// modified version of the Extended Euclidean algorithm, which
+        /// essentially solves the a*x + b*y = gcd(a,b) in this case b =
+        /// 2^32 - 5 which is a prime therefore we know that gcd(a,b) = 1 also
+        /// since we do all calculations mod 2^32 - 5 we see that b*y must
+        /// become 0. We are left with calculating a*x = 1 in which case x must
+        /// be the inverse of a.
+        /// @copydoc layer::invert(value_type, value_type) const
         value_type invert(value_type element) const
         {
             assert(element > 0);
@@ -107,6 +111,7 @@ namespace fifi
         }
 
         /// Specialization for the (2^32 - 5) prime field
+        /// @copydoc layer::add(value_type, value_type) const
         value_type add(value_type element_one, value_type element_two) const
         {
             element_one = element_one + element_two;
@@ -120,6 +125,7 @@ namespace fifi
         }
 
         /// Specialization for the (2^32 - 5) prime field
+        /// @copydoc layer::subtract(value_type, value_type) const
         value_type subtract(value_type element_one, value_type element_two) const
         {
             // Se explanation for the funny business below in arithmetics.h

@@ -20,7 +20,8 @@ namespace fifi
     /// {
     ///     std::cout << "The constant is correctly packed" << std::endl;
     /// }
-    ///
+    /// @param constant Field element to be checked if it is packed or not
+    /// @return true if constant is packed, otherwise false
     template<class Field>
     inline bool is_packed_constant(typename Field::value_type constant)
     {
@@ -28,14 +29,17 @@ namespace fifi
         return true;
     }
 
+    /// @copydoc is_packed_constant(value_type)
     template<>
     inline bool is_packed_constant<binary>(typename binary::value_type constant)
     {
         return constant == 0 || constant == 255;
     }
 
+    /// @copydoc is_packed_constant(value_type)
     template<>
-    inline bool is_packed_constant<binary4>(typename binary4::value_type constant)
+    inline bool
+    is_packed_constant<binary4>(typename binary4::value_type constant)
     {
         return ((constant & 0xF0) >> 4) == (constant & 0x0F);
     }
