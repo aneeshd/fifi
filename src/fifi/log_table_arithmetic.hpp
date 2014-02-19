@@ -45,7 +45,7 @@ namespace fifi
             m_log.resize(Field::order, '\0');
             m_antilog.resize(Field::order, '\0');
 
-            // inital value corresponds x^0
+            // initial value corresponds x^0
             value_type power = 1;
 
             for (order_type i = 0; i < Field::order - 1; ++i)

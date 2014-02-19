@@ -25,7 +25,7 @@ namespace fifi
     ///
     /// Stack implementing SSSE3 SIMD accelerated finite field
     /// arithmetic. The following intrinsics are used available in the
-    /// follwoing SIMD versions:
+    /// following SIMD versions:
     ///
     /// _mm_load_si128 (SSE2)
     /// _mm_set1_epi8 (SSE2)
@@ -64,7 +64,7 @@ namespace fifi
             uint32_t length) const;
 
         /// @return true if the executable was built with SSSE3 binary4
-        ///         fulltable support
+        ///         full table support
         bool ssse3_binary4_full_table_enabled() const;
 
         /// @copydoc layer::granularity() const
