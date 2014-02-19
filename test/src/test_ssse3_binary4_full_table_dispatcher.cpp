@@ -55,7 +55,6 @@ namespace fifi
     }
 }
 
-
 TEST(TestSSE3Binary4FullTableDispacther, alignment)
 {
     fifi::dummy_stack<fifi::binary4> stack;
@@ -78,21 +77,7 @@ TEST(TestSSE3Binary4FullTableDispacther, granularity)
     EXPECT_EQ(stack.granularity(), expected);
 }
 
-TEST(TestSSE3Binary4FullTableDispacther, api)
+TEST(TestSSE3Binary4FullTableDispacther, region_multiply_constant)
 {
-    fifi::dummy_stack<fifi::binary4> stack;
-
-    typedef fifi::binary4::value_type value_type;
-
-    typedef std::vector<value_type, sak::aligned_allocator<value_type> >
-        aligned_vector;
-
-    aligned_vector data(stack.granularity());
-    value_type constant = fifi::pack<fifi::binary4>(2);
-
-    stack.region_multiply_constant(&data[0], constant, data.size());
-    stack.region_multiply_constant(&data[0], constant, data.size());
-    stack.region_multiply_constant(&data[0], constant, data.size());
-    stack.region_multiply_constant(&data[0], constant, data.size());
-
+    check_results_region_multiply_constant<fifi::dummy_stack<fifi::binary4>>();
 }
