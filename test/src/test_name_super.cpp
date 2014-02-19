@@ -3,6 +3,8 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#include <cstdint>
+
 #include <fifi/name_super.hpp>
 
 #include <gtest/gtest.h>
