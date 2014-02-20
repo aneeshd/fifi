@@ -22,7 +22,7 @@ namespace fifi
     class ssse3_binary4 :
         public correct_alignment<
                correct_granularity<
-               region_dispatcher<Field, ssse3_binary4_full_table, binary4,
+               region_dispatcher<ssse3_binary4_full_table,
                name_super<
                binary_region_arithmetic<Field,
                region_arithmetic<

@@ -22,7 +22,7 @@ namespace fifi
     {
         template<class Field>
         struct dummy_stack_fall_through : public
-        full_table_arithmetic<Field,
+        full_table_arithmetic<
         helper_fall_through<Field,
         helper_catch_all<Field> > >
         { };
@@ -32,7 +32,7 @@ namespace fifi
     {
         template<class Field>
         struct dummy_stack : public
-        full_table_arithmetic<Field,
+        full_table_arithmetic<
         simple_online_arithmetic<
         polynomial_degree<
         final<Field> > > >

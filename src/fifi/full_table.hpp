@@ -29,14 +29,14 @@ namespace fifi
     class full_table :
         public correct_alignment<
                correct_granularity<
-               helper_region<ssse3_binary4_full_table,
+               region_dispatcher<ssse3_binary4_full_table,
                name_super<
                binary8_region_arithmetic_full_table<Field,
                region_arithmetic<
                region_info<
                binary4_packed_arithmetic<Field,
                packed_arithmetic<
-               full_table_arithmetic<Field,
+               full_table_arithmetic<
                simple_online_arithmetic<
                polynomial_degree<
                final<Field> > > > > > > > > > > > >

@@ -28,7 +28,7 @@ namespace fifi
         struct dummy_stack_fall_through : public
         binary8_region_arithmetic_full_table<Field,
         helper_region_fall_through<Field,
-        full_table_arithmetic<Field,
+        full_table_arithmetic<
         simple_online_arithmetic<
         polynomial_degree<
         helper_catch_all<Field> > > > > >
@@ -43,7 +43,7 @@ namespace fifi
         region_arithmetic<
         region_info<
         packed_arithmetic<
-        full_table_arithmetic<Field,
+        full_table_arithmetic<
         simple_online_arithmetic<
         polynomial_degree<
         final<Field> > > > > > > >
