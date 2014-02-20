@@ -46,10 +46,10 @@ namespace fifi
         /// The base class
         typedef simple_online_arithmetic<final<binary4> > base;
 
-        /// The field type
+        /// @copydoc layer::field_type
         typedef binary4 field_type;
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef binary4::value_type value_type;
 
     public:
@@ -63,11 +63,17 @@ namespace fifi
         void region_multiply_constant(value_type* dest, value_type constant,
             uint32_t length) const;
 
+        /// @copydoc layer::alignment() const
+        uint32_t alignment() const;
+
+        /// @copydoc layer::max_alignment() const
+        uint32_t max_alignment() const;
+
         /// @copydoc layer::granularity() const
         uint32_t granularity() const;
 
-        /// @copydoc layer::alignment() const
-        uint32_t alignment() const;
+        /// @copydoc layer::max_granularity() const
+        uint32_t max_granularity() const;
 
         /// @return true if the executable was built with SSSE3 binary4
         ///         full table support

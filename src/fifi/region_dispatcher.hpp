@@ -26,10 +26,10 @@ namespace fifi
     {
     public:
 
-        /// The field type
+        /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
 
     public:
@@ -39,7 +39,56 @@ namespace fifi
             m_region_multiply_constant = dispatch_region_multiply_constant();
         }
 
-        void region_multiply_constant(value_type* dest, value_type constant,
+        /*
+        /// @copydoc layer::region_add(value_type*, const value_type*,
+        ///                            uint32_t) const
+        void region_add(value_type* dest, const value_type* src,
+            uint32_t length) const
+        {
+            assert(dest != 0);
+            assert(src  != 0);
+            assert(length > 0);
+
+        }
+
+        /// @copydoc layer::region_subtract(value_type*, const value_type*,
+        ///                                 uint32_t) const
+        void region_subtract(value_type* dest, const value_type* src,
+            uint32_t length) const
+        {
+            assert(dest != 0);
+            assert(src  != 0);
+            assert(length > 0);
+
+        }
+
+        /// @copydoc layer::region_divide(value_type*, const value_type*,
+        ///                               uint32_t) const
+        void region_divide(value_type* dest, const value_type* src,
+            uint32_t length) const
+        {
+            assert(dest != 0);
+            assert(src  != 0);
+            assert(length > 0);
+
+        }
+
+        /// @copydoc layer::region_multiply(value_type*, const value_type*,
+        ///                                 uint32_t) const
+        void region_multiply(value_type* dest, const value_type* src,
+            uint32_t length) const
+        {
+            assert(dest != 0);
+            assert(src  != 0);
+            assert(length > 0);
+
+        }
+        */
+
+        /// @copydoc layer::region_multiply_constant(value_type*, value_type,
+        ///                                          uint32_t) const
+        void region_multiply_constant(
+            value_type* dest, value_type constant,
             uint32_t length) const
         {
             assert(dest != 0);
@@ -50,19 +99,34 @@ namespace fifi
             m_region_multiply_constant(dest, constant, length);
         }
 
-        uint32_t granularity() const
+        /*
+        /// @copydoc layer::region_multiply_add(value_type*, const value_type*,
+        ///                                     value_type, uint32_t) const
+        void region_multiply_add(value_type* dest, const value_type* src,
+                          value_type constant, uint32_t length) const
         {
-            if(m_stack.enabled())
-            {
-                return std::max(m_stack.granularity(),
-                                Super::granularity());
-            }
-            else
-            {
-                return Super::granularity();
-            }
+            assert(dest != 0);
+            assert(src  != 0);
+            assert(length > 0);
+            assert(is_packed_constant<field_type>(constant));
+
         }
 
+        /// @copydoc layer::region_multiply_subtract(value_type*,
+        ///                                          const value_type*,
+        ///                                          value_type, uint32_t) const
+        void region_multiply_subtract(value_type* dest, const value_type* src,
+                                value_type constant, uint32_t length) const
+        {
+            assert(dest != 0);
+            assert(src  != 0);
+            assert(length > 0);
+            assert(is_packed_constant<field_type>(constant));
+
+        }
+        */
+
+        /// @copydoc layer::alignment() const
         uint32_t alignment() const
         {
             if(m_stack.enabled())
@@ -76,6 +140,48 @@ namespace fifi
             }
         }
 
+        /// @copydoc layer::max_alignment() const
+        uint32_t max_alignment() const
+        {
+            if(m_stack.enabled())
+            {
+                return std::max(m_stack.max_alignment(),
+                                Super::max_alignment());
+            }
+            else
+            {
+                return Super::max_alignment();
+            }
+        }
+
+        /// @copydoc layer::granularity() const
+        uint32_t granularity() const
+        {
+            if(m_stack.enabled())
+            {
+                return std::max(m_stack.granularity(),
+                                Super::granularity());
+            }
+            else
+            {
+                return Super::granularity();
+            }
+        }
+
+        /// @copydoc layer::max_granularity() const
+        uint32_t max_granularity() const
+        {
+            if(m_stack.enabled())
+            {
+                return std::max(m_stack.max_granularity(),
+                                Super::max_granularity());
+            }
+            else
+            {
+                return Super::max_granularity();
+            }
+        }
+
         bool enabled() const
         {
             return m_stack.enabled();
@@ -84,8 +190,7 @@ namespace fifi
     private:
 
         /// @return A function that dispatches to the "right" function
-        /// depending on whether the binary has been compiled with
-        /// SSSE3 support and whether the CPU has SSSE3.
+        /// depending on whether the dispatching stack is enabled or not.
         std::function<void (value_type*, value_type, uint32_t)>
             dispatch_region_multiply_constant() const
         {

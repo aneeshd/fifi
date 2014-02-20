@@ -81,10 +81,11 @@ public:
 
     /// Get the division of two field elements when the data type might not
     /// represents a field element, i.e. not using the whole bits of the type.
-    /// @param numerator   First operand to divide
+    /// @param numerator First operand to divide
     /// @param denominator Second operand to divide
-    /// @return             Division result
-    value_type packed_divide(value_type numerator, value_type denominator) const;
+    /// @return Division result
+    value_type packed_divide(value_type numerator,
+                             value_type denominator) const;
 
     /// Get the inverse of a field element when the data type might not
     /// represent a field element, i.e. not using the whole bits of the type.
@@ -166,4 +167,26 @@ public:
     /// @param length Length of the provided buffers
     void region_multiply_subtract(value_type* dest, const value_type* src,
                                   value_type constant, uint32_t length) const;
+
+    //------------------------------------------------------------------
+    // REGION INFO API
+    //------------------------------------------------------------------
+
+    /// @return The default region alignment required for the buffers used in
+    /// the finite field computations. The buffers passed to the arithmetic
+    /// functions should have their memory aligned according to the value
+    /// returned by this function.
+    uint32_t alignment() const;
+
+    /// @return The maximum region alignment requirement of the stack. By
+    /// complying with this requirement the highest performance can be achieved.
+    uint32_t max_alignment() const;
+
+    /// @return The buffer length granularity, i.e., length (number of
+    /// value_type elements) by which the buffer must be divisible.
+    uint32_t granularity() const;
+
+    /// @return The maximum granularity requirement of the stack. By complying
+    /// with this requirement the highest performance can be achieved.
+    uint32_t max_granularity() const;
 };

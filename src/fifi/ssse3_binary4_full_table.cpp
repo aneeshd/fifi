@@ -90,6 +90,17 @@ namespace fifi
 
     }
 
+    uint32_t ssse3_binary4_full_table::alignment() const
+    {
+        // SSSE3 require 16 byte alignment data
+        return 16U;
+    }
+
+    uint32_t ssse3_binary4_full_table::max_alignment() const
+    {
+        return alignment();
+    }
+
     uint32_t ssse3_binary4_full_table::granularity() const
     {
         // We are working over 16 bytes at a time i.e. 128 bits so we
@@ -100,10 +111,9 @@ namespace fifi
         return 16U;
     }
 
-    uint32_t ssse3_binary4_full_table::alignment() const
+    uint32_t ssse3_binary4_full_table::max_granularity() const
     {
-        // SSSE3 require 16 byte alignment data
-        return 16U;
+        return granularity();
     }
 
     bool ssse3_binary4_full_table::enabled() const
@@ -128,6 +138,18 @@ namespace fifi
         assert(0);
     }
 
+    uint32_t ssse3_binary4_full_table::alignment() const
+    {
+        // Not implemented
+        assert(0);
+        return 0;
+    }
+
+    uint32_t ssse3_binary4_full_table::max_alignment() const
+    {
+        return alignment();
+    }
+
     uint32_t ssse3_binary4_full_table::granularity() const
     {
         // Not implemented
@@ -135,11 +157,9 @@ namespace fifi
         return 0;
     }
 
-    uint32_t ssse3_binary4_full_table::alignment() const
+    uint32_t ssse3_binary4_full_table::max_granularity() const
     {
-        // Not implemented
-        assert(0);
-        return 0;
+        return granularity();
     }
 
     bool ssse3_binary4_full_table::enabled() const

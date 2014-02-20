@@ -37,15 +37,27 @@ namespace fifi
                 EXPECT_TRUE(Enabled);
             }
 
-            uint32_t granularity() const
-            {
-                return 2U;
-            }
-
             uint32_t alignment() const
             {
-                return 2U;
+                return 3U;
             }
+
+            uint32_t max_alignment() const
+            {
+                return 30U;
+            }
+
+            uint32_t granularity() const
+            {
+                return 4U;
+            }
+
+            uint32_t max_granularity() const
+            {
+                return 40U;
+            }
+
+
 
             bool enabled() const
             {
@@ -72,14 +84,24 @@ namespace fifi
                 EXPECT_TRUE(Enabled);
             }
 
-            uint32_t granularity() const
+            uint32_t alignment() const
             {
                 return 1U;
             }
 
-            uint32_t alignment() const
+            uint32_t max_alignment() const
             {
-                return 1U;
+                return 10U;
+            }
+
+            uint32_t granularity() const
+            {
+                return 2U;
+            }
+
+            uint32_t max_granularity() const
+            {
+                return 20U;
             }
         };
 
@@ -117,7 +139,18 @@ TEST(TestRegionDispatcher, alignment)
 
     EXPECT_EQ(disabled_stack1.alignment(), 1U);
     EXPECT_EQ(disabled_stack2.alignment(), 1U);
-    EXPECT_EQ(enabled_stack.alignment(), 2U);
+    EXPECT_EQ(enabled_stack.alignment(), 3U);
+}
+
+TEST(TestRegionDispatcher, max_alignment)
+{
+    fifi::dummy_stack_enabled enabled_stack;
+    fifi::dummy_stack_disabled1 disabled_stack1;
+    fifi::dummy_stack_disabled2 disabled_stack2;
+
+    EXPECT_EQ(disabled_stack1.max_alignment(), 10U);
+    EXPECT_EQ(disabled_stack2.max_alignment(), 10U);
+    EXPECT_EQ(enabled_stack.max_alignment(), 30U);
 }
 
 TEST(TestRegionDispatcher, granularity)
@@ -126,9 +159,20 @@ TEST(TestRegionDispatcher, granularity)
     fifi::dummy_stack_disabled1 disabled_stack1;
     fifi::dummy_stack_disabled2 disabled_stack2;
 
-    EXPECT_EQ(disabled_stack1.granularity(), 1U);
-    EXPECT_EQ(disabled_stack2.granularity(), 1U);
-    EXPECT_EQ(enabled_stack.granularity(), 2U);
+    EXPECT_EQ(disabled_stack1.granularity(), 2U);
+    EXPECT_EQ(disabled_stack2.granularity(), 2U);
+    EXPECT_EQ(enabled_stack.granularity(), 4U);
+}
+
+TEST(TestRegionDispatcher, max_granularity)
+{
+    fifi::dummy_stack_enabled enabled_stack;
+    fifi::dummy_stack_disabled1 disabled_stack1;
+    fifi::dummy_stack_disabled2 disabled_stack2;
+
+    EXPECT_EQ(disabled_stack1.max_granularity(), 20U);
+    EXPECT_EQ(disabled_stack2.max_granularity(), 20U);
+    EXPECT_EQ(enabled_stack.max_granularity(), 40U);
 }
 
 TEST(TestRegionDispatcher, region_multiply_constant)
