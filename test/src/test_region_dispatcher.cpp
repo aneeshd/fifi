@@ -181,11 +181,9 @@ TEST(TestRegionDispatcher, region_multiply_constant)
     fifi::dummy_stack_disabled1 disabled_stack1;
     fifi::dummy_stack_disabled2 disabled_stack2;
 
-    typedef typename fifi::binary::value_type value_type;
-
     uint32_t length = 1;
-    std::vector<value_type> dest(length);
-    value_type constant = 255;
+    std::vector<uint8_t> dest(length);
+    uint8_t constant = 255;
 
 
     enabled_stack.region_multiply_constant(dest.data(),constant,length);

@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <cstdlib>
 #include <functional>
 #include <vector>
@@ -65,7 +66,7 @@ inline void check_results_binary(Function arithmetic)
         auto res = Results<field_type>::m_results[i];
         SCOPED_TRACE(testing::Message() << "a:" << res.m_input1);
         SCOPED_TRACE(testing::Message() << "b:" << res.m_input2);
-        EXPECT_EQ(res.m_result, (field.*arithmetic)(res.m_input1,
+        EXPECT_EQ(res.m_result, arithmetic(field, res.m_input1,
             res.m_input2));
     }
 }
@@ -79,7 +80,7 @@ inline void check_results_unary(Function arithmetic)
     {
         auto res = Results<field_type>::m_results[i];
         SCOPED_TRACE(testing::Message() << "a:" << res.m_input1);
-        EXPECT_EQ(res.m_result, (field.*arithmetic)(res.m_input1));
+        EXPECT_EQ(res.m_result, arithmetic(field, res.m_input1));
     }
 }
 
@@ -100,8 +101,8 @@ inline void check_results_random(
         if (v == 0)
             ++v;
 
-        EXPECT_EQ((field.*multiply)(v, (field.*invert)(    v)), 1U);
-        EXPECT_EQ((field.*multiply)(v, (field.*divide)(1U, v)), 1U);
+        EXPECT_EQ(multiply(field, v, invert(field,     v)), 1U);
+        EXPECT_EQ(multiply(field, v, divide(field, 1U, v)), 1U);
     }
 }
 
@@ -115,8 +116,12 @@ inline void check_results_random(
 /// contain zero or not.
 template<class Field>
 std::vector<typename Field::value_type>
-create_data(uint32_t elements, bool no_zero = false)
+create_data(uint32_t alignment, uint32_t granularity,
+    bool no_zero = false)
 {
+    (void)alignment;
+    (void)granularity;
+    uint32_t elements = 128;
     typedef typename Field::value_type value_type;
 
     std::vector<value_type> data(fifi::elements_to_length<Field>(elements));
@@ -162,13 +167,8 @@ template
 inline void check_results_region_ptr_ptr(
     TestFunction test_arithmetic,
     ReferenceFunction reference_arithmetic,
-    uint32_t elements,
     bool division = false)
 {
-    assert(elements > 0);
-
-    elements = 8;
-
     typedef typename TestImpl::field_type test_field;
     typedef typename ReferenceImpl::field_type reference_field;
 
@@ -178,22 +178,36 @@ inline void check_results_region_ptr_ptr(
     TestImpl test_stack;
     ReferenceImpl reference_stack;
 
-    auto data = create_data<test_field>(elements);
-    auto src = create_data<test_field>(elements, division);
+    uint32_t alignments = std::max(test_stack.max_alignment(), 10U);
+    uint32_t granularities = std::max(test_stack.max_granularity(), 10U);
 
-    // Create buffer and created the expected results using the reference
-    // arithmetics
-    auto test_data = data;
-    auto reference_data = data;
+    for (uint32_t alignment = test_stack.alignment();
+        alignment < alignments;
+        alignment += test_stack.alignment())
+    {
+        for (uint32_t granularity = test_stack.granularity();
+            granularity < granularities;
+            granularity += test_stack.granularity())
+        {
+            auto data = create_data<test_field>(granularity, alignment);
+            auto src = create_data<test_field>(granularity, alignment,
+                division);
 
-    uint32_t length = fifi::elements_to_length<test_field>(elements);
+            // Create buffer and created the expected results using the reference
+            // arithmetics
+            auto test_data = data;
+            auto reference_data = data;
 
-    // Perform the calculations using the region arithmetics
-    test_arithmetic(test_stack, test_data.data(), src.data(), length);
-    reference_arithmetic(reference_stack, reference_data.data(), src.data(),
-        length);
+            uint32_t length = fifi::elements_to_length<test_field>(128);
 
-    EXPECT_EQ(reference_data, test_data);
+            // Perform the calculations using the region arithmetics
+            test_arithmetic(test_stack, test_data.data(), src.data(), length);
+            reference_arithmetic(reference_stack, reference_data.data(), src.data(),
+                length);
+
+            EXPECT_EQ(reference_data, test_data);
+        }
+    }
 }
 
 /// This function checks whether the region arithmetics for the
@@ -221,11 +235,8 @@ template
 >
 inline void check_results_region_ptr_const(
     TestFunction test_arithmetic,
-    ReferenceFunction reference_arithmetic,
-    uint32_t elements)
+    ReferenceFunction reference_arithmetic)
 {
-    assert(elements > 0);
-
     typedef typename TestImpl::field_type test_field;
     typedef typename ReferenceImpl::field_type reference_field;
 
@@ -235,29 +246,37 @@ inline void check_results_region_ptr_const(
     TestImpl test_stack;
     ReferenceImpl reference_stack;
 
-    auto data = create_data<test_field>(elements);
-
-    uint32_t length = fifi::elements_to_length<test_field>(elements);
-
-    // We repeat the test a number of times with different constants
     uint32_t tests = 10;
 
     for (uint32_t i = 0; i < tests; ++i)
     {
-        // Get the constant to multiply with
-        auto constant = fifi::pack<test_field>(rand() % test_field::order);
-        SCOPED_TRACE(testing::Message() << "constant: " << constant);
+        uint32_t alignment = i;
+        uint32_t granularity = i;
 
-        // Create buffer and created the expected results using the reference
-        // arithmetics
-        auto test_data = data;
-        auto reference_data = data;
-        // Perform the calculations using the region arithmetics
-        test_arithmetic(test_stack, test_data.data(), constant, length);
-        reference_arithmetic(reference_stack, reference_data.data(), constant,
-            length);
+        auto data = create_data<test_field>(alignment, granularity);
 
-        EXPECT_EQ(reference_data, test_data);
+        uint32_t length = fifi::elements_to_length<test_field>(128);
+
+        // We repeat the test a number of times with different constants
+        uint32_t constants = 10;
+
+        for (uint32_t j = 0; j < constants; ++j)
+        {
+            // Get the constant to multiply with
+            auto constant = fifi::pack<test_field>(rand() % test_field::order);
+            SCOPED_TRACE(testing::Message() << "constant: " << constant);
+
+            // Create buffer and created the expected results using the reference
+            // arithmetics
+            auto test_data = data;
+            auto reference_data = data;
+            // Perform the calculations using the region arithmetics
+            test_arithmetic(test_stack, test_data.data(), constant, length);
+            reference_arithmetic(reference_stack, reference_data.data(), constant,
+                length);
+
+            EXPECT_EQ(reference_data, test_data);
+        }
     }
 }
 
@@ -286,11 +305,8 @@ template
 >
 inline void check_results_region_ptr_ptr_const(
     TestFunction test_arithmetic,
-    ReferenceFunction reference_arithmetic,
-    uint32_t elements)
+    ReferenceFunction reference_arithmetic)
 {
-    assert(elements > 0);
-
     typedef typename TestImpl::field_type test_field;
     typedef typename ReferenceImpl::field_type reference_field;
 
@@ -300,31 +316,39 @@ inline void check_results_region_ptr_ptr_const(
     TestImpl test_stack;
     ReferenceImpl reference_stack;
 
-    auto data = create_data<test_field>(elements);
-    auto src = create_data<test_field>(elements);
-
-    uint32_t length = fifi::elements_to_length<test_field>(elements);
-
-    // We repeat the test a number of times with different constants
     uint32_t tests = 10;
 
     for (uint32_t i = 0; i < tests; ++i)
     {
-        // Get the constant to multiply with
-        auto constant = fifi::pack<test_field>(rand() % test_field::order);
-        SCOPED_TRACE(testing::Message() << "constant: " << constant);
+        uint32_t alignment = i;
+        uint32_t granularity = i;
 
-        // Create buffer and created the expected results using the reference
-        // arithmetics
-        auto test_data = data;
-        auto reference_data = data;
-        // Perform the calculations using the region arithmetics
-        test_arithmetic(test_stack, test_data.data(), src.data(), constant,
-            length);
-        reference_arithmetic(reference_stack, reference_data.data(), src.data(),
-            constant, length);
+        auto data = create_data<test_field>(alignment, granularity);
+        auto src = create_data<test_field>(alignment, granularity);
 
-        EXPECT_EQ(reference_data, test_data);
+        uint32_t length = fifi::elements_to_length<test_field>(128);
+
+        // We repeat the test a number of times with different constants
+        uint32_t constants = 10;
+
+        for (uint32_t j = 0; j < constants; ++j)
+        {
+            // Get the constant to multiply with
+            auto constant = fifi::pack<test_field>(rand() % test_field::order);
+            SCOPED_TRACE(testing::Message() << "constant: " << constant);
+
+            // Create buffer and created the expected results using the reference
+            // arithmetics
+            auto test_data = data;
+            auto reference_data = data;
+            // Perform the calculations using the region arithmetics
+            test_arithmetic(test_stack, test_data.data(), src.data(), constant,
+                length);
+            reference_arithmetic(reference_stack, reference_data.data(), src.data(),
+                constant, length);
+
+            EXPECT_EQ(reference_data, test_data);
+        }
     }
 }
 
@@ -343,14 +367,14 @@ template<class FieldImpl>
 inline void check_results_multiply()
 {
     check_results_binary<FieldImpl, multiply_results>(
-        &FieldImpl::multiply);
+        std::mem_fn(&FieldImpl::multiply));
 }
 
 template<class FieldImpl>
 inline void check_results_packed_multiply()
 {
     check_results_binary<FieldImpl, packed_multiply_results>(
-        &FieldImpl::packed_multiply);
+        std::mem_fn(&FieldImpl::packed_multiply));
 }
 
 template
@@ -359,12 +383,11 @@ template
     class ReferenceImpl = fifi::helper_region_reference<
         typename TestImpl::field_type>
 >
-inline void check_results_region_multiply(uint32_t elements = 128)
+inline void check_results_region_multiply()
 {
     check_results_region_ptr_ptr<TestImpl, ReferenceImpl>(
         std::mem_fn(&TestImpl::region_multiply),
-        std::mem_fn(&ReferenceImpl::region_multiply),
-        elements);
+        std::mem_fn(&ReferenceImpl::region_multiply));
 }
 
 //------------------------------------------------------------------
@@ -381,14 +404,14 @@ template<class FieldImpl>
 inline void check_results_divide()
 {
     check_results_binary<FieldImpl, divide_results >(
-        &FieldImpl::divide);
+        std::mem_fn(&FieldImpl::divide));
 }
 
 template<class FieldImpl>
 inline void check_results_packed_divide()
 {
     check_results_binary<FieldImpl, packed_divide_results >(
-        &FieldImpl::packed_divide);
+        std::mem_fn(&FieldImpl::packed_divide));
 }
 
 template
@@ -397,12 +420,11 @@ template
     class ReferenceImpl = fifi::helper_region_reference<
         typename TestImpl::field_type>
 >
-inline void check_results_region_divide(uint32_t elements = 128)
+inline void check_results_region_divide()
 {
     check_results_region_ptr_ptr<TestImpl, ReferenceImpl>(
         std::mem_fn(&TestImpl::region_divide),
         std::mem_fn(&ReferenceImpl::region_divide),
-        elements,
         true);
 }
 
@@ -419,14 +441,15 @@ struct packed_add_results;
 template<class FieldImpl>
 inline void check_results_add()
 {
-    check_results_binary<FieldImpl, add_results>(&FieldImpl::add);
+    check_results_binary<FieldImpl, add_results>(
+        std::mem_fn(&FieldImpl::add));
 }
 
 template<class FieldImpl>
 inline void check_results_packed_add()
 {
     check_results_binary<FieldImpl, packed_add_results>(
-        &FieldImpl::packed_add);
+        std::mem_fn(&FieldImpl::packed_add));
 }
 
 template
@@ -435,12 +458,11 @@ template
     class ReferenceImpl = fifi::helper_region_reference<
         typename TestImpl::field_type>
 >
-inline void check_results_region_add(uint32_t elements = 128)
+inline void check_results_region_add()
 {
     check_results_region_ptr_ptr<TestImpl, ReferenceImpl>(
         std::mem_fn(&TestImpl::region_add),
-        std::mem_fn(&ReferenceImpl::region_add),
-        elements);
+        std::mem_fn(&ReferenceImpl::region_add));
 }
 
 //------------------------------------------------------------------
@@ -457,14 +479,14 @@ template<class FieldImpl>
 inline void check_results_subtract()
 {
     check_results_binary<FieldImpl, subtract_results>(
-        &FieldImpl::subtract);
+        std::mem_fn(&FieldImpl::subtract));
 }
 
 template<class FieldImpl>
 inline void check_results_packed_subtract()
 {
     check_results_binary<FieldImpl, packed_subtract_results>(
-        &FieldImpl::packed_subtract);
+        std::mem_fn(&FieldImpl::packed_subtract));
 }
 
 template
@@ -473,12 +495,11 @@ template
     class ReferenceImpl = fifi::helper_region_reference<
         typename TestImpl::field_type>
 >
-inline void check_results_region_subtract(uint32_t elements = 128)
+inline void check_results_region_subtract()
 {
     check_results_region_ptr_ptr<TestImpl, ReferenceImpl>(
         std::mem_fn(&TestImpl::region_subtract),
-        std::mem_fn(&ReferenceImpl::region_subtract),
-        elements);
+        std::mem_fn(&ReferenceImpl::region_subtract));
 }
 
 //------------------------------------------------------------------
@@ -494,14 +515,15 @@ struct packed_invert_results;
 template<class FieldImpl>
 inline void check_results_invert()
 {
-    check_results_unary<FieldImpl, invert_results>(&FieldImpl::invert);
+    check_results_unary<FieldImpl, invert_results>(
+        std::mem_fn(&FieldImpl::invert));
 }
 
 template<class FieldImpl>
 inline void check_results_packed_invert()
 {
     check_results_unary<FieldImpl, packed_invert_results>(
-        &FieldImpl::packed_invert);
+        std::mem_fn(&FieldImpl::packed_invert));
 }
 
 //------------------------------------------------------------------
@@ -515,7 +537,7 @@ template<class FieldImpl>
 inline void check_results_find_degree()
 {
     check_results_unary<FieldImpl, find_degree_results>(
-        &FieldImpl::find_degree);
+        std::mem_fn(&FieldImpl::find_degree));
 }
 
 //------------------------------------------------------------------
@@ -529,7 +551,7 @@ template<class FieldImpl>
 inline void check_results_sum_modulo()
 {
     check_results_binary<FieldImpl, sum_modulo_results>(
-        &FieldImpl::template calculate_sum_modulo<>);
+        std::mem_fn(&FieldImpl::template calculate_sum_modulo<>));
 }
 
 //------------------------------------------------------------------
@@ -542,12 +564,11 @@ template
     class ReferenceImpl = fifi::helper_region_reference<
         typename TestImpl::field_type>
 >
-inline void check_results_region_multiply_constant(uint32_t length = 128)
+inline void check_results_region_multiply_constant()
 {
     check_results_region_ptr_const<TestImpl, ReferenceImpl>(
         std::mem_fn(&TestImpl::region_multiply_constant),
-        std::mem_fn(&ReferenceImpl::region_multiply_constant),
-        length);
+        std::mem_fn(&ReferenceImpl::region_multiply_constant));
 }
 
 //------------------------------------------------------------------
@@ -560,12 +581,11 @@ template
     class ReferenceImpl = fifi::helper_region_reference<
         typename TestImpl::field_type>
 >
-inline void check_results_region_multiply_add(uint32_t elements = 128)
+inline void check_results_region_multiply_add()
 {
     check_results_region_ptr_ptr_const<TestImpl, ReferenceImpl>(
         std::mem_fn(&TestImpl::region_multiply_add),
-        std::mem_fn(&ReferenceImpl::region_multiply_add),
-        elements);
+        std::mem_fn(&ReferenceImpl::region_multiply_add));
 }
 
 //------------------------------------------------------------------
@@ -578,12 +598,11 @@ template
     class ReferenceImpl = fifi::helper_region_reference<
         typename TestImpl::field_type>
 >
-inline void check_results_region_multiply_subtract(uint32_t elements = 128)
+inline void check_results_region_multiply_subtract()
 {
     check_results_region_ptr_ptr_const<TestImpl, ReferenceImpl>(
         std::mem_fn(&TestImpl::region_multiply_subtract),
-        std::mem_fn(&ReferenceImpl::region_multiply_subtract),
-        elements);
+        std::mem_fn(&ReferenceImpl::region_multiply_subtract));
 }
 
 //------------------------------------------------------------------
@@ -595,9 +614,9 @@ inline void check_random_default(uint32_t elements = 100)
 {
     check_results_random<FieldImpl>(
         elements,
-        &FieldImpl::multiply,
-        &FieldImpl::divide,
-        &FieldImpl::invert);
+        std::mem_fn(&FieldImpl::multiply),
+        std::mem_fn(&FieldImpl::divide),
+        std::mem_fn(&FieldImpl::invert));
 }
 
 //------------------------------------------------------------------
