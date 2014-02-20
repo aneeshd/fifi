@@ -12,27 +12,27 @@
 #include "helper_test_packed_arithmetic.hpp"
 #include "helper_test_region_arithmetic.hpp"
 
-// TEST(TestSSE3Binary4FullTable, region_add)
+// TEST(TestSSSE3Binary4FullTable, region_add)
 // {
 //     fifi::check_region_add<fifi::ssse3_binary4_full_table>();
 // }
 
-// TEST(TestSSE3Binary4FullTable, region_subtract)
+// TEST(TestSSSE3Binary4FullTable, region_subtract)
 // {
 //     fifi::check_region_subtract<fifi::ssse3_binary4_full_table>();
 // }
 
-// TEST(TestSSE3Binary4FullTable, region_multiply)
+// TEST(TestSSSE3Binary4FullTable, region_multiply)
 // {
 //     fifi::check_region_multiply<fifi::ssse3_binary4_full_table>();
 // }
 
-// TEST(TestSSE3Binary4FullTable, region_divide)
+// TEST(TestSSSE3Binary4FullTable, region_divide)
 // {
 //     fifi::check_region_divide<fifi::ssse3_binary4_full_table>();
 // }
 
-TEST(TestSSE3Binary4FullTable, region_multiply_constant)
+TEST(TestSSSE3Binary4FullTable, region_multiply_constant)
 {
     cpuid::cpuinfo info;
 
@@ -48,12 +48,12 @@ TEST(TestSSE3Binary4FullTable, region_multiply_constant)
     }
 }
 
-//TEST(TestSSE3Binary4FullTable, region_multiply_add)
+//TEST(TestSSSE3Binary4FullTable, region_multiply_add)
 //{
 //    fifi::check_region_multiply_add<fifi::ssse3_binary4_full_table>();
 //}
 
-// TEST(TestSSE3Binary4FullTable, region_multiply_subtract)
+// TEST(TestSSSE3Binary4FullTable, region_multiply_subtract)
 // {
 //     fifi::check_region_multiply_subtract<fifi::ssse3_binary4_full_table>();
 // }

@@ -24,6 +24,7 @@
 #include <fifi/simple_online.hpp>
 
 #include "helper_region_reference.hpp"
+#include "helper_test_buffer.hpp"
 
 // The expected result of an arithmetic operation
 // e.g. result == operation(arg1, arg2).
@@ -116,37 +117,21 @@ inline void check_results_random(
 /// @param no_zero A boolean determining whether the buffer is allowed to
 /// contain zero or not.
 template<class Field>
-std::vector<typename Field::value_type>
-create_data(uint32_t requested_elements, uint32_t alignment,
-    uint32_t granularity, bool no_zero = false)
+fifi::helper_test_buffer<Field> create_data(uint32_t requested_elements,
+    uint32_t alignment, uint32_t granularity, bool no_zero = false)
 {
     std::cout << "alignment " << std::to_string(alignment) << std::endl;
     std::cout << "granularity " << std::to_string(granularity) << std::endl;
     std::cout << "requested_elements " << std::to_string(requested_elements) << std::endl;
+
     // make sure the number of elements matches the granularity
     uint32_t length = fifi::elements_to_length<Field>(requested_elements) /
         granularity * granularity;
 
     assert((length % granularity) == 0);
 
-    uint32_t elements = fifi::length_to_elements<Field>(length);
-
-    std::cout << "create elements " << std::to_string(elements) << std::endl;
-    std::cout << "create length " << std::to_string(length) << std::endl;
-
-    typedef typename Field::value_type value_type;
-
-    std::vector<value_type> data(length);
-    for (uint32_t i = 0; i < elements; ++i)
-    {
-        value_type v = rand() % Field::order;
-        if (no_zero && v == 0)
-        {
-            v++;
-        }
-
-        fifi::set_value<Field>(data.data(), i, v);
-    }
+    fifi::helper_test_buffer<Field> data(length, alignment,
+        no_zero);
     return data;
 }
 
@@ -192,9 +177,9 @@ inline void check_results_region_ptr_ptr(
     // pick a random number of elementes between 128 and 128+256
     uint32_t elements = 128 + rand() % 256;
 
-    uint32_t alignments = test_stack.max_alignment() + test_stack.alignment();
-    uint32_t granularities = test_stack.max_granularity() +
-        test_stack.granularity();
+    uint32_t alignments = TestImpl::max_alignment() + TestImpl::alignment();
+    uint32_t granularities = TestImpl::max_granularity() +
+        TestImpl::granularity();
 
     for (uint32_t alignment = test_stack.alignment();
         alignment <= alignments;
@@ -211,7 +196,7 @@ inline void check_results_region_ptr_ptr(
             auto src = create_data<test_field>(elements, granularity, alignment,
                 division);
 
-            uint32_t length = data.size();
+            uint32_t length = data.length();
 
             std::cout << "length " << std::to_string(length) << std::endl;
 
@@ -268,9 +253,9 @@ inline void check_results_region_ptr_const(
     // pick a random number of elementes between 128 and 128+256
     uint32_t elements = 128 + rand() % 256;
 
-    uint32_t alignments = test_stack.max_alignment() + test_stack.alignment();
-    uint32_t granularities = test_stack.max_granularity() +
-        test_stack.granularity();
+    uint32_t alignments = TestImpl::max_alignment() + TestImpl::alignment();
+    uint32_t granularities = TestImpl::max_granularity() +
+        TestImpl::granularity();
 
     for (uint32_t alignment = test_stack.alignment();
         alignment <= alignments;
@@ -285,7 +270,7 @@ inline void check_results_region_ptr_const(
             auto data = create_data<test_field>(elements, alignment,
                 granularity);
 
-            uint32_t length = data.size();
+            uint32_t length = data.length();
 
             // We repeat the test a number of times with different constants
             uint32_t constants = 10;
@@ -349,9 +334,9 @@ inline void check_results_region_ptr_ptr_const(
     // pick a random number of elementes between 128 and 128+256
     uint32_t elements = 128 + rand() % 256;
 
-    uint32_t alignments = test_stack.max_alignment() + test_stack.alignment();
-    uint32_t granularities = test_stack.max_granularity() +
-        test_stack.granularity();
+    uint32_t alignments = TestImpl::max_alignment() + TestImpl::alignment();
+    uint32_t granularities = TestImpl::max_granularity() +
+        TestImpl::granularity();
 
     for (uint32_t alignment = test_stack.alignment();
         alignment <= alignments;
@@ -369,7 +354,7 @@ inline void check_results_region_ptr_ptr_const(
             auto src = create_data<test_field>(elements, alignment,
                 granularity);
 
-            uint32_t length = data.size();
+            uint32_t length = data.length();
 
             // We repeat the test a number of times with different constants
             uint32_t constants = 10;
