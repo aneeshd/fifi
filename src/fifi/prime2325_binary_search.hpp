@@ -137,7 +137,7 @@ namespace fifi
         /// @param sequence a storage sequence @see sak::storage_list
         /// @return an unused prefix
         template<class StorageSequence>
-        uint32_t find_prefix(const StorageSequence &sequence)
+        uint32_t find_prefix(const StorageSequence& sequence)
         {
             return find_prefix(sequence.begin(), sequence.end());
         }
@@ -174,7 +174,7 @@ namespace fifi
         /// @param prefix contains the so far found prefix and will contain an
         ///        updated prefix after inspecting the buckets
         /// @return returns true if the final prefix was found otherwise false
-        bool update_prefix(uint32_t k, uint32_t *prefix) const
+        bool update_prefix(uint32_t k, uint32_t* prefix) const
         {
             uint32_t min_index = 0;
 
@@ -225,7 +225,7 @@ namespace fifi
                 assert((first->m_size % 4) == 0);
 
                 uint32_t block_size = first->m_size / 4;
-                const uint32_t *block_data =
+                const uint32_t* block_data =
                     sak::cast_storage<uint32_t>(*first);
 
                 for (uint32_t i = 0; i < block_size; ++i)

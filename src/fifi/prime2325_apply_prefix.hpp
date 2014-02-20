@@ -29,7 +29,7 @@ namespace fifi
 
             uint32_t block_size = first->m_size / 4;
 
-            uint32_t *block_data =
+            uint32_t* block_data =
                 sak::cast_storage<uint32_t>(*first);
 
             for (uint32_t i = 0; i < block_size; ++i)

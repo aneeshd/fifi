@@ -9,7 +9,7 @@
 
 namespace fifi
 {
-    /// Prime field 2^32 - 5 Practical implementations may use the
+    /// Prime field 2^32 - 5 practical implementations may use the
     /// mapping algorithm which was proposed by Crowley et al. and
     /// which allows an efficient mapping of arbitrary binary data to
     /// the 2^32 - 5 prime field.

@@ -86,7 +86,7 @@ namespace fifi
         /// @param sequence a storage sequence @see sak::storage_list
         /// @return an unused prefix
         template<class StorageSequence>
-        uint32_t find_prefix(const StorageSequence &sequence)
+        uint32_t find_prefix(const StorageSequence& sequence)
         {
             return find_prefix(sequence.begin(), sequence.end());
         }
@@ -115,7 +115,7 @@ namespace fifi
                 assert((first->m_size % 4) == 0);
 
                 uint32_t block_size = first->m_size / 4;
-                const uint32_t *block_data =
+                const uint32_t* block_data =
                     sak::cast_storage<uint32_t>(*first);
 
                 for (uint32_t i = 0; i < block_size; ++i)
@@ -138,7 +138,7 @@ namespace fifi
         /// Iterates through the bitmap looking for the unused prefix
         /// @param prefix will contain the unused prefix
         /// @return returns true if the prefix was found otherwise false
-        bool find_in_bitmap(uint32_t *prefix) const
+        bool find_in_bitmap(uint32_t* prefix) const
         {
             // Find the missing prefix in the bitmap
             for (uint32_t i = 0; i < m_bitmap.size(); ++i)
@@ -147,7 +147,7 @@ namespace fifi
                 {
                     if ((m_bitmap[i] & (1 << j)) == 0)
                     {
-                        *prefix = (i*m_mapping_bits + j) << m_shift_prefix;
+                        *prefix = (i * m_mapping_bits + j) << m_shift_prefix;
                         return true;
                     }
                 }
