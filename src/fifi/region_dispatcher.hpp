@@ -16,14 +16,13 @@ namespace fifi
 {
 
     /// Fall through for other fields
-    template<class Field, class Stack, class Super>
+    template<class Field, class Stack, class StackField, class Super>
     class region_dispatcher : public Super
     { };
 
-
     /// @todo
-    template<class Stack, class Super>
-    class region_dispatcher<typename Stack::field_type, Stack, Super>
+    template<class Field, class Stack, class Super>
+    class region_dispatcher<Field, Stack, Field, Super>
         : public Super
     {
     public:

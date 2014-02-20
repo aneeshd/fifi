@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include "binary4.hpp"
 #include "binary4_packed_arithmetic.hpp"
 #include "binary8_region_arithmetic_full_table.hpp"
 #include "final.hpp"
@@ -29,7 +30,7 @@ namespace fifi
     class full_table :
         public correct_alignment<
                correct_granularity<
-               region_dispatcher<Field, ssse3_binary4_full_table,
+               region_dispatcher<Field, ssse3_binary4_full_table, binary4,
                name_super<
                binary8_region_arithmetic_full_table<Field,
                region_arithmetic<

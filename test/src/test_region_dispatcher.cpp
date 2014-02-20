@@ -5,9 +5,12 @@
 
 #include <fifi/final.hpp>
 #include <fifi/region_dispatcher.hpp>
+#include <fifi/binary.hpp>
+#include <fifi/binary16.hpp>
 
 #include <gtest/gtest.h>
 #include <sak/aligned_allocator.hpp>
+
 
 namespace fifi
 {
@@ -81,12 +84,26 @@ namespace fifi
         };
 
         class dummy_stack_enabled :
-            public region_dispatcher<binary, dummy_optimization<binary, true>,
+            public region_dispatcher<
+                       binary,
+                       dummy_optimization<binary, true>,
+                       binary,
                    dummy_base<binary, false> >
         { };
 
-        class dummy_stack_disabled :
-            public region_dispatcher<binary, dummy_optimization<binary, false>,
+        class dummy_stack_disabled1 :
+            public region_dispatcher<
+                        binary,
+                        dummy_optimization<binary, false>,
+                        binary,
+                   dummy_base<binary, true> >
+        { };
+
+        class dummy_stack_disabled2 :
+            public region_dispatcher<
+                       binary,
+                       dummy_optimization<binary, false>,
+                       binary16,
                    dummy_base<binary, true> >
         { };
     }
@@ -95,25 +112,30 @@ namespace fifi
 TEST(TestRegionDispatcher, alignment)
 {
     fifi::dummy_stack_enabled enabled_stack;
-    fifi::dummy_stack_disabled disabled_stack;
+    fifi::dummy_stack_disabled1 disabled_stack1;
+    fifi::dummy_stack_disabled2 disabled_stack2;
 
-    EXPECT_EQ(disabled_stack.alignment(), 1U);
+    EXPECT_EQ(disabled_stack1.alignment(), 1U);
+    EXPECT_EQ(disabled_stack2.alignment(), 1U);
     EXPECT_EQ(enabled_stack.alignment(), 2U);
 }
 
 TEST(TestRegionDispatcher, granularity)
 {
     fifi::dummy_stack_enabled enabled_stack;
-    fifi::dummy_stack_disabled disabled_stack;
+    fifi::dummy_stack_disabled1 disabled_stack1;
+    fifi::dummy_stack_disabled2 disabled_stack2;
 
-    EXPECT_EQ(disabled_stack.granularity(), 1U);
+    EXPECT_EQ(disabled_stack1.granularity(), 1U);
+    EXPECT_EQ(disabled_stack2.granularity(), 1U);
     EXPECT_EQ(enabled_stack.granularity(), 2U);
 }
 
 TEST(TestRegionDispatcher, region_multiply_constant)
 {
     fifi::dummy_stack_enabled enabled_stack;
-    fifi::dummy_stack_disabled disabled_stack;
+    fifi::dummy_stack_disabled1 disabled_stack1;
+    fifi::dummy_stack_disabled2 disabled_stack2;
 
     typedef typename fifi::binary::value_type value_type;
 
@@ -123,5 +145,6 @@ TEST(TestRegionDispatcher, region_multiply_constant)
 
 
     enabled_stack.region_multiply_constant(dest.data(),constant,length);
-    disabled_stack.region_multiply_constant(dest.data(),constant,length);
+    disabled_stack1.region_multiply_constant(dest.data(),constant,length);
+    disabled_stack2.region_multiply_constant(dest.data(),constant,length);
 }
