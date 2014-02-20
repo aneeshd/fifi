@@ -176,17 +176,17 @@ public:
     /// the finite field computations. The buffers passed to the arithmetic
     /// functions should have their memory aligned according to the value
     /// returned by this function.
-    uint32_t alignment() const;
+    static uint32_t alignment();
 
     /// @return The maximum region alignment requirement of the stack. By
     /// complying with this requirement the highest performance can be achieved.
-    uint32_t max_alignment() const;
+    static uint32_t max_alignment();
 
     /// @return The buffer length granularity, i.e., length (number of
     /// value_type elements) by which the buffer must be divisible.
-    uint32_t granularity() const;
+    static uint32_t granularity();
 
     /// @return The maximum granularity requirement of the stack. By complying
     /// with this requirement the highest performance can be achieved.
-    uint32_t max_granularity() const;
+    static uint32_t max_granularity();
 };

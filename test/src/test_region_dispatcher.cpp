@@ -37,29 +37,27 @@ namespace fifi
                 EXPECT_TRUE(Enabled);
             }
 
-            uint32_t alignment() const
+            static uint32_t alignment()
             {
                 return 3U;
             }
 
-            uint32_t max_alignment() const
+            static uint32_t max_alignment()
             {
                 return 30U;
             }
 
-            uint32_t granularity() const
+            static uint32_t granularity()
             {
                 return 4U;
             }
 
-            uint32_t max_granularity() const
+            static uint32_t max_granularity()
             {
                 return 40U;
             }
 
-
-
-            bool enabled() const
+            static bool enabled()
             {
                 return Enabled;
             }
@@ -84,22 +82,22 @@ namespace fifi
                 EXPECT_TRUE(Enabled);
             }
 
-            uint32_t alignment() const
+            static uint32_t alignment()
             {
                 return 1U;
             }
 
-            uint32_t max_alignment() const
+            static uint32_t max_alignment()
             {
                 return 10U;
             }
 
-            uint32_t granularity() const
+            static uint32_t granularity()
             {
                 return 2U;
             }
 
-            uint32_t max_granularity() const
+            static uint32_t max_granularity()
             {
                 return 20U;
             }

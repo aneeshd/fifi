@@ -128,12 +128,12 @@ namespace fifi
         }
         */
 
-        /// @copydoc layer::alignment() const
-        uint32_t alignment() const
+        /// @copydoc static layer::alignment()
+        static uint32_t alignment()
         {
-            if(m_stack.enabled())
+            if(Stack::enabled())
             {
-                return std::max(m_stack.alignment(),
+                return std::max(Stack::alignment(),
                                 Super::alignment());
             }
             else
@@ -142,12 +142,12 @@ namespace fifi
             }
         }
 
-        /// @copydoc layer::max_alignment() const
-        uint32_t max_alignment() const
+        /// @copydoc static layer::max_alignment()
+        static uint32_t max_alignment()
         {
-            if(m_stack.enabled())
+            if(Stack::enabled())
             {
-                return std::max(m_stack.max_alignment(),
+                return std::max(Stack::max_alignment(),
                                 Super::max_alignment());
             }
             else
@@ -156,12 +156,12 @@ namespace fifi
             }
         }
 
-        /// @copydoc layer::granularity() const
-        uint32_t granularity() const
+        /// @copydoc static layer::granularity()
+        static uint32_t granularity()
         {
-            if(m_stack.enabled())
+            if(Stack::enabled())
             {
-                return std::max(m_stack.granularity(),
+                return std::max(Stack::granularity(),
                                 Super::granularity());
             }
             else
@@ -170,12 +170,12 @@ namespace fifi
             }
         }
 
-        /// @copydoc layer::max_granularity() const
-        uint32_t max_granularity() const
+        /// @copydoc static layer::max_granularity()
+        static uint32_t max_granularity()
         {
-            if(m_stack.enabled())
+            if(Stack::enabled())
             {
-                return std::max(m_stack.max_granularity(),
+                return std::max(Stack::max_granularity(),
                                 Super::max_granularity());
             }
             else
@@ -184,9 +184,9 @@ namespace fifi
             }
         }
 
-        bool enabled() const
+        static bool enabled()
         {
-            return m_stack.enabled();
+            return Stack::enabled();
         }
 
     private:

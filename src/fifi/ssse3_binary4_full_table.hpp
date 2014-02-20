@@ -63,21 +63,21 @@ namespace fifi
         void region_multiply_constant(value_type* dest, value_type constant,
             uint32_t length) const;
 
-        /// @copydoc layer::alignment() const
-        uint32_t alignment() const;
+        /// @copydoc static layer::alignment()
+        static uint32_t alignment();
 
-        /// @copydoc layer::max_alignment() const
-        uint32_t max_alignment() const;
+        /// @copydoc static layer::max_alignment()
+        static uint32_t max_alignment();
 
-        /// @copydoc layer::granularity() const
-        uint32_t granularity() const;
+        /// @copydoc static layer::granularity()
+        static uint32_t granularity();
 
-        /// @copydoc layer::max_granularity() const
-        uint32_t max_granularity() const;
+        /// @copydoc static layer::max_granularity()
+        static uint32_t max_granularity();
 
         /// @return true if the executable was built with SSSE3 binary4
         ///         full table support
-        bool enabled() const;
+        static bool enabled();
 
     private:
 

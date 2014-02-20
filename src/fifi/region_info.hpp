@@ -24,27 +24,27 @@ namespace fifi
 
     public:
 
-        /// @copydoc layer::alignment() const
-        uint32_t alignment() const
+        /// @copydoc static layer::alignment()
+        static uint32_t alignment()
         {
             /// @todo Change to C++11 alignof when available in MSVC
             return sizeof(value_type);
         }
 
-        /// @copydoc layer::max_alignment() const
-        uint32_t max_alignment() const
+        /// @copydoc static layer::max_alignment()
+        static uint32_t max_alignment()
         {
             return alignment();
         }
 
-        /// @copydoc layer::granularity() const
-        uint32_t granularity() const
+        /// @copydoc static layer::granularity()
+        static uint32_t granularity()
         {
             return 1U;
         }
 
-        /// @copydoc layer::max_granularity() const
-        uint32_t max_granularity() const
+        /// @copydoc static layer::max_granularity()
+        static uint32_t max_granularity()
         {
             return granularity();
         }

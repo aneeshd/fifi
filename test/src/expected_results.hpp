@@ -192,10 +192,9 @@ inline void check_results_region_ptr_ptr(
     // pick a random number of elementes between 128 and 128+256
     uint32_t elements = 128 + rand() % 256;
 
-    uint32_t min_tests = 1U;
-
-    uint32_t alignments = std::max(test_stack.max_alignment(), min_tests);
-    uint32_t granularities = std::max(test_stack.max_granularity(), min_tests);
+    uint32_t alignments = test_stack.max_alignment() + test_stack.alignment();
+    uint32_t granularities = test_stack.max_granularity() +
+        test_stack.granularity();
 
     for (uint32_t alignment = test_stack.alignment();
         alignment <= alignments;
@@ -269,10 +268,9 @@ inline void check_results_region_ptr_const(
     // pick a random number of elementes between 128 and 128+256
     uint32_t elements = 128 + rand() % 256;
 
-    uint32_t min_tests = 1U;
-
-    uint32_t alignments = std::max(test_stack.max_alignment(), min_tests);
-    uint32_t granularities = std::max(test_stack.max_granularity(), min_tests);
+    uint32_t alignments = test_stack.max_alignment() + test_stack.alignment();
+    uint32_t granularities = test_stack.max_granularity() +
+        test_stack.granularity();
 
     for (uint32_t alignment = test_stack.alignment();
         alignment <= alignments;
@@ -351,10 +349,9 @@ inline void check_results_region_ptr_ptr_const(
     // pick a random number of elementes between 128 and 128+256
     uint32_t elements = 128 + rand() % 256;
 
-    uint32_t min_tests = 1U;
-
-    uint32_t alignments = std::max(test_stack.max_alignment(), min_tests);
-    uint32_t granularities = std::max(test_stack.max_granularity(), min_tests);
+    uint32_t alignments = test_stack.max_alignment() + test_stack.alignment();
+    uint32_t granularities = test_stack.max_granularity() +
+        test_stack.granularity();
 
     for (uint32_t alignment = test_stack.alignment();
         alignment <= alignments;

@@ -28,8 +28,6 @@ namespace fifi
 
     ssse3_binary4_full_table::ssse3_binary4_full_table()
     {
-        cpuid::cpuinfo info;
-        m_has_ssse3 = info.has_ssse3();
         m_table_one.resize(16*16);
         m_table_two.resize(16*16);
 
@@ -95,18 +93,18 @@ namespace fifi
 
     }
 
-    uint32_t ssse3_binary4_full_table::alignment() const
+    uint32_t ssse3_binary4_full_table::alignment()
     {
         // SSSE3 require 16 byte alignment data
         return 16U;
     }
 
-    uint32_t ssse3_binary4_full_table::max_alignment() const
+    uint32_t ssse3_binary4_full_table::max_alignment()
     {
         return alignment();
     }
 
-    uint32_t ssse3_binary4_full_table::granularity() const
+    uint32_t ssse3_binary4_full_table::granularity()
     {
         // We are working over 16 bytes at a time i.e. 128 bits so we
         // require a length granularity of 16. We expect that binary4
@@ -116,15 +114,15 @@ namespace fifi
         return 16U;
     }
 
-    uint32_t ssse3_binary4_full_table::max_granularity() const
+    uint32_t ssse3_binary4_full_table::max_granularity()
     {
         return granularity();
     }
 
-    bool ssse3_binary4_full_table::enabled() const
+    bool ssse3_binary4_full_table::enabled()
     {
-
-        return m_has_ssse3;
+        static cpuid::cpuinfo info;
+        return info.has_ssse3();
     }
 
 #else
@@ -143,31 +141,31 @@ namespace fifi
         assert(0);
     }
 
-    uint32_t ssse3_binary4_full_table::alignment() const
+    uint32_t ssse3_binary4_full_table::alignment()
     {
         // Not implemented
         assert(0);
         return 0;
     }
 
-    uint32_t ssse3_binary4_full_table::max_alignment() const
+    uint32_t ssse3_binary4_full_table::max_alignment()
     {
         return alignment();
     }
 
-    uint32_t ssse3_binary4_full_table::granularity() const
+    uint32_t ssse3_binary4_full_table::granularity()
     {
         // Not implemented
         assert(0);
         return 0;
     }
 
-    uint32_t ssse3_binary4_full_table::max_granularity() const
+    uint32_t ssse3_binary4_full_table::max_granularity()
     {
         return granularity();
     }
 
-    bool ssse3_binary4_full_table::enabled() const
+    bool ssse3_binary4_full_table::enabled()
     {
         return false;
     }

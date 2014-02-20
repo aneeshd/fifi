@@ -48,7 +48,7 @@ namespace fifi
             }
         }
 
-        uint32_t alignment() const
+        static uint32_t alignment()
         {
             return Super::NamedSuper::alignment();
         }

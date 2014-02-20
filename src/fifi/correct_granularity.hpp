@@ -50,7 +50,7 @@ namespace fifi
             }
         }
 
-        uint32_t granularity() const
+        static uint32_t granularity()
         {
             return Super::NamedSuper::granularity();
         }
