@@ -111,8 +111,8 @@ inline void check_results_random(
 /// @tparam Field The field elements to create.
 ///
 /// @param elements The number of field elements to create.
-/// @param no_zero A boolean determing whether the buffer is allowed to contain
-/// zero or not.
+/// @param no_zero A boolean determining whether the buffer is allowed to
+/// contain zero or not.
 template<class Field>
 std::vector<typename Field::value_type>
 create_data(uint32_t elements, bool no_zero = false)
@@ -152,7 +152,7 @@ create_data(uint32_t elements, bool no_zero = false)
 /// @param reference_arithmetic The arithmetic function used to compute the
 /// reference results to test against
 /// @param elements The number of field elements in the region we will compute
-/// @param devision A boolean determing wether arithmetic functions are
+/// @param devision A boolean determining whether arithmetic functions are
 /// division. This is needed to prevent division by zero errors.
 template
 <
@@ -181,7 +181,7 @@ inline void check_results_region_ptr_ptr(
     auto data = create_data<test_field>(elements);
     auto src = create_data<test_field>(elements, division);
 
-    // Create buffer and created the expectedresults using the reference
+    // Create buffer and created the expected results using the reference
     // arithmetics
     auto test_data = data;
     auto reference_data = data;
@@ -248,7 +248,7 @@ inline void check_results_region_ptr_const(
         auto constant = fifi::pack<test_field>(rand() % test_field::order);
         SCOPED_TRACE(testing::Message() << "constant: " << constant);
 
-        // Create buffer and created the expectedresults using the reference
+        // Create buffer and created the expected results using the reference
         // arithmetics
         auto test_data = data;
         auto reference_data = data;
@@ -314,7 +314,7 @@ inline void check_results_region_ptr_ptr_const(
         auto constant = fifi::pack<test_field>(rand() % test_field::order);
         SCOPED_TRACE(testing::Message() << "constant: " << constant);
 
-        // Create buffer and created the expectedresults using the reference
+        // Create buffer and created the expected results using the reference
         // arithmetics
         auto test_data = data;
         auto reference_data = data;

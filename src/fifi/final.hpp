@@ -7,17 +7,17 @@
 
 namespace fifi
 {
-    /// @todo docs
+    /// This is used as the bottom layer of most stacks as it stops
+    /// the chain of mix-ins.
     template<class Field>
     class final
     {
-
     public:
 
-        /// The field type
+        /// @copydoc layer::field_type
         typedef Field field_type;
 
-        /// The data type storing field elements
+        /// @copydoc layer::value_type
         typedef typename field_type::value_type value_type;
     };
 }

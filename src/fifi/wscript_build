@@ -4,8 +4,6 @@
 
 from os.path import abspath
 
-#print(bld.env)
-
 # Guard by compiler and dest cpu
 
 cpu = bld.env['DEST_CPU']

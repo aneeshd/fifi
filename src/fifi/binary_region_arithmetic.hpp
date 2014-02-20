@@ -14,26 +14,27 @@
 
 namespace fifi
 {
-
+    /// Fall through case for other fields
     template<class Field, class Super>
     class binary_region_arithmetic : public Super
     { };
 
+    /// Specialization for region arithmetic for the binary field.
     template<class Super>
     class binary_region_arithmetic<fifi::binary, Super> : public Super
     {
     public:
 
-        /// The field type
+        /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
 
     public:
 
-        /// @copydoc region_arithmetic::region_multiply_constant(value_type*,
-        ///              value_type, uint32_t)
+        /// @copydoc layer::region_multiply_constant(value_type*, value_type,
+        ///                                          uint32_t) const
         void region_multiply_constant(value_type* dest,
             value_type constant, uint32_t length) const
         {
@@ -47,8 +48,8 @@ namespace fifi
             }
         }
 
-        /// @copydoc region_arithmetic::region_multiply_add(value_type*,
-        ///              value_type*, value_type, uint32_t)
+        /// @copydoc layer::region_multiply_add(value_type*, value_type*,
+        ///                                     value_type, uint32_t) const
         void region_multiply_add(value_type* dest, const value_type* src,
                           value_type constant, uint32_t length) const
         {
@@ -67,8 +68,8 @@ namespace fifi
             }
         }
 
-        /// @copydoc region_arithmetic::region_multiply_subtract(value_type*,
-        ///              value_type*, value_type, uint32_t)
+        /// @copydoc layer::region_multiply_subtract(value_type*, value_type*,
+        ///                                          value_type, uint32_t) const
         void region_multiply_subtract(value_type* dest, const value_type* src,
             value_type constant, uint32_t length) const
         {

@@ -6,11 +6,19 @@ of every change, see the Git log.
 
 Latest
 ------
-* Major: Made fifi a static library.
-* Major: Redid the fifi architecture to use mixin layers.
+* Major: Changed Fifi into a static library. Essentially this change
+  was motivated by the desire to introduced SIMD accelerated
+  arithmetics but keep the library as easy to used as possible. SIMD
+  introduces a number of CPU dependent algorithms this not only
+  introduces a compile time complexity but also run-time. Using a
+  static library these complexities can be handled internally in Fifi
+  and the hidden from its users.
+* Major: Redid the Fifi architecture to use mix-in layers. This design
+  technique allows a highly flexible design where most functionality
+  can be customized to specific needs.
 * Major: Moved optimizations from ``arithmetics.hpp`` to separate layers.
 * Minor: Added unit tests for all classes.
-* Minor: Introduced the binary4 field.
+* Minor: Introduced the binary4 finite field i.e. (2^4).
 
 10.0.0
 ------

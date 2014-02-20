@@ -12,24 +12,29 @@
 
 namespace fifi
 {
-
+    /// Fall through case for other fields
     template<class Field, class Super>
     class binary8_region_arithmetic_full_table : public Super
     { };
 
+    /// Specialization for the binary8 field. The layer implements an
+    /// optimization for binary8 full table region arithmetics. The
+    /// optimization relies on the fact that when multiplying with a
+    /// constant this yields a constant offset into the multiplication
+    /// table (see below for further details).
     template<class Super>
     class binary8_region_arithmetic_full_table<fifi::binary8, Super>
         : public Super
     {
     public:
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
 
     public:
 
-        /// @copydoc region_arithmetic::region_multiply_add(value_type*,
-        ///              value_type*, value_type, uint32_t)
+        /// @copydoc layer::region_multiply_add(value_type*, value_type*,
+        ///                                     value_type, uint32_t) const
         void region_multiply_add(value_type* dest, const value_type* src,
                           value_type constant, uint32_t length) const
         {
@@ -54,8 +59,8 @@ namespace fifi
             }
         }
 
-        /// @copydoc region_arithmetic::region_multiply_subtract(value_type*,
-        ///              value_type*, value_type, uint32_t)
+        /// @copydoc layer::region_multiply_subtract(value_type*, value_type*,
+        ///                                          value_type, uint32_t) const
         void region_multiply_subtract(value_type* dest, const value_type* src,
             value_type constant, uint32_t length) const
         {

@@ -10,7 +10,6 @@
 #include "packed_arithmetic.hpp"
 #include "region_arithmetic.hpp"
 #include "region_info.hpp"
-#include "optimal_prime_region_arithmetic.hpp"
 
 namespace fifi
 {
@@ -19,11 +18,10 @@ namespace fifi
     /// field is different than two.
     template<class Field>
     class optimal_prime :
-        public optimal_prime_region_arithmetic<Field,
-               region_arithmetic<
+        public region_arithmetic<
                region_info<
                packed_arithmetic<
                optimal_prime_arithmetic<
-               final<Field> > > > > >
+               final<Field> > > > >
     { };
 }

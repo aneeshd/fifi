@@ -10,13 +10,13 @@
 namespace fifi
 {
 
-    /// @brief This layer provides the default region infomation.
+    /// @brief This layer provides the default region information.
     template<class Super>
     class region_info : public Super
     {
     public:
 
-        /// The field type
+        /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
         /// @copydoc layer::value_type

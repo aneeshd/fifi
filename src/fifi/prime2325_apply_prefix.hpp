@@ -12,7 +12,6 @@
 
 namespace fifi
 {
-
     /// Overload for applying a prefix to a storage object
     /// @param first iterator to the beginning of the storage
     /// @param last iterator to the end of the storage
@@ -40,7 +39,6 @@ namespace fifi
 
             ++first;
         }
-
     }
 
     /// Applies a prefix to a storage sequence

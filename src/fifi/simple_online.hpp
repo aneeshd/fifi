@@ -18,7 +18,6 @@
 
 namespace fifi
 {
-
     /// Simple online finite field algorithms - computes the results
     /// on the fly without relying on pre-computed look-up tables etc.
     template<class Field>
@@ -34,5 +33,4 @@ namespace fifi
                polynomial_degree<
                final<Field> > > > > > > > > >
     { };
-
 }

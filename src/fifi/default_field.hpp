@@ -17,10 +17,11 @@
 
 namespace fifi
 {
+    /// Choosing the right field implementation is a matter of speed
+    /// and memory requirements. The default_field chosen for each
+    /// field represents a corresponding implementation which is known
+    /// to provide a good trade-off.
 
-    /// Choosing the right field implementation is a matter of speed and memory
-    /// requirements. The default_field_impl choose for each field type an
-    /// corresponding implementation which is know to provide a good trade-off.
     template<class Field>
     struct default_field;
 
@@ -63,5 +64,4 @@ namespace fifi
         /// default field implementation type
         typedef optimal_prime<prime2325> type;
     };
-
 }

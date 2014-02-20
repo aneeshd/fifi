@@ -23,9 +23,8 @@
 
 namespace fifi
 {
-
-    /// The full look-up table - computes a full lookup table of
-    /// the multiplication and division operations.
+    /// The full look-up table stack. This stack does most
+    /// computations base on full look-up tables.
     template<class Field>
     class full_table :
         public correct_alignment<

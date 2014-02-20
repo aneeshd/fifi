@@ -30,12 +30,12 @@ namespace fifi
         m_table_one.resize(16*16);
         m_table_two.resize(16*16);
 
-        assert( ( (uintptr_t)&m_table_one[0] % 16) == 0);
-        assert( ( (uintptr_t)&m_table_two[0] % 16) == 0);
+        assert(((uintptr_t) &m_table_one[0] % 16) == 0);
+        assert(((uintptr_t) &m_table_two[0] % 16) == 0);
 
-        for(uint32_t i = 0; i < 16; ++i)
+        for (uint32_t i = 0; i < 16; ++i)
         {
-            for(uint32_t j = 0; j < 16; ++j)
+            for (uint32_t j = 0; j < 16; ++j)
             {
                 auto v = base::multiply(i,j);
 
@@ -49,7 +49,7 @@ namespace fifi
         value_type* dest, value_type constant, uint32_t length) const
     {
         assert(dest != 0);
-        assert( ( (uintptr_t)dest % alignment()) == 0);
+        assert(((uintptr_t) dest % alignment()) == 0);
         assert(length > 0);
         assert((length % granularity()) == 0);
         // assert(alignment)
@@ -71,7 +71,7 @@ namespace fifi
         __m128i mask1 = _mm_set1_epi8(0x0f);
         __m128i mask2 = _mm_set1_epi8(0xf0);
 
-        for(uint32_t i = 0; i < ssse3_size; ++i)
+        for (uint32_t i = 0; i < ssse3_size; ++i)
         {
             __m128i xmm0 = _mm_load_si128(((const __m128i*) dest) + i);
 
@@ -90,7 +90,6 @@ namespace fifi
 
     }
 
-    /// @return The granularity requirements for specifying a length
     uint32_t ssse3_binary4_full_table::granularity() const
     {
         // We are working over 16 bytes at a time i.e. 128 bits so we
@@ -101,7 +100,6 @@ namespace fifi
         return 16U;
     }
 
-    /// @return The alignment requirements for memory
     uint32_t ssse3_binary4_full_table::alignment() const
     {
         // SSSE3 require 16 byte alignment data
@@ -130,11 +128,6 @@ namespace fifi
         assert(0);
     }
 
-    bool ssse3_binary4_full_table::enabled() const
-    {
-        return false;
-    }
-
     uint32_t ssse3_binary4_full_table::granularity() const
     {
         // Not implemented
@@ -147,6 +140,11 @@ namespace fifi
         // Not implemented
         assert(0);
         return 0;
+    }
+
+    bool ssse3_binary4_full_table::enabled() const
+    {
+        return false;
     }
 
 #endif

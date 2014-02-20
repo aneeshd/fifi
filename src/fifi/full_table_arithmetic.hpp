@@ -25,21 +25,29 @@ namespace fifi
     template<class Field, class Super>
     class full_table_arithmetic : public Super
     {
+        // Static check for the prime2325 field, the full lookup table
+        // only works with binary extension fields
         static_assert(
             !std::is_same<prime2325, typename Super::field_type>::value,
             "This layer does not support the 2^32 - 5 prime field");
+
+        // Check for the binary16 field the full lookup table cannot
+        // be used with binary16 due to the excessive amounts of
+        // memory it would require to create the look-up table.
         static_assert(
             !std::is_same<binary16, typename Super::field_type>::value,
             "This layer does not support the binary16 field");
+
+        // The full lookup table does not support the binary field
         static_assert(!std::is_same<binary, typename Super::field_type>::value,
             "This layer does not support the binary field");
 
     public:
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename Field::value_type value_type;
 
-        /// Typedef of the field type used
+        /// @copydoc layer::field_type
         typedef Field field_type;
 
     public:
@@ -66,7 +74,7 @@ namespace fifi
             }
         }
 
-        /// @copydoc finite_field::multiply()
+        /// @copydoc layer::multiply(value_type, value_type) const
         value_type multiply(value_type a, value_type b) const
         {
             assert(is_valid_element<field_type>(a));
@@ -75,7 +83,7 @@ namespace fifi
             return m_multtable[(a << Field::degree) + b];
         }
 
-        /// @copydoc finite_field::divide()
+        /// @copydoc layer::divide(value_type, value_type) const
         value_type divide(value_type numerator, value_type denominator) const
         {
             assert(is_valid_element<field_type>(numerator));
@@ -84,7 +92,7 @@ namespace fifi
             return m_divitable[(numerator << Field::degree) + denominator];
         }
 
-        /// @copydoc finite_field::invert()
+        /// @copydoc layer::invert(value_type) const
         value_type invert(value_type a) const
         {
             assert(is_valid_element<field_type>(a));
@@ -99,7 +107,5 @@ namespace fifi
 
         /// The division table
         std::vector<value_type> m_divitable;
-
     };
-
 }

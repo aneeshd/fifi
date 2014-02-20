@@ -32,8 +32,6 @@ std::vector<uint32_t> setup_lengths()
     return lengths;
 }
 
-
-
 template<class Field>
 void multiply_loop(const Field &field,
                    typename Field::value_type *pr,
@@ -113,18 +111,13 @@ public:
     basic_operations_setup()
     {
         std::vector<uint32_t> lengths = setup_lengths();
-        //std::vector<std::string> operations = setup_operations();
 
         for (uint32_t i = 0; i < lengths.size(); ++i)
         {
-            //for(uint32_t k = 0; k < operations.size(); ++k)
-            //{
             gauge::config_set cs;
             cs.set_value<uint32_t>("vector_length", lengths[i]);
-            //  cs.set_value<std::string>("operation", operations[k]);
             cs.set_value<uint32_t>("element_size", sizeof(value_type));
             add_configuration(cs);
-            //}
         }
     }
 

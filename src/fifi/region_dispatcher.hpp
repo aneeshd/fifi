@@ -20,10 +20,9 @@ namespace fifi
     class region_dispatcher : public Super
     { };
 
-    /// @todo
+    /// Dispatcher for the region arithmetics
     template<class Field, class Stack, class Super>
-    class region_dispatcher<Field, Stack, Field, Super>
-        : public Super
+    class region_dispatcher<Field, Stack, Field, Super> : public Super
     {
     public:
 
@@ -84,6 +83,9 @@ namespace fifi
 
     private:
 
+        /// @return A function that dispatches to the "right" function
+        /// depending on whether the binary has been compiled with
+        /// SSSE3 support and whether the CPU has SSSE3.
         std::function<void (value_type*, value_type, uint32_t)>
             dispatch_region_multiply_constant() const
         {
@@ -98,18 +100,21 @@ namespace fifi
             }
             else
             {
-                return std::bind(&Super::region_multiply_constant,
-                                 (Super*)this,
-                                 std::placeholders::_1,
-                                 std::placeholders::_2,
-                                 std::placeholders::_3);
+                return std::bind(
+                    &Super::region_multiply_constant,
+                    (Super*)this,
+                    std::placeholders::_1,
+                    std::placeholders::_2,
+                    std::placeholders::_3);
             }
         }
 
     private:
 
+        /// The stack to use for dispatching
         Stack m_stack;
 
+        /// Store the function to invoke when calling region_multiply_constant
         std::function<void (value_type*, value_type, uint32_t)>
             m_region_multiply_constant;
 

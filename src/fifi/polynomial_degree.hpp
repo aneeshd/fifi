@@ -12,7 +12,6 @@
 
 namespace fifi
 {
-
     /// @brief This layer implements a simple function for determining
     ///        the degree of a binary extension field polynomial
     ///        representation.
@@ -21,7 +20,7 @@ namespace fifi
     {
     public:
 
-        /// The field type
+        /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
         /// @copydoc layer::value_type

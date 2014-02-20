@@ -20,13 +20,12 @@
 
 namespace fifi
 {
-
     /// ssse3_binary4_full_table_dispatch
     /// ssse3_binary4_full_table
     ///
     /// Stack implementing SSSE3 SIMD accelerated finite field
     /// arithmetic. The following intrinsics are used available in the
-    /// follwoing SIMD versions:
+    /// following SIMD versions:
     ///
     /// _mm_load_si128 (SSE2)
     /// _mm_set1_epi8 (SSE2)
@@ -64,15 +63,15 @@ namespace fifi
         void region_multiply_constant(value_type* dest, value_type constant,
             uint32_t length) const;
 
-        /// @return true if the executable was built with SSSE3 binary4
-        ///         full table support
-        bool enabled() const;
-
         /// @copydoc layer::granularity() const
         uint32_t granularity() const;
 
         /// @copydoc layer::alignment() const
         uint32_t alignment() const;
+
+        /// @return true if the executable was built with SSSE3 binary4
+        ///         full table support
+        bool enabled() const;
 
     private:
 
@@ -86,11 +85,10 @@ namespace fifi
         typedef std::vector<uint8_t, sak::aligned_allocator<uint8_t> >
             aligned_vector;
 
-
+        /// Storage for the high 4 bit multiplication table
         aligned_vector m_table_one;
+
+        /// Storage for the low 4 bit multiplication table
         aligned_vector m_table_two;
-
-
     };
-
 }
