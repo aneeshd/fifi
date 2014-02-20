@@ -30,37 +30,37 @@ namespace fifi
     {
     public:
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
 
     public:
 
-        /// @copydoc layer::packed_multiply()
+        /// @copydoc layer::packed_multiply(value_type, value_type) const
         value_type packed_multiply(value_type a, value_type b) const
         {
             return Super::multiply(a, b);
         }
 
-        /// @copydoc layer::packed_divide()
+        /// @copydoc layer::packed_divide(value_type, value_type) const
         value_type packed_divide(value_type numerator,
                                  value_type denominator) const
         {
             return Super::divide(numerator, denominator);
         }
 
-        /// @copydoc layer::packed_invert()
+        /// @copydoc layer::packed_invert(value_type) const
         value_type packed_invert(value_type a) const
         {
             return Super::invert(a);
         }
 
-        /// @copydoc layer::packed_add()
+        /// @copydoc layer::packed_add(value_type, value_type) const
         value_type packed_add(value_type a, value_type b) const
         {
             return Super::add(a, b);
         }
 
-        /// @copydoc layer::packed_subtract()
+        /// @copydoc layer::packed_subtract(value_type, value_type) const
         value_type packed_subtract(value_type a, value_type b) const
         {
             return Super::subtract(a, b);

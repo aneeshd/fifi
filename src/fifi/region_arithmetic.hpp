@@ -24,14 +24,16 @@ namespace fifi
     {
     public:
 
-        /// The field type
+        /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
 
     public:
 
+        /// @copydoc layer::region_add(value_type*, const value_type*,
+        ///                            uint32_t) const
         void region_add(value_type* dest, const value_type* src,
             uint32_t length) const
         {
@@ -44,6 +46,8 @@ namespace fifi
             }
         }
 
+        /// @copydoc layer::region_subtract(value_type*, const value_type*,
+        ///                                 uint32_t) const
         void region_subtract(value_type* dest, const value_type* src,
             uint32_t length) const
         {
@@ -56,6 +60,8 @@ namespace fifi
             }
         }
 
+        /// @copydoc layer::region_divide(value_type*, const value_type*,
+        ///                               uint32_t) const
         void region_divide(value_type* dest, const value_type* src,
             uint32_t length) const
         {
@@ -68,6 +74,8 @@ namespace fifi
             }
         }
 
+        /// @copydoc layer::region_multiply(value_type*, const value_type*,
+        ///                                 uint32_t) const
         void region_multiply(value_type* dest, const value_type* src,
             uint32_t length) const
         {
@@ -80,6 +88,8 @@ namespace fifi
             }
         }
 
+        /// @copydoc layer::region_multiply_constant(value_type*, value_type,
+        ///                                          uint32_t) const
         void region_multiply_constant(
             value_type* dest, value_type constant,
             uint32_t length) const
@@ -93,6 +103,8 @@ namespace fifi
             }
         }
 
+        /// @copydoc layer::region_multiply_add(value_type*, const value_type*,
+        ///                                     value_type, uint32_t) const
         void region_multiply_add(value_type* dest, const value_type* src,
                           value_type constant, uint32_t length) const
         {
@@ -107,6 +119,9 @@ namespace fifi
             }
         }
 
+        /// @copydoc layer::region_multiply_subtract(value_type*,
+        ///                                          const value_type*,
+        ///                                          value_type, uint32_t) const
         void region_multiply_subtract(value_type* dest, const value_type* src,
                                 value_type constant, uint32_t length) const
         {

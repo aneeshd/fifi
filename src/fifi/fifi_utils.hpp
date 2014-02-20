@@ -170,6 +170,7 @@ namespace fifi
     }
 
     /// get_value specialization for the binary field
+    /// @copydoc get_value(value_type*, uint32_t)
     template<>
     inline binary::value_type
     get_value<binary>(const binary::value_type *elements, uint32_t index)
@@ -186,6 +187,7 @@ namespace fifi
     }
 
     /// get_value specialization for the binary4 field
+    /// @copydoc get_value(value_type*, uint32_t)
     template<>
     inline binary4::value_type
     get_value<binary4>(const binary4::value_type *elements, uint32_t index)
@@ -220,6 +222,7 @@ namespace fifi
     }
 
     /// set_value specialization for the binary field
+    /// @copydoc set_value(value_type*, uint32_t, value_type)
     template<>
     inline void set_value<binary>(binary::value_type* elements, uint32_t index,
                                   binary::value_type value)
@@ -245,6 +248,7 @@ namespace fifi
     }
 
     /// set_value specialization for the binary4 field
+    /// @copydoc set_value(value_type*, uint32_t, value_type)
     template<>
     inline void set_value<binary4>(
         binary4::value_type* elements,

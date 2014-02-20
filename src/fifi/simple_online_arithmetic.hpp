@@ -21,15 +21,15 @@ namespace fifi
     {
     public:
 
-        /// Typedef of the field type used
+        /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename field_type::value_type value_type;
 
     public:
 
-        /// @copydoc layer::multiply()
+        /// @copydoc layer::multiply(value_type, value_type) const
         value_type multiply(value_type a, value_type b) const
         {
             static_assert(!std::is_same<binary, field_type>::value,
@@ -76,7 +76,7 @@ namespace fifi
 
         }
 
-        /// @copydoc layer::divide()
+        /// @copydoc layer::divide(value_type, value_type) const
         value_type divide(value_type numerator, value_type denominator) const
         {
             static_assert(!std::is_same<binary, field_type>::value,
@@ -88,7 +88,7 @@ namespace fifi
             return multiply(invert(denominator), numerator);
         }
 
-        /// @copydoc layer::invert()
+        /// @copydoc layer::invert(value_type) const
         value_type invert(value_type a) const
         {
             static_assert(!std::is_same<binary, field_type>::value,
@@ -151,7 +151,7 @@ namespace fifi
             return y_large;
         }
 
-        /// @copydoc layer::add()
+        /// @copydoc layer::add(value_type, value_type) const
         value_type add(value_type a, value_type b) const
         {
             assert(is_valid_element<field_type>(a));
@@ -159,7 +159,7 @@ namespace fifi
             return a ^ b;
         }
 
-        /// @copydoc layer::subtract()
+        /// @copydoc layer::subtract(value_type, value_type) const
         value_type subtract(value_type a, value_type b) const
         {
             // In the binary extension fields add and subtract are the same

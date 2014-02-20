@@ -25,11 +25,13 @@ namespace fifi
     ///
     /// We specialize the is_packed_constant for every field so that
     /// you do not get surprising results when adding new fields.
-    ///
+    /// @param constant Field element to be checked if it is packed or not
+    /// @return true if constant is packed, otherwise false
     template<class Field>
     inline bool is_packed_constant(typename Field::value_type constant);
 
     /// Specialization for binary
+    /// @copydoc is_packed_constant(value_type)
     template<>
     inline bool is_packed_constant<binary>(
         typename binary::value_type constant)
@@ -38,6 +40,7 @@ namespace fifi
     }
 
     /// Specialization for binary4
+    /// @copydoc is_packed_constant(value_type)
     template<>
     inline bool is_packed_constant<binary4>(
         typename binary4::value_type constant)
@@ -46,6 +49,7 @@ namespace fifi
     }
 
     /// Specialization for binary8
+    /// @copydoc is_packed_constant(value_type)
     template<>
     inline bool is_packed_constant<binary8>(
         typename binary8::value_type constant)
@@ -55,6 +59,7 @@ namespace fifi
     }
 
     /// Specialization for binary16
+    /// @copydoc is_packed_constant(value_type)
     template<>
     inline bool is_packed_constant<binary16>(
         typename binary16::value_type constant)
@@ -64,6 +69,7 @@ namespace fifi
     }
 
     /// Specialization for prime2325
+    /// @copydoc is_packed_constant(value_type)
     template<>
     inline bool is_packed_constant<prime2325>(
         typename prime2325::value_type constant)

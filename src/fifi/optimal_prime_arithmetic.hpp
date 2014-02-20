@@ -21,10 +21,10 @@ namespace fifi
     {
     public:
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
 
-        /// Typedef of the field type used
+        /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
         static_assert(std::is_same<prime2325, field_type>::value,
@@ -38,6 +38,7 @@ namespace fifi
         ///   S. B. Mohan  and  B. S. Adiga, Electronics  “Fast algorithms for
         ///   implementing rsa public key cryptosystem" Electronics  Letters,
         ///   vol.  21, 1985.
+        /// @copydoc layer::multiply(value_type, value_type) const
         value_type multiply(value_type element_one,
                             value_type element_two) const
         {
@@ -63,6 +64,7 @@ namespace fifi
         /// Specialization for the (2^32 - 5) prime field. In this
         /// case division is simply implemented using multiplication
         /// with the inverse.
+        /// @copydoc layer::divide(value_type, value_type) const
         value_type divide(value_type numerator, value_type denominator) const
         {
             value_type inverse = invert(denominator);
@@ -77,6 +79,7 @@ namespace fifi
         /// calculations mod 2^32 - 5 we see that b*y must become
         /// 0. We are left with calculating a*x = 1 in which case x
         /// must be the inverse of a.
+        /// @copydoc layer::invert(value_type, value_type) const
         value_type invert(value_type element) const
         {
             assert(element > 0);
@@ -112,6 +115,7 @@ namespace fifi
         }
 
         /// Specialization for the (2^32 - 5) prime field
+        /// @copydoc layer::add(value_type, value_type) const
         value_type add(value_type element_one, value_type element_two) const
         {
             element_one =
@@ -162,6 +166,7 @@ namespace fifi
         }
 
         /// Specialization for the (2^32 - 5) prime field
+        /// @copydoc layer::subtract(value_type, value_type) const
         value_type subtract(value_type element_one,
                             value_type element_two) const
         {

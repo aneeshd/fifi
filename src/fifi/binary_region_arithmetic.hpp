@@ -25,16 +25,16 @@ namespace fifi
     {
     public:
 
-        /// The field type
+        /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
 
     public:
 
-        /// @copydoc region_arithmetic::region_multiply_constant(value_type*,
-        ///              value_type, uint32_t)
+        /// @copydoc layer::region_multiply_constant(value_type*, value_type,
+        ///                                          uint32_t) const
         void region_multiply_constant(value_type* dest,
             value_type constant, uint32_t length) const
         {
@@ -48,8 +48,8 @@ namespace fifi
             }
         }
 
-        /// @copydoc region_arithmetic::region_multiply_add(value_type*,
-        ///              value_type*, value_type, uint32_t)
+        /// @copydoc layer::region_multiply_add(value_type*, value_type*,
+        ///                                     value_type, uint32_t) const
         void region_multiply_add(value_type* dest, const value_type* src,
                           value_type constant, uint32_t length) const
         {
@@ -68,8 +68,8 @@ namespace fifi
             }
         }
 
-        /// @copydoc region_arithmetic::region_multiply_subtract(value_type*,
-        ///              value_type*, value_type, uint32_t)
+        /// @copydoc layer::region_multiply_subtract(value_type*, value_type*,
+        ///                                          value_type, uint32_t) const
         void region_multiply_subtract(value_type* dest, const value_type* src,
             value_type constant, uint32_t length) const
         {

@@ -38,7 +38,7 @@ namespace fifi
 
     public:
 
-        /// @copydoc packed_arithmetic::packed_multiply()
+        /// @copydoc layer::packed_multiply(value_type, value_type) const
         value_type packed_multiply(value_type a, value_type b) const
         {
             value_type high = Super::multiply(a >> 4, b >> 4);
@@ -47,7 +47,7 @@ namespace fifi
             return (high << 4) | low;
         }
 
-        /// @copydoc packed_arithmetic::packed_divide()
+        /// @copydoc layer::packed_divide(value_type, value_type) const
         value_type packed_divide(value_type numerator,
                                  value_type denominator) const
         {
@@ -60,7 +60,7 @@ namespace fifi
             return (high << 4) | low;
         }
 
-        /// @copydoc packed_arithmetic::packed_invert()
+        /// @copydoc layer::packed_invert(value_type) const
         value_type packed_invert(value_type a) const
         {
             value_type high = Super::invert(a >> 4);
@@ -69,13 +69,13 @@ namespace fifi
             return (high << 4) | low;
         }
 
-        /// @copydoc packed_arithmetic::packed_add()
+        /// @copydoc layer::packed_add(value_type, value_type) const
         value_type packed_add(value_type a, value_type b) const
         {
             return a ^ b;
         }
 
-        /// @copydoc packed_arithmetic::packed_subtract()
+        /// @copydoc layer::packed_subtract(value_type, value_type) const
         value_type packed_subtract(value_type a, value_type b) const
         {
             // In the binary extension fields add and subtract are the same

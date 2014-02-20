@@ -21,6 +21,7 @@ namespace fifi
     /// and memory requirements. The default_field chosen for each
     /// field represents a corresponding implementation which is known
     /// to provide a good trade-off.
+
     template<class Field>
     struct default_field;
 

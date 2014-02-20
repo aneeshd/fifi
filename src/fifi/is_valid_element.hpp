@@ -11,7 +11,7 @@ namespace fifi
 {
     /// Checks whether a value is within the valid range of the chosen
     /// finite field
-    /// @param v The value from the finite field
+    /// @param v The value from the finite field to check if it is valid
     /// @return True if the element is within the valid range, false otherwise.
     template<class Field>
     inline typename
@@ -21,7 +21,7 @@ namespace fifi
         return v <= Field::max_value;
     }
 
-    /// @copydoc is_valid_element(typename Field::value_type v)
+    /// @copydoc is_valid_element(value_type)
     template<class Field>
     inline typename
     std::enable_if<Field::is_exact, bool>::type

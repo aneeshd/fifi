@@ -20,13 +20,13 @@ namespace fifi
     {
     public:
 
-        /// The field type used
+        /// @copydoc layer::field_type
         typedef Field field_type;
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename field_type::value_type value_type;
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::order_type
         typedef typename field_type::order_type order_type;
 
         /// Check for prime2325 field
@@ -36,7 +36,6 @@ namespace fifi
         /// Check for binary field
         static_assert(!std::is_same<binary, field_type>::value,
                       "This layer does not support the binary field");
-
     public:
 
         /// Constructor
@@ -66,7 +65,7 @@ namespace fifi
 
         }
 
-        /// @copydoc layer::multiply()
+        /// @copydoc layer::multiply(value_type, value_type) const
         value_type multiply(value_type a, value_type b) const
         {
             assert(is_valid_element<field_type>(a));
@@ -86,7 +85,7 @@ namespace fifi
             return m_antilog[sum];
         }
 
-        /// @copydoc layer::divide()
+        /// @copydoc layer::divide(value_type, value_type) const
         value_type divide(value_type numerator, value_type denominator) const
         {
             assert(is_valid_element<field_type>(numerator));
@@ -119,7 +118,7 @@ namespace fifi
             return m_antilog[sum];
         }
 
-        /// @copydoc layer::invert()
+        /// @copydoc layer::invert(value_type) const
         value_type invert(value_type a) const
         {
             assert(is_valid_element<field_type>(a));
