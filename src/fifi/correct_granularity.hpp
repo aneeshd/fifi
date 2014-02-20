@@ -39,13 +39,13 @@ namespace fifi
 
             if (optimizable_length != 0)
             {
-                Super::NamedSuper::region_multiply_constant(
+                Super::region_multiply_constant(
                     dest, constant, optimizable_length);
             }
 
             if (leftover_length != 0)
             {
-                Super::region_multiply_constant(
+                Super::NamedSuper::region_multiply_constant(
                     dest + optimizable_length, constant, leftover_length);
             }
         }

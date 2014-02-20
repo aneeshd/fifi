@@ -106,6 +106,7 @@ inline void check_results_random(
     }
 }
 
+#include <iostream>
 
 /// This function creates a random buffer of field elements to use for tests.
 ///
@@ -116,15 +117,26 @@ inline void check_results_random(
 /// contain zero or not.
 template<class Field>
 std::vector<typename Field::value_type>
-create_data(uint32_t alignment, uint32_t granularity,
-    bool no_zero = false)
+create_data(uint32_t requested_elements, uint32_t alignment,
+    uint32_t granularity, bool no_zero = false)
 {
-    (void)alignment;
-    (void)granularity;
-    uint32_t elements = 128;
+    std::cout << "alignment " << std::to_string(alignment) << std::endl;
+    std::cout << "granularity " << std::to_string(granularity) << std::endl;
+    std::cout << "requested_elements " << std::to_string(requested_elements) << std::endl;
+    // make sure the number of elements matches the granularity
+    uint32_t length = fifi::elements_to_length<Field>(requested_elements) /
+        granularity * granularity;
+
+    assert((length % granularity) == 0);
+
+    uint32_t elements = fifi::length_to_elements<Field>(length);
+
+    std::cout << "create elements " << std::to_string(elements) << std::endl;
+    std::cout << "create length " << std::to_string(length) << std::endl;
+
     typedef typename Field::value_type value_type;
 
-    std::vector<value_type> data(fifi::elements_to_length<Field>(elements));
+    std::vector<value_type> data(length);
     for (uint32_t i = 0; i < elements; ++i)
     {
         value_type v = rand() % Field::order;
@@ -156,7 +168,6 @@ create_data(uint32_t alignment, uint32_t granularity,
 /// to test
 /// @param reference_arithmetic The arithmetic function used to compute the
 /// reference results to test against
-/// @param elements The number of field elements in the region we will compute
 /// @param devision A boolean determining whether arithmetic functions are
 /// division. This is needed to prevent division by zero errors.
 template
@@ -178,32 +189,42 @@ inline void check_results_region_ptr_ptr(
     TestImpl test_stack;
     ReferenceImpl reference_stack;
 
-    uint32_t alignments = std::max(test_stack.max_alignment(), 10U);
-    uint32_t granularities = std::max(test_stack.max_granularity(), 10U);
+    // pick a random number of elementes between 128 and 128+256
+    uint32_t elements = 128 + rand() % 256;
+
+    uint32_t min_tests = 1U;
+
+    uint32_t alignments = std::max(test_stack.max_alignment(), min_tests);
+    uint32_t granularities = std::max(test_stack.max_granularity(), min_tests);
 
     for (uint32_t alignment = test_stack.alignment();
-        alignment < alignments;
+        alignment <= alignments;
         alignment += test_stack.alignment())
     {
         for (uint32_t granularity = test_stack.granularity();
-            granularity < granularities;
+            granularity <= granularities;
             granularity += test_stack.granularity())
         {
-            auto data = create_data<test_field>(granularity, alignment);
-            auto src = create_data<test_field>(granularity, alignment,
+            SCOPED_TRACE(testing::Message() << "alignment: " << alignment);
+            SCOPED_TRACE(testing::Message() << "granularity: " << granularity);
+            auto data = create_data<test_field>(elements, granularity,
+                alignment);
+            auto src = create_data<test_field>(elements, granularity, alignment,
                 division);
+
+            uint32_t length = data.size();
+
+            std::cout << "length " << std::to_string(length) << std::endl;
 
             // Create buffer and created the expected results using the reference
             // arithmetics
             auto test_data = data;
             auto reference_data = data;
 
-            uint32_t length = fifi::elements_to_length<test_field>(128);
-
             // Perform the calculations using the region arithmetics
             test_arithmetic(test_stack, test_data.data(), src.data(), length);
-            reference_arithmetic(reference_stack, reference_data.data(), src.data(),
-                length);
+            reference_arithmetic(reference_stack, reference_data.data(),
+                src.data(), length);
 
             EXPECT_EQ(reference_data, test_data);
         }
@@ -227,7 +248,6 @@ inline void check_results_region_ptr_ptr(
 /// to test
 /// @param reference_arithmetic The arithmetic function used to compute the
 /// reference results to test against
-/// @param elements The number of field elements in the region we will compute
 template
 <
     class TestImpl, class ReferenceImpl,
@@ -246,36 +266,49 @@ inline void check_results_region_ptr_const(
     TestImpl test_stack;
     ReferenceImpl reference_stack;
 
-    uint32_t tests = 10;
+    // pick a random number of elementes between 128 and 128+256
+    uint32_t elements = 128 + rand() % 256;
 
-    for (uint32_t i = 0; i < tests; ++i)
+    uint32_t min_tests = 1U;
+
+    uint32_t alignments = std::max(test_stack.max_alignment(), min_tests);
+    uint32_t granularities = std::max(test_stack.max_granularity(), min_tests);
+
+    for (uint32_t alignment = test_stack.alignment();
+        alignment <= alignments;
+        alignment += test_stack.alignment())
     {
-        uint32_t alignment = i;
-        uint32_t granularity = i;
-
-        auto data = create_data<test_field>(alignment, granularity);
-
-        uint32_t length = fifi::elements_to_length<test_field>(128);
-
-        // We repeat the test a number of times with different constants
-        uint32_t constants = 10;
-
-        for (uint32_t j = 0; j < constants; ++j)
+        for (uint32_t granularity = test_stack.granularity();
+            granularity <= granularities;
+            granularity += test_stack.granularity())
         {
-            // Get the constant to multiply with
-            auto constant = fifi::pack<test_field>(rand() % test_field::order);
-            SCOPED_TRACE(testing::Message() << "constant: " << constant);
+            SCOPED_TRACE(testing::Message() << "alignment: " << alignment);
+            SCOPED_TRACE(testing::Message() << "granularity: " << granularity);
+            auto data = create_data<test_field>(elements, alignment,
+                granularity);
 
-            // Create buffer and created the expected results using the reference
-            // arithmetics
-            auto test_data = data;
-            auto reference_data = data;
-            // Perform the calculations using the region arithmetics
-            test_arithmetic(test_stack, test_data.data(), constant, length);
-            reference_arithmetic(reference_stack, reference_data.data(), constant,
-                length);
+            uint32_t length = data.size();
 
-            EXPECT_EQ(reference_data, test_data);
+            // We repeat the test a number of times with different constants
+            uint32_t constants = 10;
+
+            for (uint32_t j = 0; j < constants; ++j)
+            {
+                // Get the constant to multiply with
+                auto constant = fifi::pack<test_field>(rand() % test_field::order);
+                SCOPED_TRACE(testing::Message() << "constant: " << constant);
+
+                // Create buffer and created the expected results using the reference
+                // arithmetics
+                auto test_data = data;
+                auto reference_data = data;
+                // Perform the calculations using the region arithmetics
+                test_arithmetic(test_stack, test_data.data(), constant, length);
+                reference_arithmetic(reference_stack, reference_data.data(), constant,
+                    length);
+
+                EXPECT_EQ(reference_data, test_data);
+            }
         }
     }
 }
@@ -297,7 +330,6 @@ inline void check_results_region_ptr_const(
 /// to test
 /// @param reference_arithmetic The arithmetic function used to compute the
 /// reference results to test against
-/// @param elements The number of field elements in the region we will compute
 template
 <
     class TestImpl, class ReferenceImpl,
@@ -316,38 +348,53 @@ inline void check_results_region_ptr_ptr_const(
     TestImpl test_stack;
     ReferenceImpl reference_stack;
 
-    uint32_t tests = 10;
+    // pick a random number of elementes between 128 and 128+256
+    uint32_t elements = 128 + rand() % 256;
 
-    for (uint32_t i = 0; i < tests; ++i)
+    uint32_t min_tests = 1U;
+
+    uint32_t alignments = std::max(test_stack.max_alignment(), min_tests);
+    uint32_t granularities = std::max(test_stack.max_granularity(), min_tests);
+
+    for (uint32_t alignment = test_stack.alignment();
+        alignment <= alignments;
+        alignment += test_stack.alignment())
     {
-        uint32_t alignment = i;
-        uint32_t granularity = i;
-
-        auto data = create_data<test_field>(alignment, granularity);
-        auto src = create_data<test_field>(alignment, granularity);
-
-        uint32_t length = fifi::elements_to_length<test_field>(128);
-
-        // We repeat the test a number of times with different constants
-        uint32_t constants = 10;
-
-        for (uint32_t j = 0; j < constants; ++j)
+        for (uint32_t granularity = test_stack.granularity();
+            granularity <= granularities;
+            granularity += test_stack.granularity())
         {
-            // Get the constant to multiply with
-            auto constant = fifi::pack<test_field>(rand() % test_field::order);
-            SCOPED_TRACE(testing::Message() << "constant: " << constant);
+            SCOPED_TRACE(testing::Message() << "alignment: " << alignment);
+            SCOPED_TRACE(testing::Message() << "granularity: " << granularity);
 
-            // Create buffer and created the expected results using the reference
-            // arithmetics
-            auto test_data = data;
-            auto reference_data = data;
-            // Perform the calculations using the region arithmetics
-            test_arithmetic(test_stack, test_data.data(), src.data(), constant,
-                length);
-            reference_arithmetic(reference_stack, reference_data.data(), src.data(),
-                constant, length);
+            auto data = create_data<test_field>(elements, alignment,
+                granularity);
+            auto src = create_data<test_field>(elements, alignment,
+                granularity);
 
-            EXPECT_EQ(reference_data, test_data);
+            uint32_t length = data.size();
+
+            // We repeat the test a number of times with different constants
+            uint32_t constants = 10;
+
+            for (uint32_t j = 0; j < constants; ++j)
+            {
+                // Get the constant to multiply with
+                auto constant = fifi::pack<test_field>(rand() % test_field::order);
+                SCOPED_TRACE(testing::Message() << "constant: " << constant);
+
+                // Create buffer and created the expected results using the reference
+                // arithmetics
+                auto test_data = data;
+                auto reference_data = data;
+                // Perform the calculations using the region arithmetics
+                test_arithmetic(test_stack, test_data.data(), src.data(), constant,
+                    length);
+                reference_arithmetic(reference_stack, reference_data.data(), src.data(),
+                    constant, length);
+
+                EXPECT_EQ(reference_data, test_data);
+            }
         }
     }
 }

@@ -9,6 +9,7 @@
 #include <fifi/binary8.hpp>
 #include <fifi/prime2325.hpp>
 #include <fifi/region_arithmetic.hpp>
+#include <fifi/region_info.hpp>
 
 #include <gtest/gtest.h>
 
@@ -23,8 +24,9 @@ namespace fifi
         template<class Field>
         struct dummy_stack : public
         region_arithmetic<
+        region_info<
         helper_region_fall_through<Field,
-        helper_catch_all<Field> > >
+        helper_catch_all<Field> > > >
         { };
     }
 }

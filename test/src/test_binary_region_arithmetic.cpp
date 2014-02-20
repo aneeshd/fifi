@@ -15,6 +15,7 @@
 #include <fifi/polynomial_degree.hpp>
 #include <fifi/prime2325.hpp>
 #include <fifi/region_arithmetic.hpp>
+#include <fifi/region_info.hpp>
 #include <fifi/simple_online_arithmetic.hpp>
 
 #include <gtest/gtest.h>
@@ -41,12 +42,13 @@ namespace fifi
         struct dummy_stack : public
         binary_region_arithmetic<Field,
         region_arithmetic<
+        region_info<
         binary_packed_arithmetic<Field,
         packed_arithmetic<
         binary_simple_online_arithmetic<Field,
         simple_online_arithmetic<
         polynomial_degree<
-        final<Field> > > > > > > >
+        final<Field> > > > > > > > >
         { };
     }
 }
