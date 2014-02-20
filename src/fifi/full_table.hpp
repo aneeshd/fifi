@@ -29,7 +29,7 @@ namespace fifi
     class full_table :
         public correct_alignment<
                correct_granularity<
-               region_dispatcher<Field, ssse3_binary4_full_table, binary4,
+               helper_region<ssse3_binary4_full_table,
                name_super<
                binary8_region_arithmetic_full_table<Field,
                region_arithmetic<

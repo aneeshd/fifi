@@ -15,6 +15,8 @@
 namespace fifi
 {
 
+
+
     /// Fall through for other fields
     template<class Field, class Stack, class StackField, class Super>
     class region_dispatcher : public Super
@@ -224,4 +226,14 @@ namespace fifi
             m_region_multiply_constant;
 
     };
+
+    template<class Stack, class Super>
+    class helper_region :
+        public region_dispatcher<typename Super::field_type,
+        Stack,
+        typename Stack::field_type,
+        Super>
+    { };
+
+
 }
