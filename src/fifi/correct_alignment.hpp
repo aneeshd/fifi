@@ -37,13 +37,13 @@ namespace fifi
 
             if (aligned_start != 0)
             {
-                Super::NamedSuper::region_multiply_constant(
+                Super::region_multiply_constant(
                     dest, constant, aligned_start);
             }
 
             if (aligned_length != 0)
             {
-                Super::region_multiply_constant(
+                Super::NamedSuper::region_multiply_constant(
                     dest + aligned_start, constant, aligned_length);
             }
         }
