@@ -20,17 +20,18 @@ namespace fifi
 
         typedef typename Field::value_type value_type;
 
-        test_buffer(uint32_t elements, uint32_t alignment, bool no_zero = false) :
+        helper_test_buffer(uint32_t elements, uint32_t alignment, bool no_zero = false) :
             m_elements(elements),
             m_alignment(alignment)
         {
-            uint32_t length = fifi::elements_to_length(m_elements) + m_alignment;
+            uint32_t length = elements_to_length<Field>(m_elements) +
+                m_alignment;
 
             m_data(length);
 
             for(uint32_t i = 0; i < m_alignment; i++)
             {
-                if((((uintptr_t) &m_data[i]) % m_alignment)) == 0))
+                if(((((uintptr_t) &m_data[i]) % m_alignment)) == 0)
                 {
                     m_offset = i;
                     break;
@@ -54,7 +55,7 @@ namespace fifi
             return m_data.data() + m_alignment;
         }
 
-        test_buffer& test_buffer::operator=(const test_buffer &other)
+        helper_test_buffer& operator=(const helper_test_buffer &other)
         {
             if (this != &other) // protect against invalid self-assignment
                 return *this;
@@ -62,13 +63,14 @@ namespace fifi
             m_elements = other.m_elements;
             m_alignment = other.m_alignment;
 
-            uint32_t length = fifi::elements_to_length(m_elements) + m_alignment;
+            uint32_t length = elements_to_length<Field>(m_elements) +
+                m_alignment;
 
             m_data(length);
 
             for(uint32_t i = 0; i < m_alignment; i++)
             {
-                if((((uintptr_t) &m_data[i]) % m_alignment)) == 0))
+                if(((((uintptr_t) &m_data[i]) % m_alignment)) == 0)
                 {
                     m_offset = i;
                     break;
@@ -77,8 +79,7 @@ namespace fifi
 
             for (int i = 0; i < m_elements; ++i)
             {
-                fifi::set_value<Field>(data(), i,
-                    fifi::get_data<Field>(other.data(), i));
+                set_value<Field>(data(), i, get_value<Field>(other.data(), i));
             }
 
             return *this;
