@@ -46,6 +46,25 @@ namespace fifi
             }
         }
 
+        helper_test_buffer(const helper_test_buffer &other) :
+            m_length(other.m_length),
+            m_alignment(other.m_alignment),
+            m_offset(0)
+        {
+            uint32_t elements = length_to_elements<Field>(m_length);
+            init_data(elements);
+
+            for (int i = 0; i < elements; ++i)
+            {
+                set_value<Field>(data(), i, get_value<Field>(other.data(), i));
+            }
+        }
+
+        const value_type* data() const
+        {
+            return (value_type*)((uint8_t*)m_data.data() + m_offset);
+        }
+
         value_type* data()
         {
             return (value_type*)((uint8_t*)m_data.data() + m_offset);
