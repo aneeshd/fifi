@@ -10,9 +10,6 @@
 
 #include <fifi/fifi_utils.hpp>
 
-#include <iostream>
-#include <string>
-
 namespace fifi
 {
     template<class Field>
@@ -28,8 +25,7 @@ namespace fifi
             m_alignment(alignment),
             m_offset(0)
         {
-            std::cout << "  constructor" << std::endl;
-             // Make sure that the alignment is a multiple of element size
+            // Make sure that the alignment is a multiple of element size
             assert((m_alignment % sizeof(value_type)) == 0);
             assert(m_length != 0);
 
@@ -55,7 +51,6 @@ namespace fifi
 
         helper_test_buffer& operator=(const helper_test_buffer &other)
         {
-            std::cout << "  operator=" << std::endl;
             if (this != &other) // protect against invalid self-assignment
                 return *this;
 
@@ -100,8 +95,6 @@ namespace fifi
 
             while (((uintptr_t)data() % m_alignment) != 0)
             {
-                std::cout << "   " << std::to_string((uintptr_t)data()) << " mod " << std::to_string(m_alignment) << std::endl;
-                std::cout << "   m_offset " << std::to_string(m_offset) << std::endl;
                 m_offset++;
             }
         }

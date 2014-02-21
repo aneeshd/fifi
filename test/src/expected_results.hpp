@@ -107,9 +107,6 @@ inline void check_results_random(
     }
 }
 
-#include <iostream>
-#include <string>
-
 /// This function creates a random buffer of field elements to use for tests.
 ///
 /// @tparam Field The field elements to create.
@@ -121,7 +118,6 @@ template<class Field>
 fifi::helper_test_buffer<Field> create_data(uint32_t requested_elements,
     uint32_t alignment, uint32_t granularity, bool no_zero = false)
 {
-    std::cout << " " << std::to_string(alignment) << " mod " << std::to_string(sizeof(typename Field::value_type)) << " = "<< std::to_string((alignment % sizeof(typename Field::value_type)) == 0) << std::endl;
     assert((alignment % sizeof(typename Field::value_type)) == 0);
     // make sure the number of elements matches the granularity
     uint32_t length = fifi::elements_to_length<Field>(requested_elements) /
@@ -163,7 +159,6 @@ inline void check_results_region_ptr_ptr(
     ReferenceFunction reference_arithmetic,
     bool division = false)
 {
-    std::cout << "check_results_region_ptr_ptr" << std::endl;
     typedef typename TestImpl::field_type test_field;
     typedef typename ReferenceImpl::field_type reference_field;
 
@@ -185,7 +180,6 @@ inline void check_results_region_ptr_ptr(
         alignment += TestImpl::alignment())
     {
         assert((alignment % sizeof(typename test_field::value_type)) == 0);
-        std::cout << std::to_string(alignment) << " mod " << std::to_string(sizeof(typename test_field::value_type)) << " = "<< std::to_string((alignment % sizeof(typename test_field::value_type)) == 0) << std::endl;
         for (uint32_t granularity = TestImpl::granularity();
             granularity <= granularities;
             granularity += TestImpl::granularity())
@@ -240,7 +234,6 @@ inline void check_results_region_ptr_const(
     TestFunction test_arithmetic,
     ReferenceFunction reference_arithmetic)
 {
-    std::cout << "check_results_region_ptr_const" << std::endl;
     typedef typename TestImpl::field_type test_field;
     typedef typename ReferenceImpl::field_type reference_field;
 
@@ -262,7 +255,6 @@ inline void check_results_region_ptr_const(
         alignment += TestImpl::alignment())
     {
         assert((alignment % sizeof(typename test_field::value_type)) == 0);
-        std::cout << std::to_string(alignment) << " mod " << std::to_string(sizeof(typename test_field::value_type)) << " = "<< std::to_string((alignment % sizeof(typename test_field::value_type)) == 0) << std::endl;
         for (uint32_t granularity = TestImpl::granularity();
             granularity <= granularities;
             granularity += TestImpl::granularity())
@@ -324,7 +316,6 @@ inline void check_results_region_ptr_ptr_const(
     TestFunction test_arithmetic,
     ReferenceFunction reference_arithmetic)
 {
-    std::cout << "check_results_region_ptr_ptr_const" << std::endl;
     typedef typename TestImpl::field_type test_field;
     typedef typename ReferenceImpl::field_type reference_field;
 
@@ -346,7 +337,6 @@ inline void check_results_region_ptr_ptr_const(
         alignment += TestImpl::alignment())
     {
         assert((alignment % sizeof(typename test_field::value_type)) == 0);
-        std::cout << std::to_string(alignment) << " mod " << std::to_string(sizeof(typename test_field::value_type)) << " = "<< std::to_string((alignment % sizeof(typename test_field::value_type)) == 0) << std::endl;
         for (uint32_t granularity = TestImpl::granularity();
             granularity <= granularities;
             granularity += TestImpl::granularity())
