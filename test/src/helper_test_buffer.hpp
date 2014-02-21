@@ -10,6 +10,8 @@
 
 #include <fifi/fifi_utils.hpp>
 
+#include <iostream>
+
 namespace fifi
 {
     template<class Field>
@@ -97,6 +99,8 @@ namespace fifi
             {
                 m_offset++;
             }
+
+            std::cout << m_alignment << "\t" << (uintptr_t)data() << std::endl;
         }
 
     private:

@@ -18,6 +18,8 @@
     #include <x86intrin.h>
 #endif
 
+#include <iostream>
+
 namespace fifi
 {
 
@@ -47,6 +49,7 @@ namespace fifi
         value_type* dest, value_type constant, uint32_t length) const
     {
         assert(dest != 0);
+        std::cout << ">> " << alignment() << "\t" << (uintptr_t)dest << std::endl;
         assert(((uintptr_t) dest % alignment()) == 0);
         assert(length > 0);
         assert((length % granularity()) == 0);

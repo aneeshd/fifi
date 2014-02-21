@@ -34,14 +34,7 @@
 
 TEST(TestSSSE3Binary4FullTable, region_multiply_constant)
 {
-    cpuid::cpuinfo info;
-
-    if(!info.has_ssse3())
-        return;
-
-    fifi::ssse3_binary4_full_table impl;
-
-    if(impl.enabled())
+    if(fifi::ssse3_binary4_full_table::enabled())
     {
         check_results_region_multiply_constant<
             fifi::ssse3_binary4_full_table>();

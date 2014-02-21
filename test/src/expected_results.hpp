@@ -208,6 +208,8 @@ inline void check_results_region_ptr_ptr(
     }
 }
 
+#include <iostream>
+
 /// This function checks whether the region arithmetics for the
 /// "dest[i] = dest[i] _OPERATION_ constant" function works. Where
 /// _OPERATION_ is multiplication.
@@ -259,6 +261,7 @@ inline void check_results_region_ptr_const(
             granularity <= granularities;
             granularity += TestImpl::granularity())
         {
+            std::cout << "TEST " << std::endl;
             SCOPED_TRACE(testing::Message() << "alignment: " << alignment);
             SCOPED_TRACE(testing::Message() << "granularity: " << granularity);
             auto data = create_data<test_field>(elements, alignment,
