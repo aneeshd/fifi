@@ -120,18 +120,13 @@ template<class Field>
 fifi::helper_test_buffer<Field> create_data(uint32_t requested_elements,
     uint32_t alignment, uint32_t granularity, bool no_zero = false)
 {
-    std::cout << "alignment " << std::to_string(alignment) << std::endl;
-    std::cout << "granularity " << std::to_string(granularity) << std::endl;
-    std::cout << "requested_elements " << std::to_string(requested_elements) << std::endl;
-
     // make sure the number of elements matches the granularity
     uint32_t length = fifi::elements_to_length<Field>(requested_elements) /
         granularity * granularity;
 
     assert((length % granularity) == 0);
 
-    fifi::helper_test_buffer<Field> data(length, alignment,
-        no_zero);
+    fifi::helper_test_buffer<Field> data(length, no_zero);
     return data;
 }
 

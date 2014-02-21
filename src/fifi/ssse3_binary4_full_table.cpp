@@ -3,9 +3,6 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <iostream>
-#include <string>
-
 #include <cpuid/config.hpp>
 #include <cpuid/cpuinfo.hpp>
 
@@ -52,8 +49,6 @@ namespace fifi
         assert(dest != 0);
         assert(((uintptr_t) dest % alignment()) == 0);
         assert(length > 0);
-        std::cout << " length " << std::to_string(length) << " granularity " << std::to_string(granularity()) << std::endl;
-        std::cout << "length mod granularity() " << std::to_string(length % granularity()) << std::endl;
         assert((length % granularity()) == 0);
         // assert(alignment)
 
