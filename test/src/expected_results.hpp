@@ -261,7 +261,6 @@ inline void check_results_region_ptr_const(
             granularity <= granularities;
             granularity += TestImpl::granularity())
         {
-            std::cout << "TEST " << std::endl;
             SCOPED_TRACE(testing::Message() << "alignment: " << alignment);
             SCOPED_TRACE(testing::Message() << "granularity: " << granularity);
             auto data = create_data<test_field>(elements, alignment,
@@ -280,11 +279,9 @@ inline void check_results_region_ptr_const(
 
                 // Create buffer and created the expected results using the reference
                 // arithmetics
-                std::cout << "d\t" << (uintptr_t)data.data() << std::endl;
                 auto test_data = data;
-                std::cout << "t\t" << (uintptr_t)test_data.data() << std::endl;
                 auto reference_data = data;
-                std::cout << "r\t" << (uintptr_t)reference_data.data() << std::endl;
+
                 // Perform the calculations using the region arithmetics
                 test_arithmetic(test_stack, test_data.data(), constant, length);
                 reference_arithmetic(reference_stack, reference_data.data(), constant,

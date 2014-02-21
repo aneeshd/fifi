@@ -91,7 +91,14 @@ namespace fifi
 
         bool operator==(const helper_test_buffer &other) const
         {
-            (void)other;
+            if(m_length != other.m_length)
+                return false;
+
+            for (uint32_t i = 0; i < m_length; ++i)
+            {
+                if (data()[i] != other.data()[i])
+                    return false;
+            }
             return true;
         }
 
@@ -118,8 +125,6 @@ namespace fifi
             {
                 m_offset++;
             }
-
-            std::cout << m_alignment << "\t" << (uintptr_t)data() << std::endl;
         }
 
     private:
@@ -129,4 +134,20 @@ namespace fifi
         std::vector<value_type> m_data;
         uint32_t m_offset;
     };
+
+    template<class Field>
+    std::ostream& operator<<(std::ostream& os,
+        const helper_test_buffer<Field>& buffer)
+    {
+        os << "[";
+        for (uint32_t i = 0; i < buffer.length(); ++i)
+        {
+            os << (int)buffer.data()[i];
+            if(i < buffer.length())
+                os  << ", ";
+        }
+        os << "]";
+
+        return os;
+    }
 }
