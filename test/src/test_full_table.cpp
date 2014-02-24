@@ -32,12 +32,12 @@ TEST(TestFullTable, packed_binary8)
 {
     fifi::check_packed_all<fifi::full_table<fifi::binary8>>();
 }
-
+/*
 TEST(TestFullTable, region_binary4)
 {
     fifi::check_region_all<fifi::full_table<fifi::binary4>>();
 }
-
+*/
 TEST(TestFullTable, region_binary8)
 {
     fifi::check_region_all<fifi::full_table<fifi::binary8>>();

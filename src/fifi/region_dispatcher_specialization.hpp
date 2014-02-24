@@ -31,7 +31,7 @@ namespace fifi
 
 
     template<class Stack>
-    auto bind_region_multiply(const Stack* stack) -> decltype(
+    auto bind_region_multiply_constant(const Stack* stack) -> decltype(
         std::bind(&Stack::region_multiply_constant,
                   stack,
                   std::placeholders::_1,
@@ -92,14 +92,15 @@ namespace fifi
             if(Stack::enabled())
             {
                 m_add = bind_region_add(&m_stack);
-                m_multiply_constant = bind_region_multiply(&m_stack);
+                m_multiply_constant = bind_region_multiply_constant(&m_stack);
                 m_multiply_add = bind_region_multiply_add(&m_stack);
             }
             else
             {
-                m_add = bind_region_add(this);
-                m_multiply_constant = bind_region_multiply(this);
-                m_multiply_add = bind_region_multiply_add(this);
+                Super* stack = this;
+                m_add = bind_region_add(stack);
+                m_multiply_constant = bind_region_multiply_constant(stack);
+                m_multiply_add = bind_region_multiply_add(stack);
             }
         }
 
@@ -194,6 +195,7 @@ namespace fifi
 
             m_multiply_subtract(dest, src, constant, length);
         }
+        */
 
         /// @copydoc static layer::alignment()
         static uint32_t alignment()
@@ -255,7 +257,6 @@ namespace fifi
         {
             return Stack::enabled();
         }
-        */
 
     private:
 
