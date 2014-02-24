@@ -62,8 +62,8 @@ namespace fifi
         __m128i table2 = _mm_load_si128(
             (const __m128i*)(&m_table_two[0] + (constant * 16)));
 
-        __m128i mask1 = _mm_set1_epi8(0x0f);
-        __m128i mask2 = _mm_set1_epi8(0xf0);
+        __m128i mask1 = _mm_set1_epi8((char)0x0f);
+        __m128i mask2 = _mm_set1_epi8((char)0xf0);
 
         for (uint32_t i = 0; i < ssse3_size; ++i)
         {

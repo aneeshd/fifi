@@ -54,7 +54,7 @@ namespace fifi
             uint32_t elements = length_to_elements<Field>(m_length);
             init_data(elements);
 
-            for (int i = 0; i < elements; ++i)
+            for (uint32_t i = 0; i < elements; ++i)
             {
                 set_value<Field>(data(), i, get_value<Field>(other.data(), i));
             }
