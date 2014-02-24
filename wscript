@@ -84,6 +84,27 @@ def configure(conf):
         recurse_helper(conf, 'tables')
         recurse_helper(conf, 'cpuid')
 
+    set_simd_flags(conf)
+
+def set_simd_flags(conf):
+    """
+    Sets flags used to compile in SIMD mode
+    """
+    CXX = conf.env.get_flat("CXX")
+    flags = []
+
+    # Matches both /usr/bin/g++ and /user/bin/clang++
+    if 'g++' in CXX or 'clang' in CXX:
+        flags += conf.mkspec_try_flags('cxxflags', ['-mssse3'])
+
+    elif 'CL.exe' in CXX or 'cl.exe' in CXX:
+        pass
+
+    else:
+        conf.fatal('Unknown compiler - no SIMD flags specified')
+
+    conf.env['CFLAGS_FIFI_SIMD'] = flags
+    conf.env['CXXFLAGS_FIFI_SIMD'] = flags
 
 def build(bld):
 
@@ -94,7 +115,6 @@ def build(bld):
     if bld.is_toplevel():
 
         bld.load('wurf_dependency_bundle')
-
 
         recurse_helper(bld, 'boost')
         recurse_helper(bld, 'gtest')

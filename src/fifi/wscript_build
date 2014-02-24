@@ -2,42 +2,15 @@
 # encoding: utf-8
 
 
-from os.path import abspath
-
-# Guard by compiler and dest cpu
-
-cpu = bld.env['DEST_CPU']
-os = bld.env['MKSPEC_PLATFORM']
-
-ssse3_flags = []
-
-if os == 'linux':
-
-    if cpu == 'x86' or cpu == 'x86_64':
-        ssse3_flags = ['-mssse3']
-
-
-optimized_sources = {'ssse3_binary4_full_table': ssse3_flags}
-
-for source, flags in optimized_sources.items():
-    bld.objects(source= source + '.cpp',
-                target='ssse3_binary4_full_table',
-                cxxflags = flags,
-                use = ['sak_includes', 'cpuid'])
-
-
-source_files = bld.path.ant_glob(
-    '**/*.cpp', excl=[s + '.cpp' for s in optimized_sources.keys()])
-
 bld.stlib(features = 'cxx',
-          source   = source_files,
+          source   = bld.path.ant_glob('**/*.cpp'),
           target = 'fifi',
-          use    = ['boost_includes', 'sak_includes', 'sak',
-                    'cpuid'] + list(optimized_sources.keys()),
+          use    = ['FIFI_SIMD',
+                    'boost_includes', 'sak_includes', 'sak', 'cpuid'],
           export_includes = ['..'])
 
 
-# We want to make sure we can still build the library without any specific
+# We want to make sure we can still build the library without any specific flags
 bld.stlib(features = 'cxx',
           source   = bld.path.ant_glob('**/*.cpp'),
           target = 'fifi_no_dispatch',
