@@ -12,9 +12,8 @@ namespace fifi
     /// Helper class for easing the use of region_dispatcher_specialization.
     template<class Stack, class Super>
     class region_dispatcher :
-        public region_dispatcher_specialization<typename Super::field_type,
-        Stack,
-        typename Stack::field_type,
-        Super>
+        public region_dispatcher_specialization<
+            typename Super::field_type, Stack,
+            typename Stack::field_type, Super>
     { };
 }

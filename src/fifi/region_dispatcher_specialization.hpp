@@ -14,6 +14,56 @@
 
 namespace fifi
 {
+    template<class Stack>
+    auto bind_region_add(const Stack* stack) -> decltype(
+        std::bind(&Stack::region_add,
+                  stack,
+                  std::placeholders::_1,
+                  std::placeholders::_2,
+                  std::placeholders::_3))
+    {
+        return std::bind(&Stack::region_add,
+                         stack,
+                         std::placeholders::_1,
+                         std::placeholders::_2,
+                         std::placeholders::_3);
+    }
+
+
+    template<class Stack>
+    auto bind_region_multiply(const Stack* stack) -> decltype(
+        std::bind(&Stack::region_multiply_constant,
+                  stack,
+                  std::placeholders::_1,
+                  std::placeholders::_2,
+                  std::placeholders::_3))
+    {
+        return std::bind(&Stack::region_multiply_constant,
+                         stack,
+                         std::placeholders::_1,
+                         std::placeholders::_2,
+                         std::placeholders::_3);
+    }
+
+    template<class Stack>
+    auto bind_region_multiply_add(const Stack* stack) -> decltype(
+        std::bind(&Stack::region_multiply_add,
+                  stack,
+                  std::placeholders::_1,
+                  std::placeholders::_2,
+                  std::placeholders::_3,
+                  std::placeholders::_4))
+    {
+        return std::bind(&Stack::region_multiply_add,
+                         stack,
+                         std::placeholders::_1,
+                         std::placeholders::_2,
+                         std::placeholders::_3,
+                         std::placeholders::_4);
+    }
+
+
+
     /// This class is not to be used in the stacks. Instead use the helper class
     /// region_dispatcher.
 
@@ -24,7 +74,8 @@ namespace fifi
 
     /// Dispatcher for the region arithmetics
     template<class Field, class Stack, class Super>
-    class region_dispatcher_specialization<Field, Stack, Field, Super> : public Super
+    class region_dispatcher_specialization<Field, Stack, Field, Super>
+        : public Super
     {
     public:
 
@@ -40,109 +91,19 @@ namespace fifi
         {
             if(Stack::enabled())
             {
-                /*
-                m_add = std::bind(
-                    &Stack::region_add,
-                    &m_stack,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3);
-                m_subtract = std::bind(
-                    &Stack::region_subtract,
-                    &m_stack,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3);
-                m_multiply = std::bind(
-                    &Stack::region_multiply,
-                    &m_stack,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3);
-                m_divide = std::bind(
-                    &Stack::region_divide,
-                    &m_stack,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3);
-                */
-                m_multiply_constant = std::bind(
-                    &Stack::region_multiply_constant,
-                    &m_stack,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3);
-                /*
-                m_multiply_add = std::bind(
-                    &Stack::region_multiply_add,
-                    &m_stack,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3,
-                    std::placeholders::_4);
-                m_multiply_subtract = std::bind(
-                    &Stack::region_multiply_subtract,
-                    &m_stack,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3,
-                    std::placeholders::_4);
-                */
+                m_add = bind_region_add(&m_stack);
+                m_multiply_constant = bind_region_multiply(&m_stack);
+                m_multiply_add = bind_region_multiply_add(&m_stack);
             }
             else
             {
-                /*
-                m_add = std::bind(
-                    &Super::region_add,
-                    (Super*)this,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3);
-                m_subtract = std::bind(
-                    &Super::region_subtract,
-                    (Super*)this,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3);
-                m_multiply = std::bind(
-                    &Super::region_multiply,
-                    (Super*)this,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3);
-                m_divide = std::bind(
-                    &Super::region_divide,
-                    (Super*)this,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3);
-                */
-                m_multiply_constant = std::bind(
-                    &Super::region_multiply_constant,
-                    (Super*)this,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3);
-                /*
-                m_multiply_add = std::bind(
-                    &Super::region_multiply_add,
-                    (Super*)this,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3,
-                    std::placeholders::_4);
-                m_multiply_subtract = std::bind(
-                    &Super::region_multiply_subtract,
-                    (Super*)this,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3,
-                    std::placeholders::_4);
-                */
+                m_add = bind_region_add(this);
+                m_multiply_constant = bind_region_multiply(this);
+                m_multiply_add = bind_region_multiply_add(this);
             }
         }
 
-        /*
+
         /// @copydoc layer::region_add(value_type*, const value_type*,
         ///                            uint32_t) const
         void region_add(value_type* dest, const value_type* src,
@@ -155,6 +116,7 @@ namespace fifi
             m_add(dest, src, length);
         }
 
+        /*
         /// @copydoc layer::region_subtract(value_type*, const value_type*,
         ///                                 uint32_t) const
         void region_subtract(value_type* dest, const value_type* src,
@@ -204,7 +166,7 @@ namespace fifi
 
             m_multiply_constant(dest, constant, length);
         }
-        /*
+
         /// @copydoc layer::region_multiply_add(value_type*, const value_type*,
         ///                                     value_type, uint32_t) const
         void region_multiply_add(value_type* dest, const value_type* src,
@@ -218,6 +180,7 @@ namespace fifi
             m_multiply_add(dest, src, constant, length);
         }
 
+        /*
         /// @copydoc layer::region_multiply_subtract(value_type*,
         ///                                          const value_type*,
         ///                                          value_type, uint32_t) const
@@ -298,10 +261,12 @@ namespace fifi
 
         /// The stack to use for dispatching
         Stack m_stack;
-        /*
-        /// Store the function to invoke when calling region_add
-        std::function<void (value_type*, value_type*, uint32_t)> m_add;
 
+        /// Store the function to invoke when calling region_add
+        // typedef decltype(bind_region_add((Stack*)0)) add_type;
+        // add_type m_add;
+        std::function<void (value_type*, const value_type*, uint32_t)> m_add;
+        /*
         /// Store the function to invoke when calling region_subtract
         std::function<void (value_type*, value_type*, uint32_t)> m_subtract;
 
@@ -314,14 +279,14 @@ namespace fifi
         /// Store the function to invoke when calling region_multiply_constant
         std::function<void (value_type*, value_type, uint32_t)>
             m_multiply_constant;
-        /*
+
         /// Store the function to invoke when calling region_multiply_add
-        std::function<void (value_type*, value_type*, value_type, uint32_t)>
+        std::function<void (value_type*, const value_type*, value_type, uint32_t)>
             m_multiply_add;
 
         /// Store the function to invoke when calling region_multiply_subtract
-        std::function<void (value_type*, value_type*, value_type, uint32_t)>
-            m_multiply_subtract;
-        */
+        // std::function<void (value_type*, value_type*, value_type, uint32_t)>
+        //     m_multiply_subtract;
+
     };
 }
