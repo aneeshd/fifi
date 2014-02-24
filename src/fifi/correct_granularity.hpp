@@ -25,6 +25,33 @@ namespace fifi
         /// Typedef of the data type used for each field element
         typedef typename Super::value_type value_type;
 
+        void region_add(value_type* dest, value_type* src,
+            uint32_t length) const
+        {
+            assert(dest != 0);
+            assert(src != 0);
+            assert(length > 0);
+            // check alignment
+            assert((uintptr_t)dest % Super::alignment() == 0);
+            assert((uintptr_t)src % Super::alignment() == 0);
+
+            uint32_t optimizable_length = length /
+                Super::granularity() * Super::granularity();
+
+            uint32_t leftover_length = length - optimizable_length;
+
+            if (optimizable_length != 0)
+            {
+                Super::region_add(dest, src, optimizable_length);
+            }
+
+            if (leftover_length != 0)
+            {
+                Super::NamedSuper::region_add(dest + optimizable_length,
+                    src + optimizable_length,leftover_length);
+            }
+        }
+
         void region_multiply_constant(value_type* dest, value_type constant,
             uint32_t length) const
         {
@@ -34,7 +61,9 @@ namespace fifi
             // check alignment
             assert((uintptr_t)dest % Super::alignment() == 0);
 
-            uint32_t optimizable_length = length / Super::granularity() * Super::granularity();
+            uint32_t optimizable_length = length /
+                Super::granularity() * Super::granularity();
+
             uint32_t leftover_length = length - optimizable_length;
 
             if (optimizable_length != 0)
@@ -50,9 +79,33 @@ namespace fifi
             }
         }
 
-        static uint32_t granularity()
+        void region_multiply_add(value_type* dest, value_type* src,
+            value_type constant, uint32_t length) const
         {
-            return Super::NamedSuper::granularity();
+            assert(dest != 0);
+            assert(src != 0);
+            assert(length > 0);
+            // check alignment
+            assert((uintptr_t)dest % Super::alignment() == 0);
+            assert((uintptr_t)src % Super::alignment() == 0);
+
+            uint32_t optimizable_length = length /
+                Super::granularity() * Super::granularity();
+
+            uint32_t leftover_length = length - optimizable_length;
+
+            if (optimizable_length != 0)
+            {
+                Super::region_multiply_add(dest, src, constant,
+                    optimizable_length);
+            }
+
+            if (leftover_length != 0)
+            {
+                Super::NamedSuper::region_multiply_add(
+                    dest + optimizable_length, src + optimizable_length,
+                    constant, leftover_length);
+            }
         }
     };
 }
