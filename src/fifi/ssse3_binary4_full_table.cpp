@@ -3,22 +3,16 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <cpuid/config.hpp>
+#include <iostream>
+
 #include <cpuid/cpuinfo.hpp>
 
-#include "ssse3_binary4_full_table.hpp"
-
-#if defined(CPUID_LINUX_GCC_X86)
-    #include <x86intrin.h>
-#elif defined(CPUID_LINUX_CLANG_X86)
-    #include <x86intrin.h>
-#elif defined(CPUID_MAC_GCC_X86)
-    #include <x86intrin.h>
-#elif defined(CPUID_MAC_CLANG_X86)
+// Include x86 intrinsics for GCC-compatible compilers (GCC+clang) on x86/x86_64
+#if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
     #include <x86intrin.h>
 #endif
 
-#include <iostream>
+#include "ssse3_binary4_full_table.hpp"
 
 namespace fifi
 {
@@ -170,4 +164,3 @@ namespace fifi
 #endif
 
 }
-
