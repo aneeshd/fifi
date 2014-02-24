@@ -169,11 +169,6 @@ namespace fifi
             }
         }
 
-        static uint32_t alignment()
-        {
-            return Super::NamedSuper::alignment();
-        }
-
     private:
 
         uint32_t unaligned_head(const value_type* data) const

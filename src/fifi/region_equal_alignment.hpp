@@ -10,6 +10,8 @@
 
 #include "is_packed_constant.hpp"
 
+#include <iostream>
+
 namespace fifi
 {
     template<class Super>
@@ -142,6 +144,12 @@ namespace fifi
                 Super::NamedSuper::region_multiply_subtract(dest, src, constant,
                     length);
             }
+        }
+
+        static uint32_t alignment()
+        {
+            std::cout << "This is wrongly placed (it should be in region_divide_alignment)" << std::endl;
+            return Super::NamedSuper::alignment();
         }
 
     private:
