@@ -92,19 +92,22 @@ def set_simd_flags(conf):
     """
     CXX = conf.env.get_flat("CXX")
     flags = []
+    defines = []
 
     # Matches both /usr/bin/g++ and /user/bin/clang++
     if 'g++' in CXX or 'clang' in CXX:
         flags += conf.mkspec_try_flags('cxxflags', ['-mssse3'])
 
     elif 'CL.exe' in CXX or 'cl.exe' in CXX:
-        pass
+        # Add GCC-compatible defines for Visual Studio
+        defines += ['__SSSE3__']
 
     else:
         conf.fatal('Unknown compiler - no SIMD flags specified')
 
     conf.env['CFLAGS_FIFI_SIMD'] = flags
     conf.env['CXXFLAGS_FIFI_SIMD'] = flags
+    conf.env['DEFINES_FIFI_SIMD'] = defines
 
 def build(bld):
 
