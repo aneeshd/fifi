@@ -5,6 +5,9 @@
 
 #pragma once
 
+
+#include "is_packed_constant.hpp"
+
 namespace fifi
 {
     /// Packed arithmetic is used to perform standard arithmetic

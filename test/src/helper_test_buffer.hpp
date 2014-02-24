@@ -10,8 +10,6 @@
 
 #include <fifi/fifi_utils.hpp>
 
-#include <iostream>
-
 namespace fifi
 {
     template<class Field>

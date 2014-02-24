@@ -18,8 +18,6 @@
     #include <x86intrin.h>
 #endif
 
-#include <iostream>
-
 namespace fifi
 {
 
@@ -54,7 +52,6 @@ namespace fifi
         assert(((uintptr_t) src % alignment()) == 0);
         assert(length > 0);
         assert((length % granularity()) == 0);
-        // assert(alignment)
 
         // We loop 16 bytes at-a-time so we calculate how many loops we need
         uint32_t ssse3_size = length / granularity();
@@ -134,7 +131,6 @@ namespace fifi
         assert(((uintptr_t) src % alignment()) == 0);
         assert(length > 0);
         assert((length % granularity()) == 0);
-        // assert(alignment)
 
         // We loop 16 bytes at-a-time so we calculate how many loops we need
         uint32_t ssse3_size = length / granularity();

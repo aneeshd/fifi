@@ -21,10 +21,13 @@ TEST(TestSSSE3Binary4FullTable, region_add)
     }
 }
 
-// TEST(TestSSSE3Binary4FullTable, region_subtract)
-// {
-//     fifi::check_region_subtract<fifi::ssse3_binary4_full_table>();
-// }
+TEST(TestSSSE3Binary4FullTable, region_subtract)
+{
+    if(fifi::ssse3_binary4_full_table::enabled())
+    {
+        check_results_region_subtract<fifi::ssse3_binary4_full_table>();
+    }
+}
 
 // TEST(TestSSSE3Binary4FullTable, region_multiply)
 // {
@@ -54,7 +57,11 @@ TEST(TestSSSE3Binary4FullTable, region_multiply_add)
     }
 }
 
-// TEST(TestSSSE3Binary4FullTable, region_multiply_subtract)
-// {
-//     fifi::check_region_multiply_subtract<fifi::ssse3_binary4_full_table>();
-// }
+TEST(TestSSSE3Binary4FullTable, region_multiply_subtract)
+{
+    if(fifi::ssse3_binary4_full_table::enabled())
+    {
+        check_results_region_multiply_subtract<
+            fifi::ssse3_binary4_full_table>();
+    }
+}

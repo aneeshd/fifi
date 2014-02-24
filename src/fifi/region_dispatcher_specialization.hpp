@@ -29,6 +29,50 @@ namespace fifi
                          std::placeholders::_3);
     }
 
+    template<class Stack>
+    auto bind_region_subtract(const Stack* stack) -> decltype(
+        std::bind(&Stack::region_subtract,
+                  stack,
+                  std::placeholders::_1,
+                  std::placeholders::_2,
+                  std::placeholders::_3))
+    {
+        return std::bind(&Stack::region_subtract,
+                         stack,
+                         std::placeholders::_1,
+                         std::placeholders::_2,
+                         std::placeholders::_3);
+    }
+
+    template<class Stack>
+    auto bind_region_multiply(const Stack* stack) -> decltype(
+        std::bind(&Stack::region_multiply,
+                  stack,
+                  std::placeholders::_1,
+                  std::placeholders::_2,
+                  std::placeholders::_3))
+    {
+        return std::bind(&Stack::region_multiply,
+                         stack,
+                         std::placeholders::_1,
+                         std::placeholders::_2,
+                         std::placeholders::_3);
+    }
+
+    template<class Stack>
+    auto bind_region_divide(const Stack* stack) -> decltype(
+        std::bind(&Stack::region_divide,
+                  stack,
+                  std::placeholders::_1,
+                  std::placeholders::_2,
+                  std::placeholders::_3))
+    {
+        return std::bind(&Stack::region_divide,
+                         stack,
+                         std::placeholders::_1,
+                         std::placeholders::_2,
+                         std::placeholders::_3);
+    }
 
     template<class Stack>
     auto bind_region_multiply_constant(const Stack* stack) -> decltype(
@@ -62,7 +106,22 @@ namespace fifi
                          std::placeholders::_4);
     }
 
-
+    template<class Stack>
+    auto bind_region_multiply_subtract(const Stack* stack) -> decltype(
+        std::bind(&Stack::region_multiply_subtract,
+                  stack,
+                  std::placeholders::_1,
+                  std::placeholders::_2,
+                  std::placeholders::_3,
+                  std::placeholders::_4))
+    {
+        return std::bind(&Stack::region_multiply_subtract,
+                         stack,
+                         std::placeholders::_1,
+                         std::placeholders::_2,
+                         std::placeholders::_3,
+                         std::placeholders::_4);
+    }
 
     /// This class is not to be used in the stacks. Instead use the helper class
     /// region_dispatcher.
@@ -104,7 +163,6 @@ namespace fifi
             }
         }
 
-
         /// @copydoc layer::region_add(value_type*, const value_type*,
         ///                            uint32_t) const
         void region_add(value_type* dest, const value_type* src,
@@ -117,7 +175,6 @@ namespace fifi
             m_add(dest, src, length);
         }
 
-        /*
         /// @copydoc layer::region_subtract(value_type*, const value_type*,
         ///                                 uint32_t) const
         void region_subtract(value_type* dest, const value_type* src,
@@ -153,7 +210,7 @@ namespace fifi
 
             m_divide(dest, src, length);
         }
-        */
+
         /// @copydoc layer::region_multiply_constant(value_type*, value_type,
         ///                                          uint32_t) const
         void region_multiply_constant(
@@ -181,7 +238,6 @@ namespace fifi
             m_multiply_add(dest, src, constant, length);
         }
 
-        /*
         /// @copydoc layer::region_multiply_subtract(value_type*,
         ///                                          const value_type*,
         ///                                          value_type, uint32_t) const
@@ -195,7 +251,6 @@ namespace fifi
 
             m_multiply_subtract(dest, src, constant, length);
         }
-        */
 
         /// @copydoc static layer::alignment()
         static uint32_t alignment()
@@ -260,34 +315,41 @@ namespace fifi
 
     private:
 
+        typedef std::function<void (value_type*, const value_type*, uint32_t)>
+            ptr_ptr_function;
+
+        typedef std::function<void (value_type*, value_type, uint32_t)>
+            ptr_const_function;
+
+        typedef std::function<void (value_type*, const value_type*, value_type,
+            uint32_t)>
+            ptr_ptr_const_function;
+
+    private:
+
         /// The stack to use for dispatching
         Stack m_stack;
 
         /// Store the function to invoke when calling region_add
-        // typedef decltype(bind_region_add((Stack*)0)) add_type;
-        // add_type m_add;
-        std::function<void (value_type*, const value_type*, uint32_t)> m_add;
-        /*
+        ptr_ptr_function m_add;
+
         /// Store the function to invoke when calling region_subtract
-        std::function<void (value_type*, value_type*, uint32_t)> m_subtract;
+        ptr_ptr_function m_subtract;
 
         /// Store the function to invoke when calling region_multiply
-        std::function<void (value_type*, value_type*, uint32_t)> m_multiply;
+        ptr_ptr_function m_multiply;
 
         /// Store the function to invoke when calling region_divide
-        std::function<void (value_type*, value_type*, uint32_t)> m_divide;
-        */
+        ptr_ptr_function m_divide;
+
         /// Store the function to invoke when calling region_multiply_constant
-        std::function<void (value_type*, value_type, uint32_t)>
-            m_multiply_constant;
+        ptr_const_function m_multiply_constant;
 
         /// Store the function to invoke when calling region_multiply_add
-        std::function<void (value_type*, const value_type*, value_type, uint32_t)>
-            m_multiply_add;
+        ptr_ptr_const_function m_multiply_add;
 
         /// Store the function to invoke when calling region_multiply_subtract
-        // std::function<void (value_type*, value_type*, value_type, uint32_t)>
-        //     m_multiply_subtract;
+        ptr_ptr_const_function m_multiply_subtract;
 
     };
 }
