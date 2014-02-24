@@ -9,6 +9,9 @@
 #include <vector>
 #include <ctime>
 #include <cmath>
+#include <limits>
+
+#include <sak/aligned_allocator.hpp>
 
 #include <gauge/gauge.hpp>
 #include <gauge/console_printer.hpp>
@@ -229,6 +232,7 @@ public:
             RUN
             {
                 value_type constant = rand() % field_type::max_value;
+                constant = fifi::pack<field_type>(constant);
 
                 for(uint32_t i = 0; i < vectors; ++i)
                 {
@@ -352,17 +356,21 @@ protected:
     /// The field implementation
     field_impl m_field;
 
+    /// Type of the aligned vector
+    typedef std::vector<value_type, sak::aligned_allocator<value_type> >
+        aligned_vector;
+
     /// The first buffer of vectors
-    std::vector< std::vector<value_type> > m_symbols_one;
+    std::vector<aligned_vector> m_symbols_one;
 
     /// The second buffer of vectors
-    std::vector< std::vector<value_type> > m_symbols_two;
+    std::vector<aligned_vector> m_symbols_two;
 
     /// Random data for the first buffer of symbols
-    std::vector< std::vector<value_type> > m_random_symbols_one;
+    std::vector<aligned_vector> m_random_symbols_one;
 
     /// Random data for the second buffer of symbols
-    std::vector< std::vector<value_type> > m_random_symbols_two;
+    std::vector<aligned_vector> m_random_symbols_two;
 };
 
 

@@ -11,7 +11,6 @@
 #include <gtest/gtest.h>
 #include <sak/aligned_allocator.hpp>
 
-
 namespace fifi
 {
 
@@ -28,6 +27,15 @@ namespace fifi
 
         public:
 
+            void region_add(value_type* dest, const value_type* src,
+                uint32_t length) const
+            {
+                (void) dest;
+                (void) src;
+                (void) length;
+                EXPECT_TRUE(Enabled);
+            }
+
             void region_multiply_constant(value_type* dest, value_type constant,
                 uint32_t length) const
             {
@@ -37,14 +45,26 @@ namespace fifi
                 EXPECT_TRUE(Enabled);
             }
 
+            void region_multiply_add(value_type* dest, const value_type* src,
+                                     value_type constant,
+                                     uint32_t length) const
+            {
+                (void) dest;
+                (void) src;
+                (void) constant;
+                (void) length;
+                EXPECT_TRUE(Enabled);
+            }
+
+
             static uint32_t alignment()
             {
-                return 3U;
+                return 2U;
             }
 
             static uint32_t max_alignment()
             {
-                return 30U;
+                return 20U;
             }
 
             static uint32_t granularity()
@@ -73,6 +93,15 @@ namespace fifi
 
         public:
 
+            void region_add(value_type* dest, const value_type* src,
+                uint32_t length) const
+            {
+                (void) dest;
+                (void) src;
+                (void) length;
+                EXPECT_TRUE(Enabled);
+            }
+
             void region_multiply_constant(
                 value_type* dest, value_type constant, uint32_t length) const
             {
@@ -81,6 +110,18 @@ namespace fifi
                 (void) length;
                 EXPECT_TRUE(Enabled);
             }
+
+            void region_multiply_add(value_type* dest, const value_type* src,
+                                     value_type constant,
+                                     uint32_t length) const
+            {
+                (void) dest;
+                (void) src;
+                (void) constant;
+                (void) length;
+                EXPECT_TRUE(Enabled);
+            }
+
 
             static uint32_t alignment()
             {
@@ -94,12 +135,12 @@ namespace fifi
 
             static uint32_t granularity()
             {
-                return 2U;
+                return 3U;
             }
 
             static uint32_t max_granularity()
             {
-                return 20U;
+                return 30U;
             }
         };
 
@@ -121,7 +162,7 @@ TEST(TestRegionDispatcher, alignment)
     fifi::dummy_stack_enabled enabled_stack;
 
     EXPECT_EQ(disabled_stack.alignment(), 1U);
-    EXPECT_EQ(enabled_stack.alignment(), 3U);
+    EXPECT_EQ(enabled_stack.alignment(), 2U);
 }
 
 TEST(TestRegionDispatcher, max_alignment)
@@ -130,7 +171,7 @@ TEST(TestRegionDispatcher, max_alignment)
     fifi::dummy_stack_enabled enabled_stack;
 
     EXPECT_EQ(disabled_stack.max_alignment(), 10U);
-    EXPECT_EQ(enabled_stack.max_alignment(), 30U);
+    EXPECT_EQ(enabled_stack.max_alignment(), 20U);
 }
 
 TEST(TestRegionDispatcher, granularity)
@@ -138,7 +179,7 @@ TEST(TestRegionDispatcher, granularity)
     fifi::dummy_stack_disabled disabled_stack;
     fifi::dummy_stack_enabled enabled_stack;
 
-    EXPECT_EQ(disabled_stack.granularity(), 2U);
+    EXPECT_EQ(disabled_stack.granularity(), 3U);
     EXPECT_EQ(enabled_stack.granularity(), 4U);
 }
 
@@ -147,7 +188,7 @@ TEST(TestRegionDispatcher, max_granularity)
     fifi::dummy_stack_disabled disabled_stack;
     fifi::dummy_stack_enabled enabled_stack;
 
-    EXPECT_EQ(disabled_stack.max_granularity(), 20U);
+    EXPECT_EQ(disabled_stack.max_granularity(), 30U);
     EXPECT_EQ(enabled_stack.max_granularity(), 40U);
 }
 

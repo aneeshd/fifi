@@ -57,11 +57,28 @@ namespace fifi
         /// Constructor for the stack
         ssse3_binary4_full_table();
 
-        /// Optimized function for multiply constant
+        /// @copydoc layer::region_add(value_type*, value_type*, uint32_t) const
+        void region_add(value_type* dest, const value_type* src,
+            uint32_t length) const;
+
+        /// @copydoc layer::region_add(value_type*, value_type*, uint32_t) const
+        void region_subtract(value_type* dest, const value_type* src,
+            uint32_t length) const;
+
         /// @copydoc layer::region_multiply_constant(
-        ///      value_type*, value_type*) const
+        ///      value_type*, value_type, uint32_t) const
         void region_multiply_constant(value_type* dest, value_type constant,
             uint32_t length) const;
+
+        /// @copydoc layer::region_multiply_add(value_type*, const value_type*,
+        ///                                     value_type, uint32_t) const
+        void region_multiply_add(value_type* dest, const value_type* src,
+            value_type constant, uint32_t length) const;
+
+        /// @copydoc layer::region_multiply_subtract(value_type*,
+        ///              const value_type*, value_type, uint32_t) const
+        void region_multiply_subtract(value_type* dest, const value_type* src,
+            value_type constant, uint32_t length) const;
 
         /// @copydoc static layer::alignment()
         static uint32_t alignment();

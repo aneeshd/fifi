@@ -14,6 +14,56 @@
 
 namespace fifi
 {
+    template<class Stack>
+    auto bind_region_add(const Stack* stack) -> decltype(
+        std::bind(&Stack::region_add,
+                  stack,
+                  std::placeholders::_1,
+                  std::placeholders::_2,
+                  std::placeholders::_3))
+    {
+        return std::bind(&Stack::region_add,
+                         stack,
+                         std::placeholders::_1,
+                         std::placeholders::_2,
+                         std::placeholders::_3);
+    }
+
+
+    template<class Stack>
+    auto bind_region_multiply_constant(const Stack* stack) -> decltype(
+        std::bind(&Stack::region_multiply_constant,
+                  stack,
+                  std::placeholders::_1,
+                  std::placeholders::_2,
+                  std::placeholders::_3))
+    {
+        return std::bind(&Stack::region_multiply_constant,
+                         stack,
+                         std::placeholders::_1,
+                         std::placeholders::_2,
+                         std::placeholders::_3);
+    }
+
+    template<class Stack>
+    auto bind_region_multiply_add(const Stack* stack) -> decltype(
+        std::bind(&Stack::region_multiply_add,
+                  stack,
+                  std::placeholders::_1,
+                  std::placeholders::_2,
+                  std::placeholders::_3,
+                  std::placeholders::_4))
+    {
+        return std::bind(&Stack::region_multiply_add,
+                         stack,
+                         std::placeholders::_1,
+                         std::placeholders::_2,
+                         std::placeholders::_3,
+                         std::placeholders::_4);
+    }
+
+
+
     /// This class is not to be used in the stacks. Instead use the helper class
     /// region_dispatcher.
 
@@ -24,7 +74,8 @@ namespace fifi
 
     /// Dispatcher for the region arithmetics
     template<class Field, class Stack, class Super>
-    class region_dispatcher_specialization<Field, Stack, Field, Super> : public Super
+    class region_dispatcher_specialization<Field, Stack, Field, Super>
+        : public Super
     {
     public:
 
@@ -38,10 +89,22 @@ namespace fifi
 
         region_dispatcher_specialization()
         {
-            m_region_multiply_constant = dispatch_region_multiply_constant();
+            if(Stack::enabled())
+            {
+                m_add = bind_region_add(&m_stack);
+                m_multiply_constant = bind_region_multiply_constant(&m_stack);
+                m_multiply_add = bind_region_multiply_add(&m_stack);
+            }
+            else
+            {
+                Super* stack = this;
+                m_add = bind_region_add(stack);
+                m_multiply_constant = bind_region_multiply_constant(stack);
+                m_multiply_add = bind_region_multiply_add(stack);
+            }
         }
 
-        /*
+
         /// @copydoc layer::region_add(value_type*, const value_type*,
         ///                            uint32_t) const
         void region_add(value_type* dest, const value_type* src,
@@ -51,8 +114,10 @@ namespace fifi
             assert(src  != 0);
             assert(length > 0);
 
+            m_add(dest, src, length);
         }
 
+        /*
         /// @copydoc layer::region_subtract(value_type*, const value_type*,
         ///                                 uint32_t) const
         void region_subtract(value_type* dest, const value_type* src,
@@ -62,17 +127,7 @@ namespace fifi
             assert(src  != 0);
             assert(length > 0);
 
-        }
-
-        /// @copydoc layer::region_divide(value_type*, const value_type*,
-        ///                               uint32_t) const
-        void region_divide(value_type* dest, const value_type* src,
-            uint32_t length) const
-        {
-            assert(dest != 0);
-            assert(src  != 0);
-            assert(length > 0);
-
+            m_subtract(dest, src, length);
         }
 
         /// @copydoc layer::region_multiply(value_type*, const value_type*,
@@ -84,9 +139,21 @@ namespace fifi
             assert(src  != 0);
             assert(length > 0);
 
+            m_multiply(dest, src, length);
+        }
+
+        /// @copydoc layer::region_divide(value_type*, const value_type*,
+        ///                               uint32_t) const
+        void region_divide(value_type* dest, const value_type* src,
+            uint32_t length) const
+        {
+            assert(dest != 0);
+            assert(src  != 0);
+            assert(length > 0);
+
+            m_divide(dest, src, length);
         }
         */
-
         /// @copydoc layer::region_multiply_constant(value_type*, value_type,
         ///                                          uint32_t) const
         void region_multiply_constant(
@@ -96,12 +163,11 @@ namespace fifi
             assert(dest != 0);
             assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
-            assert(m_region_multiply_constant);
+            assert(m_multiply_constant);
 
-            m_region_multiply_constant(dest, constant, length);
+            m_multiply_constant(dest, constant, length);
         }
 
-        /*
         /// @copydoc layer::region_multiply_add(value_type*, const value_type*,
         ///                                     value_type, uint32_t) const
         void region_multiply_add(value_type* dest, const value_type* src,
@@ -112,8 +178,10 @@ namespace fifi
             assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
 
+            m_multiply_add(dest, src, constant, length);
         }
 
+        /*
         /// @copydoc layer::region_multiply_subtract(value_type*,
         ///                                          const value_type*,
         ///                                          value_type, uint32_t) const
@@ -125,6 +193,7 @@ namespace fifi
             assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
 
+            m_multiply_subtract(dest, src, constant, length);
         }
         */
 
@@ -191,39 +260,34 @@ namespace fifi
 
     private:
 
-        /// @return A function that dispatches to the "right" function
-        /// depending on whether the dispatching stack is enabled or not.
-        std::function<void (value_type*, value_type, uint32_t)>
-            dispatch_region_multiply_constant() const
-        {
-            if(m_stack.enabled())
-            {
-                return std::bind(
-                    &Stack::region_multiply_constant,
-                    &m_stack,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3);
-            }
-            else
-            {
-                return std::bind(
-                    &Super::region_multiply_constant,
-                    (Super*)this,
-                    std::placeholders::_1,
-                    std::placeholders::_2,
-                    std::placeholders::_3);
-            }
-        }
-
-    private:
-
         /// The stack to use for dispatching
         Stack m_stack;
 
+        /// Store the function to invoke when calling region_add
+        // typedef decltype(bind_region_add((Stack*)0)) add_type;
+        // add_type m_add;
+        std::function<void (value_type*, const value_type*, uint32_t)> m_add;
+        /*
+        /// Store the function to invoke when calling region_subtract
+        std::function<void (value_type*, value_type*, uint32_t)> m_subtract;
+
+        /// Store the function to invoke when calling region_multiply
+        std::function<void (value_type*, value_type*, uint32_t)> m_multiply;
+
+        /// Store the function to invoke when calling region_divide
+        std::function<void (value_type*, value_type*, uint32_t)> m_divide;
+        */
         /// Store the function to invoke when calling region_multiply_constant
         std::function<void (value_type*, value_type, uint32_t)>
-            m_region_multiply_constant;
+            m_multiply_constant;
+
+        /// Store the function to invoke when calling region_multiply_add
+        std::function<void (value_type*, const value_type*, value_type, uint32_t)>
+            m_multiply_add;
+
+        /// Store the function to invoke when calling region_multiply_subtract
+        // std::function<void (value_type*, value_type*, value_type, uint32_t)>
+        //     m_multiply_subtract;
 
     };
 }

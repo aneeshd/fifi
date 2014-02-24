@@ -27,7 +27,7 @@ namespace fifi
     /// computations base on full look-up tables.
     template<class Field>
     class full_table :
-        public correct_alignment<
+        public //correct_alignment<
                correct_granularity<
                region_dispatcher<ssse3_binary4_full_table,
                name_super<
@@ -39,6 +39,6 @@ namespace fifi
                full_table_arithmetic<
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > > > > > > > >
+               final<Field> > > > > > > > > > > > // >
     { };
 }

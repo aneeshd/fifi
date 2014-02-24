@@ -20,8 +20,10 @@ namespace fifi
     /// be enabled on SSSE3 capable CPUs.
     template<class Field>
     class ssse3_binary4 :
-        public correct_alignment<
-               correct_granularity<
+        public /// @todo when the correct alignenment and correct granularity layers
+               ///       are enabled the ssse3 layer asserts on alignement
+               //correct_alignment<
+               //correct_granularity<
                region_dispatcher<ssse3_binary4_full_table,
                name_super<
                binary_region_arithmetic<Field,
@@ -33,7 +35,7 @@ namespace fifi
                binary_simple_online_arithmetic<Field,
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > > > > > > > > >
+               final<Field> > > > > > > > > > > > //> >
     { };
 
 }
