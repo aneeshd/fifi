@@ -39,7 +39,7 @@ namespace fifi
             assert(src  != 0);
             assert(length > 0);
 
-            if (aligment_is_equal(dest, src))
+            if (alignment_is_equal(dest, src))
             {
                 Super::region_add(dest, src, length);
             }
@@ -58,7 +58,7 @@ namespace fifi
             assert(src  != 0);
             assert(length > 0);
 
-            if (aligment_is_equal(dest, src))
+            if (alignment_is_equal(dest, src))
             {
                 Super::region_subtract(dest, src, length);
             }
@@ -77,7 +77,7 @@ namespace fifi
             assert(src  != 0);
             assert(length > 0);
 
-            if (aligment_is_equal(dest, src))
+            if (alignment_is_equal(dest, src))
             {
                 Super::region_divide(dest, src, length);
             }
@@ -96,7 +96,7 @@ namespace fifi
             assert(src  != 0);
             assert(length > 0);
 
-            if (aligment_is_equal(dest, src))
+            if (alignment_is_equal(dest, src))
             {
                 Super::region_multiply(dest, src, length);
             }
@@ -116,7 +116,7 @@ namespace fifi
             assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
 
-            if (aligment_is_equal(dest, src))
+            if (alignment_is_equal(dest, src))
             {
                 Super::region_multiply_add(dest, src, constant, length);
             }
@@ -137,7 +137,7 @@ namespace fifi
             assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
 
-            if (aligment_is_equal(dest, src))
+            if (alignment_is_equal(dest, src))
             {
                 Super::region_multiply_subtract(dest, src, constant, length);
             }
@@ -150,7 +150,7 @@ namespace fifi
 
     private:
 
-        bool aligment_is_equal(const value_type* dest,
+        bool alignment_is_equal(const value_type* dest,
             const value_type* src) const
         {
             return ((uintptr_t)dest % OptimizedSuper::alignment()) ==
