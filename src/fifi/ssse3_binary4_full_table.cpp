@@ -3,30 +3,27 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <cpuid/config.hpp>
+#include <iostream>
+
+#include <platform/config.hpp>
 #include <cpuid/cpuinfo.hpp>
 
-#include "ssse3_binary4_full_table.hpp"
-
-#if defined(CPUID_LINUX_GCC_X86)
-    #include <x86intrin.h>
-#elif defined(CPUID_LINUX_CLANG_X86)
-    #include <x86intrin.h>
-#elif defined(CPUID_MAC_GCC_X86)
-    #include <x86intrin.h>
-#elif defined(CPUID_MAC_CLANG_X86)
+// Include x86 intrinsics for GCC-compatible compilers on x86/x86_64
+#if defined(PLATFORM_GCC_COMPATIBLE_X86)
     #include <x86intrin.h>
 #endif
+
+#include "ssse3_binary4_full_table.hpp"
 
 namespace fifi
 {
 
-#ifdef __SSSE3__
+#ifdef PLATFORM_SSSE3
 
     ssse3_binary4_full_table::ssse3_binary4_full_table()
     {
-        m_table_one.resize(16*16);
-        m_table_two.resize(16*16);
+        m_table_one.resize(16 * 16);
+        m_table_two.resize(16 * 16);
 
         assert(((uintptr_t) &m_table_one[0] % 16) == 0);
         assert(((uintptr_t) &m_table_two[0] % 16) == 0);
@@ -35,10 +32,10 @@ namespace fifi
         {
             for (uint32_t j = 0; j < 16; ++j)
             {
-                auto v = base::multiply(i,j);
+                auto v = base::multiply(i, j);
 
-                m_table_one[i*16 + j] = v & 0x0f;
-                m_table_two[i*16 + j] = (v << 4) & 0xf0;
+                m_table_one[i * 16 + j] = v & 0x0f;
+                m_table_two[i * 16 + j] = (v << 4) & 0xf0;
             }
         }
     }
@@ -59,14 +56,13 @@ namespace fifi
 
         for (uint32_t i = 0; i < ssse3_size; ++i)
         {
-            __m128i xmm0 = _mm_load_si128(((const __m128i*) dest) + i);
-            __m128i xmm1 = _mm_load_si128(((const __m128i*) src) + i);
+            __m128i xmm0 = _mm_load_si128(((const __m128i*)dest) + i);
+            __m128i xmm1 = _mm_load_si128(((const __m128i*)src) + i);
 
-            xmm0 = _mm_xor_si128(xmm0,xmm1);
+            xmm0 = _mm_xor_si128(xmm0, xmm1);
 
             _mm_store_si128(((__m128i*)dest) + i, xmm0);
         }
-
     }
 
     void ssse3_binary4_full_table::region_subtract(value_type* dest,
@@ -100,22 +96,22 @@ namespace fifi
         __m128i table2 = _mm_load_si128(
             (const __m128i*)(&m_table_two[0] + (constant * 16)));
 
-        __m128i mask1 = _mm_set1_epi8(0x0f);
-        __m128i mask2 = _mm_set1_epi8(0xf0);
+        __m128i mask1 = _mm_set1_epi8((char)0x0f);
+        __m128i mask2 = _mm_set1_epi8((char)0xf0);
 
         for (uint32_t i = 0; i < ssse3_size; ++i)
         {
-            __m128i xmm0 = _mm_load_si128(((const __m128i*) dest) + i);
+            __m128i xmm0 = _mm_load_si128(((const __m128i*)dest) + i);
 
             __m128i l = _mm_and_si128(xmm0, mask1);
 
             l = _mm_shuffle_epi8(table1, l);
 
             __m128i h = _mm_and_si128(xmm0, mask2);
-            h = _mm_srli_epi64(h,4);
+            h = _mm_srli_epi64(h, 4);
             h = _mm_shuffle_epi8(table2, h);
 
-            xmm0 = _mm_xor_si128(h,l);
+            xmm0 = _mm_xor_si128(h, l);
 
             _mm_store_si128(((__m128i*)dest) + i, xmm0);
         }
@@ -147,26 +143,26 @@ namespace fifi
         __m128i table2 = _mm_load_si128(
             (const __m128i*)(&m_table_two[0] + (constant * 16)));
 
-        __m128i mask1 = _mm_set1_epi8(0x0f);
-        __m128i mask2 = _mm_set1_epi8(0xf0);
+        __m128i mask1 = _mm_set1_epi8((char)0x0f);
+        __m128i mask2 = _mm_set1_epi8((char)0xf0);
 
         for (uint32_t i = 0; i < ssse3_size; ++i)
         {
             // Multiply the src with the constant
-            __m128i xmm0 = _mm_load_si128(((const __m128i*) src) + i);
+            __m128i xmm0 = _mm_load_si128(((const __m128i*)src) + i);
 
             __m128i l = _mm_and_si128(xmm0, mask1);
 
             l = _mm_shuffle_epi8(table1, l);
 
             __m128i h = _mm_and_si128(xmm0, mask2);
-            h = _mm_srli_epi64(h,4);
+            h = _mm_srli_epi64(h, 4);
             h = _mm_shuffle_epi8(table2, h);
 
-            xmm0 = _mm_xor_si128(h,l);
+            xmm0 = _mm_xor_si128(h, l);
 
             // Add the src to the dest
-            __m128i xmm1 = _mm_load_si128(((const __m128i*) dest) + i);
+            __m128i xmm1 = _mm_load_si128(((const __m128i*)dest) + i);
             xmm0 = _mm_xor_si128(xmm0, xmm1);
 
             _mm_store_si128(((__m128i*)dest) + i, xmm0);
@@ -307,4 +303,3 @@ namespace fifi
 #endif
 
 }
-

@@ -3,6 +3,9 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+// This file causes double definition warnings with MSVC
+#if !defined(_MSC_VER)
+
 #include "binary.hpp"
 
 namespace fifi
@@ -12,3 +15,5 @@ namespace fifi
     const binary::order_type binary::order;
     const bool binary::is_exact;
 }
+
+#endif
