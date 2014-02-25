@@ -10,7 +10,6 @@
 #include "binary8_region_arithmetic_full_table.hpp"
 #include "final.hpp"
 #include "full_table_arithmetic.hpp"
-#include "name_super.hpp"
 #include "packed_arithmetic.hpp"
 #include "polynomial_degree.hpp"
 #include "region_arithmetic.hpp"
@@ -32,7 +31,6 @@ namespace fifi
                region_divide_alignment<
                region_divide_granularity<
                region_dispatcher<ssse3_binary4_full_table,
-               name_super<
                binary8_region_arithmetic_full_table<Field,
                region_arithmetic<
                region_info<
@@ -41,6 +39,6 @@ namespace fifi
                full_table_arithmetic<
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > > > > > > > > >
+               final<Field> > > > > > > > > > > > >
     { };
 }

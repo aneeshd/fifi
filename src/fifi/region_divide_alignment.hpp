@@ -17,10 +17,13 @@ namespace fifi
     {
     public:
 
-        /// The field type
+        typedef typename Super::BasicSuper BasicSuper;
+        typedef typename Super::OptimizedSuper OptimizedSuper;
+
+        /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
-        /// Typedef of the data type used for each field element
+        /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
 
         void region_add(value_type* dest, const value_type* src,
@@ -33,7 +36,7 @@ namespace fifi
             auto unaligned = unaligned_head(dest);
             if (unaligned != 0)
             {
-                Super::NamedSuper::region_add(dest, src, unaligned);
+                BasicSuper::region_add(dest, src, unaligned);
             }
 
             auto rest = length - unaligned;
@@ -53,7 +56,7 @@ namespace fifi
             auto unaligned = unaligned_head(dest);
             if (unaligned != 0)
             {
-                Super::NamedSuper::region_subtract(dest, src, unaligned);
+                BasicSuper::region_subtract(dest, src, unaligned);
             }
 
             auto rest = length - unaligned;
@@ -73,7 +76,7 @@ namespace fifi
             auto unaligned = unaligned_head(dest);
             if (unaligned != 0)
             {
-                Super::NamedSuper::region_multiply(dest, src, unaligned);
+                BasicSuper::region_multiply(dest, src, unaligned);
             }
 
             auto rest = length - unaligned;
@@ -93,7 +96,7 @@ namespace fifi
             auto unaligned = unaligned_head(dest);
             if (unaligned != 0)
             {
-                Super::NamedSuper::region_divide(dest, src, unaligned);
+                BasicSuper::region_divide(dest, src, unaligned);
             }
 
             auto rest = length - unaligned;
@@ -113,7 +116,7 @@ namespace fifi
             auto unaligned = unaligned_head(dest);
             if (unaligned != 0)
             {
-                Super::NamedSuper::region_multiply_constant(dest, constant,
+                BasicSuper::region_multiply_constant(dest, constant,
                     unaligned);
             }
 
@@ -135,7 +138,7 @@ namespace fifi
             auto unaligned = unaligned_head(dest);
             if (unaligned != 0)
             {
-                Super::NamedSuper::region_multiply_add(dest, src, constant,
+                BasicSuper::region_multiply_add(dest, src, constant,
                     unaligned);
             }
 
@@ -157,7 +160,7 @@ namespace fifi
             auto unaligned = unaligned_head(dest);
             if (unaligned != 0)
             {
-                Super::NamedSuper::region_multiply_subtract(dest, src, constant,
+                BasicSuper::region_multiply_subtract(dest, src, constant,
                     unaligned);
             }
 
@@ -169,11 +172,17 @@ namespace fifi
             }
         }
 
+        static uint32_t alignment()
+        {
+            return BasicSuper::alignment();
+        }
+
     private:
 
         uint32_t unaligned_head(const value_type* data) const
         {
-            return Super::alignment() - (uintptr_t)data % Super::alignment();
+            return OptimizedSuper::alignment() - (uintptr_t)data %
+                   OptimizedSuper::alignment();
         }
     };
 }

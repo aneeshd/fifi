@@ -19,6 +19,9 @@ namespace fifi
     {
     public:
 
+        typedef typename Super::BasicSuper BasicSuper;
+        typedef typename Super::OptimizedSuper OptimizedSuper;
+
         /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
@@ -42,7 +45,7 @@ namespace fifi
             }
             else
             {
-                Super::NamedSuper::region_add(dest, src, length);
+                BasicSuper::region_add(dest, src, length);
             }
         }
 
@@ -61,7 +64,7 @@ namespace fifi
             }
             else
             {
-                Super::NamedSuper::region_subtract(dest, src, length);
+                BasicSuper::region_subtract(dest, src, length);
             }
         }
 
@@ -80,7 +83,7 @@ namespace fifi
             }
             else
             {
-                Super::NamedSuper::region_divide(dest, src, length);
+                BasicSuper::region_divide(dest, src, length);
             }
         }
 
@@ -99,7 +102,7 @@ namespace fifi
             }
             else
             {
-                Super::NamedSuper::region_multiply(dest, src, length);
+                BasicSuper::region_multiply(dest, src, length);
             }
         }
 
@@ -119,8 +122,7 @@ namespace fifi
             }
             else
             {
-                Super::NamedSuper::region_multiply_add(dest, src, constant,
-                    length);
+                BasicSuper::region_multiply_add(dest, src, constant, length);
             }
         }
 
@@ -141,15 +143,9 @@ namespace fifi
             }
             else
             {
-                Super::NamedSuper::region_multiply_subtract(dest, src, constant,
+                BasicSuper::region_multiply_subtract(dest, src, constant,
                     length);
             }
-        }
-
-        static uint32_t alignment()
-        {
-            std::cout << "This is wrongly placed (it should be in region_divide_alignment)" << std::endl;
-            return Super::NamedSuper::alignment();
         }
 
     private:
@@ -157,8 +153,8 @@ namespace fifi
         bool aligment_is_equal(const value_type* dest,
             const value_type* src) const
         {
-            return ((uintptr_t)dest % Super::alignment()) ==
-                   ((uintptr_t)src  % Super::alignment());
+            return ((uintptr_t)dest % OptimizedSuper::alignment()) ==
+                   ((uintptr_t)src  % OptimizedSuper::alignment());
         }
     };
 }

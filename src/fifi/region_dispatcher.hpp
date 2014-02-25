@@ -15,5 +15,10 @@ namespace fifi
         public region_dispatcher_specialization<
             typename Super::field_type, Stack,
             typename Stack::field_type, Super>
-    { };
+    {
+    public:
+
+        typedef Super BasicSuper;
+        typedef region_dispatcher<Stack, Super> OptimizedSuper;
+    };
 }

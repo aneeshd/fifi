@@ -19,6 +19,9 @@ namespace fifi
     {
     public:
 
+        typedef typename Super::BasicSuper BasicSuper;
+        typedef typename Super::OptimizedSuper OptimizedSuper;
+
         /// The field type
         typedef typename Super::field_type field_type;
 
@@ -32,8 +35,8 @@ namespace fifi
             assert(src != 0);
             assert(length > 0);
             // check alignment
-            assert((uintptr_t)dest % Super::alignment() == 0);
-            assert((uintptr_t)src % Super::alignment() == 0);
+            assert((uintptr_t)dest % OptimizedSuper::alignment() == 0);
+            assert((uintptr_t)src % OptimizedSuper::alignment() == 0);
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)
@@ -44,7 +47,7 @@ namespace fifi
             auto rest = length - optimizable;
             if (rest != 0)
             {
-                Super::NamedSuper::region_add(dest + optimizable,
+                BasicSuper::region_add(dest + optimizable,
                     src + optimizable, rest);
             }
         }
@@ -56,8 +59,8 @@ namespace fifi
             assert(src != 0);
             assert(length > 0);
             // check alignment
-            assert((uintptr_t)dest % Super::alignment() == 0);
-            assert((uintptr_t)src % Super::alignment() == 0);
+            assert((uintptr_t)dest % OptimizedSuper::alignment() == 0);
+            assert((uintptr_t)src % OptimizedSuper::alignment() == 0);
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)
@@ -68,7 +71,7 @@ namespace fifi
             auto rest = length - optimizable;
             if (rest != 0)
             {
-                Super::NamedSuper::region_subtract(dest + optimizable,
+                BasicSuper::region_subtract(dest + optimizable,
                     src + optimizable, rest);
             }
         }
@@ -80,8 +83,8 @@ namespace fifi
             assert(src != 0);
             assert(length > 0);
             // check alignment
-            assert((uintptr_t)dest % Super::alignment() == 0);
-            assert((uintptr_t)src % Super::alignment() == 0);
+            assert((uintptr_t)dest % OptimizedSuper::alignment() == 0);
+            assert((uintptr_t)src % OptimizedSuper::alignment() == 0);
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)
@@ -92,7 +95,7 @@ namespace fifi
             auto rest = length - optimizable;
             if (rest != 0)
             {
-                Super::NamedSuper::region_multiply(dest + optimizable,
+                BasicSuper::region_multiply(dest + optimizable,
                     src + optimizable, rest);
             }
         }
@@ -104,8 +107,8 @@ namespace fifi
             assert(src != 0);
             assert(length > 0);
             // check alignment
-            assert((uintptr_t)dest % Super::alignment() == 0);
-            assert((uintptr_t)src % Super::alignment() == 0);
+            assert((uintptr_t)dest % OptimizedSuper::alignment() == 0);
+            assert((uintptr_t)src % OptimizedSuper::alignment() == 0);
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)
@@ -116,7 +119,7 @@ namespace fifi
             auto rest = length - optimizable;
             if (rest != 0)
             {
-                Super::NamedSuper::region_divide(dest + optimizable,
+                BasicSuper::region_divide(dest + optimizable,
                     src + optimizable, rest);
             }
         }
@@ -128,7 +131,7 @@ namespace fifi
             assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
             // check alignment
-            assert((uintptr_t)dest % Super::alignment() == 0);
+            assert((uintptr_t)dest % OptimizedSuper::alignment() == 0);
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)
@@ -140,7 +143,7 @@ namespace fifi
             auto rest = length - optimizable;
             if (rest != 0)
             {
-                Super::NamedSuper::region_multiply_constant(
+                BasicSuper::region_multiply_constant(
                     dest + optimizable, constant, rest);
             }
         }
@@ -152,8 +155,8 @@ namespace fifi
             assert(src != 0);
             assert(length > 0);
             // check alignment
-            assert((uintptr_t)dest % Super::alignment() == 0);
-            assert((uintptr_t)src % Super::alignment() == 0);
+            assert((uintptr_t)dest % OptimizedSuper::alignment() == 0);
+            assert((uintptr_t)src % OptimizedSuper::alignment() == 0);
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)
@@ -165,7 +168,7 @@ namespace fifi
             auto rest = length - optimizable;
             if (rest != 0)
             {
-                Super::NamedSuper::region_multiply_add(
+                BasicSuper::region_multiply_add(
                     dest + optimizable, src + optimizable,
                     constant, rest);
             }
@@ -178,8 +181,8 @@ namespace fifi
             assert(src != 0);
             assert(length > 0);
             // check alignment
-            assert((uintptr_t)dest % Super::alignment() == 0);
-            assert((uintptr_t)src % Super::alignment() == 0);
+            assert((uintptr_t)dest % OptimizedSuper::alignment() == 0);
+            assert((uintptr_t)src % OptimizedSuper::alignment() == 0);
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)
@@ -191,7 +194,7 @@ namespace fifi
             auto rest = length - optimizable;
             if (rest != 0)
             {
-                Super::NamedSuper::region_multiply_subtract(
+                BasicSuper::region_multiply_subtract(
                     dest + optimizable, src + optimizable,
                     constant, rest);
             }
@@ -201,8 +204,8 @@ namespace fifi
 
         uint32_t granulated_length(uint32_t length) const
         {
-            static uint32_t granularity2 =
-                Super::granularity() * Super::granularity();
+            static uint32_t granularity2 = OptimizedSuper::granularity() *
+                                           OptimizedSuper::granularity();
             return length / granularity2;
         }
     };

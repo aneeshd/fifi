@@ -25,7 +25,6 @@ namespace fifi
                region_divide_alignment<
                region_divide_granularity<
                region_dispatcher<ssse3_binary4_full_table,
-               name_super<
                binary_region_arithmetic<Field,
                region_arithmetic<
                region_info<
@@ -35,6 +34,6 @@ namespace fifi
                binary_simple_online_arithmetic<Field,
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > > > > > > > > > >
+               final<Field> > > > > > > > > > > > > >
     { };
 }
