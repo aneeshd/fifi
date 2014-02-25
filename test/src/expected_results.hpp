@@ -193,8 +193,8 @@ inline void check_results_region_ptr_ptr(
 
             uint32_t length = data.length();
 
-            // Create buffer and created the expected results using the reference
-            // arithmetics
+            // Create buffer and created the expected results using the
+            // reference arithmetics
             auto test_data = data;
             auto reference_data = data;
 
@@ -274,18 +274,19 @@ inline void check_results_region_ptr_const(
             for (uint32_t j = 0; j < constants; ++j)
             {
                 // Get the constant to multiply with
-                auto constant = fifi::pack<test_field>(rand() % test_field::order);
+                auto constant = fifi::pack<test_field>(
+                    rand() % test_field::order);
                 SCOPED_TRACE(testing::Message() << "constant: " << constant);
 
-                // Create buffer and created the expected results using the reference
-                // arithmetics
+                // Create buffer and created the expected results using the
+                // reference arithmetics
                 auto test_data = data;
                 auto reference_data = data;
 
                 // Perform the calculations using the region arithmetics
                 test_arithmetic(test_stack, test_data.data(), constant, length);
-                reference_arithmetic(reference_stack, reference_data.data(), constant,
-                    length);
+                reference_arithmetic(reference_stack, reference_data.data(),
+                    constant, length);
 
                 EXPECT_EQ(reference_data, test_data);
             }
@@ -360,18 +361,19 @@ inline void check_results_region_ptr_ptr_const(
             for (uint32_t j = 0; j < constants; ++j)
             {
                 // Get the constant to multiply with
-                auto constant = fifi::pack<test_field>(rand() % test_field::order);
+                auto constant = fifi::pack<test_field>(
+                    rand() % test_field::order);
                 SCOPED_TRACE(testing::Message() << "constant: " << constant);
 
-                // Create buffer and created the expected results using the reference
-                // arithmetics
+                // Create buffer and created the expected results using the
+                // reference arithmetics
                 auto test_data = data;
                 auto reference_data = data;
                 // Perform the calculations using the region arithmetics
-                test_arithmetic(test_stack, test_data.data(), src.data(), constant,
-                    length);
-                reference_arithmetic(reference_stack, reference_data.data(), src.data(),
+                test_arithmetic(test_stack, test_data.data(), src.data(),
                     constant, length);
+                reference_arithmetic(reference_stack, reference_data.data(),
+                    src.data(), constant, length);
 
                 EXPECT_EQ(reference_data, test_data);
             }
