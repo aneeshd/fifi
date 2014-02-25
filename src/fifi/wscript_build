@@ -2,7 +2,10 @@
 # encoding: utf-8
 
 optimized_sources = \
-    {'ssse3_binary4_full_table': ['-mssse3']}
+{
+    'ssse3_binary4_full_table': ['-mssse3'],
+    'ssse3_binary8_full_table': ['-mssse3'],
+}
 
 for source, flags in optimized_sources.items():
     bld.objects(source   = source + '.cpp',
