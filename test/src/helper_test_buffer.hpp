@@ -7,6 +7,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <ostream>
 
 #include <fifi/fifi_utils.hpp>
 

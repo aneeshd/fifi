@@ -12,6 +12,8 @@
 
 #include "is_packed_constant.hpp"
 
+#include <iostream>
+
 namespace fifi
 {
     template<class Stack>
@@ -148,19 +150,25 @@ namespace fifi
 
         region_dispatcher_specialization()
         {
+            Super* stack = this;
             if(Stack::enabled())
             {
                 m_add = bind_region_add(&m_stack);
                 m_subtract = bind_region_subtract(&m_stack);
-                m_multiply = bind_region_multiply(&m_stack);
-                m_divide = bind_region_divide(&m_stack);
+
+                ////////////////////////////////////////////////////////////////
+                //TODO: These should be called with m_stack, when implemented://
+                ////////////////////////////////////////////////////////////////
+                std::cout << "These should be called with m_stack, when implemented" << std::endl;
+                m_multiply = bind_region_multiply(stack);
+                m_divide = bind_region_divide(stack);
+
                 m_multiply_constant = bind_region_multiply_constant(&m_stack);
                 m_multiply_add = bind_region_multiply_add(&m_stack);
                 m_multiply_subtract = bind_region_multiply_subtract(&m_stack);
             }
             else
             {
-                Super* stack = this;
                 m_add = bind_region_add(stack);
                 m_subtract = bind_region_subtract(stack);
                 m_multiply = bind_region_multiply(stack);

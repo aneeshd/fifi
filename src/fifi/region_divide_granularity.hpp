@@ -204,9 +204,7 @@ namespace fifi
 
         uint32_t granulated_length(uint32_t length) const
         {
-            static uint32_t granularity2 = OptimizedSuper::granularity() *
-                                           OptimizedSuper::granularity();
-            return length / granularity2;
+            return (length / OptimizedSuper::granularity()) * OptimizedSuper::granularity();
         }
     };
 }
