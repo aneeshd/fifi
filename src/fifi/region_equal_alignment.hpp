@@ -10,8 +10,6 @@
 
 #include "is_packed_constant.hpp"
 
-#include <iostream>
-
 namespace fifi
 {
     template<class Super>
