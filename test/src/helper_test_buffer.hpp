@@ -74,7 +74,7 @@ namespace fifi
         ValueType* find_aligned(ValueType* ptr)
         {
             uintptr_t p = reinterpret_cast<uintptr_t>(ptr);
-            return ptr + (m_alignment - (p % m_alignment));
+            return (ValueType*)(p + (m_alignment - (p % m_alignment)));
         }
 
 
