@@ -36,6 +36,33 @@ namespace fifi
                 EXPECT_TRUE(Enabled);
             }
 
+            void region_subtract(value_type* dest, const value_type* src,
+                uint32_t length) const
+            {
+                (void) dest;
+                (void) src;
+                (void) length;
+                EXPECT_TRUE(Enabled);
+            }
+
+            void region_multiply(value_type* dest, const value_type* src,
+                uint32_t length) const
+            {
+                (void) dest;
+                (void) src;
+                (void) length;
+                EXPECT_TRUE(Enabled);
+            }
+
+            void region_divide(value_type* dest, const value_type* src,
+                uint32_t length) const
+            {
+                (void) dest;
+                (void) src;
+                (void) length;
+                EXPECT_TRUE(Enabled);
+            }
+
             void region_multiply_constant(value_type* dest, value_type constant,
                 uint32_t length) const
             {
@@ -56,6 +83,16 @@ namespace fifi
                 EXPECT_TRUE(Enabled);
             }
 
+            void region_multiply_subtract(value_type* dest,
+                const value_type* src, value_type constant,
+                uint32_t length) const
+            {
+                (void) dest;
+                (void) src;
+                (void) constant;
+                (void) length;
+                EXPECT_TRUE(Enabled);
+            }
 
             static uint32_t alignment()
             {
@@ -102,6 +139,33 @@ namespace fifi
                 EXPECT_TRUE(Enabled);
             }
 
+            void region_subtract(value_type* dest, const value_type* src,
+                uint32_t length) const
+            {
+                (void) dest;
+                (void) src;
+                (void) length;
+                EXPECT_TRUE(Enabled);
+            }
+
+            void region_multiply(value_type* dest, const value_type* src,
+                uint32_t length) const
+            {
+                (void) dest;
+                (void) src;
+                (void) length;
+                EXPECT_TRUE(Enabled);
+            }
+
+            void region_divide(value_type* dest, const value_type* src,
+                uint32_t length) const
+            {
+                (void) dest;
+                (void) src;
+                (void) length;
+                EXPECT_TRUE(Enabled);
+            }
+
             void region_multiply_constant(
                 value_type* dest, value_type constant, uint32_t length) const
             {
@@ -122,6 +186,16 @@ namespace fifi
                 EXPECT_TRUE(Enabled);
             }
 
+            void region_multiply_subtract(value_type* dest,
+                const value_type* src, value_type constant,
+                uint32_t length) const
+            {
+                (void) dest;
+                (void) src;
+                (void) constant;
+                (void) length;
+                EXPECT_TRUE(Enabled);
+            }
 
             static uint32_t alignment()
             {

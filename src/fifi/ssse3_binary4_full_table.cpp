@@ -72,6 +72,28 @@ namespace fifi
         region_add(dest, src, length);
     }
 
+    void ssse3_binary4_full_table::region_multiply(value_type* dest,
+        const value_type* src, uint32_t length) const
+    {
+        (void) dest;
+        (void) src;
+        (void) length;
+
+        // Not implemented
+        assert(0);
+    }
+
+    void ssse3_binary4_full_table::region_divide(value_type* dest,
+        const value_type* src, uint32_t length) const
+    {
+        (void) dest;
+        (void) src;
+        (void) length;
+
+        // Not implemented
+        assert(0);
+    }
+
     void ssse3_binary4_full_table::region_multiply_constant(
         value_type* dest, value_type constant, uint32_t length) const
     {
@@ -236,6 +258,28 @@ namespace fifi
         assert(0);
     }
 
+    void ssse3_binary4_full_table::region_multiply(value_type* dest,
+        const value_type* src, uint32_t length) const
+    {
+        (void) dest;
+        (void) src;
+        (void) length;
+
+        // Not implemented
+        assert(0);
+    }
+
+    void ssse3_binary4_full_table::region_divide(value_type* dest,
+        const value_type* src, uint32_t length) const
+    {
+        (void) dest;
+        (void) src;
+        (void) length;
+
+        // Not implemented
+        assert(0);
+    }
+
     void ssse3_binary4_full_table::region_multiply_constant(
         value_type* dest, value_type constant, uint32_t length) const
     {
@@ -280,7 +324,9 @@ namespace fifi
 
     uint32_t ssse3_binary4_full_table::max_alignment()
     {
-        return alignment();
+        // Not implemented
+        assert(0);
+        return 0;
     }
 
     uint32_t ssse3_binary4_full_table::granularity()
@@ -292,7 +338,9 @@ namespace fifi
 
     uint32_t ssse3_binary4_full_table::max_granularity()
     {
-        return granularity();
+        // Not implemented
+        assert(0);
+        return 0;
     }
 
     bool ssse3_binary4_full_table::enabled()

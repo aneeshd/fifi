@@ -151,15 +151,23 @@ namespace fifi
             if(Stack::enabled())
             {
                 m_add = bind_region_add(&m_stack);
+                m_subtract = bind_region_subtract(&m_stack);
+                m_multiply = bind_region_multiply(&m_stack);
+                m_divide = bind_region_divide(&m_stack);
                 m_multiply_constant = bind_region_multiply_constant(&m_stack);
                 m_multiply_add = bind_region_multiply_add(&m_stack);
+                m_multiply_subtract = bind_region_multiply_subtract(&m_stack);
             }
             else
             {
                 Super* stack = this;
                 m_add = bind_region_add(stack);
+                m_subtract = bind_region_subtract(stack);
+                m_multiply = bind_region_multiply(stack);
+                m_divide = bind_region_divide(stack);
                 m_multiply_constant = bind_region_multiply_constant(stack);
                 m_multiply_add = bind_region_multiply_add(stack);
+                m_multiply_subtract = bind_region_multiply_subtract(stack);
             }
         }
 
@@ -171,6 +179,7 @@ namespace fifi
             assert(dest != 0);
             assert(src  != 0);
             assert(length > 0);
+            assert(m_add);
 
             m_add(dest, src, length);
         }
@@ -183,6 +192,7 @@ namespace fifi
             assert(dest != 0);
             assert(src  != 0);
             assert(length > 0);
+            assert(m_subtract);
 
             m_subtract(dest, src, length);
         }
@@ -195,6 +205,7 @@ namespace fifi
             assert(dest != 0);
             assert(src  != 0);
             assert(length > 0);
+            assert(m_multiply);
 
             m_multiply(dest, src, length);
         }
@@ -207,6 +218,7 @@ namespace fifi
             assert(dest != 0);
             assert(src  != 0);
             assert(length > 0);
+            assert(m_divide);
 
             m_divide(dest, src, length);
         }
@@ -234,6 +246,7 @@ namespace fifi
             assert(src  != 0);
             assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
+            assert(m_multiply_add);
 
             m_multiply_add(dest, src, constant, length);
         }
@@ -248,6 +261,7 @@ namespace fifi
             assert(src  != 0);
             assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
+            assert(m_multiply_subtract);
 
             m_multiply_subtract(dest, src, constant, length);
         }

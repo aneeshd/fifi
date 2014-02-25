@@ -61,8 +61,19 @@ namespace fifi
         void region_add(value_type* dest, const value_type* src,
             uint32_t length) const;
 
-        /// @copydoc layer::region_add(value_type*, value_type*, uint32_t) const
+        /// @copydoc layer::region_subtract(value_type*, value_type*,
+        ///                                 uint32_t) const
         void region_subtract(value_type* dest, const value_type* src,
+            uint32_t length) const;
+
+        /// @copydoc layer::region_multiply(value_type*, value_type*,
+        ///                                 uint32_t) const
+        void region_multiply(value_type* dest, const value_type* src,
+            uint32_t length) const;
+
+        /// @copydoc layer::region_divide(value_type*, value_type*,
+        ///                               uint32_t) const
+        void region_divide(value_type* dest, const value_type* src,
             uint32_t length) const;
 
         /// @copydoc layer::region_multiply_constant(
