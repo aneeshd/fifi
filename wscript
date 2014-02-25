@@ -60,7 +60,14 @@ def options(opt):
         resolve.ResolveGitMajorVersion(
             name = 'cpuid',
             git_repository = 'github.com/steinwurf/cpuid.git',
-            major_version = 2))
+            major_version = 3))
+
+    bundle.add_dependency(opt,
+        resolve.ResolveGitMajorVersion(
+            name = 'platform',
+            git_repository = 'github.com/steinwurf/platform.git',
+            major_version = 1))
+
 
     opt.load('wurf_dependency_bundle')
     opt.load('wurf_tools')
@@ -83,6 +90,7 @@ def configure(conf):
         recurse_helper(conf, 'gauge')
         recurse_helper(conf, 'tables')
         recurse_helper(conf, 'cpuid')
+        recurse_helper(conf, 'platform')
 
     set_simd_flags(conf)
 
@@ -99,15 +107,13 @@ def set_simd_flags(conf):
         flags += conf.mkspec_try_flags('cxxflags', ['-mssse3'])
 
     elif 'CL.exe' in CXX or 'cl.exe' in CXX:
-        # Add GCC-compatible defines for Visual Studio
-        defines += ['__SSSE3__']
+        pass
 
     else:
         conf.fatal('Unknown compiler - no SIMD flags specified')
 
     conf.env['CFLAGS_FIFI_SIMD'] = flags
     conf.env['CXXFLAGS_FIFI_SIMD'] = flags
-    conf.env['DEFINES_FIFI_SIMD'] = defines
 
 def build(bld):
 
@@ -125,6 +131,7 @@ def build(bld):
         recurse_helper(bld, 'gauge')
         recurse_helper(bld, 'tables')
         recurse_helper(bld, 'cpuid')
+        recurse_helper(bld, 'platform')
 
         # Only build test and benchmarks when executed from the
         # top-level wscript i.e. not when included as a dependency

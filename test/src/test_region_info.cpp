@@ -28,33 +28,27 @@ namespace fifi
 template<class Field>
 void test_region_alignment()
 {
-    fifi::dummy_stack<Field> stack;
-    (void) stack; // Suppress warning on MSVC
-    EXPECT_EQ(sizeof(typename Field::value_type), stack.alignment());
+    EXPECT_EQ(sizeof(typename Field::value_type),
+              fifi::dummy_stack<Field>().alignment());
 }
 
 template<class Field>
 void test_region_max_alignment()
 {
-    fifi::dummy_stack<Field> stack;
-    (void) stack; // Suppress warning on MSVC
-    EXPECT_EQ(sizeof(typename Field::value_type), stack.max_alignment());
+    EXPECT_EQ(sizeof(typename Field::value_type),
+              fifi::dummy_stack<Field>().max_alignment());
 }
 
 template<class Field>
 void test_region_granularity()
 {
-    fifi::dummy_stack<Field> stack;
-    (void) stack; // Suppress warning on MSVC
-    EXPECT_EQ(1U, stack.granularity());
+    EXPECT_EQ(1U, fifi::dummy_stack<Field>().granularity());
 }
 
 template<class Field>
 void test_region_max_granularity()
 {
-    fifi::dummy_stack<Field> stack;
-    (void) stack; // Suppress warning on MSVC
-    EXPECT_EQ(1U, stack.max_granularity());
+    EXPECT_EQ(1U, fifi::dummy_stack<Field>().max_granularity());
 }
 
 
