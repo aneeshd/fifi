@@ -112,32 +112,39 @@ namespace fifi
         constant = constant & 0xf;
 
         // Initialize the look-up tables
+        // Load the 16-byte row that contains pre-calculated multiplication
+        // results with the constant
         __m128i table1 = _mm_load_si128(
             (const __m128i*)(&m_table_one[0] + (constant * 16)));
 
+        // table2 contains the same results shifted left by 4 bits
         __m128i table2 = _mm_load_si128(
             (const __m128i*)(&m_table_two[0] + (constant * 16)));
 
+        // Create low and high bitmasks by replicating the mask values 16 times
         __m128i mask1 = _mm_set1_epi8((char)0x0f);
         __m128i mask2 = _mm_set1_epi8((char)0xf0);
 
-        for (uint32_t i = 0; i < ssse3_size; ++i)
+        __m128i* dest_ptr = (__m128i*)dest;
+        for (uint32_t i = 0; i < ssse3_size; i++, dest_ptr++)
         {
-            __m128i xmm0 = _mm_load_si128(((const __m128i*)dest) + i);
-
+            // Load the next 16-bytes of the destination buffer
+            __m128i xmm0 = _mm_load_si128(dest_ptr);
+            // Apply mask1 to get the low-half of the data
             __m128i l = _mm_and_si128(xmm0, mask1);
-
+            // Perform 16 simultaneous table lookups to multiply the low-half
             l = _mm_shuffle_epi8(table1, l);
-
+            // Apply mask2 to get the high-half of the data
             __m128i h = _mm_and_si128(xmm0, mask2);
+            // Right shift the high-half by 4 bits to get values in [0,15]
             h = _mm_srli_epi64(h, 4);
+            // Perform table lookup with these indices to multiply the high-half
             h = _mm_shuffle_epi8(table2, h);
-
+            // Xor the high and low halves together to get the final result
             xmm0 = _mm_xor_si128(h, l);
-
-            _mm_store_si128(((__m128i*)dest) + i, xmm0);
+            // Store the result in the destination buffer
+            _mm_store_si128(dest_ptr, xmm0);
         }
-
     }
 
     void ssse3_binary4_full_table::region_multiply_add(value_type* dest,
