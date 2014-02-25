@@ -11,6 +11,8 @@
 
 #include <fifi/fifi_utils.hpp>
 
+#include <iostream>
+
 namespace fifi
 {
     template<class Field>
@@ -120,10 +122,13 @@ namespace fifi
             m_data.resize(elements_to_length<Field>(elements) +
                 aligment_length);
 
+            std::cout << m_alignment << std::endl;
             while (((uintptr_t)data() % m_alignment) != 0)
             {
-                m_offset++;
+                std::cout << "run" << std::endl;
+                m_offset += sizeof(value_type);
             }
+            std::cout << "done" << std::endl;
         }
 
     private:
