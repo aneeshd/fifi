@@ -218,6 +218,7 @@ TEST(TestRegionEqualAlignment, max_alignment)
 TEST(TestRegionEqualAlignment, region_add)
 {
     typedef fifi::binary16 field_type;
+    typedef typename field_type::value_type value_type;
 
     uint32_t value_size = sizeof(typename field_type::value_type);
     uint32_t alignment = value_size * 4;
@@ -237,28 +238,26 @@ TEST(TestRegionEqualAlignment, region_add)
 
         uint32_t test_alignment = i * value_size;
 
-        fifi::helper_test_buffer<field_type> dest(
-            length, test_alignment, false);
+        fifi::helper_test_buffer<value_type> dest(length, test_alignment);
 
         assert(((uintptr_t) dest.data() % test_alignment) == 0);
 
-        fifi::helper_test_buffer<field_type> src(
-            length, test_alignment, false);
+        fifi::helper_test_buffer<value_type> src(length, test_alignment);
 
         assert(((uintptr_t) src.data() % test_alignment) == 0);
 
-        // ASSERT_EQ((uintptr_t)dest.data() % optimized.alignment(),
-        //           (uintptr_t)src.data()  % optimized.alignment());
+        ASSERT_EQ((uintptr_t)dest.data() % optimized.alignment(),
+                  (uintptr_t)src.data()  % optimized.alignment());
 
-        // stack.region_add(dest.data(), src.data(), length);
+        stack.region_add(dest.data(), src.data(), length);
 
-        // EXPECT_EQ(optimized.m_region_add_dest, dest.data());
-        // EXPECT_EQ(optimized.m_region_add_src, src.data());
-        // EXPECT_EQ(optimized.m_region_add_length, length);
+        EXPECT_EQ(optimized.m_region_add_dest, dest.data());
+        EXPECT_EQ(optimized.m_region_add_src, src.data());
+        EXPECT_EQ(optimized.m_region_add_length, length);
 
-        // EXPECT_EQ(basic.m_region_add_dest, nullptr);
-        // EXPECT_EQ(basic.m_region_add_src, nullptr);
-        // EXPECT_EQ(basic.m_region_add_length, 0U);
+        EXPECT_EQ(basic.m_region_add_dest, nullptr);
+        EXPECT_EQ(basic.m_region_add_src, nullptr);
+        EXPECT_EQ(basic.m_region_add_length, 0U);
     }
 /*
     for (uint32_t i = 1; i < 10; ++i)

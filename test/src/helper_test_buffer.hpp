@@ -12,11 +12,8 @@
 
 #include <fifi/fifi_utils.hpp>
 
-#include <iostream>
-
 namespace fifi
 {
-
     /// sizeof(value_type) = 2
     /// alignement = 16
     /// extra = 8
@@ -26,14 +23,14 @@ namespace fifi
     /// ValueType uint16_t
     ///
     ///
-    template<class Field>
+    template<class ValueType>
     class helper_test_buffer
     {
     public:
 
-        typedef typename Field::value_type ValueType;
+        typedef ValueType value_type;
 
-        helper_test_buffer(uint32_t length, uint32_t alignment, bool nonzero) :
+        helper_test_buffer(uint32_t length, uint32_t alignment) :
             m_length(length),
             m_alignment(alignment),
             m_data_ptr(0)
@@ -41,21 +38,17 @@ namespace fifi
             // Make sure that the alignment is a multiple of element size
             assert(m_length > 0);
             assert(m_alignment > 0);
-            assert((m_alignment % sizeof(ValueType)) == 0);
+            assert((m_alignment % sizeof(value_type)) == 0);
 
             // Extra length needed to ensure that we can always move
             // the buffer to match the required alignment
-            uint32_t extra_length = m_alignment / sizeof(ValueType);
+            uint32_t extra_length = m_alignment / sizeof(value_type);
             assert(extra_length > 0);
 
             m_data.resize(length + extra_length);
-            assert(((uintptr_t)m_data.data() % sizeof(ValueType)) == 0);
+            assert(((uintptr_t)m_data.data() % sizeof(value_type)) == 0);
 
             m_data_ptr = find_aligned(m_data.data());
-
-            std::cout << "Alignement: " << m_alignment << std::endl;
-            std::cout << (void*) m_data.data() << std::endl;
-            std::cout << (void*) m_data_ptr << std::endl;
 
             assert(((uintptr_t)m_data_ptr % m_alignment) == 0);
         }
@@ -71,19 +64,19 @@ namespace fifi
             std::copy_n(other.m_data_ptr, m_length, m_data_ptr);
         }
 
-        ValueType* find_aligned(ValueType* ptr)
+        value_type* find_aligned(value_type* ptr)
         {
             uintptr_t p = reinterpret_cast<uintptr_t>(ptr);
-            return (ValueType*)(p + (m_alignment - (p % m_alignment)));
+            return (value_type*)(p + (m_alignment - (p % m_alignment)));
         }
 
 
-        const ValueType* data() const
+        const value_type* data() const
         {
             return m_data_ptr;
         }
 
-        ValueType* data()
+        value_type* data()
         {
             return m_data_ptr;
         }
@@ -129,5 +122,30 @@ namespace fifi
         os << "]";
 
         return os;
+    }
+
+    template<class Field>
+    helper_test_buffer<typename Field::value_type> create_random_buffer(uint32_t length, uint32_t alignment,
+        bool no_zero)
+    {
+        typedef typename Field::value_type value_type;
+
+        helper_test_buffer<value_type> buffer(length, alignment);
+
+        uint32_t elements = length_to_elements<Field>(length);
+
+        for (int i = 0; i < elements; ++i)
+        {
+            value_type v = rand() % Field::order;
+
+            if (no_zero && v == 0)
+            {
+                v++;
+            }
+
+            fifi::set_value<Field>(buffer.data(), i, v);
+        }
+
+        return buffer;
     }
 }
