@@ -125,8 +125,8 @@ namespace fifi
     }
 
     template<class Field>
-    helper_test_buffer<typename Field::value_type> create_random_buffer(uint32_t length, uint32_t alignment,
-        bool no_zero)
+    helper_test_buffer<typename Field::value_type> create_random_buffer(
+        uint32_t length, uint32_t alignment, bool no_zero)
     {
         typedef typename Field::value_type value_type;
 
@@ -134,7 +134,7 @@ namespace fifi
 
         uint32_t elements = length_to_elements<Field>(length);
 
-        for (int i = 0; i < elements; ++i)
+        for (uint32_t i = 0; i < elements; ++i)
         {
             value_type v = rand() % Field::order;
 
