@@ -247,6 +247,7 @@ public:
             RUN
             {
                 value_type constant = rand() % field_type::max_value;
+                constant = fifi::pack<field_type>(constant);
 
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
@@ -277,8 +278,8 @@ public:
         {
             RUN
             {
-                value_type constant =
-                    fifi::pack<field_type>(rand() % field_type::max_value);
+                value_type constant = rand() % field_type::max_value;
+                constant = fifi::pack<field_type>(constant);
 
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
@@ -291,8 +292,8 @@ public:
         {
             RUN
             {
-                value_type constant =
-                    fifi::pack<field_type>(rand() % field_type::max_value);
+                value_type constant = rand() % field_type::max_value;
+                constant = fifi::pack<field_type>(constant);
 
                 for (uint32_t i = 0; i < vectors; ++i)
                 {

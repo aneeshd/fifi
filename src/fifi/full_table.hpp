@@ -7,6 +7,7 @@
 
 #include "binary4.hpp"
 #include "binary4_packed_arithmetic.hpp"
+#include "binary8.hpp"
 #include "binary8_region_arithmetic_full_table.hpp"
 #include "final.hpp"
 #include "full_table_arithmetic.hpp"
@@ -20,6 +21,7 @@
 #include "region_info.hpp"
 #include "simple_online_arithmetic.hpp"
 #include "ssse3_binary4_full_table.hpp"
+#include "ssse3_binary8_full_table.hpp"
 
 namespace fifi
 {
@@ -31,6 +33,7 @@ namespace fifi
                region_divide_alignment<
                region_divide_granularity<
                region_dispatcher<ssse3_binary4_full_table,
+               region_dispatcher<ssse3_binary8_full_table,
                binary8_region_arithmetic_full_table<Field,
                region_arithmetic<
                region_info<
@@ -39,6 +42,6 @@ namespace fifi
                full_table_arithmetic<
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > > > > > > > >
+               final<Field> > > > > > > > > > > > > >
     { };
 }
