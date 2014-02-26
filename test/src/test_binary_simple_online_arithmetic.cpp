@@ -31,102 +31,40 @@ namespace fifi
     }
 }
 
-template<class Field>
-void test_fall_through()
+TEST(TestBinarySimpleOnlineArithmetic, fall_through_binary)
 {
-    typedef Field field_type;
-    typedef typename field_type::value_type value_type;
-    typedef fifi::dummy_stack<field_type> stack;
-
-    value_type a = 1;
-    value_type b = 1;
-    value_type r = 0;
-
-    fifi::capture_calls<value_type> expected_calls;
-
+    typedef fifi::dummy_stack<fifi::binary> stack;
+    // The binary field specialization for this layer implements multiply,
+    // divide, and invert. Therefore these should not fall through.
+    fifi::capture_calls<fifi::binary::value_type> expected_calls;
     stack s;
 
-    // Add
     s.m_calls.clear();
     expected_calls.clear();
-
-    expected_calls.call_add(a, b);
-
-    r = s.add(a, b);
-
-    expected_calls.return_add(r);
+    s.multiply(1U, 1U);
+    s.divide(1U, 1U);
+    s.invert(1U);
 
     EXPECT_EQ(expected_calls, s.m_calls);
 
-    // Subtract
-    s.m_calls.clear();
-    expected_calls.clear();
-
-    expected_calls.call_subtract(a, b);
-
-    r = s.subtract(a, b);
-
-    expected_calls.return_subtract(r);
-
-    EXPECT_EQ(expected_calls, s.m_calls);
-
-    // Multiply
-    s.m_calls.clear();
-    expected_calls.clear();
-
-    expected_calls.call_multiply(a, b);
-
-    r = s.multiply(a, b);
-
-    expected_calls.return_multiply(r);
-
-    EXPECT_EQ(expected_calls, s.m_calls);
-
-    // Divide
-    s.m_calls.clear();
-    expected_calls.clear();
-
-    expected_calls.call_divide(a, b);
-
-    r = s.divide(a, b);
-
-    expected_calls.return_divide(r);
-
-    EXPECT_EQ(expected_calls, s.m_calls);
-
-    // Invert
-    s.m_calls.clear();
-    expected_calls.clear();
-
-    expected_calls.call_invert(a);
-
-    r = s.invert(a);
-
-    expected_calls.return_invert(r);
-
-    EXPECT_EQ(expected_calls, s.m_calls);
+    // Test that other calls does fall through.
+    fifi::test_fall_through_add<stack>();
+    fifi::test_fall_through_subtract<stack>();
 }
 
-void test_fall_through_binary()
+TEST(TestBinarySimpleOnlineArithmetic, fall_through_binary4)
 {
-    fifi::capture_calls<fifi::binary::value_type> expected_calls;
-    fifi::dummy_stack<fifi::binary> s;
-
-    s.m_calls.clear();
-    expected_calls.clear();
-    s.multiply(1, 1);
-    s.divide(1, 1);
-    s.invert(1);
-
-    EXPECT_EQ(expected_calls, s.m_calls);
+    fifi::test_fall_through<fifi::dummy_stack<fifi::binary4>>();
 }
 
-TEST(TestBinarySimpleOnlineArithmetic, fall_through)
+TEST(TestBinarySimpleOnlineArithmetic, fall_through_binary8)
 {
-    test_fall_through_binary();
-    test_fall_through<fifi::binary4>();
-    test_fall_through<fifi::binary8>();
-    test_fall_through<fifi::binary16>();
+    fifi::test_fall_through<fifi::dummy_stack<fifi::binary8>>();
+}
+
+TEST(TestBinarySimpleOnlineArithmetic, fall_through_binary16)
+{
+    fifi::test_fall_through<fifi::dummy_stack<fifi::binary16>>();
 }
 
 TEST(TestBinarySimpleOnlineArithmetic, multiply)
