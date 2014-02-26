@@ -7,6 +7,7 @@
 
 namespace fifi
 {
+    /// @todo Add documentation
     template<class Field>
     struct helper_catch_all
     {
@@ -74,6 +75,5 @@ namespace fifi
             (void) a;
             return b;
         }
-
     };
 }

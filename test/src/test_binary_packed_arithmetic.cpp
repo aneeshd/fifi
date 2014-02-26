@@ -15,58 +15,87 @@
 #include <gtest/gtest.h>
 
 #include "expected_results.hpp"
-#include "helper_packed_fall_through.hpp"
+#include "helper_fall_through.hpp"
 
 namespace fifi
 {
+    // Put dummy layers and tests classes in an anonymous namespace
+    // to avoid violations of ODF (one-definition-rule) in other
+    // translation units
     namespace
     {
+        /// We only need on dummy stack here since all calculations
+        /// are implemented in the binary_packed_arithmetic layer
         template<class Field>
         struct dummy_stack : public
-        binary_packed_arithmetic<Field,
-        helper_packed_fall_through<Field,
-        packed_arithmetic<
-        final<Field> > > >
+            binary_packed_arithmetic<Field,
+            helper_fall_through<Field> >
         { };
     }
 }
 
+template<class Field>
+void test_binary_packed_counters()
+{
+    typedef fifi::dummy_stack<Field> stack;
+
+    // We expect all the packed operations fall through the binary4
+    // specializations to the other packed arithmetic function
+    fifi::fall_through_counter overall;
+
+    overall.zero_counter();
+
+    overall.m_count_packed_multiply = 1U;
+    overall.m_count_packed_divide = 1U;
+    overall.m_count_packed_invert = 1U;
+    overall.m_count_packed_add = 1U;
+    overall.m_count_packed_subtract = 1U;
+    fifi::test_packed_counters<stack>(overall);
+}
+
+template<>
+void test_binary_packed_counters<fifi::binary>()
+{
+    typedef fifi::dummy_stack<fifi::binary> stack;
+
+    // We expect all the packed operations for binary4 fall through to
+    // the standard arithmetic functions
+    fifi::fall_through_counter overall;
+    overall.zero_counter();
+
+    // All arithmetic functions are implemented directly in
+    // binary_packed_arithmetic layer so we don't expect to see
+    // any calls for those
+
+    fifi::test_packed_counters<stack>(overall);
+}
+
+/// Tests the binary packed arithmetic for fields other than binary
 TEST(TestBinaryPackedArithmetic, fall_through)
 {
     {
         SCOPED_TRACE("binary");
-        fifi::fall_through_packed_result expected;
-        expected.add = false;
-        expected.subtract = false;
-        expected.multiply = false;
-        expected.divide = false;
-        expected.invert = false;
-        fifi::helper_packed_fall_through_test<fifi::binary,
-        fifi::dummy_stack<fifi::binary> >(expected);
+        test_binary_packed_counters<fifi::binary>();
     }
+
     {
         SCOPED_TRACE("binary4");
-        fifi::fall_through_packed_result expected;
-        fifi::helper_packed_fall_through_test<fifi::binary4,
-        fifi::dummy_stack<fifi::binary4> >(expected);
+        test_binary_packed_counters<fifi::binary4>();
     }
+
     {
         SCOPED_TRACE("binary8");
-        fifi::fall_through_packed_result expected;
-        fifi::helper_packed_fall_through_test<fifi::binary8,
-        fifi::dummy_stack<fifi::binary8> >(expected);
+        test_binary_packed_counters<fifi::binary8>();
     }
+
     {
         SCOPED_TRACE("binary16");
-        fifi::fall_through_packed_result expected;
-        fifi::helper_packed_fall_through_test<fifi::binary16,
-        fifi::dummy_stack<fifi::binary16> >(expected);
+        test_binary_packed_counters<fifi::binary16>();
     }
+
     {
         SCOPED_TRACE("prime2325");
-        fifi::fall_through_packed_result expected;
-        fifi::helper_packed_fall_through_test<fifi::prime2325,
-        fifi::dummy_stack<fifi::prime2325> >(expected);
+        test_binary_packed_counters<fifi::prime2325>();
     }
 }
 
@@ -94,3 +123,4 @@ TEST(TestBinaryPackedArithmetic, invert)
 {
     check_results_packed_invert<fifi::dummy_stack<fifi::binary>>();
 }
+

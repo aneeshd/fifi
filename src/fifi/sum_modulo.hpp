@@ -9,65 +9,47 @@
 
 namespace fifi
 {
-    /// @brief This layer implements a simple function for determining
-    ///        whether a value is within the valid range of the chosen
-    ///        finite field.
-    ///        Note: for an explanation of how the enable_if works go here:
-    ///        http://stackoverflow.com/q/6972368/660982
-    template<class Super>
-    class sum_modulo : public Super
+    /// @param a First value from the finite field
+    /// @param b Second value from the finite field
+    /// @return True if the element is within the valid range, false
+    /// otherwise.
+    template<class Field, class Value>
+    inline typename std::enable_if<Field::is_exact, Value>::type
+    sum_modulo(Value a, Value b)
     {
-    public:
+        // This might be a bit tricky, but what we do here is to check
+        // for an integer overflow. If an overflow has happened we
+        // have to +1 to sum: we may write the sum as (2^m * h) + l,
+        // where h is the high-half of the sum and l is the low half.
+        // Now we realize that 2^m is congruent to +1 when working mod
+        // (2^m -1) So we may write 1 + l if h not equal zero and all
+        // we have to do is to +1 to the sum.
 
-        /// @copydoc layer::field_type
-        typedef typename Super::field_type field_type;
+        Value sum = a + b;
+        sum = sum < a ? sum + 1 : sum;
+        return sum;
+    }
 
-        /// @copydoc layer::value_type
-        typedef typename field_type::value_type value_type;
+    /// Specialization for non exact types
+    /// @copydoc sum_modulo(value_type, value_type) const
+    template<class Field, class Value>
+    inline typename std::enable_if<!Field::is_exact, Value>::type
+    sum_modulo(Value a, Value b)
+    {
+        // Here we use the same approach as if the field is exact. We
+        // however have to handle one additional case, namely if we do
+        // not have a data type overflow but anyway exceed the maximum
+        // allowed value in the field.
+        Value sum = a + b;
+        sum = sum < a ? sum + 1 : sum;
 
-    public:
-
-        /// @param a First value from the finite field
-        /// @param b Second value from the finite field
-        /// @return True if the element is within the valid range, false
-        /// otherwise.
-        template<class T = field_type>
-        inline typename std::enable_if<T::is_exact,
-            typename T::value_type>::type
-        calculate_sum_modulo(value_type a, value_type b) const
+        if (sum > Field::max_value)
         {
-            // This might be a bit tricky, but what we do here is to
-            // check for an integer overflow. If an overflow has
-            // happened we have to +1 to sum: we may write the sum as
-            // (2^m * h) + l, where h is the high-half of the sum and
-            // l is the low half.  Now we realize that 2^m is
-            // congruent to +1 when working mod (2^m -1) So we may
-            // write (1 * h) + l, now we realize that h must also be 1
-            // since we had an overflow thus: If we had an overflow
-            // all we have to do is to +1 to the sum.
-
-            value_type sum = a + b;
-            sum = sum < a ? sum + 1 : sum;
+            return sum - Field::max_value;
+        }
+        else
+        {
             return sum;
         }
-
-        /// Specialization for non exact types
-        /// @copydoc calculate_sum_modulo(value_type, value_type) const
-        template<class T = field_type>
-        inline typename std::enable_if<!T::is_exact,
-            typename T::value_type>::type
-        calculate_sum_modulo(value_type a, value_type b) const
-        {
-            value_type sum = a + b;
-            sum = sum < a ? sum + 1 : sum;
-            if (sum > field_type::max_value)
-            {
-                return sum - field_type::max_value;
-            }
-            else
-            {
-                return sum;
-            }
-        }
-    };
+    }
 }

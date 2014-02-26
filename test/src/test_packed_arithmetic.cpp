@@ -14,52 +14,52 @@
 
 #include "helper_catch_all.hpp"
 #include "helper_packed_fall_through.hpp"
+#include "helper_fall_through.hpp"
 
 namespace fifi
 {
+    // Put dummy layers and tests classes in an anonymous namespace
+    // to avoid violations of ODF (one-definition-rule) in other
+    // translation units
     namespace
     {
         template<class Field>
         struct dummy_stack : public
-        packed_arithmetic<
-        helper_packed_fall_through<Field,
-        helper_catch_all<Field> > >
+            packed_arithmetic<
+            helper_fall_through<Field> >
         { };
     }
 }
 
+/// Check that the packed_arithmetic layer correctly forwards the calls
+/// to the arithmetic layer.
 TEST(TestPackedArithmetic, fall_through)
 {
-    fifi::fall_through_packed_result expected;
-    expected.add = false;
-    expected.subtract = false;
-    expected.multiply = false;
-    expected.divide = false;
-    expected.invert = false;
+    typedef fifi::binary4 field_type;
+    typedef field_type::value_type value_type;
+    typedef fifi::dummy_stack<field_type> stack;
 
-    {
-        SCOPED_TRACE("binary");
-        fifi::helper_packed_fall_through_test<fifi::binary,
-        fifi::dummy_stack<fifi::binary> >(expected);
-    }
-    {
-        SCOPED_TRACE("binary4");
-        fifi::helper_packed_fall_through_test<fifi::binary4,
-        fifi::dummy_stack<fifi::binary4> >(expected);
-    }
-    {
-        SCOPED_TRACE("binary8");
-        fifi::helper_packed_fall_through_test<fifi::binary8,
-        fifi::dummy_stack<fifi::binary8> >(expected);
-    }
-    {
-        SCOPED_TRACE("binary16");
-        fifi::helper_packed_fall_through_test<fifi::binary16,
-        fifi::dummy_stack<fifi::binary16> >(expected);
-    }
-    {
-        SCOPED_TRACE("prime2325");
-        fifi::helper_packed_fall_through_test<fifi::prime2325,
-        fifi::dummy_stack<fifi::prime2325> >(expected);
-    }
+    // Get some input values
+    fifi::random_constant<field_type> constants;
+
+    value_type a = constants.pack();
+    value_type b = constants.pack();
+    value_type r = 0;
+
+    fifi::capture_calls<value_type> expected_calls;
+
+    stack s;
+
+    // Add
+    s.m_calls.clear();
+    expected_calls.clear();
+
+    expected_calls.call_add(a,b);
+    r = s.packed_add(a,b);
+    expected_calls.return_add(r);
+
+    EXPECT_EQ(expected_calls, s.m_calls);
+
+
+
 }

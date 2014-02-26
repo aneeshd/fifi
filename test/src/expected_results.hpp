@@ -207,8 +207,6 @@ inline void check_results_region_ptr_ptr(
     }
 }
 
-#include <iostream>
-
 /// This function checks whether the region arithmetics for the
 /// "dest[i] = dest[i] _OPERATION_ constant" function works. Where
 /// _OPERATION_ is multiplication.
@@ -569,18 +567,11 @@ inline void check_results_find_degree()
 }
 
 //------------------------------------------------------------------
-// sum modulo
+// sum_modulo
 //------------------------------------------------------------------
 
 template<class Field>
 struct sum_modulo_results;
-
-template<class FieldImpl>
-inline void check_results_sum_modulo()
-{
-    check_results_binary<FieldImpl, sum_modulo_results>(
-        std::mem_fn(&FieldImpl::template calculate_sum_modulo<>));
-}
 
 //------------------------------------------------------------------
 // multiply constant

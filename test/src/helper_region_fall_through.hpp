@@ -7,6 +7,7 @@
 
 namespace fifi
 {
+    /// @todo Add documentation
     template<class Field, class Super>
     struct helper_region_fall_through : public Super
     {
@@ -83,6 +84,7 @@ namespace fifi
         mutable bool m_fall_through;
     };
 
+    /// @todo Add documentation
     struct region_fall_through_result
     {
         region_fall_through_result() :
@@ -104,6 +106,7 @@ namespace fifi
         bool multiply_subtract;
     };
 
+    /// @todo Add documentation
     template<class Field, class Stack>
     void helper_region_fall_through_test(
         const region_fall_through_result& expected)

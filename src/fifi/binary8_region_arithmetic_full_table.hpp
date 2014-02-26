@@ -36,7 +36,7 @@ namespace fifi
         /// @copydoc layer::region_multiply_add(value_type*, value_type*,
         ///                                     value_type, uint32_t) const
         void region_multiply_add(value_type* dest, const value_type* src,
-                          value_type constant, uint32_t length) const
+                                 value_type constant, uint32_t length) const
         {
             assert(dest != 0);
             assert(src != 0);
@@ -62,7 +62,8 @@ namespace fifi
         /// @copydoc layer::region_multiply_subtract(value_type*, value_type*,
         ///                                          value_type, uint32_t) const
         void region_multiply_subtract(value_type* dest, const value_type* src,
-            value_type constant, uint32_t length) const
+                                      value_type constant,
+                                      uint32_t length) const
         {
             // In the binary extension fields add and subtract are the same
             region_multiply_add(dest, src, constant, length);

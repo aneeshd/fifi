@@ -16,153 +16,195 @@
 
 namespace fifi
 {
+    /// Helper function which given a field implementation will
+    /// instantiate it (with the different binary extension fields)
+    /// and perform the unit tests for region arithmetic.
+    ///
+    /// Note: This function is usually called indirectly through the
+    /// check_region_all() helper function.
     template<template <class> class FieldImpl>
     void check_region_add()
     {
         {
             SCOPED_TRACE("binary");
-            check_results_region_add<FieldImpl<fifi::binary> >();
+            check_results_region_add<
+                FieldImpl<fifi::binary> >();
         }
         {
             SCOPED_TRACE("binary4");
-            check_results_region_add<FieldImpl<fifi::binary4> >();
+            check_results_region_add<
+                FieldImpl<fifi::binary4> >();
         }
         {
             SCOPED_TRACE("binary8");
-            check_results_region_add<FieldImpl<fifi::binary8> >();
+            check_results_region_add<
+                FieldImpl<fifi::binary8> >();
         }
         {
             SCOPED_TRACE("binary16");
-            check_results_region_add<FieldImpl<fifi::binary16> >();
+            check_results_region_add<
+                FieldImpl<fifi::binary16> >();
         }
     }
 
+    /// @copydoc check_region_add()
     template<template <class> class FieldImpl>
     void check_region_subtract()
     {
         {
             SCOPED_TRACE("binary");
-            check_results_region_subtract<FieldImpl<fifi::binary> >();
+            check_results_region_subtract<
+                FieldImpl<fifi::binary> >();
         }
         {
             SCOPED_TRACE("binary4");
-            check_results_region_subtract<FieldImpl<fifi::binary4> >();
+            check_results_region_subtract<
+                FieldImpl<fifi::binary4> >();
         }
         {
             SCOPED_TRACE("binary8");
-            check_results_region_subtract<FieldImpl<fifi::binary8> >();
+            check_results_region_subtract<
+                FieldImpl<fifi::binary8> >();
         }
         {
             SCOPED_TRACE("binary16");
-            check_results_region_subtract<FieldImpl<fifi::binary16> >();
+            check_results_region_subtract<
+                FieldImpl<fifi::binary16> >();
         }
     }
 
+    /// @copydoc check_region_add()
     template<template <class> class FieldImpl>
     void check_region_multiply()
     {
         {
             SCOPED_TRACE("binary");
-            check_results_region_multiply<FieldImpl<fifi::binary> >();
+            check_results_region_multiply<
+                FieldImpl<fifi::binary> >();
         }
         {
             SCOPED_TRACE("binary4");
-            check_results_region_multiply<FieldImpl<fifi::binary4> >();
+            check_results_region_multiply<
+                FieldImpl<fifi::binary4> >();
         }
         {
             SCOPED_TRACE("binary8");
-            check_results_region_multiply<FieldImpl<fifi::binary8> >();
+            check_results_region_multiply<
+                FieldImpl<fifi::binary8> >();
         }
         {
             SCOPED_TRACE("binary16");
-            check_results_region_multiply<FieldImpl<fifi::binary16> >();
+            check_results_region_multiply<
+                FieldImpl<fifi::binary16> >();
         }
     }
 
+    /// @copydoc check_region_add()
     template<template <class> class FieldImpl>
     void check_region_divide()
     {
         {
             SCOPED_TRACE("binary");
-            check_results_region_divide<FieldImpl<fifi::binary> >();
+            check_results_region_divide<
+                FieldImpl<fifi::binary> >();
         }
         {
             SCOPED_TRACE("binary4");
-            check_results_region_divide<FieldImpl<fifi::binary4> >();
+            check_results_region_divide<
+                FieldImpl<fifi::binary4> >();
         }
         {
             SCOPED_TRACE("binary8");
-            check_results_region_divide<FieldImpl<fifi::binary8> >();
+            check_results_region_divide<
+                FieldImpl<fifi::binary8> >();
         }
         {
             SCOPED_TRACE("binary16");
-            check_results_region_divide<FieldImpl<fifi::binary16> >();
+            check_results_region_divide<
+                FieldImpl<fifi::binary16> >();
         }
     }
 
+    /// @copydoc check_region_add()
     template<template <class> class FieldImpl>
     void check_region_multiply_constant()
     {
         {
             SCOPED_TRACE("binary");
-            check_results_region_multiply_constant<FieldImpl<fifi::binary> >();
+            check_results_region_multiply_constant<
+                FieldImpl<fifi::binary> >();
         }
         {
             SCOPED_TRACE("binary4");
-            check_results_region_multiply_constant<FieldImpl<fifi::binary4> >();
+            check_results_region_multiply_constant<
+                FieldImpl<fifi::binary4> >();
         }
         {
             SCOPED_TRACE("binary8");
-            check_results_region_multiply_constant<FieldImpl<fifi::binary8> >();
+            check_results_region_multiply_constant<
+                FieldImpl<fifi::binary8> >();
         }
         {
             SCOPED_TRACE("binary16");
-            check_results_region_multiply_constant<FieldImpl<fifi::binary16> >();
+            check_results_region_multiply_constant<
+                FieldImpl<fifi::binary16> >();
         }
     }
 
+    /// @copydoc check_region_add()
     template<template <class> class FieldImpl>
     void check_region_multiply_add()
     {
         {
             SCOPED_TRACE("binary");
-            check_results_region_multiply_add<FieldImpl<fifi::binary> >();
+            check_results_region_multiply_add<
+                FieldImpl<fifi::binary> >();
         }
         {
             SCOPED_TRACE("binary4");
-            check_results_region_multiply_add<FieldImpl<fifi::binary4> >();
+            check_results_region_multiply_add<
+                FieldImpl<fifi::binary4> >();
         }
         {
             SCOPED_TRACE("binary8");
-            check_results_region_multiply_add<FieldImpl<fifi::binary8> >();
+            check_results_region_multiply_add<
+                FieldImpl<fifi::binary8> >();
         }
         {
             SCOPED_TRACE("binary16");
-            check_results_region_multiply_add<FieldImpl<fifi::binary16> >();
+            check_results_region_multiply_add<
+                FieldImpl<fifi::binary16> >();
         }
     }
 
+    /// @copydoc check_region_add()
     template<template <class> class FieldImpl>
     void check_region_multiply_subtract()
     {
         {
             SCOPED_TRACE("binary");
-            check_results_region_multiply_subtract<FieldImpl<fifi::binary> >();
+            check_results_region_multiply_subtract<
+                FieldImpl<fifi::binary> >();
         }
         {
             SCOPED_TRACE("binary4");
-            check_results_region_multiply_subtract<FieldImpl<fifi::binary4> >();
+            check_results_region_multiply_subtract<
+                FieldImpl<fifi::binary4> >();
         }
         {
             SCOPED_TRACE("binary8");
-            check_results_region_multiply_subtract<FieldImpl<fifi::binary8> >();
+            check_results_region_multiply_subtract<
+                FieldImpl<fifi::binary8> >();
         }
         {
             SCOPED_TRACE("binary16");
-            check_results_region_multiply_subtract<FieldImpl<fifi::binary16> >();
+            check_results_region_multiply_subtract<
+                FieldImpl<fifi::binary16> >();
         }
     }
 
+    /// Helper function that given a field implementation will invoke
+    /// all the different check_region_xxx() functions.
     template<class FieldImpl>
     void check_region_all()
     {

@@ -14,6 +14,12 @@
 
 namespace fifi
 {
+    /// Helper function which given a field implementation will
+    /// instantiate it (with the different binary extension fields)
+    /// and perform the unit tests for packed arithmetic.
+    ///
+    /// Note: This function is usually called indirectly through the
+    /// check_packed_all() helper function.
     template<template <class> class FieldImpl>
     void check_packed_add()
     {
@@ -35,6 +41,7 @@ namespace fifi
         }
     }
 
+    /// @copydoc check_packed_add()
     template<template <class> class FieldImpl>
     void check_packed_subtract()
     {
@@ -56,6 +63,7 @@ namespace fifi
         }
     }
 
+    /// @copydoc check_packed_add()
     template<template <class> class FieldImpl>
     void check_packed_multiply()
     {
@@ -77,6 +85,7 @@ namespace fifi
         }
     }
 
+    /// @copydoc check_packed_add()
     template<template <class> class FieldImpl>
     void check_packed_divide()
     {
@@ -98,6 +107,7 @@ namespace fifi
         }
     }
 
+    /// @copydoc check_packed_add()
     template<template <class> class FieldImpl>
     void check_packed_invert()
     {
@@ -119,6 +129,8 @@ namespace fifi
         }
     }
 
+    /// Helper function that given a field implementation will invoke
+    /// all the different check_packed_xxx() functions.
     template<class FieldImpl>
     void check_packed_all()
     {

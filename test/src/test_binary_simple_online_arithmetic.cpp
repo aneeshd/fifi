@@ -18,13 +18,15 @@
 
 namespace fifi
 {
+    // Put dummy layers and tests classes in an anonymous namespace
+    // to avoid violations of ODF (one-definition-rule) in other
+    // translation units
     namespace
     {
         template<class Field>
         struct dummy_stack : public
-        binary_simple_online_arithmetic<Field,
-        helper_fall_through<Field,
-        helper_catch_all<Field> > >
+            binary_simple_online_arithmetic<Field,
+            helper_fall_through<Field> >
         { };
     }
 }

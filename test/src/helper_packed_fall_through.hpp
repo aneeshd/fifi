@@ -7,6 +7,7 @@
 
 namespace fifi
 {
+    /// @todo Add missing documentation
     template<class Field, class Super>
     struct helper_packed_fall_through : public Super
     {
@@ -70,13 +71,24 @@ namespace fifi
         bool invert;
     };
 
-    template<class Field, class Stack>
+    /// Initializes the fall_through_results helper with the expected value
+    inline void set_expected(fall_through_packed_result& result, bool expected)
+    {
+        result.add = expected;
+        result.subtract = expected;
+        result.multiply = expected;
+        result.divide = expected;
+        result.invert = expected;
+    }
+
+    template<class Stack>
     void helper_packed_fall_through_test(
         const fall_through_packed_result& expected)
     {
-        Stack stack;
+        typedef typename Stack::field_type field_type;
+        typedef typename field_type::value_type value_type;
 
-        typedef typename Field::value_type value_type;
+        Stack stack;
 
         // Create an all ones value (zero negated) since invert and divide
         // only works with all ones for the binary case

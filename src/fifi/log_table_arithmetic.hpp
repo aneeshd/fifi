@@ -11,6 +11,7 @@
 #include "is_valid_element.hpp"
 #include "binary.hpp"
 #include "prime2325.hpp"
+#include "sum_modulo.hpp"
 
 namespace fifi
 {
@@ -35,7 +36,8 @@ namespace fifi
 
         /// Check for binary field
         static_assert(!std::is_same<binary, field_type>::value,
-                      "This layer does not support the binary field");
+            "This layer does not support the binary field");
+
     public:
 
         /// Constructor
@@ -77,7 +79,7 @@ namespace fifi
             value_type one = m_log[a];
             value_type two = m_log[b];
 
-            value_type sum = Super::calculate_sum_modulo(one, two);
+            value_type sum = sum_modulo<field_type>(one, two);
 
             // Notice that we handle the case where sum is equal to
             // 2^m - 1, by remapping this entry in the AntiLog table
@@ -110,7 +112,7 @@ namespace fifi
             two = Field::max_value - two;
 
             // Now we may simply multiply like before
-            value_type sum = Super::calculate_sum_modulo(one, two);
+            value_type sum = sum_modulo<field_type>(one, two);
 
             // Notice that we handle the case where sum is equal to
             // 2^m - 1, by remapping this entry in the AntiLog table
