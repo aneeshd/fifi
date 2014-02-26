@@ -41,9 +41,6 @@ namespace fifi
     }
 }
 
-
-
-
 TEST(TestRegionArithmetic, fall_through)
 {
     typedef fifi::binary8 field_type;
@@ -56,7 +53,6 @@ TEST(TestRegionArithmetic, fall_through)
 
     uint32_t length = 2;
 
-    fifi::fall_through_counter expected;
     fifi::capture_calls<value_type> expected_calls;
 
     stack s;

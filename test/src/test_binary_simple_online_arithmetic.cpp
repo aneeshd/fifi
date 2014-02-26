@@ -31,41 +31,122 @@ namespace fifi
     }
 }
 
+template<class Field>
+void test_fall_through()
+{
+    typedef Field field_type;
+    typedef typename field_type::value_type value_type;
+    typedef fifi::dummy_stack<field_type> stack;
+
+    value_type a = 1;
+    value_type b = 1;
+
+    fifi::capture_calls<value_type> expected_calls;
+
+    stack s;
+
+    auto constants = s.m_constants;
+
+    // Add
+    s.m_calls.clear();
+    expected_calls.clear();
+
+    expected_calls.call_add(a, b);
+
+    s.add(a, b);
+
+    expected_calls.return_add(constants.value());
+
+    EXPECT_EQ(expected_calls, s.m_calls);
+
+    // Subtract
+    s.m_calls.clear();
+    expected_calls.clear();
+
+    expected_calls.call_subtract(a, b);
+
+    s.subtract(a, b);
+
+    expected_calls.return_subtract(constants.value());
+
+    EXPECT_EQ(expected_calls, s.m_calls);
+
+    // Multiply
+    s.m_calls.clear();
+    expected_calls.clear();
+
+    expected_calls.call_multiply(a, b);
+
+    s.multiply(a, b);
+
+    expected_calls.return_multiply(constants.value());
+
+    EXPECT_EQ(expected_calls, s.m_calls);
+
+    // Divide
+    s.m_calls.clear();
+    expected_calls.clear();
+
+    expected_calls.call_divide(a, b);
+
+    s.divide(a, b);
+
+    expected_calls.return_divide(constants.value());
+
+    EXPECT_EQ(expected_calls, s.m_calls);
+
+    // Invert
+    s.m_calls.clear();
+    expected_calls.clear();
+
+    expected_calls.call_invert(a);
+
+    s.invert(a);
+
+    expected_calls.return_invert(constants.value());
+
+    EXPECT_EQ(expected_calls, s.m_calls);
+}
+
+template<>
+void test_fall_through<fifi::binary>()
+{
+    typedef fifi::binary field_type;
+    typedef field_type::value_type value_type;
+    typedef fifi::dummy_stack<field_type> stack;
+
+    value_type a = 1U;
+    value_type b = 1U;
+
+    fifi::capture_calls<value_type> expected_calls;
+
+    stack s;
+
+    // Multiply
+    s.m_calls.clear();
+    expected_calls.clear();
+    s.multiply(a, b);
+    EXPECT_EQ(expected_calls, s.m_calls);
+
+    // Divide
+    s.m_calls.clear();
+    expected_calls.clear();
+    s.divide(a, b);
+    EXPECT_EQ(expected_calls, s.m_calls);
+
+    // Invert
+    s.m_calls.clear();
+    expected_calls.clear();
+    s.invert(a);
+    EXPECT_EQ(expected_calls, s.m_calls);
+}
+
 TEST(TestBinarySimpleOnlineArithmetic, fall_through)
 {
-    {
-        SCOPED_TRACE("binary");
-        fifi::fall_through_result expected;
-        expected.multiply = false;
-        expected.divide = false;
-        expected.invert = false;
-        fifi::helper_fall_through_test<fifi::binary,
-        fifi::dummy_stack<fifi::binary> >(expected);
-    }
-    {
-        SCOPED_TRACE("binary4");
-        fifi::fall_through_result expected;
-        fifi::helper_fall_through_test<fifi::binary4,
-        fifi::dummy_stack<fifi::binary4> >(expected);
-    }
-    {
-        SCOPED_TRACE("binary8");
-        fifi::fall_through_result expected;
-        fifi::helper_fall_through_test<fifi::binary8,
-        fifi::dummy_stack<fifi::binary8> >(expected);
-    }
-    {
-        SCOPED_TRACE("binary16");
-        fifi::fall_through_result expected;
-        fifi::helper_fall_through_test<fifi::binary16,
-        fifi::dummy_stack<fifi::binary16> >(expected);
-    }
-    {
-        SCOPED_TRACE("prime2325");
-        fifi::fall_through_result expected;
-        fifi::helper_fall_through_test<fifi::prime2325,
-        fifi::dummy_stack<fifi::prime2325> >(expected);
-    }
+    test_fall_through<fifi::binary>();
+    test_fall_through<fifi::binary4>();
+    test_fall_through<fifi::binary8>();
+    test_fall_through<fifi::binary16>();
 }
 
 TEST(TestBinarySimpleOnlineArithmetic, multiply)
