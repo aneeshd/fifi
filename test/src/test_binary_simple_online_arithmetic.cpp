@@ -40,12 +40,11 @@ void test_fall_through()
 
     value_type a = 1;
     value_type b = 1;
+    value_type r = 0;
 
     fifi::capture_calls<value_type> expected_calls;
 
     stack s;
-
-    auto constants = s.m_constants;
 
     // Add
     s.m_calls.clear();
@@ -53,9 +52,9 @@ void test_fall_through()
 
     expected_calls.call_add(a, b);
 
-    s.add(a, b);
+    r = s.add(a, b);
 
-    expected_calls.return_add(constants.value());
+    expected_calls.return_add(r);
 
     EXPECT_EQ(expected_calls, s.m_calls);
 
@@ -65,9 +64,9 @@ void test_fall_through()
 
     expected_calls.call_subtract(a, b);
 
-    s.subtract(a, b);
+    r = s.subtract(a, b);
 
-    expected_calls.return_subtract(constants.value());
+    expected_calls.return_subtract(r);
 
     EXPECT_EQ(expected_calls, s.m_calls);
 
@@ -77,9 +76,9 @@ void test_fall_through()
 
     expected_calls.call_multiply(a, b);
 
-    s.multiply(a, b);
+    r = s.multiply(a, b);
 
-    expected_calls.return_multiply(constants.value());
+    expected_calls.return_multiply(r);
 
     EXPECT_EQ(expected_calls, s.m_calls);
 
@@ -89,9 +88,9 @@ void test_fall_through()
 
     expected_calls.call_divide(a, b);
 
-    s.divide(a, b);
+    r = s.divide(a, b);
 
-    expected_calls.return_divide(constants.value());
+    expected_calls.return_divide(r);
 
     EXPECT_EQ(expected_calls, s.m_calls);
 
@@ -101,9 +100,9 @@ void test_fall_through()
 
     expected_calls.call_invert(a);
 
-    s.invert(a);
+    r = s.invert(a);
 
-    expected_calls.return_invert(constants.value());
+    expected_calls.return_invert(r);
 
     EXPECT_EQ(expected_calls, s.m_calls);
 }
