@@ -121,7 +121,6 @@ void test_fall_through<fifi::binary>()
 
     stack s;
 
-    // Multiply
     s.m_calls.clear();
     expected_calls.clear();
     s.multiply(a, b);
