@@ -125,18 +125,9 @@ void test_fall_through<fifi::binary>()
     s.m_calls.clear();
     expected_calls.clear();
     s.multiply(a, b);
-    EXPECT_EQ(expected_calls, s.m_calls);
-
-    // Divide
-    s.m_calls.clear();
-    expected_calls.clear();
     s.divide(a, b);
-    EXPECT_EQ(expected_calls, s.m_calls);
-
-    // Invert
-    s.m_calls.clear();
-    expected_calls.clear();
     s.invert(a);
+
     EXPECT_EQ(expected_calls, s.m_calls);
 }
 
