@@ -107,32 +107,23 @@ void test_fall_through()
     EXPECT_EQ(expected_calls, s.m_calls);
 }
 
-template<>
-void test_fall_through<fifi::binary>()
+void test_fall_through_binary()
 {
-    typedef fifi::binary field_type;
-    typedef field_type::value_type value_type;
-    typedef fifi::dummy_stack<field_type> stack;
-
-    value_type a = 1U;
-    value_type b = 1U;
-
-    fifi::capture_calls<value_type> expected_calls;
-
-    stack s;
+    fifi::capture_calls<fifi::binary::value_type> expected_calls;
+    fifi::dummy_stack<fifi::binary> s;
 
     s.m_calls.clear();
     expected_calls.clear();
-    s.multiply(a, b);
-    s.divide(a, b);
-    s.invert(a);
+    s.multiply(1, 1);
+    s.divide(1, 1);
+    s.invert(1);
 
     EXPECT_EQ(expected_calls, s.m_calls);
 }
 
 TEST(TestBinarySimpleOnlineArithmetic, fall_through)
 {
-    test_fall_through<fifi::binary>();
+    test_fall_through_binary();
     test_fall_through<fifi::binary4>();
     test_fall_through<fifi::binary8>();
     test_fall_through<fifi::binary16>();
