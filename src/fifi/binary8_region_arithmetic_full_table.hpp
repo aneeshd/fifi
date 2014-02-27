@@ -49,6 +49,7 @@ namespace fifi
             // the row number. Therefore the constant is used as an offset,
             // and all possible results can then be accessed on the following
             // number of indices.
+            /// @todo make m_multtable private, and provide it using a function
             const value_type* offset =
                 &Super::m_multtable[(constant << binary8::degree)];
 
