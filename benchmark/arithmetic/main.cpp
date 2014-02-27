@@ -83,32 +83,6 @@ public:
         auto operations = options["operations"].as<std::vector<std::string>>();
         auto access = options["access"].as<std::vector<std::string>>();
 
-        // We make one pool with random data as source for the
-        // computations
-        uint32_t max_size =
-            *std::max_element(sizes.begin(), sizes.end());
-
-        assert((max_size % sizeof(value_type)) == 0);
-        uint32_t max_length = max_size / sizeof(value_type);
-
-        uint32_t max_vectors =
-            *std::max_element(vectors.begin(), vectors.end());
-
-        m_random_symbols_one.resize(max_vectors);
-        m_random_symbols_two.resize(max_vectors);
-
-        for(uint32_t j = 0; j < max_vectors; ++j)
-        {
-            m_random_symbols_one[j].resize(max_length);
-            m_random_symbols_two[j].resize(max_length);
-
-            for (uint32_t i = 0; i < max_length; ++i)
-            {
-                m_random_symbols_one[j][i] = rand();
-                m_random_symbols_two[j][i] = rand();
-            }
-        }
-
         assert(sizes.size() > 0);
         assert(vectors.size() > 0);
         assert(operations.size() > 0);
@@ -122,6 +96,11 @@ public:
                 {
                     for (const auto& a : access)
                     {
+                        // The encoding benchmark pattern is not applicable
+                        // to multiply_constant
+                        if (o == "multiply_constant" && a == "encoding")
+                            continue;
+
                         gauge::config_set cs;
                         cs.set_value<uint32_t>("vector_size", s);
 
@@ -152,25 +131,24 @@ public:
         uint32_t length = cs.get_value<uint32_t>("vector_length");
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
 
-        if (vectors != m_symbols_one.size())
+        // Prepare the continuous data blocks
+        m_data_one.resize(vectors * length);
+        m_data_two.resize(vectors * length);
+
+        for (uint32_t i = 0; i < length; ++i)
         {
-            m_symbols_one.resize(vectors);
-            m_symbols_two.resize(vectors);
+            m_data_one[i] = rand() % field_type::max_value;
+            m_data_two[i] = rand() % field_type::max_value;
         }
 
-        for (uint32_t j = 0; j < vectors; ++j)
+        // Prepare the symbol pointers
+        m_symbols_one.resize(vectors);
+        m_symbols_two.resize(vectors);
+
+        for (uint32_t i = 0; i < vectors; ++i)
         {
-            if (length != m_symbols_one[j].size())
-            {
-                m_symbols_one[j].resize(length);
-                m_symbols_two[j].resize(length);
-            }
-
-            std::copy_n(&m_random_symbols_one[j][0], length,
-                        &m_symbols_one[j][0]);
-
-            std::copy_n(&m_random_symbols_two[j][0], length,
-                        &m_symbols_two[j][0]);
+            m_symbols_one[i] = &m_data_one[i * length];
+            m_symbols_two[i] = &m_data_two[i * length];
         }
     }
 
@@ -187,11 +165,9 @@ public:
         {
             RUN
             {
-                for(uint32_t i = 0; i < vectors; ++i)
+                for (uint32_t i = 0; i < vectors; ++i)
                 {
-                    (m_field.*function)(
-                        &(m_symbols_one[i][0]),
-                        &(m_symbols_two[i][0]),
+                    (m_field.*function)(m_symbols_one[i], m_symbols_two[i],
                         length);
                 }
             }
@@ -205,9 +181,22 @@ public:
                     uint32_t index_one = rand() % vectors;
                     uint32_t index_two = rand() % vectors;
 
-                    (m_field.*function)(&(m_symbols_one[index_one][0]),
-                      &(m_symbols_two[index_two][0]),
-                      length);
+                    (m_field.*function)(m_symbols_one[index_one],
+                        m_symbols_two[index_two], length);
+                }
+            }
+        }
+        else if (data_access == "encoding")
+        {
+            RUN
+            {
+                for (uint32_t i = 0; i < vectors; ++i)
+                {
+                    for (uint32_t j = 0; j < vectors; ++j)
+                    {
+                        (m_field.*function)(m_symbols_one[i],
+                            m_symbols_two[j], length);
+                    }
                 }
             }
         }
@@ -234,10 +223,10 @@ public:
                 value_type constant = rand() % field_type::max_value;
                 constant = fifi::pack<field_type>(constant);
 
-                for(uint32_t i = 0; i < vectors; ++i)
+                for (uint32_t i = 0; i < vectors; ++i)
                 {
-                    (m_field.*function)(&(m_symbols_one[i][0]),
-                      &(m_symbols_two[i][0]), constant, length);
+                    (m_field.*function)(m_symbols_one[i],
+                        m_symbols_two[i], constant, length);
                 }
             }
         }
@@ -254,8 +243,25 @@ public:
                     uint32_t index_one = rand() % vectors;
                     uint32_t index_two = rand() % vectors;
 
-                    (m_field.*function)(&(m_symbols_one[index_one][0]),
-                      &(m_symbols_two[index_two][0]), constant, length);
+                    (m_field.*function)(m_symbols_one[index_one],
+                        m_symbols_two[index_two], constant, length);
+                }
+            }
+        }
+        else if (data_access == "encoding")
+        {
+            RUN
+            {
+                for (uint32_t i = 0; i < vectors; ++i)
+                {
+                    for (uint32_t j = 0; j < vectors; ++j)
+                    {
+                        value_type constant = rand() % field_type::max_value;
+                        constant = fifi::pack<field_type>(constant);
+
+                        (m_field.*function)(m_symbols_one[i],
+                            m_symbols_two[j], constant, length);
+                    }
                 }
             }
         }
@@ -283,7 +289,7 @@ public:
 
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
-                    (m_field.*function)(&(m_symbols_one[i][0]), constant,
+                    (m_field.*function)(m_symbols_one[i], constant,
                         length);
                 }
             }
@@ -299,7 +305,7 @@ public:
                 {
                     uint32_t index = rand() % vectors;
 
-                    (m_field.*function)(&(m_symbols_one[index][0]), constant,
+                    (m_field.*function)(m_symbols_one[index], constant,
                         length);
                 }
             }
@@ -358,20 +364,20 @@ protected:
     field_impl m_field;
 
     /// Type of the aligned vector
-    typedef std::vector<value_type, sak::aligned_allocator<value_type> >
+    typedef std::vector<value_type, sak::aligned_allocator<value_type>>
         aligned_vector;
 
     /// The first buffer of vectors
-    std::vector<aligned_vector> m_symbols_one;
+    std::vector<value_type*> m_symbols_one;
 
     /// The second buffer of vectors
-    std::vector<aligned_vector> m_symbols_two;
+    std::vector<value_type*> m_symbols_two;
 
-    /// Random data for the first buffer of symbols
-    std::vector<aligned_vector> m_random_symbols_one;
+    /// Random data for the first continuous buffer
+    aligned_vector m_data_one;
 
-    /// Random data for the second buffer of symbols
-    std::vector<aligned_vector> m_random_symbols_two;
+    /// Random data for the second continuous buffer
+    aligned_vector m_data_two;
 };
 
 
@@ -383,8 +389,8 @@ BENCHMARK_OPTION(arithmetic_options)
     gauge::po::options_description options;
 
     std::vector<uint32_t> size;
-    size.push_back(100);
-    size.push_back(2000);
+    size.push_back(64);
+    size.push_back(1600);
 
     auto default_size =
         gauge::po::value<std::vector<uint32_t>>()->default_value(
@@ -393,8 +399,7 @@ BENCHMARK_OPTION(arithmetic_options)
     std::vector<uint32_t> vectors;
     vectors.push_back(16);
     vectors.push_back(64);
-    vectors.push_back(128);
-    vectors.push_back(512);
+    vectors.push_back(256);
 
     auto default_vectors =
         gauge::po::value<std::vector<uint32_t>>()->default_value(
@@ -415,6 +420,7 @@ BENCHMARK_OPTION(arithmetic_options)
     std::vector<std::string> access;
     access.push_back("random");
     access.push_back("linear");
+    access.push_back("encoding");
 
     auto default_access =
         gauge::po::value<std::vector<std::string> >()->default_value(
