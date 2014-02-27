@@ -768,79 +768,7 @@ namespace fifi
 
         mutable capture_calls<value_type> m_calls;
         mutable random_constant<field_type> m_constants;
-
-        mutable bool m_fall_through;
     };
-
-
-
-    struct fall_through_result
-    {
-        fall_through_result() :
-            add(true),
-            subtract(true),
-            multiply(true),
-            divide(true),
-            invert(true)
-        { }
-        bool add;
-        bool subtract;
-        bool multiply;
-        bool divide;
-        bool invert;
-
-        uint32_t m_count_multiply;
-        uint32_t m_count_divide;
-        uint32_t m_count_invert;
-        uint32_t m_count_add;
-        uint32_t m_count_subtract;
-    };
-
-
-
-    /// Initializes the fall_through_results helper with the expected value
-    inline void set_expected(fall_through_result& result, bool expected)
-    {
-        result.add = expected;
-        result.subtract = expected;
-        result.multiply = expected;
-        result.divide = expected;
-        result.invert = expected;
-    }
-
-    template<class Field, class Stack>
-    void helper_fall_through_test(const fall_through_result& expected)
-    {
-        Stack stack;
-
-        typedef typename Field::value_type value_type;
-
-        value_type value = 1;
-
-        stack.m_fall_through = false;
-        stack.add(value, value);
-        EXPECT_EQ(expected.add, stack.m_fall_through);
-
-        stack.m_fall_through = false;
-        stack.subtract(value, value);
-        EXPECT_EQ(expected.subtract, stack.m_fall_through);
-
-        stack.m_fall_through = false;
-        stack.multiply(value, value);
-        EXPECT_EQ(expected.multiply, stack.m_fall_through);
-
-        stack.m_fall_through = false;
-        stack.divide(value, value);
-        EXPECT_EQ(expected.divide, stack.m_fall_through);
-
-        stack.m_fall_through = false;
-        stack.invert(value);
-        EXPECT_EQ(expected.invert, stack.m_fall_through);
-    }
-
-
-
-
 
     template<class Stack>
     void test_fall_through_add()
