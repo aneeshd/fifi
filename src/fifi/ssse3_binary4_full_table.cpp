@@ -45,8 +45,8 @@ namespace fifi
     {
         assert(dest != 0);
         assert(src != 0);
-        assert(((uintptr_t) dest % alignment()) == 0);
-        assert(((uintptr_t) src % alignment()) == 0);
+        //assert(((uintptr_t) dest % alignment()) == 0);
+        //assert(((uintptr_t) src % alignment()) == 0);
         assert(length > 0);
         assert((length % granularity()) == 0);
 
@@ -59,12 +59,12 @@ namespace fifi
         for (uint32_t i = 0; i < ssse3_size; i++, src_ptr++, dest_ptr++)
         {
             // Load the next 16-bytes of the destination and source buffers
-            __m128i xmm0 = _mm_load_si128(dest_ptr);
-            __m128i xmm1 = _mm_load_si128(src_ptr);
+            __m128i xmm0 = _mm_loadu_si128(dest_ptr);
+            __m128i xmm1 = _mm_loadu_si128(src_ptr);
             // Xor these values together
             xmm0 = _mm_xor_si128(xmm0, xmm1);
             // Store the result in the destination buffer
-            _mm_store_si128(dest_ptr, xmm0);
+            _mm_storeu_si128(dest_ptr, xmm0);
         }
     }
 
@@ -101,7 +101,7 @@ namespace fifi
         value_type* dest, value_type constant, uint32_t length) const
     {
         assert(dest != 0);
-        assert(((uintptr_t) dest % alignment()) == 0);
+        //assert(((uintptr_t) dest % alignment()) == 0);
         assert(length > 0);
         assert((length % granularity()) == 0);
         // assert(alignment)
@@ -132,7 +132,7 @@ namespace fifi
         for (uint32_t i = 0; i < ssse3_size; i++, dest_ptr++)
         {
             // Load the next 16-bytes of the destination buffer
-            __m128i xmm0 = _mm_load_si128(dest_ptr);
+            __m128i xmm0 = _mm_loadu_si128(dest_ptr);
             // Apply mask1 to get the low-half of the data
             __m128i l = _mm_and_si128(xmm0, mask1);
             // Perform 16 simultaneous table lookups to multiply the low-half
@@ -146,7 +146,7 @@ namespace fifi
             // Xor the high and low halves together to get the final result
             xmm0 = _mm_xor_si128(h, l);
             // Store the result in the destination buffer
-            _mm_store_si128(dest_ptr, xmm0);
+            _mm_storeu_si128(dest_ptr, xmm0);
         }
     }
 
@@ -155,8 +155,8 @@ namespace fifi
     {
         assert(dest != 0);
         assert(src != 0);
-        assert(((uintptr_t) dest % alignment()) == 0);
-        assert(((uintptr_t) src % alignment()) == 0);
+        //assert(((uintptr_t) dest % alignment()) == 0);
+        //assert(((uintptr_t) src % alignment()) == 0);
         assert(length > 0);
         assert((length % granularity()) == 0);
 
@@ -189,7 +189,7 @@ namespace fifi
             // Multiply the src with the constant
 
             // Load the next 16-bytes of the source buffer
-            __m128i xmm0 = _mm_load_si128(src_ptr);
+            __m128i xmm0 = _mm_loadu_si128(src_ptr);
             // Apply mask1 to get the low-half of the data
             __m128i l = _mm_and_si128(xmm0, mask1);
             // Perform 16 simultaneous table lookups to multiply the low-half
@@ -206,11 +206,11 @@ namespace fifi
             // Add the src to the dest
 
             // Load the next 16-bytes of the destination buffer
-            __m128i xmm1 = _mm_load_si128(dest_ptr);
+            __m128i xmm1 = _mm_loadu_si128(dest_ptr);
             // Xor the multiplication result and the destination value
             xmm0 = _mm_xor_si128(xmm0, xmm1);
             // Store the result in the destination buffer
-            _mm_store_si128(dest_ptr, xmm0);
+            _mm_storeu_si128(dest_ptr, xmm0);
         }
     }
 

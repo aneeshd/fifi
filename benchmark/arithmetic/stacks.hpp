@@ -17,38 +17,10 @@
 
 namespace fifi
 {
-
-    /// Stack containing the SSSE3 Binary4 SIMD optimized
-    /// operations. Using the CPU dispatcher optimizations should only
-    /// be enabled on SSSE3-capable CPUs.
+    /// Unoptimized Binary8 stack for comparison with SIMD implementations.
     template<class Field>
-    class ssse3_binary4 :
-        public region_equal_alignment<
-               region_divide_alignment<
-               region_divide_granularity<
-               region_dispatcher<ssse3_binary4_full_table,
-               binary_region_arithmetic<Field,
-               region_arithmetic<
-               region_info<
-               binary4_packed_arithmetic<Field,
-               binary_packed_arithmetic<Field,
-               packed_arithmetic<
-               binary_simple_online_arithmetic<Field,
-               simple_online_arithmetic<
-               polynomial_degree<
-               final<Field> > > > > > > > > > > > > >
-    { };
-
-    /// Stack containing the SSSE3 Binary8 SIMD optimized
-    /// operations. Using the CPU dispatcher optimizations should only
-    /// be enabled on SSSE3-capable CPUs.
-    template<class Field>
-    class ssse3_binary8 :
-        public region_equal_alignment<
-               region_divide_alignment<
-               region_divide_granularity<
-               region_dispatcher<ssse3_binary8_full_table,
-               binary8_region_arithmetic_full_table<Field,
+    class unoptimized_binary8 :
+        public binary8_region_arithmetic_full_table<Field,
                region_arithmetic<
                region_info<
                binary4_packed_arithmetic<Field,
@@ -56,6 +28,6 @@ namespace fifi
                full_table_arithmetic<
                simple_online_arithmetic<
                polynomial_degree<
-               final<Field> > > > > > > > > > > > >
+               final<Field> > > > > > > > >
     { };
 }
