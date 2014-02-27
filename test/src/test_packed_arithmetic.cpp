@@ -5,15 +5,8 @@
 
 #include <gtest/gtest.h>
 
-#include <fifi/binary.hpp>
-#include <fifi/binary16.hpp>
-#include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
 #include <fifi/packed_arithmetic.hpp>
-#include <fifi/prime2325.hpp>
-
-#include "helper_catch_all.hpp"
-#include "helper_packed_fall_through.hpp"
 #include "helper_fall_through.hpp"
 
 namespace fifi
@@ -35,7 +28,7 @@ namespace fifi
 /// to the arithmetic layer.
 TEST(TestPackedArithmetic, fall_through)
 {
-    typedef fifi::binary4 field_type;
+    typedef fifi::binary8 field_type;
     typedef field_type::value_type value_type;
     typedef fifi::dummy_stack<field_type> stack;
 
@@ -57,6 +50,46 @@ TEST(TestPackedArithmetic, fall_through)
     expected_calls.call_add(a,b);
     r = s.packed_add(a,b);
     expected_calls.return_add(r);
+
+    EXPECT_EQ(expected_calls, s.m_calls);
+
+    // Subtract
+    s.m_calls.clear();
+    expected_calls.clear();
+
+    expected_calls.call_subtract(a,b);
+    r = s.packed_subtract(a,b);
+    expected_calls.return_subtract(r);
+
+    EXPECT_EQ(expected_calls, s.m_calls);
+
+    // Multiply
+    s.m_calls.clear();
+    expected_calls.clear();
+
+    expected_calls.call_multiply(a,b);
+    r = s.packed_multiply(a,b);
+    expected_calls.return_multiply(r);
+
+    EXPECT_EQ(expected_calls, s.m_calls);
+
+    // Divide
+    s.m_calls.clear();
+    expected_calls.clear();
+
+    expected_calls.call_divide(a,b);
+    r = s.packed_divide(a,b);
+    expected_calls.return_divide(r);
+
+    EXPECT_EQ(expected_calls, s.m_calls);
+
+    // Invert
+    s.m_calls.clear();
+    expected_calls.clear();
+
+    expected_calls.call_invert(a);
+    r = s.packed_invert(a);
+    expected_calls.return_invert(r);
 
     EXPECT_EQ(expected_calls, s.m_calls);
 }

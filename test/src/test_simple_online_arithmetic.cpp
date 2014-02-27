@@ -14,7 +14,6 @@
 #include <gtest/gtest.h>
 
 #include "expected_results.hpp"
-#include "helper_catch_all.hpp"
 #include "helper_fall_through.hpp"
 
 namespace fifi
@@ -40,28 +39,59 @@ namespace fifi
     }
 }
 
+template<class Field>
+inline void helper_fall_through()
+{
+    typedef fifi::dummy_stack_fall_through<Field> stack;
+
+    fifi::capture_calls<typename Field::value_type> expected_calls;
+    stack s;
+
+    s.m_calls.clear();
+    expected_calls.clear();
+    s.add(1, 1);
+    s.subtract(1, 1);
+    s.multiply(1, 1);
+    s.divide(1, 1);
+    s.invert(1);
+
+    EXPECT_EQ(expected_calls, s.m_calls);
+}
+
+// simple online does not support binary multiplication, division, or inversion.
+template<>
+inline void helper_fall_through<fifi::binary>()
+{
+    typedef fifi::dummy_stack_fall_through<fifi::binary> stack;
+
+    fifi::capture_calls<typename fifi::binary::value_type> expected_calls;
+    stack s;
+
+    s.m_calls.clear();
+    expected_calls.clear();
+    s.add(1, 1);
+    s.subtract(1, 1);
+
+    EXPECT_EQ(expected_calls, s.m_calls);
+}
+
 TEST(TestSimpleOnlineArithmetic, fall_through)
 {
-    fifi::fall_through_result expected;
-    expected.add = false;
-    expected.subtract = false;
-    expected.multiply = false;
-    expected.divide = false;
-    expected.invert = false;
+    {
+        SCOPED_TRACE("binary");
+        helper_fall_through<fifi::binary>();
+    }
     {
         SCOPED_TRACE("binary4");
-        fifi::helper_fall_through_test<fifi::binary4,
-        fifi::dummy_stack_fall_through<fifi::binary4> >(expected);
+        helper_fall_through<fifi::binary4>();
     }
     {
         SCOPED_TRACE("binary8");
-        fifi::helper_fall_through_test<fifi::binary8,
-        fifi::dummy_stack_fall_through<fifi::binary8> >(expected);
+        helper_fall_through<fifi::binary8>();
     }
     {
         SCOPED_TRACE("binary16");
-        fifi::helper_fall_through_test<fifi::binary16,
-        fifi::dummy_stack_fall_through<fifi::binary16> >(expected);
+        helper_fall_through<fifi::binary16>();
     }
 }
 

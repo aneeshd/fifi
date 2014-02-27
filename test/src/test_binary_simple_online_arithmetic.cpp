@@ -8,12 +8,10 @@
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
 #include <fifi/binary_simple_online_arithmetic.hpp>
-#include <fifi/prime2325.hpp>
 
 #include <gtest/gtest.h>
 
 #include "expected_results.hpp"
-#include "helper_catch_all.hpp"
 #include "helper_fall_through.hpp"
 
 namespace fifi

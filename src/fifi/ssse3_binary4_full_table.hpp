@@ -109,12 +109,6 @@ namespace fifi
 
     private:
 
-        /// Boolean specifying whether the cpu has ssse3
-        bool m_has_ssse3;
-
-        /// The size of each step in the region loops
-        uint32_t m_ssse3_size;
-
         /// The storage type
         typedef std::vector<uint8_t, sak::aligned_allocator<uint8_t> >
             aligned_vector;

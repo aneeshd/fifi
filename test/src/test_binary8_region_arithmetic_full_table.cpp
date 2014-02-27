@@ -17,7 +17,6 @@
 #include <gtest/gtest.h>
 
 #include "expected_results.hpp"
-#include "helper_catch_all.hpp"
 #include "helper_fall_through.hpp"
 
 namespace fifi

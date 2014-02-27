@@ -29,6 +29,23 @@ namespace fifi
 
     public:
 
+        /// @copydoc layer::add(value_type, value_type) const
+        value_type add(value_type a, value_type b) const
+        {
+            assert(is_valid_element<field_type>(a));
+            assert(is_valid_element<field_type>(b));
+            return a ^ b;
+        }
+
+        /// @copydoc layer::subtract(value_type, value_type) const
+        value_type subtract(value_type a, value_type b) const
+        {
+            assert(is_valid_element<field_type>(a));
+            assert(is_valid_element<field_type>(b));
+            // In the binary extension fields add and subtract are the same
+            return add(a, b);
+        }
+
         /// @copydoc layer::multiply(value_type, value_type) const
         value_type multiply(value_type a, value_type b) const
         {
@@ -149,21 +166,6 @@ namespace fifi
             }
 
             return y_large;
-        }
-
-        /// @copydoc layer::add(value_type, value_type) const
-        value_type add(value_type a, value_type b) const
-        {
-            assert(is_valid_element<field_type>(a));
-            assert(is_valid_element<field_type>(b));
-            return a ^ b;
-        }
-
-        /// @copydoc layer::subtract(value_type, value_type) const
-        value_type subtract(value_type a, value_type b) const
-        {
-            // In the binary extension fields add and subtract are the same
-            return add(a, b);
         }
     };
 }

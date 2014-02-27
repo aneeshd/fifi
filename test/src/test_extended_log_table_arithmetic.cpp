@@ -13,7 +13,6 @@
 #include <gtest/gtest.h>
 
 #include "expected_results.hpp"
-#include "helper_catch_all.hpp"
 #include "helper_fall_through.hpp"
 
 namespace fifi
@@ -53,29 +52,10 @@ inline void helper_fall_through()
     s.invert(1);
 
     EXPECT_EQ(expected_calls, s.m_calls);
-    /*
-    // Get some input values
-    fifi::random_constant<field_type> constants;
 
-    value_type a = constants.value();
-    value_type b = constants.value();
-    value_type r = 0;
-
-    fifi::capture_calls<value_type> expected_calls;
-
-    stack s;
-
-    // Multiply, divide and invert are implemented so we do not
-    // expect to get any "fall-through" when calling those
-    s.m_calls.clear();
-    expected_calls.clear();
-
-    r = s.multiply(a,b);
-    r = s.divide(a,b);
-    r = s.invert(a);
-
-    EXPECT_EQ(expected_calls, s.m_calls);
-    */
+    // Test that other calls does fall through.
+    fifi::test_fall_through_add<stack>();
+    fifi::test_fall_through_subtract<stack>();
 }
 
 

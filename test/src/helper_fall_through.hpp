@@ -47,7 +47,6 @@ namespace fifi
         std::vector<args1> m_return_packed_divide;
         std::vector<args1> m_return_packed_invert;
 
-
         std::vector<args3> m_call_region_add;
         std::vector<args3> m_call_region_subtract;
         std::vector<args3> m_call_region_multiply;
