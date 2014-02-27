@@ -19,12 +19,6 @@
 
 #include <tuple>
 
-class arguments
-{
-    virtual bool compare();
-};
-
-
 namespace fifi
 {
     // Put dummy layers and tests classes in an anonymous namespace

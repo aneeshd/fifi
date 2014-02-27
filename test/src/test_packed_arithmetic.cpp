@@ -59,7 +59,4 @@ TEST(TestPackedArithmetic, fall_through)
     expected_calls.return_add(r);
 
     EXPECT_EQ(expected_calls, s.m_calls);
-
-
-
 }

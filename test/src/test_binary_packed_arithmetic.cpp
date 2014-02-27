@@ -33,7 +33,7 @@ namespace fifi
         { };
     }
 }
-
+/*
 template<class Field>
 void test_binary_packed_counters()
 {
@@ -98,6 +98,22 @@ TEST(TestBinaryPackedArithmetic, fall_through)
         test_binary_packed_counters<fifi::prime2325>();
     }
 }
+*/
+TEST(TestBinaryPackedArithmetic, fall_through_binary4)
+{
+    fifi::test_fall_through<fifi::dummy_stack<fifi::binary4>>();
+}
+
+TEST(TestBinaryPackedArithmetic, fall_through_binary8)
+{
+    fifi::test_fall_through<fifi::dummy_stack<fifi::binary8>>();
+}
+
+TEST(TestBinaryPackedArithmetic, fall_through_binary16)
+{
+    fifi::test_fall_through<fifi::dummy_stack<fifi::binary16>>();
+}
+
 
 TEST(TestBinaryPackedArithmetic, add)
 {

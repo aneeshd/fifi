@@ -43,73 +43,98 @@ namespace fifi
     }
 }
 
-template<class Field>
-void test_binary4_packed_counters()
+TEST(TestBinary4PackedArithmetic, fall_through_binary)
 {
-    typedef fifi::fall_through_stack<Field> stack;
-
-    // We expect all the packed operations fall through the binary4
-    // specializations to the other packed arithmetic function
-    fifi::fall_through_counter overall;
-
-    overall.zero_counter();
-
-    overall.m_count_packed_multiply = 1U;
-    overall.m_count_packed_divide = 1U;
-    overall.m_count_packed_invert = 1U;
-    overall.m_count_packed_add = 1U;
-    overall.m_count_packed_subtract = 1U;
-    fifi::test_packed_counters<stack>(overall);
+    fifi::test_packed_fall_through<fifi::fall_through_stack<fifi::binary>>();
 }
 
-template<>
-void test_binary4_packed_counters<fifi::binary4>()
+TEST(TestBinary4PackedArithmetic, fall_through_binary4)
 {
     typedef fifi::fall_through_stack<fifi::binary4> stack;
+    typedef typename stack::field_type field_type;
+    typedef typename field_type::value_type value_type;
 
-    // We expect all the packed operations for binary4 fall through to
-    // the standard arithmetic functions
-    fifi::fall_through_counter overall;
-    overall.zero_counter();
+    fifi::capture_calls<fifi::binary::value_type> expected_calls;
+    stack s;
+    {
+        s.m_calls.clear();
+        expected_calls.clear();
 
-    overall.m_count_multiply = 2U;
-    overall.m_count_divide = 2U;
-    overall.m_count_invert = 2U;
+        // Only add and subtract is independenct of the underlying implementation
+        s.packed_add(1U, 1U);
+        s.packed_subtract(1U, 1U);
 
-    // Addition and subtraction are implemented directly in
-    // binary_packed_arithmetic layer so we don't expect to see
-    // any calls for those
+        EXPECT_EQ(expected_calls, s.m_calls);
+    }
+    {
+        // Multiply
+        s.m_calls.clear();
+        expected_calls.clear();
 
-    fifi::test_packed_counters<stack>(overall);
+        value_type a = 1;
+        value_type b = 1;
+
+        expected_calls.call_multiply(a >> 4, b >> 4);
+        expected_calls.call_multiply(a & 0xf, b & 0xf);
+
+        auto constant = s.m_constants;
+
+        expected_calls.return_multiply(constant.value());
+        expected_calls.return_multiply(constant.value());
+
+        s.packed_multiply(a, b);
+
+        EXPECT_EQ(expected_calls, s.m_calls);
+    }
+    {
+        // Divide
+        s.m_calls.clear();
+        expected_calls.clear();
+
+        value_type a = 1;
+        value_type b = 0xff;
+
+        expected_calls.call_divide(a >> 4, b >> 4);
+        expected_calls.call_divide(a & 0xf, b & 0xf);
+
+        auto constant = s.m_constants;
+
+        expected_calls.return_divide(constant.value());
+        expected_calls.return_divide(constant.value());
+
+        s.packed_divide(a, b);
+
+        EXPECT_EQ(expected_calls, s.m_calls);
+    }
+    {
+        // Invert
+        s.m_calls.clear();
+        expected_calls.clear();
+
+        value_type a = 0xff;
+
+        expected_calls.call_invert(a >> 4);
+        expected_calls.call_invert(a & 0xf);
+
+        auto constant = s.m_constants;
+
+        expected_calls.return_invert(constant.value());
+        expected_calls.return_invert(constant.value());
+
+        s.packed_invert(a);
+
+        EXPECT_EQ(expected_calls, s.m_calls);
+    }
 }
 
-/// Tests the binary4 packed arithmetic for fields other than binary4
-TEST(TestBinary4PackedArithmetic, fall_through)
+TEST(TestBinary4PackedArithmetic, fall_through_binary8)
 {
-    {
-        SCOPED_TRACE("binary");
-        test_binary4_packed_counters<fifi::binary>();
-    }
+    fifi::test_packed_fall_through<fifi::fall_through_stack<fifi::binary8>>();
+}
 
-    {
-        SCOPED_TRACE("binary4");
-        test_binary4_packed_counters<fifi::binary4>();
-    }
-
-    {
-        SCOPED_TRACE("binary8");
-        test_binary4_packed_counters<fifi::binary8>();
-    }
-
-    {
-        SCOPED_TRACE("binary16");
-        test_binary4_packed_counters<fifi::binary16>();
-    }
-
-    {
-        SCOPED_TRACE("prime2325");
-        test_binary4_packed_counters<fifi::prime2325>();
-    }
+TEST(TestBinary4PackedArithmetic, fall_through_binary16)
+{
+    fifi::test_packed_fall_through<fifi::fall_through_stack<fifi::binary16>>();
 }
 
 TEST(TestBinary4PackedArithmetic, packed_add)
