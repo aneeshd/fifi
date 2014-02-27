@@ -24,15 +24,30 @@ namespace fifi
 {
     namespace
     {
+        template<class Super>
+        class multtable_mock : public Super
+        {
+
+        public:
+            typedef typename Super::field_type field_type;
+            typedef typename field_type::value_type value_type;
+        public:
+            multtable_mock()
+            {
+                m_multtable.resize(field_type::order * field_type::order, '\0');
+            }
+
+        protected:
+            std::vector<value_type> m_multtable;
+        };
+
         template<class Field>
         struct fall_through_stack : public
         binary8_region_arithmetic_full_table<Field,
-        helper_fall_through<Field> >
+        multtable_mock<
+        helper_fall_through<Field> > >
         { };
-    }
 
-    namespace
-    {
         template<class Field>
         struct arithmetic_stack : public
         binary8_region_arithmetic_full_table<Field,
@@ -58,32 +73,37 @@ TEST(TestBinary8RegionArithmeticFullTable, fall_through_binary8)
     typedef typename stack::field_type field_type;
     typedef typename field_type::value_type value_type;
 
-    fifi::capture_calls<fifi::binary::value_type> expected_calls;
+    fifi::capture_calls<value_type> expected_calls;
     stack s;
 
+    // region_multiply_add
+
+    uint32_t length = 10;
+    auto dest_vector = std::vector<value_type>(length);
+    auto src_vector = std::vector<value_type>(length);
+    auto constant = fifi::pack<field_type>(1);
+
+    s.m_calls.clear();
+    expected_calls.clear();
+
+    for (uint32_t i = 0; i < length; ++i)
     {
-        // region_multiply_add
-
-        uint32_t length = 10;
-        auto dest_vector = std::vector<value_type>(length);
-        auto src_vector = std::vector<value_type>(length);
-        auto constant = fifi::pack<field_type>(1);
-
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        for (uint32_t i = 0; i < length; ++i)
-        {
-            expected_calls.call_packed_add(dest_vector.data(),
-            src_vector.data(), constant, length);
-        }
-
-
-        s.region_multiply_add(dest_vector.data(), src_vector.data(), constant,
-            length);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        expected_calls.call_packed_add(1,1);
+        expected_calls.return_packed_add(1);
     }
+
+    s.region_multiply_add(dest_vector.data(), src_vector.data(), constant,
+        length);
+
+    EXPECT_TRUE(fifi::equal_call_count(expected_calls, s.m_calls));
+
+    // region_multiply_uses the same implementation
+    s.m_calls.clear();
+
+    s.region_multiply_subtract(dest_vector.data(), src_vector.data(), constant,
+        length);
+
+    EXPECT_TRUE(fifi::equal_call_count(expected_calls, s.m_calls));
 
     // Test that other calls does fall through.
     fifi::test_fall_through_region_add<stack>();

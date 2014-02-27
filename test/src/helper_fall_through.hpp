@@ -257,7 +257,6 @@ namespace fifi
         }
     };
 
-
     template<class ValueType>
     inline bool operator==(const capture_calls<ValueType>& a,
                            const capture_calls<ValueType>& b)
@@ -344,7 +343,94 @@ namespace fifi
             return false;
 
         return true;
+    }
 
+    template<class ValueType>
+    inline bool equal_call_count(const capture_calls<ValueType>& a,
+                           const capture_calls<ValueType>& b)
+    {
+        if (a.m_call_add.size() != b.m_call_add.size())
+            return false;
+
+        if (a.m_call_subtract.size() != b.m_call_subtract.size())
+            return false;
+
+        if (a.m_call_multiply.size() != b.m_call_multiply.size())
+            return false;
+
+        if (a.m_call_divide.size() != b.m_call_divide.size())
+            return false;
+
+        if (a.m_call_invert.size() != b.m_call_invert.size())
+            return false;
+
+        if (a.m_return_add.size() != b.m_return_add.size())
+            return false;
+
+        if (a.m_return_subtract.size() != b.m_return_subtract.size())
+            return false;
+
+        if (a.m_return_multiply.size() != b.m_return_multiply.size())
+            return false;
+
+        if (a.m_return_divide.size() != b.m_return_divide.size())
+            return false;
+
+        if (a.m_return_invert.size() != b.m_return_invert.size())
+            return false;
+
+        if (a.m_call_packed_add.size() != b.m_call_packed_add.size())
+            return false;
+
+        if (a.m_call_packed_subtract.size() != b.m_call_packed_subtract.size())
+            return false;
+
+        if (a.m_call_packed_multiply.size() != b.m_call_packed_multiply.size())
+            return false;
+
+        if (a.m_call_packed_divide.size() != b.m_call_packed_divide.size())
+            return false;
+
+        if (a.m_call_packed_invert.size() != b.m_call_packed_invert.size())
+            return false;
+
+        if (a.m_return_packed_add.size() != b.m_return_packed_add.size())
+            return false;
+
+        if (a.m_return_packed_subtract.size() != b.m_return_packed_subtract.size())
+            return false;
+
+        if (a.m_return_packed_multiply.size() != b.m_return_packed_multiply.size())
+            return false;
+
+        if (a.m_return_packed_divide.size() != b.m_return_packed_divide.size())
+            return false;
+
+        if (a.m_return_packed_invert.size() != b.m_return_packed_invert.size())
+            return false;
+
+        if (a.m_call_region_add.size() != b.m_call_region_add.size())
+            return false;
+
+        if (a.m_call_region_subtract.size() != b.m_call_region_subtract.size())
+            return false;
+
+        if (a.m_call_region_multiply.size() != b.m_call_region_multiply.size())
+            return false;
+
+        if (a.m_call_region_divide.size() != b.m_call_region_divide.size())
+            return false;
+
+        if (a.m_call_region_multiply_constant.size() != b.m_call_region_multiply_constant.size())
+            return false;
+
+        if (a.m_call_region_multiply_add.size() != b.m_call_region_multiply_add.size())
+            return false;
+
+        if (a.m_call_region_multiply_subtract.size() != b.m_call_region_multiply_subtract.size())
+            return false;
+
+        return true;
     }
 
     template<class ValueType>

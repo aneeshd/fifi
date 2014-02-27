@@ -41,10 +41,19 @@ namespace fifi
 template<class Field>
 inline void helper_fall_through()
 {
-    typedef Field field_type;
-    typedef typename field_type::value_type value_type;
-    typedef fifi::dummy_stack_fall_through<field_type> stack;
+    typedef fifi::dummy_stack_fall_through<Field> stack;
 
+    fifi::capture_calls<typename Field::value_type> expected_calls;
+    stack s;
+
+    s.m_calls.clear();
+    expected_calls.clear();
+    s.multiply(1, 1);
+    s.divide(1, 1);
+    s.invert(1);
+
+    EXPECT_EQ(expected_calls, s.m_calls);
+    /*
     // Get some input values
     fifi::random_constant<field_type> constants;
 
@@ -66,7 +75,7 @@ inline void helper_fall_through()
     r = s.invert(a);
 
     EXPECT_EQ(expected_calls, s.m_calls);
-
+    */
 }
 
 

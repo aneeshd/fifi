@@ -54,7 +54,7 @@ TEST(TestBinary4PackedArithmetic, fall_through_binary4)
     typedef typename stack::field_type field_type;
     typedef typename field_type::value_type value_type;
 
-    fifi::capture_calls<fifi::binary::value_type> expected_calls;
+    fifi::capture_calls<value_type> expected_calls;
     stack s;
     {
         s.m_calls.clear();
