@@ -13,9 +13,15 @@
 #include <fifi/prime2325.hpp>
 #include <fifi/prime2325_prefix_length.hpp>
 #include <sak/storage.hpp>
+
 namespace fifi
 {
-    /// Very simple test we just set a few values and check that we are fine
+    /// Test that we can find a prefix for a carefully generated
+    /// buffer. The values in the buffer are constructed so that only
+    /// one unique prefix is guaranteed to exist.
+    ///
+    /// @param prefix_bits The number of prefix bits to use. This
+    /// determines the maximum block length that we can use.
     template<class Algorithm>
     void helper_prime2325_find_one_prefix(uint32_t prefix_bits)
     {
@@ -32,6 +38,23 @@ namespace fifi
         EXPECT_EQ(prefix_bits, prefix_length);
 
         uint32_t shift_prefix = 32 - prefix_length;
+
+        // Here we fill the block of data with a unique value each
+        // element making sure that only one prefix exist in the
+        // block.
+        //
+        // This is done in the following way with the shift_prefix we
+        // know which bits will be inspected by the prefix search so
+        // we shift a number [0:block_length-1] up to the prefix
+        //
+        // Example (shift_prefix 28) of how the bits are filled:
+        //
+        // Iteration 0: 0000xxxxxxxxxx
+        // Iteration 1: 0001xxxxxxxxxx
+        // Iteration 2: 0010xxxxxxxxxx
+        // Iteration 3: 0011xxxxxxxxxx
+        //
+        // and so forth.
 
         for (uint32_t i = 0; i < block_length; ++i)
         {

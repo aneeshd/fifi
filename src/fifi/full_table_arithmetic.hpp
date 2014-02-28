@@ -22,47 +22,48 @@ namespace fifi
     /// the 2^8 binary extension field.  However, for higher field
     /// sizes it will most likely not work due to the very high memory
     /// requirements.
-    template<class Field, class Super>
+    template<class Super>
     class full_table_arithmetic : public Super
     {
-        // Static check for the prime2325 field, the full lookup table
-        // only works with binary extension fields
-        static_assert(
-            !std::is_same<prime2325, typename Super::field_type>::value,
-            "This layer does not support the 2^32 - 5 prime field");
+
+    public:
+
+        /// @copydoc layer::field_type
+        typedef typename Super::field_type field_type;
+
+        /// @copydoc layer::value_type
+        typedef typename field_type::value_type value_type;
+
+        // The full lookup table does not support the binary field
+        static_assert(!std::is_same<binary, field_type>::value,
+            "This layer does not support the binary field");
 
         // Check for the binary16 field the full lookup table cannot
         // be used with binary16 due to the excessive amounts of
         // memory it would require to create the look-up table.
         static_assert(
-            !std::is_same<binary16, typename Super::field_type>::value,
+            !std::is_same<binary16, field_type>::value,
             "This layer does not support the binary16 field");
 
-        // The full lookup table does not support the binary field
-        static_assert(!std::is_same<binary, typename Super::field_type>::value,
-            "This layer does not support the binary field");
-
-    public:
-
-        /// @copydoc layer::value_type
-        typedef typename Field::value_type value_type;
-
-        /// @copydoc layer::field_type
-        typedef Field field_type;
+        // Static check for the prime2325 field, the full lookup table
+        // only works with binary extension fields
+        static_assert(
+            !std::is_same<prime2325, field_type>::value,
+            "This layer does not support the 2^32 - 5 prime field");
 
     public:
 
         /// Constructor
         full_table_arithmetic()
         {
-            m_multtable.resize(Field::order * Field::order, '\0');
-            m_divitable.resize(Field::order * Field::order, '\0');
+            m_multtable.resize(field_type::order * field_type::order, '\0');
+            m_divitable.resize(field_type::order * field_type::order, '\0');
 
-            for (uint32_t i = 0; i < Field::order; ++i)
+            for (uint32_t i = 0; i < field_type::order; ++i)
             {
-                int offset = i * Field::order;
+                int offset = i * field_type::order;
 
-                for (uint32_t j = 0; j < Field::order; ++j)
+                for (uint32_t j = 0; j < field_type::order; ++j)
                 {
                     m_multtable[offset + j] = Super::multiply(i,j);
 
@@ -80,7 +81,7 @@ namespace fifi
             assert(is_valid_element<field_type>(a));
             assert(is_valid_element<field_type>(b));
 
-            return m_multtable[(a << Field::degree) + b];
+            return m_multtable[(a << field_type::degree) + b];
         }
 
         /// @copydoc layer::divide(value_type, value_type) const
@@ -89,7 +90,7 @@ namespace fifi
             assert(is_valid_element<field_type>(numerator));
             assert(is_valid_element<field_type>(denominator));
 
-            return m_divitable[(numerator << Field::degree) + denominator];
+            return m_divitable[(numerator << field_type::degree) + denominator];
         }
 
         /// @copydoc layer::invert(value_type) const

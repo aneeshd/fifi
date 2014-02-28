@@ -16,6 +16,11 @@
 
 namespace fifi
 {
+    /// Test that we can find a prefix for in a randomly generated
+    /// buffer, given we choose the buffer length in such a way that
+    /// one unused prefix is guaranteed to exist.
+    ///
+    /// @param data The random buffer to search for a prefix
     template<class Algorithm>
     void helper_prime2325_find_a_prefix(std::vector<uint32_t> data)
     {
@@ -40,6 +45,10 @@ namespace fifi
         }
     }
 
+    /// Creates a random and deterministic block of data to search for
+    /// a prefix.
+    ///
+    /// @param block_length The length of the block we want to test.
     template<class Algorithm>
     void helper_prime2325_find_a_prefix(uint32_t block_length)
     {

@@ -9,7 +9,6 @@
 
 namespace fifi
 {
-
     /// @brief This layer provides the default region information.
     template<class Super>
     class region_info : public Super
@@ -24,21 +23,29 @@ namespace fifi
 
     public:
 
-        /// @return The default region alignment required for the buffers used
-        ///         in the finite field computations. The buffers passed to the
-        ///         arithmetic functions should have their memory aligned
-        ///         according to the value returned by this function.
+        /// @copydoc layer::alignment()
         uint32_t alignment() const
         {
             /// @todo Change to C++11 alignof when available in MSVC
             return sizeof(value_type);
         }
 
-        /// @return The buffer length granularity, i.e., length (number of
-        ///         value_type elements) by which the buffer must be divisible.
+        /// @copydoc layer::max_alignment()
+        uint32_t max_alignment() const
+        {
+            return alignment();
+        }
+
+        /// @copydoc layer::granularity()
         uint32_t granularity() const
         {
             return 1U;
+        }
+
+        /// @copydoc layer::max_granularity()
+        uint32_t max_granularity() const
+        {
+            return granularity();
         }
     };
 }

@@ -3,6 +3,9 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+// This file causes double definition warnings with MSVC
+#if !defined(_MSC_VER)
+
 #include "binary8.hpp"
 
 namespace fifi
@@ -14,3 +17,5 @@ namespace fifi
     const binary8::value_type binary8::prime;
     const bool binary8::is_exact;
 }
+
+#endif

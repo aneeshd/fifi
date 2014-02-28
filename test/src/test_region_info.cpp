@@ -26,17 +26,78 @@ namespace fifi
 }
 
 template<class Field>
-void test_region_granularity()
+void test_region_alignment()
 {
-    fifi::dummy_stack<Field> stack;
-    EXPECT_TRUE(stack.granularity() > 0);
+    EXPECT_EQ(sizeof(typename Field::value_type),
+              fifi::dummy_stack<Field>().alignment());
 }
 
 template<class Field>
-void test_region_alignment()
+void test_region_max_alignment()
 {
-    fifi::dummy_stack<Field> stack;
-    EXPECT_TRUE(stack.alignment() > 0);
+    EXPECT_EQ(sizeof(typename Field::value_type),
+              fifi::dummy_stack<Field>().max_alignment());
+}
+
+template<class Field>
+void test_region_granularity()
+{
+    EXPECT_EQ(1U, fifi::dummy_stack<Field>().granularity());
+}
+
+template<class Field>
+void test_region_max_granularity()
+{
+    EXPECT_EQ(1U, fifi::dummy_stack<Field>().max_granularity());
+}
+
+
+TEST(TestRegionInfo, alignment)
+{
+    {
+        SCOPED_TRACE("binary");
+        test_region_alignment<fifi::binary>();
+    }
+    {
+        SCOPED_TRACE("binary4");
+        test_region_alignment<fifi::binary4>();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        test_region_alignment<fifi::binary8>();
+    }
+    {
+        SCOPED_TRACE("binary16");
+        test_region_alignment<fifi::binary16>();
+    }
+    {
+        SCOPED_TRACE("prime2325");
+        test_region_alignment<fifi::prime2325>();
+    }
+}
+
+TEST(TestRegionInfo, max_alignment)
+{
+    {
+        SCOPED_TRACE("binary");
+        test_region_max_alignment<fifi::binary>();
+    }
+    {
+        SCOPED_TRACE("binary4");
+        test_region_max_alignment<fifi::binary4>();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        test_region_max_alignment<fifi::binary8>();
+    }
+    {
+        SCOPED_TRACE("binary16");
+        test_region_max_alignment<fifi::binary16>();
+    }
+    {
+        SCOPED_TRACE("prime2325");
+        test_region_max_alignment<fifi::prime2325>();
+    }
 }
 
 TEST(TestRegionInfo, granularity)
@@ -63,26 +124,26 @@ TEST(TestRegionInfo, granularity)
     }
 }
 
-TEST(TestRegionInfo, alignment)
+TEST(TestRegionInfo, max_granularity)
 {
     {
         SCOPED_TRACE("binary");
-        test_region_alignment<fifi::binary>();
+        test_region_max_granularity<fifi::binary>();
     }
     {
         SCOPED_TRACE("binary4");
-        test_region_alignment<fifi::binary4>();
+        test_region_max_granularity<fifi::binary4>();
     }
     {
         SCOPED_TRACE("binary8");
-        test_region_alignment<fifi::binary8>();
+        test_region_max_granularity<fifi::binary8>();
     }
     {
         SCOPED_TRACE("binary16");
-        test_region_alignment<fifi::binary16>();
+        test_region_max_granularity<fifi::binary16>();
     }
     {
         SCOPED_TRACE("prime2325");
-        test_region_alignment<fifi::prime2325>();
+        test_region_max_granularity<fifi::prime2325>();
     }
 }

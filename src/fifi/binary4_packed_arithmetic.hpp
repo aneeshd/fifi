@@ -38,6 +38,19 @@ namespace fifi
 
     public:
 
+        /// @copydoc layer::packed_add(value_type, value_type) const
+        value_type packed_add(value_type a, value_type b) const
+        {
+            return a ^ b;
+        }
+
+        /// @copydoc layer::packed_subtract(value_type, value_type) const
+        value_type packed_subtract(value_type a, value_type b) const
+        {
+            // In the binary extension fields add and subtract are the same
+            return packed_add(a, b);
+        }
+
         /// @copydoc layer::packed_multiply(value_type, value_type) const
         value_type packed_multiply(value_type a, value_type b) const
         {
@@ -67,19 +80,6 @@ namespace fifi
             value_type low = Super::invert(a & 0xf);
 
             return (high << 4) | low;
-        }
-
-        /// @copydoc layer::packed_add(value_type, value_type) const
-        value_type packed_add(value_type a, value_type b) const
-        {
-            return a ^ b;
-        }
-
-        /// @copydoc layer::packed_subtract(value_type, value_type) const
-        value_type packed_subtract(value_type a, value_type b) const
-        {
-            // In the binary extension fields add and subtract are the same
-            return packed_add(a, b);
         }
     };
 }

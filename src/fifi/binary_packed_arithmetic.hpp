@@ -33,6 +33,19 @@ namespace fifi
 
     public:
 
+        /// @copydoc layer::packed_add(value_type, value_type)
+        value_type packed_add(value_type a, value_type b) const
+        {
+            return a ^ b;
+        }
+
+        /// @copydoc layer::packed_subtract(value_type, value_type) const
+        value_type packed_subtract(value_type a, value_type b) const
+        {
+            // In the binary extension fields add and subtract are the same
+            return packed_add(a, b);
+        }
+
         /// @copydoc layer::packed_multiply(value_type, value_type) const
         value_type packed_multiply(value_type a, value_type b) const
         {
@@ -58,19 +71,6 @@ namespace fifi
             // a vector of all ones
             assert(a == std::numeric_limits<value_type>::max());
             return a;
-        }
-
-        /// @copydoc layer::packed_add(value_type, value_type)
-        value_type packed_add(value_type a, value_type b) const
-        {
-            return a ^ b;
-        }
-
-        /// @copydoc layer::packed_subtract(value_type, value_type) const
-        value_type packed_subtract(value_type a, value_type b) const
-        {
-            // In the binary extension fields add and subtract are the same
-            return packed_add(a, b);
         }
     };
 }

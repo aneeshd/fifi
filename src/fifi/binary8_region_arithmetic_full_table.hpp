@@ -23,8 +23,8 @@ namespace fifi
     /// constant this yields a constant offset into the multiplication
     /// table (see below for further details).
     template<class Super>
-    class binary8_region_arithmetic_full_table<fifi::binary8, Super>
-        : public Super
+    class binary8_region_arithmetic_full_table<fifi::binary8, Super> :
+        public Super
     {
     public:
 
@@ -36,7 +36,7 @@ namespace fifi
         /// @copydoc layer::region_multiply_add(value_type*, value_type*,
         ///                                     value_type, uint32_t) const
         void region_multiply_add(value_type* dest, const value_type* src,
-                          value_type constant, uint32_t length) const
+            value_type constant, uint32_t length) const
         {
             assert(dest != 0);
             assert(src != 0);
@@ -49,6 +49,7 @@ namespace fifi
             // the row number. Therefore the constant is used as an offset,
             // and all possible results can then be accessed on the following
             // number of indices.
+            /// @todo make m_multtable private, and provide it using a function
             const value_type* offset =
                 &Super::m_multtable[(constant << binary8::degree)];
 

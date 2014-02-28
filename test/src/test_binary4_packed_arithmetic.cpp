@@ -16,84 +16,149 @@
 #include <gtest/gtest.h>
 
 #include "expected_results.hpp"
-#include "helper_catch_all.hpp"
-#include "helper_packed_fall_through.hpp"
+#include "helper_fall_through.hpp"
 
 namespace fifi
 {
+    // Put dummy layers and tests classes in an anonymous namespace
+    // to avoid violations of ODF (one-definition-rule) in other
+    // translation units
     namespace
     {
+        // Dummy stack used to check the fall-through
         template<class Field>
-        struct dummy_stack : public
-        binary4_packed_arithmetic<Field,
-        helper_packed_fall_through<Field,
-        simple_online_arithmetic<
-        polynomial_degree<
-        helper_catch_all<Field> > > > >
+        struct fall_through_stack : public
+            binary4_packed_arithmetic<Field,
+            helper_fall_through<Field> >
+        { };
+
+        // Dummy stack used to check the calculations
+        template<class Field>
+        struct arithmetic_stack : public
+            binary4_packed_arithmetic<Field,
+            simple_online_arithmetic<
+            polynomial_degree<
+            final<Field> > > >
         { };
     }
 }
 
-TEST(TestBinary4PackedArithmetic, fall_through)
+TEST(TestBinary4PackedArithmetic, fall_through_binary)
 {
+    fifi::test_packed_fall_through<fifi::fall_through_stack<fifi::binary>>();
+}
+
+TEST(TestBinary4PackedArithmetic, fall_through_binary4)
+{
+    typedef fifi::fall_through_stack<fifi::binary4> stack;
+    typedef stack::field_type field_type;
+    typedef field_type::value_type value_type;
+
+    fifi::capture_calls<value_type> expected_calls;
+    stack s;
     {
-        SCOPED_TRACE("binary");
-        fifi::fall_through_packed_result expected;
-        fifi::helper_packed_fall_through_test<fifi::binary,
-        fifi::dummy_stack<fifi::binary> >(expected);
+        s.m_calls.clear();
+        expected_calls.clear();
+
+        // Only add and subtract is independenct of the underlying implementation
+        s.packed_add(1U, 1U);
+        s.packed_subtract(1U, 1U);
+
+        EXPECT_EQ(expected_calls, s.m_calls);
     }
     {
-        SCOPED_TRACE("binary4");
-        fifi::fall_through_packed_result expected;
-        expected.add = false;
-        expected.subtract = false;
-        expected.multiply = false;
-        expected.divide = false;
-        expected.invert = false;
-        fifi::helper_packed_fall_through_test<fifi::binary4,
-        fifi::dummy_stack<fifi::binary4> >(expected);
+        // Multiply
+        s.m_calls.clear();
+        expected_calls.clear();
+
+        value_type a = 1;
+        value_type b = 1;
+
+        expected_calls.call_multiply(a >> 4, b >> 4);
+        expected_calls.call_multiply(a & 0xf, b & 0xf);
+
+        auto constant = s.m_constants;
+
+        expected_calls.return_multiply(constant.value());
+        expected_calls.return_multiply(constant.value());
+
+        s.packed_multiply(a, b);
+
+        EXPECT_EQ(expected_calls, s.m_calls);
     }
     {
-        SCOPED_TRACE("binary8");
-        fifi::fall_through_packed_result expected;
-        fifi::helper_packed_fall_through_test<fifi::binary8,
-        fifi::dummy_stack<fifi::binary8> >(expected);
+        // Divide
+        s.m_calls.clear();
+        expected_calls.clear();
+
+        value_type a = 1;
+        value_type b = 0xff;
+
+        expected_calls.call_divide(a >> 4, b >> 4);
+        expected_calls.call_divide(a & 0xf, b & 0xf);
+
+        auto constant = s.m_constants;
+
+        expected_calls.return_divide(constant.value());
+        expected_calls.return_divide(constant.value());
+
+        s.packed_divide(a, b);
+
+        EXPECT_EQ(expected_calls, s.m_calls);
     }
     {
-        SCOPED_TRACE("binary16");
-        fifi::fall_through_packed_result expected;
-        fifi::helper_packed_fall_through_test<fifi::binary16,
-        fifi::dummy_stack<fifi::binary16> >(expected);
-    }
-    {
-        SCOPED_TRACE("prime2325");
-        fifi::fall_through_packed_result expected;
-        fifi::helper_packed_fall_through_test<fifi::prime2325,
-        fifi::dummy_stack<fifi::prime2325> >(expected);
+        // Invert
+        s.m_calls.clear();
+        expected_calls.clear();
+
+        value_type a = 0xff;
+
+        expected_calls.call_invert(a >> 4);
+        expected_calls.call_invert(a & 0xf);
+
+        auto constant = s.m_constants;
+
+        expected_calls.return_invert(constant.value());
+        expected_calls.return_invert(constant.value());
+
+        s.packed_invert(a);
+
+        EXPECT_EQ(expected_calls, s.m_calls);
     }
 }
 
-TEST(TestBinary4PackedArithmetic, add)
+TEST(TestBinary4PackedArithmetic, fall_through_binary8)
 {
-    check_results_packed_add<fifi::dummy_stack<fifi::binary4>>();
+    fifi::test_packed_fall_through<fifi::fall_through_stack<fifi::binary8>>();
 }
 
-TEST(TestBinary4PackedArithmetic, subtract)
+TEST(TestBinary4PackedArithmetic, fall_through_binary16)
 {
-    check_results_packed_subtract<fifi::dummy_stack<fifi::binary4>>();
+    fifi::test_packed_fall_through<fifi::fall_through_stack<fifi::binary16>>();
 }
 
-TEST(TestBinary4PackedArithmetic, multiply)
+TEST(TestBinary4PackedArithmetic, packed_add)
 {
-    check_results_packed_multiply<fifi::dummy_stack<fifi::binary4> >();
+    check_results_packed_add<fifi::arithmetic_stack<fifi::binary4>>();
 }
 
-TEST(TestBinary4PackedArithmetic, divide)
+TEST(TestBinary4PackedArithmetic, packed_subtract)
 {
-    check_results_packed_divide<fifi::dummy_stack<fifi::binary4>>();
+    check_results_packed_subtract<fifi::arithmetic_stack<fifi::binary4>>();
 }
 
-TEST(TestBinary4PackedArithmetic, invert)
+TEST(TestBinary4PackedArithmetic, packed_multiply)
 {
-    check_results_packed_invert<fifi::dummy_stack<fifi::binary4>>();
+    check_results_packed_multiply<fifi::arithmetic_stack<fifi::binary4>>();
 }
+
+TEST(TestBinary4PackedArithmetic, packed_divide)
+{
+    check_results_packed_divide<fifi::arithmetic_stack<fifi::binary4>>();
+}
+
+TEST(TestBinary4PackedArithmetic, packed_invert)
+{
+    check_results_packed_invert<fifi::arithmetic_stack<fifi::binary4>>();
+}
+
