@@ -159,7 +159,7 @@ namespace fifi
                 ////////////////////////////////////////////////////////////////
                 //TODO: These should be called with m_stack, when implemented://
                 ////////////////////////////////////////////////////////////////
-                std::cout << "These should be called with m_stack, when implemented" << std::endl;
+                //std::cout << "These should be called with m_stack, when implemented" << std::endl;
                 m_multiply = bind_region_multiply(stack);
                 m_divide = bind_region_divide(stack);
 

@@ -13,34 +13,38 @@
     #include <x86intrin.h>
 #endif
 
-#include "ssse3_binary4_full_table.hpp"
+#include "ssse3_binary8_full_table.hpp"
 
 namespace fifi
 {
 
 #ifdef PLATFORM_SSSE3
 
-    ssse3_binary4_full_table::ssse3_binary4_full_table()
+    ssse3_binary8_full_table::ssse3_binary8_full_table()
     {
-        m_table_one.resize(16 * 16);
-        m_table_two.resize(16 * 16);
+        m_table_one.resize(256 * 16);
+        m_table_two.resize(256 * 16);
 
         assert(((uintptr_t) &m_table_one[0] % 16) == 0);
         assert(((uintptr_t) &m_table_two[0] % 16) == 0);
 
-        for (uint32_t i = 0; i < 16; ++i)
+        // Iterate over all elements in the field
+        for (uint32_t i = 0; i < 256; ++i)
         {
+            // Only take the constants whose first 4 bits are zero
             for (uint32_t j = 0; j < 16; ++j)
             {
-                auto v = base::multiply(i, j);
-
-                m_table_one[i * 16 + j] = v & 0x0f;
-                m_table_two[i * 16 + j] = (v << 4) & 0xf0;
+                // Calculate 8-bit product with the low-half
+                auto v1 = base::multiply(i, j);
+                m_table_one[i * 16 + j] = v1;
+                // Calculate 8-bit product with the high-half
+                auto v2 = base::multiply(i, j << 4);
+                m_table_two[i * 16 + j] = v2;
             }
         }
     }
 
-    void ssse3_binary4_full_table::region_add(value_type* dest,
+    void ssse3_binary8_full_table::region_add(value_type* dest,
         const value_type* src, uint32_t length) const
     {
         assert(dest != 0);
@@ -68,14 +72,14 @@ namespace fifi
         }
     }
 
-    void ssse3_binary4_full_table::region_subtract(value_type* dest,
+    void ssse3_binary8_full_table::region_subtract(value_type* dest,
         const value_type* src, uint32_t length) const
     {
         // In a binary extension field addition is the same as subtraction
         region_add(dest, src, length);
     }
 
-    void ssse3_binary4_full_table::region_multiply(value_type* dest,
+    void ssse3_binary8_full_table::region_multiply(value_type* dest,
         const value_type* src, uint32_t length) const
     {
         (void) dest;
@@ -86,7 +90,7 @@ namespace fifi
         assert(0);
     }
 
-    void ssse3_binary4_full_table::region_divide(value_type* dest,
+    void ssse3_binary8_full_table::region_divide(value_type* dest,
         const value_type* src, uint32_t length) const
     {
         (void) dest;
@@ -97,7 +101,7 @@ namespace fifi
         assert(0);
     }
 
-    void ssse3_binary4_full_table::region_multiply_constant(
+    void ssse3_binary8_full_table::region_multiply_constant(
         value_type* dest, value_type constant, uint32_t length) const
     {
         assert(dest != 0);
@@ -109,10 +113,6 @@ namespace fifi
         // We loop 16 bytes at-a-time so we calculate how many loops we need
         uint32_t ssse3_size = length / granularity();
         assert(ssse3_size > 0);
-
-        // The constant is packed, so we need just either the high or
-        // low 4 bits to get constant value
-        constant = constant & 0xf;
 
         // Initialize the look-up tables
         // Load the 16-byte row that contains pre-calculated multiplication
@@ -150,7 +150,7 @@ namespace fifi
         }
     }
 
-    void ssse3_binary4_full_table::region_multiply_add(value_type* dest,
+    void ssse3_binary8_full_table::region_multiply_add(value_type* dest,
         const value_type* src, value_type constant, uint32_t length) const
     {
         assert(dest != 0);
@@ -163,10 +163,6 @@ namespace fifi
         // We loop 16 bytes at-a-time so we calculate how many loops we need
         uint32_t ssse3_size = length / granularity();
         assert(ssse3_size > 0);
-
-        // The constant is packed, so we need just either the high or
-        // low 4 bits to get constant value
-        constant = constant & 0xf;
 
         // Initialize the look-up tables
         // Load the 16-byte row that contains pre-calculated multiplication
@@ -214,7 +210,7 @@ namespace fifi
         }
     }
 
-    void ssse3_binary4_full_table::region_multiply_subtract(value_type* dest,
+    void ssse3_binary8_full_table::region_multiply_subtract(value_type* dest,
         const value_type* src, value_type constant, uint32_t length) const
     {
         // In a binary extension field addition is the same as subtraction
@@ -222,18 +218,18 @@ namespace fifi
     }
 
 
-    uint32_t ssse3_binary4_full_table::alignment()
+    uint32_t ssse3_binary8_full_table::alignment()
     {
         // SSSE3 require 16 byte alignment data
         return 16U;
     }
 
-    uint32_t ssse3_binary4_full_table::max_alignment()
+    uint32_t ssse3_binary8_full_table::max_alignment()
     {
         return alignment();
     }
 
-    uint32_t ssse3_binary4_full_table::granularity()
+    uint32_t ssse3_binary8_full_table::granularity()
     {
         // We are working over 16 bytes at a time i.e. 128 bits so we
         // require a length granularity of 16. We expect that binary4
@@ -243,12 +239,12 @@ namespace fifi
         return 16U;
     }
 
-    uint32_t ssse3_binary4_full_table::max_granularity()
+    uint32_t ssse3_binary8_full_table::max_granularity()
     {
         return granularity();
     }
 
-    bool ssse3_binary4_full_table::enabled()
+    bool ssse3_binary8_full_table::enabled()
     {
         static cpuid::cpuinfo info;
         return info.has_ssse3();
@@ -256,10 +252,10 @@ namespace fifi
 
 #else
 
-    ssse3_binary4_full_table::ssse3_binary4_full_table()
+    ssse3_binary8_full_table::ssse3_binary8_full_table()
     { }
 
-    void ssse3_binary4_full_table::region_add(value_type* dest,
+    void ssse3_binary8_full_table::region_add(value_type* dest,
         const value_type* src, uint32_t length) const
     {
         (void) dest;
@@ -270,7 +266,7 @@ namespace fifi
         assert(0);
     }
 
-    void ssse3_binary4_full_table::region_subtract(value_type* dest,
+    void ssse3_binary8_full_table::region_subtract(value_type* dest,
         const value_type* src, uint32_t length) const
     {
         (void) dest;
@@ -281,7 +277,7 @@ namespace fifi
         assert(0);
     }
 
-    void ssse3_binary4_full_table::region_multiply(value_type* dest,
+    void ssse3_binary8_full_table::region_multiply(value_type* dest,
         const value_type* src, uint32_t length) const
     {
         (void) dest;
@@ -292,7 +288,7 @@ namespace fifi
         assert(0);
     }
 
-    void ssse3_binary4_full_table::region_divide(value_type* dest,
+    void ssse3_binary8_full_table::region_divide(value_type* dest,
         const value_type* src, uint32_t length) const
     {
         (void) dest;
@@ -303,7 +299,7 @@ namespace fifi
         assert(0);
     }
 
-    void ssse3_binary4_full_table::region_multiply_constant(
+    void ssse3_binary8_full_table::region_multiply_constant(
         value_type* dest, value_type constant, uint32_t length) const
     {
         (void) dest;
@@ -314,7 +310,7 @@ namespace fifi
         assert(0);
     }
 
-    void ssse3_binary4_full_table::region_multiply_add(value_type* dest,
+    void ssse3_binary8_full_table::region_multiply_add(value_type* dest,
         const value_type* src, value_type constant, uint32_t length) const
     {
         (void) dest;
@@ -326,7 +322,7 @@ namespace fifi
         assert(0);
     }
 
-    void ssse3_binary4_full_table::region_multiply_subtract(value_type* dest,
+    void ssse3_binary8_full_table::region_multiply_subtract(value_type* dest,
         const value_type* src, value_type constant, uint32_t length) const
     {
         (void) dest;
@@ -338,35 +334,35 @@ namespace fifi
         assert(0);
     }
 
-    uint32_t ssse3_binary4_full_table::alignment()
+    uint32_t ssse3_binary8_full_table::alignment()
     {
         // Not implemented
         assert(0);
         return 0;
     }
 
-    uint32_t ssse3_binary4_full_table::max_alignment()
+    uint32_t ssse3_binary8_full_table::max_alignment()
     {
         // Not implemented
         assert(0);
         return 0;
     }
 
-    uint32_t ssse3_binary4_full_table::granularity()
+    uint32_t ssse3_binary8_full_table::granularity()
     {
         // Not implemented
         assert(0);
         return 0;
     }
 
-    uint32_t ssse3_binary4_full_table::max_granularity()
+    uint32_t ssse3_binary8_full_table::max_granularity()
     {
         // Not implemented
         assert(0);
         return 0;
     }
 
-    bool ssse3_binary4_full_table::enabled()
+    bool ssse3_binary8_full_table::enabled()
     {
         return false;
     }
