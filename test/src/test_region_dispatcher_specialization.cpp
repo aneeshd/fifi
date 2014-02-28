@@ -101,20 +101,20 @@ namespace fifi
             public region_dispatcher_specialization<
                        binary,
                        helper_region_info<
-                           binary, 2U, 20U, 4U, 40U, dummy<binary, true>>,
+                           2U, 20U, 4U, 40U, dummy<binary, true>>,
                        binary,
                        helper_region_info<
-                           binary, 1U, 10U, 3U, 30U, dummy<binary, false>>>
+                           1U, 10U, 3U, 30U, dummy<binary, false>>>
         { };
 
         class dummy_stack_disabled :
             public region_dispatcher_specialization<
                        binary,
                        helper_region_info<
-                           binary, 2U, 20U, 4U, 40U, dummy<binary, false>>,
+                           2U, 20U, 4U, 40U, dummy<binary, false>>,
                        binary,
                        helper_region_info<
-                           binary,  1U, 10U, 3U, 30U, dummy<binary, true>>>
+                           1U, 10U, 3U, 30U, dummy<binary, true>>>
         { };
     }
 }

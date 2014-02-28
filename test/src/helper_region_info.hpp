@@ -11,7 +11,6 @@ namespace fifi
 {
     template
     <
-        class Field,
         uint32_t Alignment,
         uint32_t MaxAlignment,
         uint32_t Granularity,
@@ -20,11 +19,6 @@ namespace fifi
     >
     class helper_region_info : public Super
     {
-    public:
-
-        typedef Field field_type;
-        typedef typename field_type::value_type value_type;
-
     public:
 
         static uint32_t alignment()

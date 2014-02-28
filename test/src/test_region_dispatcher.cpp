@@ -26,9 +26,9 @@ namespace fifi
 
         class dummy_stack :
             public region_dispatcher<
-                       helper_region_info<binary, 2U, 20U, 4U, 40U,
+                       helper_region_info<2U, 20U, 4U, 40U,
                            dummy<true,helper_fall_through<binary>>>,
-                   helper_region_info<binary, 1U, 10U, 3U, 30U,
+                   helper_region_info<1U, 10U, 3U, 30U,
                        helper_fall_through<binary>>
                    >
         { };
