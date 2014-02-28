@@ -5,613 +5,15 @@
 
 #pragma once
 
-#include <tuple>
+#include <functional>
 
 #include <fifi/fifi_utils.hpp>
 
-#include "helper_random_constant.hpp"
+#include "random_constant.hpp"
+#include "capture_calls.hpp"
 
 namespace fifi
 {
-    template<class ValueType>
-    struct capture_calls
-    {
-        typedef std::tuple<ValueType> value;
-        typedef std::tuple<ValueType, ValueType> value_value;
-        typedef std::tuple<ValueType*, const ValueType*, uint32_t>
-            ptr_ptr_length;
-        typedef std::tuple<ValueType*, ValueType, uint32_t> ptr_value_length;
-        typedef std::tuple<ValueType*, const ValueType*, ValueType, uint32_t>
-            ptr_ptr_value_length;
-
-        std::vector<value_value> m_call_add;
-        std::vector<value_value> m_call_subtract;
-        std::vector<value_value> m_call_multiply;
-        std::vector<value_value> m_call_divide;
-        std::vector<value> m_call_invert;
-
-        std::vector<value> m_return_add;
-        std::vector<value> m_return_subtract;
-        std::vector<value> m_return_multiply;
-        std::vector<value> m_return_divide;
-        std::vector<value> m_return_invert;
-
-        std::vector<value_value> m_call_packed_add;
-        std::vector<value_value> m_call_packed_subtract;
-        std::vector<value_value> m_call_packed_multiply;
-        std::vector<value_value> m_call_packed_divide;
-        std::vector<value> m_call_packed_invert;
-
-        std::vector<value> m_return_packed_add;
-        std::vector<value> m_return_packed_subtract;
-        std::vector<value> m_return_packed_multiply;
-        std::vector<value> m_return_packed_divide;
-        std::vector<value> m_return_packed_invert;
-
-        std::vector<ptr_ptr_length> m_call_region_add;
-        std::vector<ptr_ptr_length> m_call_region_subtract;
-        std::vector<ptr_ptr_length> m_call_region_multiply;
-        std::vector<ptr_ptr_length> m_call_region_divide;
-        std::vector<ptr_value_length> m_call_region_multiply_constant;
-        std::vector<ptr_ptr_value_length> m_call_region_multiply_add;
-        std::vector<ptr_ptr_value_length> m_call_region_multiply_subtract;
-
-        template <class... Args>
-        void call_add(Args&&... args)
-        {
-            m_call_add.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_subtract(Args&&... args)
-        {
-            m_call_subtract.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_multiply(Args&&... args)
-        {
-            m_call_multiply.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_divide(Args&&... args)
-        {
-            m_call_divide.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_invert(Args&&... args)
-        {
-            m_call_invert.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void return_add(Args&&... args)
-        {
-            m_return_add.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void return_subtract(Args&&... args)
-        {
-            m_return_subtract.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void return_multiply(Args&&... args)
-        {
-            m_return_multiply.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void return_divide(Args&&... args)
-        {
-            m_return_divide.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void return_invert(Args&&... args)
-        {
-            m_return_invert.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_packed_add(Args&&... args)
-        {
-            m_call_packed_add.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_packed_subtract(Args&&... args)
-        {
-            m_call_packed_subtract.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_packed_multiply(Args&&... args)
-        {
-            m_call_packed_multiply.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_packed_divide(Args&&... args)
-        {
-            m_call_packed_divide.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_packed_invert(Args&&... args)
-        {
-            m_call_packed_invert.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void return_packed_add(Args&&... args)
-        {
-            m_return_packed_add.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void return_packed_subtract(Args&&... args)
-        {
-            m_return_packed_subtract.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void return_packed_multiply(Args&&... args)
-        {
-            m_return_packed_multiply.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void return_packed_divide(Args&&... args)
-        {
-            m_return_packed_divide.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void return_packed_invert(Args&&... args)
-        {
-            m_return_packed_invert.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_region_add(Args&&... args)
-        {
-            m_call_region_add.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_region_subtract(Args&&... args)
-        {
-            m_call_region_subtract.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_region_multiply(Args&&... args)
-        {
-            m_call_region_multiply.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_region_divide(Args&&... args)
-        {
-            m_call_region_divide.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_region_multiply_constant(Args&&... args)
-        {
-            m_call_region_multiply_constant.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_region_multiply_add(Args&&... args)
-        {
-            m_call_region_multiply_add.emplace_back(args...);
-        }
-
-        template <class... Args>
-        void call_region_multiply_subtract(Args&&... args)
-        {
-            m_call_region_multiply_subtract.emplace_back(args...);
-        }
-
-        void clear()
-        {
-
-            m_call_add.clear();
-            m_call_subtract.clear();
-            m_call_multiply.clear();
-            m_call_divide.clear();
-            m_call_invert.clear();
-
-
-            m_return_add.clear();
-            m_return_subtract.clear();
-            m_return_multiply.clear();
-            m_return_divide.clear();
-            m_return_invert.clear();
-
-
-            m_call_packed_add.clear();
-            m_call_packed_subtract.clear();
-            m_call_packed_multiply.clear();
-            m_call_packed_divide.clear();
-            m_call_packed_invert.clear();
-
-            m_return_packed_add.clear();
-            m_return_packed_subtract.clear();
-            m_return_packed_multiply.clear();
-            m_return_packed_divide.clear();
-            m_return_packed_invert.clear();
-
-            m_call_region_add.clear();
-            m_call_region_subtract.clear();
-            m_call_region_multiply.clear();
-            m_call_region_divide.clear();
-            m_call_region_multiply_constant.clear();
-            m_call_region_multiply_add.clear();
-            m_call_region_multiply_subtract.clear();
-        }
-    };
-
-    template<class ValueType>
-    inline bool operator==(const capture_calls<ValueType>& a,
-                           const capture_calls<ValueType>& b)
-    {
-        if (a.m_call_add != b.m_call_add)
-            return false;
-
-        if (a.m_call_subtract != b.m_call_subtract)
-            return false;
-
-        if (a.m_call_multiply != b.m_call_multiply)
-            return false;
-
-        if (a.m_call_divide != b.m_call_divide)
-            return false;
-
-        if (a.m_call_invert != b.m_call_invert)
-            return false;
-
-        if (a.m_return_add != b.m_return_add)
-            return false;
-
-        if (a.m_return_subtract != b.m_return_subtract)
-            return false;
-
-        if (a.m_return_multiply != b.m_return_multiply)
-            return false;
-
-        if (a.m_return_divide != b.m_return_divide)
-            return false;
-
-        if (a.m_return_invert != b.m_return_invert)
-            return false;
-
-        if (a.m_call_packed_add != b.m_call_packed_add)
-            return false;
-
-        if (a.m_call_packed_subtract != b.m_call_packed_subtract)
-            return false;
-
-        if (a.m_call_packed_multiply != b.m_call_packed_multiply)
-            return false;
-
-        if (a.m_call_packed_divide != b.m_call_packed_divide)
-            return false;
-
-        if (a.m_call_packed_invert != b.m_call_packed_invert)
-            return false;
-
-        if (a.m_return_packed_add != b.m_return_packed_add)
-            return false;
-
-        if (a.m_return_packed_subtract != b.m_return_packed_subtract)
-            return false;
-
-        if (a.m_return_packed_multiply != b.m_return_packed_multiply)
-            return false;
-
-        if (a.m_return_packed_divide != b.m_return_packed_divide)
-            return false;
-
-        if (a.m_return_packed_invert != b.m_return_packed_invert)
-            return false;
-
-        if (a.m_call_region_add != b.m_call_region_add)
-            return false;
-
-        if (a.m_call_region_subtract != b.m_call_region_subtract)
-            return false;
-
-        if (a.m_call_region_multiply != b.m_call_region_multiply)
-            return false;
-
-        if (a.m_call_region_divide != b.m_call_region_divide)
-            return false;
-
-        if (a.m_call_region_multiply_constant != b.m_call_region_multiply_constant)
-            return false;
-
-        if (a.m_call_region_multiply_add != b.m_call_region_multiply_add)
-            return false;
-
-        if (a.m_call_region_multiply_subtract != b.m_call_region_multiply_subtract)
-            return false;
-
-        return true;
-    }
-
-    template<class ValueType>
-    inline bool equal_call_count(const capture_calls<ValueType>& a,
-                           const capture_calls<ValueType>& b)
-    {
-        if (a.m_call_add.size() != b.m_call_add.size())
-            return false;
-
-        if (a.m_call_subtract.size() != b.m_call_subtract.size())
-            return false;
-
-        if (a.m_call_multiply.size() != b.m_call_multiply.size())
-            return false;
-
-        if (a.m_call_divide.size() != b.m_call_divide.size())
-            return false;
-
-        if (a.m_call_invert.size() != b.m_call_invert.size())
-            return false;
-
-        if (a.m_return_add.size() != b.m_return_add.size())
-            return false;
-
-        if (a.m_return_subtract.size() != b.m_return_subtract.size())
-            return false;
-
-        if (a.m_return_multiply.size() != b.m_return_multiply.size())
-            return false;
-
-        if (a.m_return_divide.size() != b.m_return_divide.size())
-            return false;
-
-        if (a.m_return_invert.size() != b.m_return_invert.size())
-            return false;
-
-        if (a.m_call_packed_add.size() != b.m_call_packed_add.size())
-            return false;
-
-        if (a.m_call_packed_subtract.size() != b.m_call_packed_subtract.size())
-            return false;
-
-        if (a.m_call_packed_multiply.size() != b.m_call_packed_multiply.size())
-            return false;
-
-        if (a.m_call_packed_divide.size() != b.m_call_packed_divide.size())
-            return false;
-
-        if (a.m_call_packed_invert.size() != b.m_call_packed_invert.size())
-            return false;
-
-        if (a.m_return_packed_add.size() != b.m_return_packed_add.size())
-            return false;
-
-        if (a.m_return_packed_subtract.size() != b.m_return_packed_subtract.size())
-            return false;
-
-        if (a.m_return_packed_multiply.size() != b.m_return_packed_multiply.size())
-            return false;
-
-        if (a.m_return_packed_divide.size() != b.m_return_packed_divide.size())
-            return false;
-
-        if (a.m_return_packed_invert.size() != b.m_return_packed_invert.size())
-            return false;
-
-        if (a.m_call_region_add.size() != b.m_call_region_add.size())
-            return false;
-
-        if (a.m_call_region_subtract.size() != b.m_call_region_subtract.size())
-            return false;
-
-        if (a.m_call_region_multiply.size() != b.m_call_region_multiply.size())
-            return false;
-
-        if (a.m_call_region_divide.size() != b.m_call_region_divide.size())
-            return false;
-
-        if (a.m_call_region_multiply_constant.size() != b.m_call_region_multiply_constant.size())
-            return false;
-
-        if (a.m_call_region_multiply_add.size() != b.m_call_region_multiply_add.size())
-            return false;
-
-        if (a.m_call_region_multiply_subtract.size() != b.m_call_region_multiply_subtract.size())
-            return false;
-
-        return true;
-    }
-
-    template<class ValueType>
-    inline std::ostream& operator<<(std::ostream& out,
-                                    const capture_calls<ValueType>& calls)
-    {
-        out << std::endl;
-
-
-        out << "\tcall m_call_add:" << std::endl;
-        for(const auto& v : calls.m_call_add)
-        {
-            out << "\t\t" << "a = " << ((uint32_t) std::get<0>(v))
-                << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
-        }
-        out << "\tcall m_call_subtract:" << std::endl;
-        for(const auto& v : calls.m_call_subtract)
-        {
-            out << "\t\t" << "a = " << ((uint32_t) std::get<0>(v))
-                << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
-        }
-        out << "\tcall m_call_multiply:" << std::endl;
-        for(const auto& v : calls.m_call_multiply)
-        {
-            out << "\t\t" << "a = " << ((uint32_t) std::get<0>(v))
-                << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
-        }
-        out << "\tcall m_call_divide:" << std::endl;
-        for(const auto& v : calls.m_call_divide)
-        {
-            out << "\t\t" << "a = " << ((uint32_t) std::get<0>(v))
-                << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
-        }
-        out << "\tcall m_call_invert:" << std::endl;
-        for(const auto& v : calls.m_call_invert)
-        {
-            out << "\t\t" << "a = " << ((uint32_t) std::get<0>(v)) << std::endl;
-        }
-
-
-        out << "\tcall m_return_add:" << std::endl;
-        for(const auto& v : calls.m_return_add)
-        {
-            out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
-        }
-        out << "\tcall m_return_subtract:" << std::endl;
-        for(const auto& v : calls.m_return_subtract)
-        {
-            out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
-        }
-        out << "\tcall m_return_multiply:" << std::endl;
-        for(const auto& v : calls.m_return_multiply)
-        {
-            out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
-        }
-        out << "\tcall m_return_divide:" << std::endl;
-        for(const auto& v : calls.m_return_divide)
-        {
-            out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
-        }
-        out << "\tcall m_return_invert:" << std::endl;
-        for(const auto& v : calls.m_return_invert)
-        {
-            out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
-        }
-
-        // Packed
-
-        out << "\tcall m_call_packed_add:" << std::endl;
-        for(const auto& v : calls.m_call_packed_add)
-        {
-            out << "\t\t" << "a = " << ((uint32_t) std::get<0>(v))
-                << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
-        }
-        out << "\tcall m_call_packed_subtract:" << std::endl;
-        for(const auto& v : calls.m_call_packed_subtract)
-        {
-            out << "\t\t" << "a = " << ((uint32_t) std::get<0>(v))
-                << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
-        }
-        out << "\tcall m_call_packed_multiply:" << std::endl;
-        for(const auto& v : calls.m_call_packed_multiply)
-        {
-            out << "\t\t" << "a = " << ((uint32_t) std::get<0>(v))
-                << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
-        }
-        out << "\tcall m_call_packed_divide:" << std::endl;
-        for(const auto& v : calls.m_call_packed_divide)
-        {
-            out << "\t\t" << "a = " << ((uint32_t) std::get<0>(v))
-                << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
-        }
-        out << "\tcall m_call_packed_invert:" << std::endl;
-        for(const auto& v : calls.m_call_packed_invert)
-        {
-            out << "\t\t" << "a = " << ((uint32_t) std::get<0>(v)) << std::endl;
-        }
-
-
-        out << "\tcall m_return_packed_add:" << std::endl;
-        for(const auto& v : calls.m_return_packed_add)
-        {
-            out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
-        }
-        out << "\tcall m_return_packed_subtract:" << std::endl;
-        for(const auto& v : calls.m_return_packed_subtract)
-        {
-            out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
-        }
-        out << "\tcall m_return_packed_multiply:" << std::endl;
-        for(const auto& v : calls.m_return_packed_multiply)
-        {
-            out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
-        }
-        out << "\tcall m_return_packed_divide:" << std::endl;
-        for(const auto& v : calls.m_return_packed_divide)
-        {
-            out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
-        }
-        out << "\tcall m_return_packed_invert:" << std::endl;
-        for(const auto& v : calls.m_return_packed_invert)
-        {
-            out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
-        }
-
-        // Region
-
-        out << "\tcall m_call_region_add:" << std::endl;
-        for(const auto& v : calls.m_call_region_add)
-        {
-            out << "\t\t" << "dest = " << ((uintptr_t) std::get<0>(v))
-                << " src = " << ((uintptr_t) std::get<1>(v))
-                << " length = " << ((uint32_t) std::get<2>(v)) << std::endl;
-        }
-        out << "\tcall m_call_region_subtract:" << std::endl;
-        for(const auto& v : calls.m_call_region_subtract)
-        {
-            out << "\t\t" << "dest = " << ((uintptr_t) std::get<0>(v))
-                << " src = " << ((uintptr_t) std::get<1>(v))
-                << " length = " << ((uint32_t) std::get<2>(v)) << std::endl;
-        }
-        out << "\tcall m_call_region_multiply:" << std::endl;
-        for(const auto& v : calls.m_call_region_multiply)
-        {
-            out << "\t\t" << "dest = " << ((uintptr_t) std::get<0>(v))
-                << " src = " << ((uintptr_t) std::get<1>(v))
-                << " length = " << ((uint32_t) std::get<2>(v)) << std::endl;
-        }
-        out << "\tcall m_call_region_divide:" << std::endl;
-        for(const auto& v : calls.m_call_region_divide)
-        {
-            out << "\t\t" << "dest = " << ((uintptr_t) std::get<0>(v))
-                << " src = " << ((uintptr_t) std::get<1>(v))
-                << " length = " << ((uint32_t) std::get<2>(v)) << std::endl;
-        }
-        out << "\tcall m_call_region_multiply_constant:" << std::endl;
-        for(const auto& v : calls.m_call_region_multiply_constant)
-        {
-            out << "\t\t" << "dest = " << ((uintptr_t) std::get<0>(v))
-                << " constant = " << ((uint32_t) std::get<1>(v))
-                << " length = " << ((uint32_t) std::get<2>(v)) << std::endl;
-        }
-        out << "\tcall m_call_region_multiply_add:" << std::endl;
-        for(const auto& v : calls.m_call_region_multiply_add)
-        {
-            out << "\t\t" << "dest = " << ((uintptr_t) std::get<0>(v))
-                << " src = " << ((uintptr_t) std::get<1>(v))
-                << " constant = " << ((uint32_t) std::get<2>(v))
-                << " length = " << ((uint32_t) std::get<3>(v)) << std::endl;
-        }
-        out << "\tcall m_call_region_multiply_subtract:" << std::endl;
-        for(const auto& v : calls.m_call_region_multiply_subtract)
-        {
-            out << "\t\t" << "dest = " << ((uintptr_t) std::get<0>(v))
-                << " src = " << ((uintptr_t) std::get<1>(v))
-                << " constant = " << ((uint32_t) std::get<2>(v))
-                << " length = " << ((uint32_t) std::get<3>(v)) << std::endl;
-        }
-
-        return out;
-    }
 
 
     /// @todo Add documentation
@@ -771,395 +173,239 @@ namespace fifi
         mutable random_constant<field_type> m_constants;
     };
 
-    template<class Stack>
-    void test_fall_through_add()
+    template<class Stack, class Function, class CallFunction, class CallReturn>
+    void test_fall_through_value(Function function,
+        CallFunction call_function, CallReturn call_return,
+        typename Stack::value_type a = 1)
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
+        fifi::capture_calls<typename Stack::value_type> expected_calls;
+        Stack s;
 
-        value_type a = 1;
-        value_type b = 1;
-        value_type r = 0;
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // Add
         s.m_calls.clear();
         expected_calls.clear();
 
-        expected_calls.call_add(a, b);
+        call_function(expected_calls, a);
 
-        r = s.add(a, b);
+        auto r = function(s, a);
 
-        expected_calls.return_add(r);
+        call_return(expected_calls, r);
 
         EXPECT_EQ(expected_calls, s.m_calls);
+    }
+
+    template<class Stack, class Function, class CallFunction, class CallReturn>
+    void test_fall_through_value_value(Function function,
+        CallFunction call_function, CallReturn call_return,
+        typename Stack::value_type a = 1, typename Stack::value_type b = 1)
+    {
+        fifi::capture_calls<typename Stack::value_type> expected_calls;
+        Stack s;
+
+        s.m_calls.clear();
+        expected_calls.clear();
+
+        call_function(expected_calls, a, b);
+
+        auto r = function(s, a, b);
+
+        call_return(expected_calls, r);
+
+        EXPECT_EQ(expected_calls, s.m_calls);
+    }
+
+    template<class Stack, class Function, class CallFunction>
+    void test_fall_through_ptr_ptr_length(Function function,
+        CallFunction call_function)
+    {
+        typedef typename Stack::value_type value_type;
+
+        uint32_t length = 10;
+        auto dest_vector = std::vector<value_type>(length);
+        auto src_vector = std::vector<value_type>(length,
+            std::numeric_limits<value_type>::max());
+
+        fifi::capture_calls<value_type> expected_calls;
+
+        Stack s;
+
+        s.m_calls.clear();
+        expected_calls.clear();
+
+        call_function(expected_calls, dest_vector.data(), src_vector.data(),
+            length);
+
+        function(s, dest_vector.data(), src_vector.data(), length);
+
+        EXPECT_EQ(expected_calls, s.m_calls);
+    }
+
+    template<class Stack, class Function, class CallFunction>
+    void test_fall_through_ptr_ptr_value_length(Function function,
+        CallFunction call_function)
+    {
+        typedef typename Stack::value_type value_type;
+
+        uint32_t length = 10;
+        auto dest_vector = std::vector<value_type>(length);
+        auto src_vector = std::vector<value_type>(length,
+            std::numeric_limits<value_type>::max());
+        auto constant = std::numeric_limits<value_type>::max();
+
+        fifi::capture_calls<value_type> expected_calls;
+
+        Stack s;
+
+        s.m_calls.clear();
+        expected_calls.clear();
+
+        call_function(expected_calls, dest_vector.data(), src_vector.data(),
+            constant, length);
+
+        function(s, dest_vector.data(), src_vector.data(), constant, length);
+
+        EXPECT_EQ(expected_calls, s.m_calls);
+    }
+
+    template<class Stack>
+    void test_fall_through_add()
+    {
+        typedef typename fifi::capture_calls<typename Stack::value_type> calls;
+        test_fall_through_value_value<Stack>(
+            std::mem_fn(&Stack::add),
+            std::mem_fn(&calls::call_add),
+            std::mem_fn(&calls::return_add));
     }
 
     template<class Stack>
     void test_fall_through_subtract()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        value_type a = 1;
-        value_type b = 1;
-        value_type r = 0;
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // Subtract
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_subtract(a, b);
-
-        r = s.subtract(a, b);
-
-        expected_calls.return_subtract(r);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename fifi::capture_calls<typename Stack::value_type> calls;
+        test_fall_through_value_value<Stack>(
+            std::mem_fn(&Stack::subtract),
+            std::mem_fn(&calls::call_subtract),
+            std::mem_fn(&calls::return_subtract));
     }
 
     template<class Stack>
     void test_fall_through_multiply()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        value_type a = 1;
-        value_type b = 1;
-        value_type r = 0;
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // Multiply
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_multiply(a, b);
-
-        r = s.multiply(a, b);
-
-        expected_calls.return_multiply(r);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename fifi::capture_calls<typename Stack::value_type> calls;
+        test_fall_through_value_value<Stack>(
+            std::mem_fn(&Stack::multiply),
+            std::mem_fn(&calls::call_multiply),
+            std::mem_fn(&calls::return_multiply));
     }
 
     template<class Stack>
     void test_fall_through_divide()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        value_type a = 1;
-        value_type b = 1;
-        value_type r = 0;
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // Divide
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_divide(a, b);
-
-        r = s.divide(a, b);
-
-        expected_calls.return_divide(r);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename fifi::capture_calls<typename Stack::value_type> calls;
+        test_fall_through_value_value<Stack>(
+            std::mem_fn(&Stack::divide),
+            std::mem_fn(&calls::call_divide),
+            std::mem_fn(&calls::return_divide));
     }
 
     template<class Stack>
     void test_fall_through_invert()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        value_type a = 1;
-        value_type r = 0;
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // Invert
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_invert(a);
-
-        r = s.invert(a);
-
-        expected_calls.return_invert(r);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename fifi::capture_calls<typename Stack::value_type> calls;
+        test_fall_through_value<Stack>(
+            std::mem_fn(&Stack::invert),
+            std::mem_fn(&calls::call_invert),
+            std::mem_fn(&calls::return_invert));
     }
 
 
     template<class Stack>
     void test_fall_through_packed_add()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        value_type a = 1;
-        value_type b = 1;
-        value_type r = 0;
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // Add
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_packed_add(a, b);
-
-        r = s.packed_add(a, b);
-
-        expected_calls.return_packed_add(r);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename fifi::capture_calls<typename Stack::value_type> calls;
+        test_fall_through_value_value<Stack>(
+            std::mem_fn(&Stack::packed_add),
+            std::mem_fn(&calls::call_packed_add),
+            std::mem_fn(&calls::return_packed_add));
     }
 
     template<class Stack>
     void test_fall_through_packed_subtract()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        value_type a = 1;
-        value_type b = 1;
-        value_type r = 0;
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // Subtract
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_packed_subtract(a, b);
-
-        r = s.packed_subtract(a, b);
-
-        expected_calls.return_packed_subtract(r);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename fifi::capture_calls<typename Stack::value_type> calls;
+        test_fall_through_value_value<Stack>(
+            std::mem_fn(&Stack::packed_subtract),
+            std::mem_fn(&calls::call_packed_subtract),
+            std::mem_fn(&calls::return_packed_subtract));
     }
 
     template<class Stack>
     void test_fall_through_packed_multiply()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        value_type a = 1;
-        value_type b = 1;
-        value_type r = 0;
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // Multiply
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_packed_multiply(a, b);
-
-        r = s.packed_multiply(a, b);
-
-        expected_calls.return_packed_multiply(r);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename fifi::capture_calls<typename Stack::value_type> calls;
+        test_fall_through_value_value<Stack>(
+            std::mem_fn(&Stack::packed_multiply),
+            std::mem_fn(&calls::call_packed_multiply),
+            std::mem_fn(&calls::return_packed_multiply));
     }
 
     template<class Stack>
     void test_fall_through_packed_divide()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        value_type a = std::numeric_limits<value_type>::max();
-        value_type b = 1;
-        value_type r = 0;
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // Divide
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_packed_divide(a, b);
-
-        r = s.packed_divide(a, b);
-
-        expected_calls.return_packed_divide(r);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename Stack::value_type value_type;
+        typedef typename fifi::capture_calls<value_type> calls;
+        test_fall_through_value_value<Stack>(
+            std::mem_fn(&Stack::packed_divide),
+            std::mem_fn(&calls::call_packed_divide),
+            std::mem_fn(&calls::return_packed_divide),
+            std::numeric_limits<value_type>::max(),
+            std::numeric_limits<value_type>::max());
     }
 
     template<class Stack>
     void test_fall_through_packed_invert()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        value_type a = std::numeric_limits<value_type>::max();
-        value_type r = 0;
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // Invert
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_packed_invert(a);
-
-        r = s.packed_invert(a);
-
-        expected_calls.return_packed_invert(r);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename Stack::value_type value_type;
+        typedef typename fifi::capture_calls<value_type> calls;
+        test_fall_through_value<Stack>(
+            std::mem_fn(&Stack::packed_invert),
+            std::mem_fn(&calls::call_packed_invert),
+            std::mem_fn(&calls::return_packed_invert),
+            std::numeric_limits<value_type>::max());
     }
 
     template<class Stack>
     void test_fall_through_region_add()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        uint32_t length = 10;
-        auto dest_vector = std::vector<value_type>(length);
-        auto src_vector = std::vector<value_type>(length);
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // region_add
-
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_region_add(dest_vector.data(),
-            src_vector.data(), length);
-
-        s.region_add(dest_vector.data(), src_vector.data(), length);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename fifi::capture_calls<typename Stack::value_type> calls;
+        test_fall_through_ptr_ptr_length<Stack>(
+            std::mem_fn(&Stack::region_add),
+            std::mem_fn(&calls::call_region_add));
     }
 
     template<class Stack>
     void test_fall_through_region_subtract()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        uint32_t length = 10;
-        auto dest_vector = std::vector<value_type>(length);
-        auto src_vector = std::vector<value_type>(length);
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // region_subtract
-
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_region_subtract(dest_vector.data(),
-            src_vector.data(), length);
-
-        s.region_subtract(dest_vector.data(), src_vector.data(), length);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename fifi::capture_calls<typename Stack::value_type> calls;
+        test_fall_through_ptr_ptr_length<Stack>(
+            std::mem_fn(&Stack::region_subtract),
+            std::mem_fn(&calls::call_region_subtract));
     }
 
     template<class Stack>
     void test_fall_through_region_multiply()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        uint32_t length = 10;
-        auto dest_vector = std::vector<value_type>(length);
-        auto src_vector = std::vector<value_type>(length);
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // region_multiply
-
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_region_multiply(dest_vector.data(),
-            src_vector.data(), length);
-
-        s.region_multiply(dest_vector.data(), src_vector.data(), length);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename fifi::capture_calls<typename Stack::value_type> calls;
+        test_fall_through_ptr_ptr_length<Stack>(
+            std::mem_fn(&Stack::region_multiply),
+            std::mem_fn(&calls::call_region_multiply));
     }
 
     template<class Stack>
     void test_fall_through_region_divide()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        uint32_t length = 10;
-        auto dest_vector = std::vector<value_type>(length);
-        auto src_vector = std::vector<value_type>(length);
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // region_divide
-
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_region_divide(dest_vector.data(),
-            src_vector.data(), length);
-
-        s.region_divide(dest_vector.data(), src_vector.data(), length);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename fifi::capture_calls<typename Stack::value_type> calls;
+        test_fall_through_ptr_ptr_length<Stack>(
+            std::mem_fn(&Stack::region_divide),
+            std::mem_fn(&calls::call_region_divide));
     }
 
     template<class Stack>
@@ -1177,8 +423,6 @@ namespace fifi
 
         stack s;
 
-        // region_multiply_constant
-
         s.m_calls.clear();
         expected_calls.clear();
 
@@ -1193,61 +437,19 @@ namespace fifi
     template<class Stack>
     void test_fall_through_region_multiply_add()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        uint32_t length = 10;
-        auto dest_vector = std::vector<value_type>(length);
-        auto src_vector = std::vector<value_type>(length);
-        auto constant = fifi::pack<field_type>(1);
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // region_multiply_add
-
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_region_multiply_add(dest_vector.data(),
-            src_vector.data(), constant, length);
-
-        s.region_multiply_add(dest_vector.data(), src_vector.data(), constant,
-            length);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename fifi::capture_calls<typename Stack::value_type> calls;
+        test_fall_through_ptr_ptr_value_length<Stack>(
+            std::mem_fn(&Stack::region_multiply_add),
+            std::mem_fn(&calls::call_region_multiply_add));
     }
 
     template<class Stack>
     void test_fall_through_region_multiply_subtract()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        uint32_t length = 10;
-        auto dest_vector = std::vector<value_type>(length);
-        auto src_vector = std::vector<value_type>(length);
-        auto constant = fifi::pack<field_type>(1);
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        // region_multiply_subtract
-
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_region_multiply_subtract(dest_vector.data(),
-            src_vector.data(), constant, length);
-
-        s.region_multiply_subtract(dest_vector.data(), src_vector.data(),
-            constant, length);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename fifi::capture_calls<typename Stack::value_type> calls;
+        test_fall_through_ptr_ptr_value_length<Stack>(
+            std::mem_fn(&Stack::region_multiply_subtract),
+            std::mem_fn(&calls::call_region_multiply_subtract));
     }
 
     template<class Stack>
