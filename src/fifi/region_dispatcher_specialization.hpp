@@ -78,21 +78,24 @@ namespace fifi
         void bind_region_subtract(const TargetStack* stack)
         {
             using namespace std::placeholders;
-            m_subtract = std::bind(&TargetStack::region_subtract, stack, _1, _2, _3);
+            m_subtract = std::bind(
+                &TargetStack::region_subtract, stack, _1, _2, _3);
         }
 
         template<class TargetStack>
         void bind_region_multiply(const TargetStack* stack)
         {
             using namespace std::placeholders;
-            m_multiply = std::bind(&TargetStack::region_multiply, stack, _1, _2, _3);
+            m_multiply = std::bind(
+                &TargetStack::region_multiply, stack, _1, _2, _3);
         }
 
         template<class TargetStack>
         void bind_region_divide(const TargetStack* stack)
         {
             using namespace std::placeholders;
-            m_divide = std::bind(&TargetStack::region_divide, stack, _1, _2, _3);
+            m_divide = std::bind(
+                &TargetStack::region_divide, stack, _1, _2, _3);
         }
 
         template<class TargetStack>
