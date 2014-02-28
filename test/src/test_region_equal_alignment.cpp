@@ -3,24 +3,22 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#include <vector>
 #include <memory>
 #include <functional>
+
+#include <gtest/gtest.h>
 
 #include <fifi/binary8.hpp>
 #include <fifi/final.hpp>
 #include <fifi/region_equal_alignment.hpp>
-#include <gtest/gtest.h>
 
 #include "helper_test_buffer.hpp"
 
-#include <vector>
-
 namespace fifi
 {
-
     namespace
     {
-
         template<class Super>
         class dummy_typedef_basic_super : public Super
         {
@@ -38,7 +36,6 @@ namespace fifi
         template<class Super>
         class region_dummy : public Super
         {
-
         public:
 
             typedef typename Super::field_type field_type;
@@ -88,7 +85,7 @@ namespace fifi
             }
 
             void region_multiply_add(value_type* dest, const value_type* src,
-                              value_type constant, uint32_t length) const
+                value_type constant, uint32_t length) const
             {
                 m_region_multiply_add_dest = dest;
                 m_region_multiply_add_src = src;
@@ -282,7 +279,6 @@ TEST(TestRegionEqualAlignment, region_add)
         EXPECT_EQ(basic.m_region_add_dest, nullptr);
         EXPECT_EQ(basic.m_region_add_src, nullptr);
         EXPECT_EQ(basic.m_region_add_length, 0U);
-
     }
 
     // Test that when buffers are unaligned, the basic approach is used.
@@ -292,12 +288,13 @@ TEST(TestRegionEqualAlignment, region_add)
         optimized.clear_test();
         basic.clear_test();
 
-        fifi::helper_test_buffer<value_type> dest_buffer(length,
-            optimized.alignment());
-        fifi::helper_test_buffer<value_type> src_buffer(length,
-            optimized.alignment());
+        fifi::helper_test_buffer<value_type> dest_buffer(
+            length, optimized.alignment());
+        fifi::helper_test_buffer<value_type> src_buffer(
+            length, optimized.alignment());
 
-        value_type* dest = (value_type*)(((uintptr_t)dest_buffer.data()) + test_offset);
+        value_type* dest =
+            (value_type*)(((uintptr_t)dest_buffer.data()) + test_offset);
         value_type* src = (value_type*)(((uintptr_t)src_buffer.data()));
 
         ASSERT_NE((uintptr_t)dest % optimized.alignment(),
@@ -312,7 +309,6 @@ TEST(TestRegionEqualAlignment, region_add)
         EXPECT_EQ(basic.m_region_add_dest, dest);
         EXPECT_EQ(basic.m_region_add_src, src);
         EXPECT_EQ(basic.m_region_add_length, length);
-
     }
 }
 
@@ -398,8 +394,10 @@ void gerneric_test(
         fifi::helper_test_buffer<value_type> src_buffer(length,
             optimized.alignment());
 
-        value_type* dest = (value_type*)(((uintptr_t)dest_buffer.data()) + test_offset);
-        value_type* src = (value_type*)(((uintptr_t)src_buffer.data()));
+        value_type* dest =
+            (value_type*)(((uintptr_t)dest_buffer.data()) + test_offset);
+        value_type* src =
+            (value_type*)(((uintptr_t)src_buffer.data()));
 
         ASSERT_NE((uintptr_t)dest % optimized.alignment(),
                   (uintptr_t)src  % optimized.alignment());

@@ -3,8 +3,6 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <iostream>
-
 #include <platform/config.hpp>
 #include <cpuid/cpuinfo.hpp>
 
@@ -12,6 +10,9 @@
 #if defined(PLATFORM_GCC_COMPATIBLE_X86)
     #include <x86intrin.h>
 #endif
+
+#include "simple_online_arithmetic.hpp"
+#include "final.hpp"
 
 #include "ssse3_binary8_full_table.hpp"
 
@@ -22,6 +23,8 @@ namespace fifi
 
     ssse3_binary8_full_table::ssse3_binary8_full_table()
     {
+        simple_online_arithmetic<final<binary8>> field;
+
         m_table_one.resize(256 * 16);
         m_table_two.resize(256 * 16);
 
@@ -35,22 +38,20 @@ namespace fifi
             for (uint32_t j = 0; j < 16; ++j)
             {
                 // Calculate 8-bit product with the low-half
-                auto v1 = base::multiply(i, j);
+                auto v1 = field.multiply(i, j);
                 m_table_one[i * 16 + j] = v1;
                 // Calculate 8-bit product with the high-half
-                auto v2 = base::multiply(i, j << 4);
+                auto v2 = field.multiply(i, j << 4);
                 m_table_two[i * 16 + j] = v2;
             }
         }
     }
 
-    void ssse3_binary8_full_table::region_add(value_type* dest,
-        const value_type* src, uint32_t length) const
+    void ssse3_binary8_full_table::region_add(
+        value_type* dest, const value_type* src, uint32_t length) const
     {
         assert(dest != 0);
         assert(src != 0);
-        //assert(((uintptr_t) dest % alignment()) == 0);
-        //assert(((uintptr_t) src % alignment()) == 0);
         assert(length > 0);
         assert((length % granularity()) == 0);
 
@@ -72,43 +73,19 @@ namespace fifi
         }
     }
 
-    void ssse3_binary8_full_table::region_subtract(value_type* dest,
-        const value_type* src, uint32_t length) const
+    void ssse3_binary8_full_table::region_subtract(
+        value_type* dest, const value_type* src, uint32_t length) const
     {
         // In a binary extension field addition is the same as subtraction
         region_add(dest, src, length);
-    }
-
-    void ssse3_binary8_full_table::region_multiply(value_type* dest,
-        const value_type* src, uint32_t length) const
-    {
-        (void) dest;
-        (void) src;
-        (void) length;
-
-        // Not implemented
-        assert(0);
-    }
-
-    void ssse3_binary8_full_table::region_divide(value_type* dest,
-        const value_type* src, uint32_t length) const
-    {
-        (void) dest;
-        (void) src;
-        (void) length;
-
-        // Not implemented
-        assert(0);
     }
 
     void ssse3_binary8_full_table::region_multiply_constant(
         value_type* dest, value_type constant, uint32_t length) const
     {
         assert(dest != 0);
-        //assert(((uintptr_t) dest % alignment()) == 0);
         assert(length > 0);
         assert((length % granularity()) == 0);
-        // assert(alignment)
 
         // We loop 16 bytes at-a-time so we calculate how many loops we need
         uint32_t ssse3_size = length / granularity();
@@ -155,8 +132,6 @@ namespace fifi
     {
         assert(dest != 0);
         assert(src != 0);
-        //assert(((uintptr_t) dest % alignment()) == 0);
-        //assert(((uintptr_t) src % alignment()) == 0);
         assert(length > 0);
         assert((length % granularity()) == 0);
 
@@ -218,18 +193,17 @@ namespace fifi
     }
 
 
-    uint32_t ssse3_binary8_full_table::alignment()
+    uint32_t ssse3_binary8_full_table::alignment() const
     {
-        // SSSE3 require 16 byte alignment data
-        return 16U;
+        return 1U;
     }
 
-    uint32_t ssse3_binary8_full_table::max_alignment()
+    uint32_t ssse3_binary8_full_table::max_alignment() const
     {
         return alignment();
     }
 
-    uint32_t ssse3_binary8_full_table::granularity()
+    uint32_t ssse3_binary8_full_table::granularity() const
     {
         // We are working over 16 bytes at a time i.e. 128 bits so we
         // require a length granularity of 16. We expect that binary4
@@ -239,7 +213,7 @@ namespace fifi
         return 16U;
     }
 
-    uint32_t ssse3_binary8_full_table::max_granularity()
+    uint32_t ssse3_binary8_full_table::max_granularity() const
     {
         return granularity();
     }
@@ -255,107 +229,63 @@ namespace fifi
     ssse3_binary8_full_table::ssse3_binary8_full_table()
     { }
 
-    void ssse3_binary8_full_table::region_add(value_type* dest,
-        const value_type* src, uint32_t length) const
+    void ssse3_binary8_full_table::region_add(
+        value_type*, const value_type*, uint32_t) const
     {
-        (void) dest;
-        (void) src;
-        (void) length;
-
         // Not implemented
         assert(0);
     }
 
-    void ssse3_binary8_full_table::region_subtract(value_type* dest,
-        const value_type* src, uint32_t length) const
+    void ssse3_binary8_full_table::region_subtract(
+        value_type*, const value_type*, uint32_t) const
     {
-        (void) dest;
-        (void) src;
-        (void) length;
-
-        // Not implemented
-        assert(0);
-    }
-
-    void ssse3_binary8_full_table::region_multiply(value_type* dest,
-        const value_type* src, uint32_t length) const
-    {
-        (void) dest;
-        (void) src;
-        (void) length;
-
-        // Not implemented
-        assert(0);
-    }
-
-    void ssse3_binary8_full_table::region_divide(value_type* dest,
-        const value_type* src, uint32_t length) const
-    {
-        (void) dest;
-        (void) src;
-        (void) length;
-
         // Not implemented
         assert(0);
     }
 
     void ssse3_binary8_full_table::region_multiply_constant(
-        value_type* dest, value_type constant, uint32_t length) const
+        value_type*, value_type, uint32_t) const
     {
-        (void) dest;
-        (void) constant;
-        (void) length;
-
         // Not implemented
         assert(0);
     }
 
-    void ssse3_binary8_full_table::region_multiply_add(value_type* dest,
-        const value_type* src, value_type constant, uint32_t length) const
+    void ssse3_binary8_full_table::region_multiply_add(
+        value_type*, const value_type*, value_type, uint32_t) const
     {
-        (void) dest;
-        (void) src;
-        (void) constant;
-        (void) length;
-
         // Not implemented
         assert(0);
     }
 
-    void ssse3_binary8_full_table::region_multiply_subtract(value_type* dest,
-        const value_type* src, value_type constant, uint32_t length) const
+    void ssse3_binary8_full_table::region_multiply_subtract(
+        value_type*, const value_type*, value_type, uint32_t) const
     {
-        (void) dest;
-        (void) src;
-        (void) constant;
-        (void) length;
-
         // Not implemented
         assert(0);
     }
 
-    uint32_t ssse3_binary8_full_table::alignment()
+    uint32_t ssse3_binary8_full_table::alignment() const
     {
         // Not implemented
         assert(0);
         return 0;
     }
 
-    uint32_t ssse3_binary8_full_table::max_alignment()
+    uint32_t ssse3_binary8_full_table::max_alignment() const
     {
         // Not implemented
         assert(0);
         return 0;
     }
 
-    uint32_t ssse3_binary8_full_table::granularity()
+    uint32_t ssse3_binary8_full_table::granularity() const
     {
         // Not implemented
         assert(0);
         return 0;
     }
 
-    uint32_t ssse3_binary8_full_table::max_granularity()
+    uint32_t ssse3_binary8_full_table::max_granularity() const
     {
         // Not implemented
         assert(0);

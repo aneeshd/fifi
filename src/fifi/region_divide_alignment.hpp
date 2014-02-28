@@ -172,7 +172,7 @@ namespace fifi
             }
         }
 
-        static uint32_t alignment()
+        uint32_t alignment() const
         {
             return BasicSuper::alignment();
         }

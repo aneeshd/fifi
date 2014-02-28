@@ -18,7 +18,7 @@ public:
     /// @typedef order_type
     /// The data type used to hold the order of the field i.e. the
     /// number of elements. E.g. binary8 uses uint32_t as the order_type
-    typedef field::order_type order_type
+    typedef field::order_type order_type;
 
     //------------------------------------------------------------------
     // BASE ARITHMETICS API
@@ -106,7 +106,6 @@ public:
     void region_add(value_type* dest, const value_type* src,
                     uint32_t length) const;
 
-
     /// Get the subtract of two memory regions composed of field elements
     /// instead of field elements itself. It is assumed regions are "packed"
     /// as mentioned in the packed arithmetics API
@@ -145,7 +144,6 @@ public:
     void region_multiply_constant(value_type* dest, value_type constant,
                                   uint32_t length) const;
 
-
     /// Get the multiplication with a constant and addition of two memory
     /// regions composed of field elements instead of field elements itself.
     /// It is assumed regions are "packed" as mentioned in the packed
@@ -176,17 +174,17 @@ public:
     /// the finite field computations. The buffers passed to the arithmetic
     /// functions should have their memory aligned according to the value
     /// returned by this function.
-    static uint32_t alignment();
+    uint32_t alignment() const;
 
     /// @return The maximum region alignment requirement of the stack. By
     /// complying with this requirement the highest performance can be achieved.
-    static uint32_t max_alignment();
+    uint32_t max_alignment() const;
 
     /// @return The buffer length granularity, i.e., length (number of
     /// value_type elements) by which the buffer must be divisible.
-    static uint32_t granularity();
+    uint32_t granularity() const;
 
     /// @return The maximum granularity requirement of the stack. By complying
     /// with this requirement the highest performance can be achieved.
-    static uint32_t max_granularity();
+    uint32_t max_granularity() const;
 };

@@ -170,18 +170,18 @@ inline void check_results_region_ptr_ptr(
     // pick a random number of elementes between 128 and 128+256
     uint32_t elements = 128 + rand() % 256;
 
-    uint32_t alignments = TestImpl::max_alignment() + TestImpl::alignment();
-    uint32_t granularities = TestImpl::max_granularity() +
-        TestImpl::granularity();
+    uint32_t alignments = test_stack.max_alignment() + test_stack.alignment();
+    uint32_t granularities = test_stack.max_granularity() +
+        test_stack.granularity();
 
-    for (uint32_t alignment = TestImpl::alignment();
+    for (uint32_t alignment = test_stack.alignment();
         alignment <= alignments;
-        alignment += TestImpl::alignment())
+        alignment += test_stack.alignment())
     {
         assert((alignment % sizeof(typename test_field::value_type)) == 0);
-        for (uint32_t granularity = TestImpl::granularity();
+        for (uint32_t granularity = test_stack.granularity();
             granularity <= granularities;
-            granularity += TestImpl::granularity())
+            granularity += test_stack.granularity())
         {
             SCOPED_TRACE(testing::Message() << "alignment: " << alignment);
             SCOPED_TRACE(testing::Message() << "granularity: " << granularity);
@@ -245,18 +245,18 @@ inline void check_results_region_ptr_const(
     // pick a random number of elementes between 128 and 128+256
     uint32_t elements = 128 + rand() % 256;
 
-    uint32_t alignments = TestImpl::max_alignment() + TestImpl::alignment();
-    uint32_t granularities = TestImpl::max_granularity() +
-        TestImpl::granularity();
+    uint32_t alignments = test_stack.max_alignment() + test_stack.alignment();
+    uint32_t granularities = test_stack.max_granularity() +
+        test_stack.granularity();
 
-    for (uint32_t alignment = TestImpl::alignment();
+    for (uint32_t alignment = test_stack.alignment();
         alignment <= alignments;
-        alignment += TestImpl::alignment())
+        alignment += test_stack.alignment())
     {
         assert((alignment % sizeof(typename test_field::value_type)) == 0);
-        for (uint32_t granularity = TestImpl::granularity();
+        for (uint32_t granularity = test_stack.granularity();
             granularity <= granularities;
-            granularity += TestImpl::granularity())
+            granularity += test_stack.granularity())
         {
             SCOPED_TRACE(testing::Message() << "alignment: " << alignment);
             SCOPED_TRACE(testing::Message() << "granularity: " << granularity);
@@ -329,18 +329,18 @@ inline void check_results_region_ptr_ptr_const(
     // pick a random number of elementes between 128 and 128+256
     uint32_t elements = 128 + rand() % 256;
 
-    uint32_t alignments = TestImpl::max_alignment() + TestImpl::alignment();
-    uint32_t granularities = TestImpl::max_granularity() +
-        TestImpl::granularity();
+    uint32_t alignments = test_stack.max_alignment() + test_stack.alignment();
+    uint32_t granularities = test_stack.max_granularity() +
+        test_stack.granularity();
 
-    for (uint32_t alignment = TestImpl::alignment();
+    for (uint32_t alignment = test_stack.alignment();
         alignment <= alignments;
-        alignment += TestImpl::alignment())
+        alignment += test_stack.alignment())
     {
         assert((alignment % sizeof(typename test_field::value_type)) == 0);
-        for (uint32_t granularity = TestImpl::granularity();
+        for (uint32_t granularity = test_stack.granularity();
             granularity <= granularities;
-            granularity += TestImpl::granularity())
+            granularity += test_stack.granularity())
         {
             SCOPED_TRACE(testing::Message() << "alignment: " << alignment);
             SCOPED_TRACE(testing::Message() << "granularity: " << granularity);
