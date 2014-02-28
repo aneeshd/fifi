@@ -16,44 +16,45 @@ namespace fifi
     template<class ValueType>
     struct capture_calls
     {
-        typedef std::tuple<ValueType> args1;
-        typedef std::tuple<ValueType, ValueType> args2;
-        typedef std::tuple<ValueType*, const ValueType*, uint32_t> args3;
-        typedef std::tuple<ValueType*, ValueType, uint32_t> args4;
+        typedef std::tuple<ValueType> value;
+        typedef std::tuple<ValueType, ValueType> value_value;
+        typedef std::tuple<ValueType*, const ValueType*, uint32_t>
+            ptr_ptr_length;
+        typedef std::tuple<ValueType*, ValueType, uint32_t> ptr_value_length;
         typedef std::tuple<ValueType*, const ValueType*, ValueType, uint32_t>
-            args5;
+            ptr_ptr_value_length;
 
-        std::vector<args2> m_call_add;
-        std::vector<args2> m_call_subtract;
-        std::vector<args2> m_call_multiply;
-        std::vector<args2> m_call_divide;
-        std::vector<args1> m_call_invert;
+        std::vector<value_value> m_call_add;
+        std::vector<value_value> m_call_subtract;
+        std::vector<value_value> m_call_multiply;
+        std::vector<value_value> m_call_divide;
+        std::vector<value> m_call_invert;
 
-        std::vector<args1> m_return_add;
-        std::vector<args1> m_return_subtract;
-        std::vector<args1> m_return_multiply;
-        std::vector<args1> m_return_divide;
-        std::vector<args1> m_return_invert;
+        std::vector<value> m_return_add;
+        std::vector<value> m_return_subtract;
+        std::vector<value> m_return_multiply;
+        std::vector<value> m_return_divide;
+        std::vector<value> m_return_invert;
 
-        std::vector<args2> m_call_packed_add;
-        std::vector<args2> m_call_packed_subtract;
-        std::vector<args2> m_call_packed_multiply;
-        std::vector<args2> m_call_packed_divide;
-        std::vector<args1> m_call_packed_invert;
+        std::vector<value_value> m_call_packed_add;
+        std::vector<value_value> m_call_packed_subtract;
+        std::vector<value_value> m_call_packed_multiply;
+        std::vector<value_value> m_call_packed_divide;
+        std::vector<value> m_call_packed_invert;
 
-        std::vector<args1> m_return_packed_add;
-        std::vector<args1> m_return_packed_subtract;
-        std::vector<args1> m_return_packed_multiply;
-        std::vector<args1> m_return_packed_divide;
-        std::vector<args1> m_return_packed_invert;
+        std::vector<value> m_return_packed_add;
+        std::vector<value> m_return_packed_subtract;
+        std::vector<value> m_return_packed_multiply;
+        std::vector<value> m_return_packed_divide;
+        std::vector<value> m_return_packed_invert;
 
-        std::vector<args3> m_call_region_add;
-        std::vector<args3> m_call_region_subtract;
-        std::vector<args3> m_call_region_multiply;
-        std::vector<args3> m_call_region_divide;
-        std::vector<args4> m_call_region_multiply_constant;
-        std::vector<args5> m_call_region_multiply_add;
-        std::vector<args5> m_call_region_multiply_subtract;
+        std::vector<ptr_ptr_length> m_call_region_add;
+        std::vector<ptr_ptr_length> m_call_region_subtract;
+        std::vector<ptr_ptr_length> m_call_region_multiply;
+        std::vector<ptr_ptr_length> m_call_region_divide;
+        std::vector<ptr_value_length> m_call_region_multiply_constant;
+        std::vector<ptr_ptr_value_length> m_call_region_multiply_add;
+        std::vector<ptr_ptr_value_length> m_call_region_multiply_subtract;
 
         template <class... Args>
         void call_add(Args&&... args)
