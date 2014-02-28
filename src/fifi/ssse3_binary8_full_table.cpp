@@ -47,8 +47,8 @@ namespace fifi
         }
     }
 
-    void ssse3_binary8_full_table::region_add(value_type* dest,
-        const value_type* src, uint32_t length) const
+    void ssse3_binary8_full_table::region_add(
+        value_type* dest, const value_type* src, uint32_t length) const
     {
         assert(dest != 0);
         assert(src != 0);
@@ -73,8 +73,8 @@ namespace fifi
         }
     }
 
-    void ssse3_binary8_full_table::region_subtract(value_type* dest,
-        const value_type* src, uint32_t length) const
+    void ssse3_binary8_full_table::region_subtract(
+        value_type* dest, const value_type* src, uint32_t length) const
     {
         // In a binary extension field addition is the same as subtraction
         region_add(dest, src, length);

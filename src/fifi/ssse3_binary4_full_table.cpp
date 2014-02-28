@@ -13,6 +13,9 @@
     #include <x86intrin.h>
 #endif
 
+#include "simple_online_arithmetic.hpp"
+#include "final.hpp"
+
 #include "ssse3_binary4_full_table.hpp"
 
 namespace fifi
@@ -22,6 +25,8 @@ namespace fifi
 
     ssse3_binary4_full_table::ssse3_binary4_full_table()
     {
+        simple_online_arithmetic<final<binary4>> field;
+
         m_table_one.resize(16 * 16);
         m_table_two.resize(16 * 16);
 
@@ -32,7 +37,7 @@ namespace fifi
         {
             for (uint32_t j = 0; j < 16; ++j)
             {
-                auto v = base::multiply(i, j);
+                auto v = field.multiply(i, j);
 
                 m_table_one[i * 16 + j] = v & 0x0f;
                 m_table_two[i * 16 + j] = (v << 4) & 0xf0;
@@ -40,8 +45,8 @@ namespace fifi
         }
     }
 
-    void ssse3_binary4_full_table::region_add(value_type* dest,
-        const value_type* src, uint32_t length) const
+    void ssse3_binary4_full_table::region_add(
+        value_type* dest, const value_type* src, uint32_t length) const
     {
         assert(dest != 0);
         assert(src != 0);
@@ -66,8 +71,8 @@ namespace fifi
         }
     }
 
-    void ssse3_binary4_full_table::region_subtract(value_type* dest,
-        const value_type* src, uint32_t length) const
+    void ssse3_binary4_full_table::region_subtract(
+        value_type* dest, const value_type* src, uint32_t length) const
     {
         // In a binary extension field addition is the same as subtraction
         region_add(dest, src, length);
@@ -230,81 +235,37 @@ namespace fifi
     ssse3_binary4_full_table::ssse3_binary4_full_table()
     { }
 
-    void ssse3_binary4_full_table::region_add(value_type* dest,
-        const value_type* src, uint32_t length) const
+    void ssse3_binary4_full_table::region_add(
+        value_type*, const value_type*, uint32_t) const
     {
-        (void) dest;
-        (void) src;
-        (void) length;
-
         // Not implemented
         assert(0);
     }
 
-    void ssse3_binary4_full_table::region_subtract(value_type* dest,
-        const value_type* src, uint32_t length) const
+    void ssse3_binary4_full_table::region_subtract(
+        value_type*, const value_type*, uint32_t) const
     {
-        (void) dest;
-        (void) src;
-        (void) length;
-
-        // Not implemented
-        assert(0);
-    }
-
-    void ssse3_binary4_full_table::region_multiply(value_type* dest,
-        const value_type* src, uint32_t length) const
-    {
-        (void) dest;
-        (void) src;
-        (void) length;
-
-        // Not implemented
-        assert(0);
-    }
-
-    void ssse3_binary4_full_table::region_divide(value_type* dest,
-        const value_type* src, uint32_t length) const
-    {
-        (void) dest;
-        (void) src;
-        (void) length;
-
         // Not implemented
         assert(0);
     }
 
     void ssse3_binary4_full_table::region_multiply_constant(
-        value_type* dest, value_type constant, uint32_t length) const
+        value_type*, value_type, uint32_t) const
     {
-        (void) dest;
-        (void) constant;
-        (void) length;
-
         // Not implemented
         assert(0);
     }
 
-    void ssse3_binary4_full_table::region_multiply_add(value_type* dest,
-        const value_type* src, value_type constant, uint32_t length) const
+    void ssse3_binary4_full_table::region_multiply_add(
+        value_type*, const value_type*, value_type, uint32_t) const
     {
-        (void) dest;
-        (void) src;
-        (void) constant;
-        (void) length;
-
         // Not implemented
         assert(0);
     }
 
-    void ssse3_binary4_full_table::region_multiply_subtract(value_type* dest,
-        const value_type* src, value_type constant, uint32_t length) const
+    void ssse3_binary4_full_table::region_multiply_subtract(
+        value_type*, const value_type*, value_type, uint32_t) const
     {
-        (void) dest;
-        (void) src;
-        (void) constant;
-        (void) length;
-
         // Not implemented
         assert(0);
     }

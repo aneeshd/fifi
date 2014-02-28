@@ -12,8 +12,6 @@
 #include <sak/aligned_allocator.hpp>
 
 #include "binary4.hpp"
-#include "simple_online_arithmetic.hpp"
-#include "final.hpp"
 
 namespace fifi
 {
@@ -35,13 +33,9 @@ namespace fifi
     /// Based on this we see that the minimum required instruction for
     /// this optimization is the Supplemental Streaming SIMD Extension
     /// 3 (SSSE3).
-    class ssse3_binary4_full_table :
-        public simple_online_arithmetic<final<binary4>>
+    class ssse3_binary4_full_table
     {
     public:
-
-        /// The base class
-        typedef simple_online_arithmetic<final<binary4> > base;
 
         /// @copydoc layer::field_type
         typedef binary4 field_type;
@@ -54,37 +48,38 @@ namespace fifi
         /// Constructor for the stack
         ssse3_binary4_full_table();
 
-        /// @copydoc layer::region_add(value_type*, value_type*, uint32_t) const
-        void region_add(value_type* dest, const value_type* src,
-            uint32_t length) const;
+        /// @copydoc layer::region_add(
+        ///     value_type*, value_type*, uint32_t) const
+        void region_add(
+            value_type* dest, const value_type* src, uint32_t length) const;
 
-        /// @copydoc layer::region_subtract(value_type*, value_type*,
-        ///                                 uint32_t) const
-        void region_subtract(value_type* dest, const value_type* src,
-            uint32_t length) const;
+        /// @copydoc layer::region_subtract(
+        ///     value_type*, value_type*, uint32_t) const
+        void region_subtract(
+            value_type* dest, const value_type* src, uint32_t length) const;
 
-        /// @copydoc layer::region_multiply(value_type*, value_type*,
-        ///                                 uint32_t) const
-        void region_multiply(value_type* dest, const value_type* src,
-            uint32_t length) const;
+        /// @copydoc layer::region_multiply(
+        ///     value_type*, value_type*, uint32_t) const
+        void region_multiply(
+            value_type* dest, const value_type* src, uint32_t length) const;
 
-        /// @copydoc layer::region_divide(value_type*, value_type*,
-        ///                               uint32_t) const
-        void region_divide(value_type* dest, const value_type* src,
-            uint32_t length) const;
+        /// @copydoc layer::region_divide(
+        ///     value_type*, value_type*, uint32_t) const
+        void region_divide(
+            value_type* dest, const value_type* src, uint32_t length) const;
 
         /// @copydoc layer::region_multiply_constant(
         ///      value_type*, value_type, uint32_t) const
-        void region_multiply_constant(value_type* dest, value_type constant,
-            uint32_t length) const;
+        void region_multiply_constant(
+            value_type* dest, value_type constant, uint32_t length) const;
 
-        /// @copydoc layer::region_multiply_add(value_type*, const value_type*,
-        ///                                     value_type, uint32_t) const
+        /// @copydoc layer::region_multiply_add(
+        ///     value_type*, const value_type*, value_type, uint32_t) const
         void region_multiply_add(value_type* dest, const value_type* src,
             value_type constant, uint32_t length) const;
 
-        /// @copydoc layer::region_multiply_subtract(value_type*,
-        ///              const value_type*, value_type, uint32_t) const
+        /// @copydoc layer::region_multiply_subtract(
+        ///     value_type*, const value_type*, value_type, uint32_t) const
         void region_multiply_subtract(value_type* dest, const value_type* src,
             value_type constant, uint32_t length) const;
 

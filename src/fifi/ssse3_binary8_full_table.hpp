@@ -46,19 +46,30 @@ namespace fifi
         /// Constructor for the stack
         ssse3_binary8_full_table();
 
-        /// @copydoc layer::region_add(value_type*, value_type*, uint32_t) const
-        void region_add(value_type* dest, const value_type* src,
-            uint32_t length) const;
+        /// @copydoc layer::region_add(
+        ///     value_type*, value_type*, uint32_t) const
+        void region_add(
+            value_type* dest, const value_type* src, uint32_t length) const;
 
         /// @copydoc layer::region_subtract(
         ///     value_type*, value_type*, uint32_t) const
-        void region_subtract(value_type* dest, const value_type* src,
-            uint32_t length) const;
+        void region_subtract(
+            value_type* dest, const value_type* src, uint32_t length) const;
+
+        /// @copydoc layer::region_multiply(
+        ///     value_type*, value_type*, uint32_t) const
+        void region_multiply(
+            value_type* dest, const value_type* src, uint32_t length) const;
+
+        /// @copydoc layer::region_divide(
+        ///     value_type*, value_type*, uint32_t) const
+        void region_divide(
+            value_type* dest, const value_type* src, uint32_t length) const;
 
         /// @copydoc layer::region_multiply_constant(
-        ///     value_type*, value_type, uint32_t) const
-        void region_multiply_constant(value_type* dest, value_type constant,
-            uint32_t length) const;
+        ///      value_type*, value_type, uint32_t) const
+        void region_multiply_constant(
+            value_type* dest, value_type constant, uint32_t length) const;
 
         /// @copydoc layer::region_multiply_add(
         ///     value_type*, const value_type*, value_type, uint32_t) const
