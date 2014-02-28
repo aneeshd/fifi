@@ -67,56 +67,56 @@ namespace fifi
             }
         }
 
-        template<class Stack>
-        void bind_region_add(const Stack* stack)
+        template<class TargetStack>
+        void bind_region_add(const TargetStack* stack)
         {
             using namespace std::placeholders;
-            m_add = std::bind(&Stack::region_add, stack, _1, _2, _3);
+            m_add = std::bind(&TargetStack::region_add, stack, _1, _2, _3);
         }
 
-        template<class Stack>
-        void bind_region_subtract(const Stack* stack)
+        template<class TargetStack>
+        void bind_region_subtract(const TargetStack* stack)
         {
             using namespace std::placeholders;
-            m_subtract = std::bind(&Stack::region_subtract, stack, _1, _2, _3);
+            m_subtract = std::bind(&TargetStack::region_subtract, stack, _1, _2, _3);
         }
 
-        template<class Stack>
-        void bind_region_multiply(const Stack* stack)
+        template<class TargetStack>
+        void bind_region_multiply(const TargetStack* stack)
         {
             using namespace std::placeholders;
-            m_multiply = std::bind(&Stack::region_multiply, stack, _1, _2, _3);
+            m_multiply = std::bind(&TargetStack::region_multiply, stack, _1, _2, _3);
         }
 
-        template<class Stack>
-        void bind_region_divide(const Stack* stack)
+        template<class TargetStack>
+        void bind_region_divide(const TargetStack* stack)
         {
             using namespace std::placeholders;
-            m_divide = std::bind(&Stack::region_divide, stack, _1, _2, _3);
+            m_divide = std::bind(&TargetStack::region_divide, stack, _1, _2, _3);
         }
 
-        template<class Stack>
-        void bind_region_multiply_constant(const Stack* stack)
+        template<class TargetStack>
+        void bind_region_multiply_constant(const TargetStack* stack)
         {
             using namespace std::placeholders;
             m_multiply_constant = std::bind(
-                &Stack::region_multiply_constant, stack, _1, _2, _3);
+                &TargetStack::region_multiply_constant, stack, _1, _2, _3);
         }
 
-        template<class Stack>
-        void bind_region_multiply_add(const Stack* stack)
+        template<class TargetStack>
+        void bind_region_multiply_add(const TargetStack* stack)
         {
             using namespace std::placeholders;
             m_multiply_add = std::bind(
-                &Stack::region_multiply_add, stack, _1, _2, _3, _4);
+                &TargetStack::region_multiply_add, stack, _1, _2, _3, _4);
         }
 
-        template<class Stack>
-        void bind_region_multiply_subtract(const Stack* stack)
+        template<class TargetStack>
+        void bind_region_multiply_subtract(const TargetStack* stack)
         {
             using namespace std::placeholders;
             m_multiply_subtract = std::bind(
-                &Stack::region_multiply_subtract, stack, _1, _2, _3, _4);
+                &TargetStack::region_multiply_subtract, stack, _1, _2, _3, _4);
         }
 
         /// @copydoc layer::region_add(value_type*, const value_type*,
