@@ -3,8 +3,6 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <iostream>
-
 #include <platform/config.hpp>
 #include <cpuid/cpuinfo.hpp>
 
@@ -12,6 +10,9 @@
 #if defined(PLATFORM_GCC_COMPATIBLE_X86)
     #include <x86intrin.h>
 #endif
+
+#include "simple_online_arithmetic.hpp"
+#include "final.hpp"
 
 #include "ssse3_binary8_full_table.hpp"
 
@@ -22,6 +23,8 @@ namespace fifi
 
     ssse3_binary8_full_table::ssse3_binary8_full_table()
     {
+        simple_online_arithmetic<final<binary8>> field;
+
         m_table_one.resize(256 * 16);
         m_table_two.resize(256 * 16);
 
@@ -35,10 +38,10 @@ namespace fifi
             for (uint32_t j = 0; j < 16; ++j)
             {
                 // Calculate 8-bit product with the low-half
-                auto v1 = base::multiply(i, j);
+                auto v1 = field.multiply(i, j);
                 m_table_one[i * 16 + j] = v1;
                 // Calculate 8-bit product with the high-half
-                auto v2 = base::multiply(i, j << 4);
+                auto v2 = field.multiply(i, j << 4);
                 m_table_two[i * 16 + j] = v2;
             }
         }
@@ -226,81 +229,37 @@ namespace fifi
     ssse3_binary8_full_table::ssse3_binary8_full_table()
     { }
 
-    void ssse3_binary8_full_table::region_add(value_type* dest,
-        const value_type* src, uint32_t length) const
+    void ssse3_binary8_full_table::region_add(
+        value_type*, const value_type*, uint32_t) const
     {
-        (void) dest;
-        (void) src;
-        (void) length;
-
         // Not implemented
         assert(0);
     }
 
-    void ssse3_binary8_full_table::region_subtract(value_type* dest,
-        const value_type* src, uint32_t length) const
+    void ssse3_binary8_full_table::region_subtract(
+        value_type*, const value_type*, uint32_t) const
     {
-        (void) dest;
-        (void) src;
-        (void) length;
-
-        // Not implemented
-        assert(0);
-    }
-
-    void ssse3_binary8_full_table::region_multiply(value_type* dest,
-        const value_type* src, uint32_t length) const
-    {
-        (void) dest;
-        (void) src;
-        (void) length;
-
-        // Not implemented
-        assert(0);
-    }
-
-    void ssse3_binary8_full_table::region_divide(value_type* dest,
-        const value_type* src, uint32_t length) const
-    {
-        (void) dest;
-        (void) src;
-        (void) length;
-
         // Not implemented
         assert(0);
     }
 
     void ssse3_binary8_full_table::region_multiply_constant(
-        value_type* dest, value_type constant, uint32_t length) const
+        value_type*, value_type, uint32_t) const
     {
-        (void) dest;
-        (void) constant;
-        (void) length;
-
         // Not implemented
         assert(0);
     }
 
-    void ssse3_binary8_full_table::region_multiply_add(value_type* dest,
-        const value_type* src, value_type constant, uint32_t length) const
+    void ssse3_binary8_full_table::region_multiply_add(
+        value_type*, const value_type*, value_type, uint32_t) const
     {
-        (void) dest;
-        (void) src;
-        (void) constant;
-        (void) length;
-
         // Not implemented
         assert(0);
     }
 
-    void ssse3_binary8_full_table::region_multiply_subtract(value_type* dest,
-        const value_type* src, value_type constant, uint32_t length) const
+    void ssse3_binary8_full_table::region_multiply_subtract(
+        value_type*, const value_type*, value_type, uint32_t) const
     {
-        (void) dest;
-        (void) src;
-        (void) constant;
-        (void) length;
-
         // Not implemented
         assert(0);
     }

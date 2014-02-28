@@ -12,12 +12,9 @@
 #include <sak/aligned_allocator.hpp>
 
 #include "binary8.hpp"
-#include "simple_online_arithmetic.hpp"
-#include "final.hpp"
 
 namespace fifi
 {
-    /// ssse3_binary8_full_table_dispatch
     /// ssse3_binary8_full_table
     ///
     /// Stack implementing SSSE3 SIMD accelerated finite field
@@ -34,13 +31,9 @@ namespace fifi
     ///
     /// Based on this we see that the minimum required instruction for this
     /// optimization is the Supplemental Streaming SIMD Extension 3 (SSSE3).
-    class ssse3_binary8_full_table :
-        public simple_online_arithmetic<final<binary8>>
+    class ssse3_binary8_full_table
     {
     public:
-
-        /// The base class
-        typedef simple_online_arithmetic<final<binary8> > base;
 
         /// @copydoc layer::field_type
         typedef binary8 field_type;
@@ -57,46 +50,36 @@ namespace fifi
         void region_add(value_type* dest, const value_type* src,
             uint32_t length) const;
 
-        /// @copydoc layer::region_subtract(value_type*, value_type*,
-        ///                                 uint32_t) const
+        /// @copydoc layer::region_subtract(
+        ///     value_type*, value_type*, uint32_t) const
         void region_subtract(value_type* dest, const value_type* src,
             uint32_t length) const;
 
-        /// @copydoc layer::region_multiply(value_type*, value_type*,
-        ///                                 uint32_t) const
-        void region_multiply(value_type* dest, const value_type* src,
-            uint32_t length) const;
-
-        /// @copydoc layer::region_divide(value_type*, value_type*,
-        ///                               uint32_t) const
-        void region_divide(value_type* dest, const value_type* src,
-            uint32_t length) const;
-
         /// @copydoc layer::region_multiply_constant(
-        ///      value_type*, value_type, uint32_t) const
+        ///     value_type*, value_type, uint32_t) const
         void region_multiply_constant(value_type* dest, value_type constant,
             uint32_t length) const;
 
-        /// @copydoc layer::region_multiply_add(value_type*, const value_type*,
-        ///                                     value_type, uint32_t) const
+        /// @copydoc layer::region_multiply_add(
+        ///     value_type*, const value_type*, value_type, uint32_t) const
         void region_multiply_add(value_type* dest, const value_type* src,
             value_type constant, uint32_t length) const;
 
-        /// @copydoc layer::region_multiply_subtract(value_type*,
-        ///              const value_type*, value_type, uint32_t) const
+        /// @copydoc layer::region_multiply_subtract(
+        ///     value_type*, const value_type*, value_type, uint32_t) const
         void region_multiply_subtract(value_type* dest, const value_type* src,
             value_type constant, uint32_t length) const;
 
-        /// @copydoc layer::alignment()
+        /// @copydoc layer::alignment() const
         uint32_t alignment() const;
 
-        /// @copydoc layer::max_alignment()
+        /// @copydoc layer::max_alignment() const
         uint32_t max_alignment() const;
 
-        /// @copydoc layer::granularity()
+        /// @copydoc layer::granularity() const
         uint32_t granularity() const;
 
-        /// @copydoc layer::max_granularity()
+        /// @copydoc layer::max_granularity() const
         uint32_t max_granularity() const;
 
         /// @return true if the executable was built with SSSE3 binary4
