@@ -309,28 +309,28 @@ namespace fifi
         assert(0);
     }
 
-    uint32_t ssse3_binary4_full_table::alignment()
+    uint32_t ssse3_binary4_full_table::alignment() const
     {
         // Not implemented
         assert(0);
         return 0;
     }
 
-    uint32_t ssse3_binary4_full_table::max_alignment()
+    uint32_t ssse3_binary4_full_table::max_alignment() const
     {
         // Not implemented
         assert(0);
         return 0;
     }
 
-    uint32_t ssse3_binary4_full_table::granularity()
+    uint32_t ssse3_binary4_full_table::granularity() const
     {
         // Not implemented
         assert(0);
         return 0;
     }
 
-    uint32_t ssse3_binary4_full_table::max_granularity()
+    uint32_t ssse3_binary4_full_table::max_granularity() const
     {
         // Not implemented
         assert(0);
