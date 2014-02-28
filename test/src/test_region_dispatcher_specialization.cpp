@@ -8,19 +8,13 @@
 
 #include <gtest/gtest.h>
 
+#include "helper_region_info.hpp"
+
 namespace fifi
 {
     namespace
     {
-        template
-        <
-            class Field,
-            bool Enabled,
-            uint32_t Alignment,
-            uint32_t MaxAlignment,
-            uint32_t Granularity,
-            uint32_t MaxGranularity
-        >
+        template<class Field, bool Enabled>
         class dummy
         {
         public:
@@ -97,26 +91,6 @@ namespace fifi
                 EXPECT_TRUE(Enabled);
             }
 
-            static uint32_t alignment()
-            {
-                return Alignment;
-            }
-
-            static uint32_t max_alignment()
-            {
-                return MaxAlignment;
-            }
-
-            static uint32_t granularity()
-            {
-                return Granularity;
-            }
-
-            static uint32_t max_granularity()
-            {
-                return MaxGranularity;
-            }
-
             static bool enabled()
             {
                 return Enabled;
@@ -126,17 +100,21 @@ namespace fifi
         class dummy_stack_enabled :
             public region_dispatcher_specialization<
                        binary,
-                       dummy<binary, true,  2U, 20U, 4U, 40U>,
+                       helper_region_info<
+                           binary, 2U, 20U, 4U, 40U, dummy<binary, true>>,
                        binary,
-                       dummy<binary, false, 1U, 10U, 3U, 30U> >
+                       helper_region_info<
+                           binary, 1U, 10U, 3U, 30U, dummy<binary, false>>>
         { };
 
         class dummy_stack_disabled :
             public region_dispatcher_specialization<
                        binary,
-                       dummy<binary, false, 2U, 20U, 4U, 40U>,
+                       helper_region_info<
+                           binary, 2U, 20U, 4U, 40U, dummy<binary, false>>,
                        binary,
-                       dummy<binary, true,  1U, 10U, 3U, 30U> >
+                       helper_region_info<
+                           binary,  1U, 10U, 3U, 30U, dummy<binary, true>>>
         { };
     }
 }
