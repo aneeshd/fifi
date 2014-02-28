@@ -12,7 +12,6 @@
 
 namespace fifi
 {
-
     /// Fall through for other fields
     template<class Super>
     class region_divide_granularity : public Super
@@ -34,9 +33,6 @@ namespace fifi
             assert(dest != 0);
             assert(src != 0);
             assert(length > 0);
-            // check alignment
-            //assert((uintptr_t)dest % OptimizedSuper::alignment() == 0);
-            //assert((uintptr_t)src % OptimizedSuper::alignment() == 0);
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)
@@ -58,9 +54,6 @@ namespace fifi
             assert(dest != 0);
             assert(src != 0);
             assert(length > 0);
-            // check alignment
-            //assert((uintptr_t)dest % OptimizedSuper::alignment() == 0);
-            //assert((uintptr_t)src % OptimizedSuper::alignment() == 0);
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)
@@ -82,9 +75,6 @@ namespace fifi
             assert(dest != 0);
             assert(src != 0);
             assert(length > 0);
-            // check alignment
-            //assert((uintptr_t)dest % OptimizedSuper::alignment() == 0);
-            //assert((uintptr_t)src % OptimizedSuper::alignment() == 0);
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)
@@ -106,9 +96,6 @@ namespace fifi
             assert(dest != 0);
             assert(src != 0);
             assert(length > 0);
-            // check alignment
-            //assert((uintptr_t)dest % OptimizedSuper::alignment() == 0);
-            //assert((uintptr_t)src % OptimizedSuper::alignment() == 0);
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)
@@ -130,8 +117,6 @@ namespace fifi
             assert(dest != 0);
             assert(length > 0);
             assert(is_packed_constant<field_type>(constant));
-            // check alignment
-            //assert((uintptr_t)dest % OptimizedSuper::alignment() == 0);
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)
@@ -154,9 +139,6 @@ namespace fifi
             assert(dest != 0);
             assert(src != 0);
             assert(length > 0);
-            // check alignment
-            //assert((uintptr_t)dest % OptimizedSuper::alignment() == 0);
-            //assert((uintptr_t)src % OptimizedSuper::alignment() == 0);
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)
@@ -180,9 +162,6 @@ namespace fifi
             assert(dest != 0);
             assert(src != 0);
             assert(length > 0);
-            // check alignment
-            //assert((uintptr_t)dest % OptimizedSuper::alignment() == 0);
-            //assert((uintptr_t)src % OptimizedSuper::alignment() == 0);
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)

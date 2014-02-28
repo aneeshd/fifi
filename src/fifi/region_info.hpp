@@ -9,7 +9,6 @@
 
 namespace fifi
 {
-
     /// @brief This layer provides the default region information.
     template<class Super>
     class region_info : public Super
@@ -24,27 +23,27 @@ namespace fifi
 
     public:
 
-        /// @copydoc static layer::alignment()
-        static uint32_t alignment()
+        /// @copydoc layer::alignment()
+        uint32_t alignment() const
         {
             /// @todo Change to C++11 alignof when available in MSVC
             return sizeof(value_type);
         }
 
-        /// @copydoc static layer::max_alignment()
-        static uint32_t max_alignment()
+        /// @copydoc layer::max_alignment()
+        uint32_t max_alignment() const
         {
             return alignment();
         }
 
-        /// @copydoc static layer::granularity()
-        static uint32_t granularity()
+        /// @copydoc layer::granularity()
+        uint32_t granularity() const
         {
             return 1U;
         }
 
-        /// @copydoc static layer::max_granularity()
-        static uint32_t max_granularity()
+        /// @copydoc layer::max_granularity()
+        uint32_t max_granularity() const
         {
             return granularity();
         }

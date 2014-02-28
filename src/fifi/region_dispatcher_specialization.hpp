@@ -12,17 +12,15 @@
 
 #include "is_packed_constant.hpp"
 
-#include <iostream>
-
 namespace fifi
 {
     template<class Stack>
     auto bind_region_add(const Stack* stack) -> decltype(
         std::bind(&Stack::region_add,
-                  stack,
-                  std::placeholders::_1,
-                  std::placeholders::_2,
-                  std::placeholders::_3))
+        stack,
+        std::placeholders::_1,
+        std::placeholders::_2,
+        std::placeholders::_3))
     {
         return std::bind(&Stack::region_add,
                          stack,
@@ -135,8 +133,8 @@ namespace fifi
 
     /// Dispatcher for the region arithmetics
     template<class Field, class Stack, class Super>
-    class region_dispatcher_specialization<Field, Stack, Field, Super>
-        : public Super
+    class region_dispatcher_specialization<Field, Stack, Field, Super> :
+        public Super
     {
     public:
 
@@ -151,7 +149,7 @@ namespace fifi
         region_dispatcher_specialization()
         {
             Super* stack = this;
-            if(Stack::enabled())
+            if (Stack::enabled())
             {
                 m_add = bind_region_add(&m_stack);
                 m_subtract = bind_region_subtract(&m_stack);
@@ -159,7 +157,6 @@ namespace fifi
                 ////////////////////////////////////////////////////////////////
                 //TODO: These should be called with m_stack, when implemented://
                 ////////////////////////////////////////////////////////////////
-                //std::cout << "These should be called with m_stack, when implemented" << std::endl;
                 m_multiply = bind_region_multiply(stack);
                 m_divide = bind_region_divide(stack);
 
@@ -274,12 +271,12 @@ namespace fifi
             m_multiply_subtract(dest, src, constant, length);
         }
 
-        /// @copydoc static layer::alignment()
-        static uint32_t alignment()
+        /// @copydoc layer::alignment()
+        uint32_t alignment() const
         {
-            if(Stack::enabled())
+            if (Stack::enabled())
             {
-                return std::max(Stack::alignment(),
+                return std::max(m_stack.alignment(),
                                 Super::alignment());
             }
             else
@@ -288,12 +285,12 @@ namespace fifi
             }
         }
 
-        /// @copydoc static layer::max_alignment()
-        static uint32_t max_alignment()
+        /// @copydoc layer::max_alignment()
+        uint32_t max_alignment() const
         {
-            if(Stack::enabled())
+            if (Stack::enabled())
             {
-                return std::max(Stack::max_alignment(),
+                return std::max(m_stack.max_alignment(),
                                 Super::max_alignment());
             }
             else
@@ -302,12 +299,12 @@ namespace fifi
             }
         }
 
-        /// @copydoc static layer::granularity()
-        static uint32_t granularity()
+        /// @copydoc layer::granularity()
+        uint32_t granularity() const
         {
-            if(Stack::enabled())
+            if (Stack::enabled())
             {
-                return std::max(Stack::granularity(),
+                return std::max(m_stack.granularity(),
                                 Super::granularity());
             }
             else
@@ -316,12 +313,12 @@ namespace fifi
             }
         }
 
-        /// @copydoc static layer::max_granularity()
-        static uint32_t max_granularity()
+        /// @copydoc layer::max_granularity()
+        uint32_t max_granularity() const
         {
-            if(Stack::enabled())
+            if (Stack::enabled())
             {
-                return std::max(Stack::max_granularity(),
+                return std::max(m_stack.max_granularity(),
                                 Super::max_granularity());
             }
             else
@@ -343,8 +340,8 @@ namespace fifi
         typedef std::function<void (value_type*, value_type, uint32_t)>
             ptr_const_function;
 
-        typedef std::function<void (value_type*, const value_type*, value_type,
-            uint32_t)>
+        typedef std::function<
+            void (value_type*, const value_type*, value_type, uint32_t)>
             ptr_ptr_const_function;
 
     private:
@@ -372,6 +369,5 @@ namespace fifi
 
         /// Store the function to invoke when calling region_multiply_subtract
         ptr_ptr_const_function m_multiply_subtract;
-
     };
 }

@@ -9,9 +9,6 @@
 #include <cstdint>
 #include <vector>
 
-/// @todo fix cannot compile sak::aligned_allocator without
-#include <limits>
-
 #include <sak/aligned_allocator.hpp>
 
 #include "binary8.hpp"
@@ -38,7 +35,7 @@ namespace fifi
     /// Based on this we see that the minimum required instruction for this
     /// optimization is the Supplemental Streaming SIMD Extension 3 (SSSE3).
     class ssse3_binary8_full_table :
-        public simple_online_arithmetic<final<binary8> >
+        public simple_online_arithmetic<final<binary8>>
     {
     public:
 
@@ -90,29 +87,23 @@ namespace fifi
         void region_multiply_subtract(value_type* dest, const value_type* src,
             value_type constant, uint32_t length) const;
 
-        /// @copydoc static layer::alignment()
-        static uint32_t alignment();
+        /// @copydoc layer::alignment()
+        uint32_t alignment() const;
 
-        /// @copydoc static layer::max_alignment()
-        static uint32_t max_alignment();
+        /// @copydoc layer::max_alignment()
+        uint32_t max_alignment() const;
 
-        /// @copydoc static layer::granularity()
-        static uint32_t granularity();
+        /// @copydoc layer::granularity()
+        uint32_t granularity() const;
 
-        /// @copydoc static layer::max_granularity()
-        static uint32_t max_granularity();
+        /// @copydoc layer::max_granularity()
+        uint32_t max_granularity() const;
 
         /// @return true if the executable was built with SSSE3 binary4
         ///         full table support
         static bool enabled();
 
     private:
-
-        /// Boolean specifying whether the cpu has ssse3
-        bool m_has_ssse3;
-
-        /// The size of each step in the region loops
-        uint32_t m_ssse3_size;
 
         /// The storage type
         typedef std::vector<uint8_t, sak::aligned_allocator<uint8_t>>
