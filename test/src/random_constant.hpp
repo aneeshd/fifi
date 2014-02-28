@@ -9,7 +9,7 @@
 
 #include <cstdint>
 #include <random>
-
+#include <limits>
 
 namespace fifi
 {
@@ -19,21 +19,25 @@ namespace fifi
         typedef Field field_type;
         typedef typename field_type::value_type value_type;
 
+        static_assert(
+            std::numeric_limits<uint32_t>::max() > field_type::max_value,
+                      "We only create uint32_t sized random numbers");
+
         random_constant()
             : m_distribution(field_type::min_value, field_type::max_value)
         { }
 
         value_type value()
         {
-            return m_distribution(m_generator);
+            return (value_type)m_distribution(m_generator);
         }
 
         value_type pack()
         {
-            return fifi::pack<field_type>(m_distribution(m_generator));
+            return fifi::pack<field_type>(value());
         }
 
-        std::uniform_int_distribution<value_type> m_distribution;
+        std::uniform_int_distribution<uint32_t> m_distribution;
         std::mt19937 m_generator;
 
     };
