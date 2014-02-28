@@ -7,7 +7,9 @@
 
 #include <fifi/fifi_utils.hpp>
 
+#include <cstdint>
 #include <random>
+
 
 namespace fifi
 {
