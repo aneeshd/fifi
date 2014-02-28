@@ -8,84 +8,77 @@
 #include <cstdint>
 #include <vector>
 #include <ostream>
+#include <algorithm>
 
 #include <fifi/fifi_utils.hpp>
 
 namespace fifi
 {
-    template<class Field>
+    /// sizeof(value_type) = 2
+    /// alignement = 16
+    /// extra = 8
+    ///
+    /// length = 5
+    /// alignement = 8;
+    /// ValueType uint16_t
+    ///
+    ///
+    template<class ValueType>
     class helper_test_buffer
     {
-
     public:
 
-        typedef typename Field::value_type value_type;
+        typedef ValueType value_type;
 
-        helper_test_buffer(uint32_t length, uint32_t alignment, bool no_zero):
+        helper_test_buffer(uint32_t length, uint32_t alignment) :
             m_length(length),
             m_alignment(alignment),
-            m_offset(0)
+            m_data_ptr(0)
         {
             // Make sure that the alignment is a multiple of element size
+            assert(m_length > 0);
+            assert(m_alignment > 0);
             assert((m_alignment % sizeof(value_type)) == 0);
-            assert(m_length != 0);
 
-            uint32_t elements = length_to_elements<Field>(m_length);
-            init_data(elements);
+            // Extra length needed to ensure that we can always move
+            // the buffer to match the required alignment
+            uint32_t extra_length = m_alignment / sizeof(value_type);
+            assert(extra_length > 0);
 
-            for (uint32_t i = 0; i < elements; ++i)
-            {
-                value_type v = rand() % Field::order;
-                if (no_zero && v == 0)
-                {
-                    v++;
-                }
+            m_data.resize(length + extra_length);
+            assert(((uintptr_t)m_data.data() % sizeof(value_type)) == 0);
 
-                fifi::set_value<Field>(data(), i, v);
-            }
+            m_data_ptr = find_aligned(m_data.data());
+
+            assert(((uintptr_t)m_data_ptr % m_alignment) == 0);
         }
 
         helper_test_buffer(const helper_test_buffer &other) :
             m_length(other.m_length),
             m_alignment(other.m_alignment),
-            m_offset(0)
+            m_data_ptr(0)
         {
-            uint32_t elements = length_to_elements<Field>(m_length);
-            init_data(elements);
+            m_data.resize(other.m_data.size());
+            m_data_ptr = find_aligned(m_data.data());
 
-            for (uint32_t i = 0; i < elements; ++i)
-            {
-                set_value<Field>(data(), i, get_value<Field>(other.data(), i));
-            }
+            std::copy_n(other.m_data_ptr, m_length, m_data_ptr);
         }
+
+        value_type* find_aligned(value_type* ptr)
+        {
+            uintptr_t p = reinterpret_cast<uintptr_t>(ptr);
+            return (value_type*)(p + (m_alignment - (p % m_alignment)));
+        }
+
 
         const value_type* data() const
         {
-            return (value_type*)((uint8_t*)m_data.data() + m_offset);
+            return m_data_ptr;
         }
 
         value_type* data()
         {
-            return (value_type*)((uint8_t*)m_data.data() + m_offset);
-        }
-
-        helper_test_buffer& operator=(const helper_test_buffer &other)
-        {
-            if (this != &other) // protect against invalid self-assignment
-                return *this;
-
-            m_length = other.m_length;
-            m_alignment = other.m_alignment;
-            m_offset = 0;
-            uint32_t elements = length_to_elements<Field>(m_length);
-            init_data(elements);
-
-            for (uint32_t i = 0; i < elements; ++i)
-            {
-                set_value<Field>(data(), i, get_value<Field>(other.data(), i));
-            }
-
-            return *this;
+            return m_data_ptr;
         }
 
         bool operator==(const helper_test_buffer &other) const
@@ -93,17 +86,13 @@ namespace fifi
             if(m_length != other.m_length)
                 return false;
 
-            for (uint32_t i = 0; i < m_length; ++i)
-            {
-                if (data()[i] != other.data()[i])
-                    return false;
-            }
-            return true;
+            return std::equal(m_data_ptr, m_data_ptr + m_length,
+                              other.m_data_ptr);
         }
 
         bool operator!=(const helper_test_buffer &other) const
         {
-            return !(*this == other);
+            return !operator==(other);
         }
 
         uint32_t length() const
@@ -113,25 +102,10 @@ namespace fifi
 
     private:
 
-        void init_data(uint32_t elements)
-        {
-            uint32_t aligment_length = size_to_length<Field>(m_alignment);
-
-            m_data.resize(elements_to_length<Field>(elements) +
-                aligment_length);
-
-            while (((uintptr_t)data() % m_alignment) != 0)
-            {
-                m_offset++;
-            }
-        }
-
-    private:
-
         uint32_t m_length;
         uint32_t m_alignment;
-        std::vector<value_type> m_data;
-        uint32_t m_offset;
+        std::vector<ValueType> m_data;
+        ValueType* m_data_ptr;
     };
 
     template<class Field>
@@ -148,5 +122,30 @@ namespace fifi
         os << "]";
 
         return os;
+    }
+
+    template<class Field>
+    helper_test_buffer<typename Field::value_type> create_random_buffer(
+        uint32_t length, uint32_t alignment, bool no_zero)
+    {
+        typedef typename Field::value_type value_type;
+
+        helper_test_buffer<value_type> buffer(length, alignment);
+
+        uint32_t elements = length_to_elements<Field>(length);
+
+        for (uint32_t i = 0; i < elements; ++i)
+        {
+            value_type v = rand() % Field::order;
+
+            if (no_zero && v == 0)
+            {
+                v++;
+            }
+
+            fifi::set_value<Field>(buffer.data(), i, v);
+        }
+
+        return buffer;
     }
 }

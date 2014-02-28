@@ -13,7 +13,6 @@
 #include <fifi/final.hpp>
 #include <fifi/packed_arithmetic.hpp>
 #include <fifi/polynomial_degree.hpp>
-#include <fifi/prime2325.hpp>
 #include <fifi/region_arithmetic.hpp>
 #include <fifi/region_info.hpp>
 #include <fifi/simple_online_arithmetic.hpp>
@@ -21,8 +20,7 @@
 #include <gtest/gtest.h>
 
 #include "expected_results.hpp"
-#include "helper_catch_all.hpp"
-#include "helper_region_fall_through.hpp"
+#include "helper_fall_through.hpp"
 
 namespace fifi
 {
@@ -31,8 +29,7 @@ namespace fifi
         template<class Field>
         struct dummy_stack_fall_through : public
         binary_region_arithmetic<Field,
-        helper_region_fall_through<Field,
-        helper_catch_all<Field> > >
+        helper_fall_through<Field> >
         { };
     }
 
@@ -52,42 +49,80 @@ namespace fifi
         { };
     }
 }
-
-TEST(TestBinaryRegionArithmetic, fall_through)
+TEST(TestBinaryRegionArithmetic, fall_through_binary)
 {
+    typedef fifi::dummy_stack_fall_through<fifi::binary> stack;
+    typedef stack::field_type field_type;
+    typedef field_type::value_type value_type;
+
+    fifi::capture_calls<value_type> expected_calls;
+    stack s;
+
     {
-        fifi::region_fall_through_result expected;
-        expected.multiply_constant = false;
-        expected.multiply_add = false;
-        expected.multiply_subtract = false;
-        SCOPED_TRACE("binary");
-        fifi::helper_region_fall_through_test<fifi::binary,
-        fifi::dummy_stack_fall_through<fifi::binary> >(expected);
+        // region_multiply_constant
+
+        uint32_t length = 10;
+        auto dest_vector = std::vector<value_type>(length);
+        auto constant = fifi::pack<field_type>(1);
+
+        s.m_calls.clear();
+        expected_calls.clear();
+
+        s.region_multiply_constant(dest_vector.data(), constant, length);
+
+        EXPECT_EQ(expected_calls, s.m_calls);
     }
+
     {
-        fifi::region_fall_through_result expected;
-        SCOPED_TRACE("binary4");
-        fifi::helper_region_fall_through_test<fifi::binary4,
-        fifi::dummy_stack_fall_through<fifi::binary4> >(expected);
+        // region_multiply_add
+
+        uint32_t length = 10;
+        auto dest_vector = std::vector<value_type>(length);
+        auto src_vector = std::vector<value_type>(length);
+        auto constant = fifi::pack<field_type>(1);
+
+        s.m_calls.clear();
+        expected_calls.clear();
+
+        expected_calls.call_region_add(dest_vector.data(), src_vector.data(),
+            length);
+
+        s.region_multiply_add(dest_vector.data(), src_vector.data(), constant,
+            length);
+
+        EXPECT_EQ(expected_calls, s.m_calls);
+
+        // region_multiply_subtract uses the same implementation.
+
+        s.m_calls.clear();
+        s.region_multiply_subtract(dest_vector.data(), src_vector.data(),
+            constant, length);
+        EXPECT_EQ(expected_calls, s.m_calls);
     }
-    {
-        fifi::region_fall_through_result expected;
-        SCOPED_TRACE("binary8");
-        fifi::helper_region_fall_through_test<fifi::binary8,
-        fifi::dummy_stack_fall_through<fifi::binary8> >(expected);
-    }
-    {
-        fifi::region_fall_through_result expected;
-        SCOPED_TRACE("binary16");
-        fifi::helper_region_fall_through_test<fifi::binary16,
-        fifi::dummy_stack_fall_through<fifi::binary16> >(expected);
-    }
-    {
-        fifi::region_fall_through_result expected;
-        SCOPED_TRACE("prime2325");
-        fifi::helper_region_fall_through_test<fifi::prime2325,
-        fifi::dummy_stack_fall_through<fifi::prime2325> >(expected);
-    }
+
+    // Test that other calls does fall through.
+    fifi::test_fall_through_region_add<stack>();
+    fifi::test_fall_through_region_subtract<stack>();
+    fifi::test_fall_through_region_multiply<stack>();
+    fifi::test_fall_through_region_divide<stack>();
+}
+
+TEST(TestBinaryRegionArithmetic, fall_through_binary4)
+{
+    fifi::test_region_fall_through<
+        fifi::dummy_stack_fall_through<fifi::binary4>>();
+}
+
+TEST(TestBinaryRegionArithmetic, fall_through_binary8)
+{
+    fifi::test_region_fall_through<
+        fifi::dummy_stack_fall_through<fifi::binary8>>();
+}
+
+TEST(TestBinaryRegionArithmetic, fall_through_binary16)
+{
+    fifi::test_region_fall_through<
+        fifi::dummy_stack_fall_through<fifi::binary16>>();
 }
 
 TEST(TestBinaryRegionArithmetic, multiply_constant)

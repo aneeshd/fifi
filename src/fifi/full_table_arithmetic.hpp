@@ -34,11 +34,9 @@ namespace fifi
         /// @copydoc layer::value_type
         typedef typename field_type::value_type value_type;
 
-        // Static check for the prime2325 field, the full lookup table
-        // only works with binary extension fields
-        static_assert(
-            !std::is_same<prime2325, field_type>::value,
-            "This layer does not support the 2^32 - 5 prime field");
+        // The full lookup table does not support the binary field
+        static_assert(!std::is_same<binary, field_type>::value,
+            "This layer does not support the binary field");
 
         // Check for the binary16 field the full lookup table cannot
         // be used with binary16 due to the excessive amounts of
@@ -47,9 +45,11 @@ namespace fifi
             !std::is_same<binary16, field_type>::value,
             "This layer does not support the binary16 field");
 
-        // The full lookup table does not support the binary field
-        static_assert(!std::is_same<binary, field_type>::value,
-            "This layer does not support the binary field");
+        // Static check for the prime2325 field, the full lookup table
+        // only works with binary extension fields
+        static_assert(
+            !std::is_same<prime2325, field_type>::value,
+            "This layer does not support the 2^32 - 5 prime field");
 
     public:
 

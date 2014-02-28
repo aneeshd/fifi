@@ -115,18 +115,17 @@ inline void check_results_random(
 /// @param no_zero A boolean determining whether the buffer is allowed to
 /// contain zero or not.
 template<class Field>
-fifi::helper_test_buffer<Field> create_data(uint32_t requested_elements,
+fifi::helper_test_buffer<typename Field::value_type> create_data(uint32_t requested_elements,
     uint32_t alignment, uint32_t granularity, bool no_zero = false)
 {
     assert((alignment % sizeof(typename Field::value_type)) == 0);
     // make sure the number of elements matches the granularity
-    uint32_t length = fifi::elements_to_length<Field>(requested_elements) /
-        granularity * granularity;
+    uint32_t length = (fifi::elements_to_length<Field>(requested_elements) /
+        granularity) * granularity;
 
     assert((length % granularity) == 0);
 
-    fifi::helper_test_buffer<Field> data(length, alignment, no_zero);
-    return data;
+    return fifi::create_random_buffer<Field>(length, alignment, no_zero);
 }
 
 /// This function checks whether the region arithmetics for the
@@ -207,8 +206,6 @@ inline void check_results_region_ptr_ptr(
         }
     }
 }
-
-#include <iostream>
 
 /// This function checks whether the region arithmetics for the
 /// "dest[i] = dest[i] _OPERATION_ constant" function works. Where
@@ -570,18 +567,11 @@ inline void check_results_find_degree()
 }
 
 //------------------------------------------------------------------
-// sum modulo
+// sum_modulo
 //------------------------------------------------------------------
 
 template<class Field>
 struct sum_modulo_results;
-
-template<class FieldImpl>
-inline void check_results_sum_modulo()
-{
-    check_results_binary<FieldImpl, sum_modulo_results>(
-        std::mem_fn(&FieldImpl::template calculate_sum_modulo<>));
-}
 
 //------------------------------------------------------------------
 // multiply constant

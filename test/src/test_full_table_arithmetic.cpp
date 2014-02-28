@@ -13,48 +13,61 @@
 #include <gtest/gtest.h>
 
 #include "expected_results.hpp"
-#include "helper_catch_all.hpp"
 #include "helper_fall_through.hpp"
 
 namespace fifi
 {
+    // Put dummy layers and tests classes in an anonymous namespace
+    // to avoid violations of ODF (one-definition-rule) in other
+    // translation units
     namespace
     {
         template<class Field>
         struct dummy_stack_fall_through : public
-        full_table_arithmetic<
-        helper_fall_through<Field,
-        helper_catch_all<Field> > >
+            full_table_arithmetic<
+            helper_fall_through<Field> >
         { };
-    }
 
-    namespace
-    {
         template<class Field>
         struct dummy_stack : public
-        full_table_arithmetic<
-        simple_online_arithmetic<
-        polynomial_degree<
-        final<Field> > > >
+            full_table_arithmetic<
+            simple_online_arithmetic<
+            polynomial_degree<
+            final<Field> > > >
         { };
     }
 }
 
+template<class Field>
+inline void helper_fall_through()
+{
+    typedef fifi::dummy_stack_fall_through<Field> stack;
+
+    fifi::capture_calls<typename Field::value_type> expected_calls;
+    stack s;
+
+    s.m_calls.clear();
+    expected_calls.clear();
+    s.multiply(1, 1);
+    s.divide(1, 1);
+    s.invert(1);
+
+    EXPECT_EQ(expected_calls, s.m_calls);
+
+    // Test that other calls does fall through.
+    fifi::test_fall_through_add<stack>();
+    fifi::test_fall_through_subtract<stack>();
+}
+
 TEST(TestFullTableArithmetic, fall_through)
 {
-    fifi::fall_through_result expected;
-    expected.multiply = false;
-    expected.divide = false;
-    expected.invert = false;
     {
         SCOPED_TRACE("binary4");
-        fifi::helper_fall_through_test<fifi::binary4,
-        fifi::dummy_stack_fall_through<fifi::binary4> >(expected);
+        helper_fall_through<fifi::binary4>();
     }
     {
         SCOPED_TRACE("binary8");
-        fifi::helper_fall_through_test<fifi::binary8,
-        fifi::dummy_stack_fall_through<fifi::binary8> >(expected);
+        helper_fall_through<fifi::binary8>();
     }
 }
 

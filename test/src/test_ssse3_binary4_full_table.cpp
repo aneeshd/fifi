@@ -30,16 +30,6 @@ TEST(TestSSSE3Binary4FullTable, region_subtract)
     }
 }
 
-// TEST(TestSSSE3Binary4FullTable, region_multiply)
-// {
-//     fifi::check_region_multiply<fifi::ssse3_binary4_full_table>();
-// }
-
-// TEST(TestSSSE3Binary4FullTable, region_divide)
-// {
-//     fifi::check_region_divide<fifi::ssse3_binary4_full_table>();
-// }
-
 TEST(TestSSSE3Binary4FullTable, region_multiply_constant)
 {
     if (fifi::ssse3_binary4_full_table::enabled())

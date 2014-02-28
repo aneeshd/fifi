@@ -12,6 +12,8 @@
 
 namespace fifi
 {
+    /// @todo Change this from a layer to a free function
+    ///
     /// @brief This layer implements a simple function for determining
     ///        the degree of a binary extension field polynomial
     ///        representation.

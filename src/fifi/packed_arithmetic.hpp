@@ -38,6 +38,18 @@ namespace fifi
 
     public:
 
+        /// @copydoc layer::packed_add(value_type, value_type) const
+        value_type packed_add(value_type a, value_type b) const
+        {
+            return Super::add(a, b);
+        }
+
+        /// @copydoc layer::packed_subtract(value_type, value_type) const
+        value_type packed_subtract(value_type a, value_type b) const
+        {
+            return Super::subtract(a, b);
+        }
+
         /// @copydoc layer::packed_multiply(value_type, value_type) const
         value_type packed_multiply(value_type a, value_type b) const
         {
@@ -55,18 +67,6 @@ namespace fifi
         value_type packed_invert(value_type a) const
         {
             return Super::invert(a);
-        }
-
-        /// @copydoc layer::packed_add(value_type, value_type) const
-        value_type packed_add(value_type a, value_type b) const
-        {
-            return Super::add(a, b);
-        }
-
-        /// @copydoc layer::packed_subtract(value_type, value_type) const
-        value_type packed_subtract(value_type a, value_type b) const
-        {
-            return Super::subtract(a, b);
         }
     };
 }

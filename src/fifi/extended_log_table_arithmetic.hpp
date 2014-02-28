@@ -39,7 +39,7 @@ namespace fifi
 
         /// Check for binary field
         static_assert(!std::is_same<binary, field_type>::value,
-                      "This layer does not support the binary field");
+            "This layer does not support the binary field");
 
     public:
 
