@@ -5,11 +5,12 @@
 
 #pragma once
 
-#include <fifi/fifi_utils.hpp>
-
 #include <cstdint>
 #include <random>
 #include <limits>
+#include <cassert>
+
+#include <fifi/fifi_utils.hpp>
 
 namespace fifi
 {
@@ -19,16 +20,15 @@ namespace fifi
         typedef Field field_type;
         typedef typename field_type::value_type value_type;
 
-        static_assert(
-            std::numeric_limits<uint32_t>::max() > field_type::max_value,
-                      "We only create uint32_t sized random numbers");
-
-        random_constant()
-            : m_distribution(field_type::min_value, field_type::max_value)
+        random_constant() :
+            m_distribution(field_type::min_value, field_type::max_value)
         { }
 
         value_type value()
         {
+            // We only create uint32_t sized random numbers
+            assert(
+                std::numeric_limits<uint32_t>::max() >= field_type::max_value);
             return (value_type)m_distribution(m_generator);
         }
 
@@ -39,6 +39,5 @@ namespace fifi
 
         std::uniform_int_distribution<uint32_t> m_distribution;
         std::mt19937 m_generator;
-
     };
 }

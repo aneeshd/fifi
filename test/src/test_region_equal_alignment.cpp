@@ -240,9 +240,9 @@ TEST(TestRegionEqualAlignment, max_alignment)
 TEST(TestRegionEqualAlignment, region_add)
 {
     typedef fifi::binary16 field_type;
-    typedef typename field_type::value_type value_type;
+    typedef field_type::value_type value_type;
 
-    uint32_t value_size = sizeof(typename field_type::value_type);
+    uint32_t value_size = sizeof(field_type::value_type);
     uint32_t alignment = value_size * 8;
     uint32_t length = alignment * 8;
 
