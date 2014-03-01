@@ -141,31 +141,31 @@ namespace fifi
                 m_last_constant = 0;
                 switch (operation)
                 {
-                case fifi::region_operation::NONE:
+                case region_operation::NONE:
                     assert(0);
                     break;
-                case fifi::region_operation::ADD:
+                case region_operation::ADD:
                     m_stack.region_add(dest, src, length);
                     break;
-                case fifi::region_operation::SUBTRACT:
+                case region_operation::SUBTRACT:
                     m_stack.region_subtract(dest, src, length);
                     break;
-                case fifi::region_operation::MULTIPLY:
+                case region_operation::MULTIPLY:
                     m_stack.region_multiply(dest, src, length);
                     break;
-                case fifi::region_operation::DIVIDE:
+                case region_operation::DIVIDE:
                     m_stack.region_divide(dest, src, length);
                     break;
-                case fifi::region_operation::MULTIPLY_CONSTANT:
+                case region_operation::MULTIPLY_CONSTANT:
                     // region_multiply_constant operates on a single buffer
                     assert(0);
                     break;
-                case fifi::region_operation::MULTIPLY_ADD:
+                case region_operation::MULTIPLY_ADD:
                     m_last_constant = m_constants.pack();
                     m_stack.region_multiply_add(
                         dest, src, m_last_constant, length);
                     break;
-                case fifi::region_operation::MULTIPLY_SUBTRACT:
+                case region_operation::MULTIPLY_SUBTRACT:
                     m_last_constant = m_constants.pack();
                     m_stack.region_multiply_subtract(
                         dest, src, m_last_constant, length);

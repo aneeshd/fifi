@@ -8,7 +8,7 @@
 #include <cassert>
 #include <cstdint>
 
-#include "binary4.hpp"
+#include "is_packed_constant.hpp"
 
 namespace fifi
 {
@@ -134,6 +134,7 @@ namespace fifi
             assert(dest != 0);
             assert(src  != 0);
             assert(length > 0);
+            assert(is_packed_constant<field_type>(constant));
 
             auto unaligned = unaligned_head(dest);
             if (unaligned != 0)
@@ -156,6 +157,7 @@ namespace fifi
             assert(dest != 0);
             assert(src  != 0);
             assert(length > 0);
+            assert(is_packed_constant<field_type>(constant));
 
             auto unaligned = unaligned_head(dest);
             if (unaligned != 0)
