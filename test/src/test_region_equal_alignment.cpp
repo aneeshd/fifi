@@ -16,6 +16,7 @@
 #include <fifi/final.hpp>
 #include <fifi/region_equal_alignment.hpp>
 
+#include "random_constant.hpp"
 #include "helper_test_buffer.hpp"
 #include "helper_region_dummy.hpp"
 
@@ -48,7 +49,7 @@ namespace fifi
         { };
 
         template<class Field>
-        struct TestOperationBase
+        struct TestOperation
         {
             typedef Field field_type;
             typedef dummy_stack<field_type> stack_type;
@@ -57,11 +58,13 @@ namespace fifi
             typedef typename stack_type::BasicSuper basic_super;
             typedef typename stack_type::OptimizedSuper optimized_super;
 
-            TestOperationBase()
+            TestOperation()
             {
                 m_value_size = sizeof(typename field_type::value_type);
-                m_alignment = m_value_size * 8;
+                // The alignment is measured in bytes
+                m_alignment = 16;
                 m_length = 100;
+                m_size = m_length * m_value_size;
 
                 m_basic = &m_stack;
                 m_optimized = &m_stack;
@@ -70,48 +73,110 @@ namespace fifi
                 m_optimized->set_alignment(m_alignment);
             }
 
-            void run_test()
+            void run_test(region_operation operation)
             {
-                fifi::helper_test_buffer<value_type> dest_buffer(
-                    m_length, m_alignment);
-                fifi::helper_test_buffer<value_type> src_buffer(
-                    m_length, m_alignment);
+                fifi::helper_test_buffer<uint8_t> dest_buffer(
+                    m_size, m_alignment);
+                fifi::helper_test_buffer<uint8_t> src_buffer(
+                    m_size, m_alignment);
 
                 // If the buffers are aligned, the optimized approach is used.
-                for (uint32_t offset = 0; offset < m_length; offset++)
+                for (uint32_t offset = 0; offset < m_size; offset++)
                 {
                     m_optimized->clear_test();
                     m_basic->clear_test();
 
-                    value_type* dest = &dest_buffer.data()[offset];
-                    value_type* src = &src_buffer.data()[offset];
+                    value_type* dest = (value_type*)&dest_buffer.data()[offset];
+                    value_type* src = (value_type*)&src_buffer.data()[offset];
 
                     ASSERT_EQ((uintptr_t)dest % m_alignment,
                               (uintptr_t)src  % m_alignment);
 
-                    test_aligned(dest, src);
+                    run_operation(operation, dest, src, m_length);
+
+                    EXPECT_EQ(m_optimized->m_last_operation, operation);
+                    EXPECT_EQ(m_optimized->m_dest, dest);
+                    EXPECT_EQ(m_optimized->m_src, src);
+                    EXPECT_EQ(m_optimized->m_length, m_length);
+                    EXPECT_EQ(m_optimized->m_constant, m_last_constant);
+
+                    EXPECT_EQ(m_basic->m_last_operation,
+                              region_operation::NONE);
+                    EXPECT_EQ(m_basic->m_dest, nullptr);
+                    EXPECT_EQ(m_basic->m_src, nullptr);
+                    EXPECT_EQ(m_basic->m_length, 0U);
+                    EXPECT_EQ(m_basic->m_constant, 0U);
                 }
 
                 // If the buffers are unaligned, the basic approach is used.
-                for (uint32_t offset = 1; offset < m_alignment / m_value_size;
-                    offset++)
+                for (uint32_t offset = 1; offset < m_alignment; offset++)
                 {
                     m_optimized->clear_test();
                     m_basic->clear_test();
 
-                    value_type* dest = &dest_buffer.data()[offset];
-                    value_type* src = &src_buffer.data()[0];
+                    value_type* dest = (value_type*)&dest_buffer.data()[offset];
+                    value_type* src = (value_type*)&src_buffer.data()[0];
 
                     ASSERT_NE((uintptr_t)dest % m_alignment,
                               (uintptr_t)src  % m_alignment);
 
-                    test_unaligned(dest, src);
+                    run_operation(operation, dest, src, m_length);
+
+                    EXPECT_EQ(m_optimized->m_last_operation,
+                              region_operation::NONE);
+                    EXPECT_EQ(m_optimized->m_dest, nullptr);
+                    EXPECT_EQ(m_optimized->m_src, nullptr);
+                    EXPECT_EQ(m_optimized->m_length, 0U);
+                    EXPECT_EQ(m_optimized->m_constant, 0U);
+
+                    EXPECT_EQ(m_basic->m_last_operation, operation);
+                    EXPECT_EQ(m_basic->m_dest, dest);
+                    EXPECT_EQ(m_basic->m_src, src);
+                    EXPECT_EQ(m_basic->m_length, m_length);
+                    EXPECT_EQ(m_basic->m_constant, m_last_constant);
                 }
             }
 
-            virtual void test_aligned(value_type* dest, value_type* src) = 0;
-
-            virtual void test_unaligned(value_type* dest, value_type* src) = 0;
+            void run_operation(region_operation operation,
+                value_type* dest, value_type* src, uint32_t length)
+            {
+                m_last_constant = 0;
+                switch (operation)
+                {
+                case fifi::region_operation::NONE:
+                    assert(0);
+                    break;
+                case fifi::region_operation::ADD:
+                    m_stack.region_add(dest, src, length);
+                    break;
+                case fifi::region_operation::SUBTRACT:
+                    m_stack.region_subtract(dest, src, length);
+                    break;
+                case fifi::region_operation::MULTIPLY:
+                    m_stack.region_multiply(dest, src, length);
+                    break;
+                case fifi::region_operation::DIVIDE:
+                    m_stack.region_divide(dest, src, length);
+                    break;
+                case fifi::region_operation::MULTIPLY_CONSTANT:
+                    // region_multiply_constant operates on a single buffer
+                    assert(0);
+                    break;
+                case fifi::region_operation::MULTIPLY_ADD:
+                    m_last_constant = m_constants.pack();
+                    m_stack.region_multiply_add(
+                        dest, src, m_last_constant, length);
+                    break;
+                case fifi::region_operation::MULTIPLY_SUBTRACT:
+                    m_last_constant = m_constants.pack();
+                    m_stack.region_multiply_subtract(
+                        dest, src, m_last_constant, length);
+                    break;
+                default:
+                    assert(0);
+                    break;
+                }
+            }
 
         protected:
 
@@ -123,223 +188,29 @@ namespace fifi
             uint32_t m_value_size;
             uint32_t m_alignment;
             uint32_t m_length;
+            uint32_t m_size;
+
+            random_constant<field_type> m_constants;
+            value_type m_last_constant;
         };
 
-        template<class Field>
-        struct TestRegionAdd : public TestOperationBase<Field>
-        {
-            typedef typename TestOperationBase<Field>::value_type value_type;
-
-            virtual void test_aligned(value_type* dest, value_type* src)
-            {
-                this->m_stack.region_add(dest, src, this->m_length);
-
-                EXPECT_EQ(this->m_optimized->m_add_dest, dest);
-                EXPECT_EQ(this->m_optimized->m_add_src, src);
-                EXPECT_EQ(this->m_optimized->m_add_length, this->m_length);
-
-                EXPECT_EQ(this->m_basic->m_add_dest, nullptr);
-                EXPECT_EQ(this->m_basic->m_add_src, nullptr);
-                EXPECT_EQ(this->m_basic->m_add_length, 0U);
-            }
-
-            virtual void test_unaligned(value_type* dest, value_type* src)
-            {
-                this->m_stack.region_add(dest, src, this->m_length);
-
-                EXPECT_EQ(this->m_optimized->m_add_dest, nullptr);
-                EXPECT_EQ(this->m_optimized->m_add_src, nullptr);
-                EXPECT_EQ(this->m_optimized->m_add_length, 0U);
-
-                EXPECT_EQ(this->m_basic->m_add_dest, dest);
-                EXPECT_EQ(this->m_basic->m_add_src, src);
-                EXPECT_EQ(this->m_basic->m_add_length, this->m_length);
-            }
-        };
-
-        template<class Field>
-        struct TestRegionSubtract : public TestOperationBase<Field>
-        {
-            typedef typename TestOperationBase<Field>::value_type value_type;
-
-            virtual void test_aligned(value_type* dest, value_type* src)
-            {
-                this->m_stack.region_subtract(dest, src, this->m_length);
-
-                EXPECT_EQ(this->m_optimized->m_subtract_dest, dest);
-                EXPECT_EQ(this->m_optimized->m_subtract_src, src);
-                EXPECT_EQ(this->m_optimized->m_subtract_length, this->m_length);
-
-                EXPECT_EQ(this->m_basic->m_subtract_dest, nullptr);
-                EXPECT_EQ(this->m_basic->m_subtract_src, nullptr);
-                EXPECT_EQ(this->m_basic->m_subtract_length, 0U);
-            }
-
-            virtual void test_unaligned(value_type* dest, value_type* src)
-            {
-                this->m_stack.region_subtract(dest, src, this->m_length);
-
-                EXPECT_EQ(this->m_optimized->m_subtract_dest, nullptr);
-                EXPECT_EQ(this->m_optimized->m_subtract_src, nullptr);
-                EXPECT_EQ(this->m_optimized->m_subtract_length, 0U);
-
-                EXPECT_EQ(this->m_basic->m_subtract_dest, dest);
-                EXPECT_EQ(this->m_basic->m_subtract_src, src);
-                EXPECT_EQ(this->m_basic->m_subtract_length, this->m_length);
-            }
-        };
-
-        template<class Field>
-        struct TestRegionMultiply : public TestOperationBase<Field>
-        {
-            typedef typename TestOperationBase<Field>::value_type value_type;
-
-            virtual void test_aligned(value_type* dest, value_type* src)
-            {
-                this->m_stack.region_multiply(dest, src, this->m_length);
-
-                EXPECT_EQ(this->m_optimized->m_multiply_dest, dest);
-                EXPECT_EQ(this->m_optimized->m_multiply_src, src);
-                EXPECT_EQ(this->m_optimized->m_multiply_length, this->m_length);
-
-                EXPECT_EQ(this->m_basic->m_multiply_dest, nullptr);
-                EXPECT_EQ(this->m_basic->m_multiply_src, nullptr);
-                EXPECT_EQ(this->m_basic->m_multiply_length, 0U);
-            }
-
-            virtual void test_unaligned(value_type* dest, value_type* src)
-            {
-                this->m_stack.region_multiply(dest, src, this->m_length);
-
-                EXPECT_EQ(this->m_optimized->m_multiply_dest, nullptr);
-                EXPECT_EQ(this->m_optimized->m_multiply_src, nullptr);
-                EXPECT_EQ(this->m_optimized->m_multiply_length, 0U);
-
-                EXPECT_EQ(this->m_basic->m_multiply_dest, dest);
-                EXPECT_EQ(this->m_basic->m_multiply_src, src);
-                EXPECT_EQ(this->m_basic->m_multiply_length, this->m_length);
-            }
-        };
-
-        template<class Field>
-        struct TestRegionDivide : public TestOperationBase<Field>
-        {
-            typedef typename TestOperationBase<Field>::value_type value_type;
-
-            virtual void test_aligned(value_type* dest, value_type* src)
-            {
-                this->m_stack.region_divide(dest, src, this->m_length);
-
-                EXPECT_EQ(this->m_optimized->m_divide_dest, dest);
-                EXPECT_EQ(this->m_optimized->m_divide_src, src);
-                EXPECT_EQ(this->m_optimized->m_divide_length, this->m_length);
-
-                EXPECT_EQ(this->m_basic->m_divide_dest, nullptr);
-                EXPECT_EQ(this->m_basic->m_divide_src, nullptr);
-                EXPECT_EQ(this->m_basic->m_divide_length, 0U);
-            }
-
-            virtual void test_unaligned(value_type* dest, value_type* src)
-            {
-                this->m_stack.region_divide(dest, src, this->m_length);
-
-                EXPECT_EQ(this->m_optimized->m_divide_dest, nullptr);
-                EXPECT_EQ(this->m_optimized->m_divide_src, nullptr);
-                EXPECT_EQ(this->m_optimized->m_divide_length, 0U);
-
-                EXPECT_EQ(this->m_basic->m_divide_dest, dest);
-                EXPECT_EQ(this->m_basic->m_divide_src, src);
-                EXPECT_EQ(this->m_basic->m_divide_length, this->m_length);
-            }
-        };
-
-        template<class Field>
-        struct TestRegionMultiplyAdd : public TestOperationBase<Field>
-        {
-            typedef typename TestOperationBase<Field>::value_type value_type;
-
-            virtual void test_aligned(value_type* dest, value_type* src)
-            {
-                this->m_stack.region_multiply_add(dest, src, 0, this->m_length);
-
-                EXPECT_EQ(this->m_optimized->m_multiply_add_dest, dest);
-                EXPECT_EQ(this->m_optimized->m_multiply_add_src, src);
-                EXPECT_EQ(this->m_optimized->m_multiply_add_length,
-                          this->m_length);
-
-                EXPECT_EQ(this->m_basic->m_multiply_add_dest, nullptr);
-                EXPECT_EQ(this->m_basic->m_multiply_add_src, nullptr);
-                EXPECT_EQ(this->m_basic->m_multiply_add_length, 0U);
-            }
-
-            virtual void test_unaligned(value_type* dest, value_type* src)
-            {
-                this->m_stack.region_multiply_add(dest, src, 0, this->m_length);
-
-                EXPECT_EQ(this->m_optimized->m_multiply_add_dest, nullptr);
-                EXPECT_EQ(this->m_optimized->m_multiply_add_src, nullptr);
-                EXPECT_EQ(this->m_optimized->m_multiply_add_length, 0U);
-
-                EXPECT_EQ(this->m_basic->m_multiply_add_dest, dest);
-                EXPECT_EQ(this->m_basic->m_multiply_add_src, src);
-                EXPECT_EQ(this->m_basic->m_multiply_add_length, this->m_length);
-            }
-        };
-
-        template<class Field>
-        struct TestRegionMultiplySubtract : public TestOperationBase<Field>
-        {
-            typedef typename TestOperationBase<Field>::value_type value_type;
-
-            virtual void test_aligned(value_type* dest, value_type* src)
-            {
-                this->m_stack.region_multiply_subtract(
-                    dest, src, 0, this->m_length);
-
-                EXPECT_EQ(this->m_optimized->m_multiply_subtract_dest, dest);
-                EXPECT_EQ(this->m_optimized->m_multiply_subtract_src, src);
-                EXPECT_EQ(this->m_optimized->m_multiply_subtract_length,
-                          this->m_length);
-
-                EXPECT_EQ(this->m_basic->m_multiply_subtract_dest, nullptr);
-                EXPECT_EQ(this->m_basic->m_multiply_subtract_src, nullptr);
-                EXPECT_EQ(this->m_basic->m_multiply_subtract_length, 0U);
-            }
-
-            virtual void test_unaligned(value_type* dest, value_type* src)
-            {
-                this->m_stack.region_multiply_subtract(
-                    dest, src, 0, this->m_length);
-
-                EXPECT_EQ(this->m_optimized->m_multiply_subtract_dest, nullptr);
-                EXPECT_EQ(this->m_optimized->m_multiply_subtract_src, nullptr);
-                EXPECT_EQ(this->m_optimized->m_multiply_subtract_length, 0U);
-
-                EXPECT_EQ(this->m_basic->m_multiply_subtract_dest, dest);
-                EXPECT_EQ(this->m_basic->m_multiply_subtract_src, src);
-                EXPECT_EQ(this->m_basic->m_multiply_subtract_length,
-                          this->m_length);
-            }
-        };
-
-        template<template<class> class TestOperation>
-        void check_operation()
+        void check_operation(region_operation operation)
         {
             {
                 SCOPED_TRACE("binary");
-                TestOperation<binary>().run_test();
+                TestOperation<binary>().run_test(operation);
             }
             {
                 SCOPED_TRACE("binary4");
-                TestOperation<binary4>().run_test();
+                TestOperation<binary4>().run_test(operation);
             }
             {
                 SCOPED_TRACE("binary8");
-                TestOperation<binary8>().run_test();
+                TestOperation<binary8>().run_test(operation);
             }
             {
                 SCOPED_TRACE("binary16");
-                TestOperation<binary16>().run_test();
+                TestOperation<binary16>().run_test(operation);
             }
         }
     }
@@ -375,30 +246,30 @@ TEST(TestRegionEqualAlignment, max_alignment)
 
 TEST(TestRegionEqualAlignment, region_add)
 {
-    fifi::check_operation<fifi::TestRegionAdd>();
+    fifi::check_operation(fifi::region_operation::ADD);
 }
 
 TEST(TestRegionEqualAlignment, region_subtract)
 {
-    fifi::check_operation<fifi::TestRegionSubtract>();
+    fifi::check_operation(fifi::region_operation::SUBTRACT);
 }
 
 TEST(TestRegionEqualAlignment, region_multiply)
 {
-    fifi::check_operation<fifi::TestRegionMultiply>();
+    fifi::check_operation(fifi::region_operation::MULTIPLY);
 }
 
 TEST(TestRegionEqualAlignment, region_divide)
 {
-    fifi::check_operation<fifi::TestRegionDivide>();
+    fifi::check_operation(fifi::region_operation::DIVIDE);
 }
 
 TEST(TestRegionEqualAlignment, region_multiply_add)
 {
-    fifi::check_operation<fifi::TestRegionMultiplyAdd>();
+    fifi::check_operation(fifi::region_operation::MULTIPLY_ADD);
 }
 
 TEST(TestRegionEqualAlignment, region_multiply_subtract)
 {
-    fifi::check_operation<fifi::TestRegionMultiplySubtract>();
+    fifi::check_operation(fifi::region_operation::MULTIPLY_SUBTRACT);
 }
