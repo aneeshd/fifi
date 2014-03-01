@@ -287,6 +287,8 @@ namespace fifi
         template<class Field>
         struct TestRegionAdd : public TestOperationBase<Field>
         {
+            typedef typename TestOperationBase<Field>::value_type value_type;
+
             virtual void test_aligned(value_type* dest, value_type* src)
             {
                 m_stack.region_add(dest, src, m_length);
@@ -317,6 +319,8 @@ namespace fifi
         template<class Field>
         struct TestRegionSubtract : public TestOperationBase<Field>
         {
+            typedef typename TestOperationBase<Field>::value_type value_type;
+
             virtual void test_aligned(value_type* dest, value_type* src)
             {
                 m_stack.region_subtract(dest, src, m_length);
@@ -347,6 +351,8 @@ namespace fifi
         template<class Field>
         struct TestRegionMultiply : public TestOperationBase<Field>
         {
+            typedef typename TestOperationBase<Field>::value_type value_type;
+
             virtual void test_aligned(value_type* dest, value_type* src)
             {
                 m_stack.region_multiply(dest, src, m_length);
@@ -377,6 +383,8 @@ namespace fifi
         template<class Field>
         struct TestRegionDivide : public TestOperationBase<Field>
         {
+            typedef typename TestOperationBase<Field>::value_type value_type;
+
             virtual void test_aligned(value_type* dest, value_type* src)
             {
                 m_stack.region_divide(dest, src, m_length);
