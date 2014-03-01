@@ -8,8 +8,6 @@
 #include <cassert>
 #include <cstdint>
 
-#include "binary4.hpp"
-
 namespace fifi
 {
     /// Fall through for other fields
@@ -116,7 +114,6 @@ namespace fifi
         {
             assert(dest != 0);
             assert(length > 0);
-            assert(is_packed_constant<field_type>(constant));
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)
