@@ -125,6 +125,26 @@ namespace fifi
             m_max_alignment = max_alignment;
         }
 
+        uint32_t granularity() const
+        {
+            return m_granularity;
+        }
+
+        uint32_t max_granularity() const
+        {
+            return m_max_granularity;
+        }
+
+        void set_granularity(uint32_t granularity)
+        {
+            m_granularity = granularity;
+        }
+
+        void set_max_granularity(uint32_t max_granularity)
+        {
+            m_max_granularity = max_granularity;
+        }
+
         void clear_test()
         {
             m_last_operation = region_operation::NONE;
@@ -148,5 +168,7 @@ namespace fifi
 
         uint32_t m_alignment;
         uint32_t m_max_alignment;
+        uint32_t m_granularity;
+        uint32_t m_max_granularity;
     };
 }
