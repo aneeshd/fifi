@@ -49,60 +49,60 @@ namespace fifi
             void region_add(value_type* dest, const value_type* src,
                 uint32_t length) const
             {
-                m_region_add_dest = dest;
-                m_region_add_src = src;
-                m_region_add_length = length;
+                m_add_dest = dest;
+                m_add_src = src;
+                m_add_length = length;
             }
 
             void region_subtract(value_type* dest, const value_type* src,
                 uint32_t length) const
             {
-                m_region_subtract_dest = dest;
-                m_region_subtract_src = src;
-                m_region_subtract_length = length;
+                m_subtract_dest = dest;
+                m_subtract_src = src;
+                m_subtract_length = length;
             }
 
             void region_divide(value_type* dest, const value_type* src,
                 uint32_t length) const
             {
-                m_region_divide_dest = dest;
-                m_region_divide_src = src;
-                m_region_divide_length = length;
+                m_divide_dest = dest;
+                m_divide_src = src;
+                m_divide_length = length;
             }
 
             void region_multiply(value_type* dest, const value_type* src,
                 uint32_t length) const
             {
-                m_region_multiply_dest = dest;
-                m_region_multiply_src = src;
-                m_region_multiply_length = length;
+                m_multiply_dest = dest;
+                m_multiply_src = src;
+                m_multiply_length = length;
             }
 
             void region_multiply_constant(value_type* dest, value_type constant,
                 uint32_t length) const
             {
-                m_region_multiply_constant_dest = dest;
-                m_region_multiply_constant_constant = constant;
-                m_region_multiply_constant_length = length;
+                m_multiply_constant_dest = dest;
+                m_multiply_constant_constant = constant;
+                m_multiply_constant_length = length;
             }
 
             void region_multiply_add(value_type* dest, const value_type* src,
                 value_type constant, uint32_t length) const
             {
-                m_region_multiply_add_dest = dest;
-                m_region_multiply_add_src = src;
-                m_region_multiply_add_constant = constant;
-                m_region_multiply_add_length = length;
+                m_multiply_add_dest = dest;
+                m_multiply_add_src = src;
+                m_multiply_add_constant = constant;
+                m_multiply_add_length = length;
             }
 
             void region_multiply_subtract(value_type* dest,
                 const value_type* src, value_type constant,
                 uint32_t length) const
             {
-                m_region_multiply_subtract_dest = dest;
-                m_region_multiply_subtract_src = src;
-                m_region_multiply_subtract_constant = constant;
-                m_region_multiply_subtract_length = length;
+                m_multiply_subtract_dest = dest;
+                m_multiply_subtract_src = src;
+                m_multiply_subtract_constant = constant;
+                m_multiply_subtract_length = length;
             }
 
             uint32_t alignment() const
@@ -127,68 +127,68 @@ namespace fifi
 
             void clear_test()
             {
-                m_region_add_dest = 0;
-                m_region_add_src = 0;
-                m_region_add_length = 0;
+                m_add_dest = 0;
+                m_add_src = 0;
+                m_add_length = 0;
 
-                m_region_subtract_dest = 0;
-                m_region_subtract_src = 0;
-                m_region_subtract_length = 0;
+                m_subtract_dest = 0;
+                m_subtract_src = 0;
+                m_subtract_length = 0;
 
-                m_region_divide_dest = 0;
-                m_region_divide_src = 0;
-                m_region_divide_length = 0;
+                m_divide_dest = 0;
+                m_divide_src = 0;
+                m_divide_length = 0;
 
-                m_region_multiply_dest = 0;
-                m_region_multiply_src = 0;
-                m_region_multiply_length = 0;
+                m_multiply_dest = 0;
+                m_multiply_src = 0;
+                m_multiply_length = 0;
 
-                m_region_multiply_constant_dest = 0;
-                m_region_multiply_constant_constant = 0;
-                m_region_multiply_constant_length = 0;
+                m_multiply_constant_dest = 0;
+                m_multiply_constant_constant = 0;
+                m_multiply_constant_length = 0;
 
-                m_region_multiply_add_dest = 0;
-                m_region_multiply_add_src = 0;
-                m_region_multiply_add_constant = 0;
-                m_region_multiply_add_length = 0;
+                m_multiply_add_dest = 0;
+                m_multiply_add_src = 0;
+                m_multiply_add_constant = 0;
+                m_multiply_add_length = 0;
 
-                m_region_multiply_subtract_dest = 0;
-                m_region_multiply_subtract_src = 0;
-                m_region_multiply_subtract_constant = 0;
-                m_region_multiply_subtract_length = 0;
+                m_multiply_subtract_dest = 0;
+                m_multiply_subtract_src = 0;
+                m_multiply_subtract_constant = 0;
+                m_multiply_subtract_length = 0;
             }
 
         public:
 
-            mutable value_type* m_region_add_dest;
-            mutable const value_type* m_region_add_src;
-            mutable uint32_t m_region_add_length;
+            mutable value_type* m_add_dest;
+            mutable const value_type* m_add_src;
+            mutable uint32_t m_add_length;
 
-            mutable value_type* m_region_subtract_dest;
-            mutable const value_type* m_region_subtract_src;
-            mutable uint32_t m_region_subtract_length;
+            mutable value_type* m_subtract_dest;
+            mutable const value_type* m_subtract_src;
+            mutable uint32_t m_subtract_length;
 
-            mutable value_type* m_region_divide_dest;
-            mutable const value_type* m_region_divide_src;
-            mutable uint32_t m_region_divide_length;
+            mutable value_type* m_divide_dest;
+            mutable const value_type* m_divide_src;
+            mutable uint32_t m_divide_length;
 
-            mutable value_type* m_region_multiply_dest;
-            mutable const value_type* m_region_multiply_src;
-            mutable uint32_t m_region_multiply_length;
+            mutable value_type* m_multiply_dest;
+            mutable const value_type* m_multiply_src;
+            mutable uint32_t m_multiply_length;
 
-            mutable value_type* m_region_multiply_constant_dest;
-            mutable value_type m_region_multiply_constant_constant;
-            mutable uint32_t m_region_multiply_constant_length;
+            mutable value_type* m_multiply_constant_dest;
+            mutable value_type m_multiply_constant_constant;
+            mutable uint32_t m_multiply_constant_length;
 
-            mutable value_type* m_region_multiply_add_dest;
-            mutable const value_type* m_region_multiply_add_src;
-            mutable value_type m_region_multiply_add_constant;
-            mutable uint32_t m_region_multiply_add_length;
+            mutable value_type* m_multiply_add_dest;
+            mutable const value_type* m_multiply_add_src;
+            mutable value_type m_multiply_add_constant;
+            mutable uint32_t m_multiply_add_length;
 
-            mutable value_type* m_region_multiply_subtract_dest;
-            mutable const value_type* m_region_multiply_subtract_src;
-            mutable value_type m_region_multiply_subtract_constant;
-            mutable uint32_t m_region_multiply_subtract_length;
+            mutable value_type* m_multiply_subtract_dest;
+            mutable const value_type* m_multiply_subtract_src;
+            mutable value_type m_multiply_subtract_constant;
+            mutable uint32_t m_multiply_subtract_length;
 
         private:
 
@@ -291,28 +291,28 @@ namespace fifi
 
             virtual void test_aligned(value_type* dest, value_type* src)
             {
-                m_stack.region_add(dest, src, m_length);
+                this->m_stack.region_add(dest, src, this->m_length);
 
-                EXPECT_EQ(m_optimized->m_region_add_dest, dest);
-                EXPECT_EQ(m_optimized->m_region_add_src, src);
-                EXPECT_EQ(m_optimized->m_region_add_length, m_length);
+                EXPECT_EQ(this->m_optimized->m_add_dest, dest);
+                EXPECT_EQ(this->m_optimized->m_add_src, src);
+                EXPECT_EQ(this->m_optimized->m_add_length, this->m_length);
 
-                EXPECT_EQ(m_basic->m_region_add_dest, nullptr);
-                EXPECT_EQ(m_basic->m_region_add_src, nullptr);
-                EXPECT_EQ(m_basic->m_region_add_length, 0U);
+                EXPECT_EQ(this->m_basic->m_add_dest, nullptr);
+                EXPECT_EQ(this->m_basic->m_add_src, nullptr);
+                EXPECT_EQ(this->m_basic->m_add_length, 0U);
             }
 
             virtual void test_unaligned(value_type* dest, value_type* src)
             {
-                m_stack.region_add(dest, src, m_length);
+                this->m_stack.region_add(dest, src, this->m_length);
 
-                EXPECT_EQ(m_optimized->m_region_add_dest, nullptr);
-                EXPECT_EQ(m_optimized->m_region_add_src, nullptr);
-                EXPECT_EQ(m_optimized->m_region_add_length, 0U);
+                EXPECT_EQ(this->m_optimized->m_add_dest, nullptr);
+                EXPECT_EQ(this->m_optimized->m_add_src, nullptr);
+                EXPECT_EQ(this->m_optimized->m_add_length, 0U);
 
-                EXPECT_EQ(m_basic->m_region_add_dest, dest);
-                EXPECT_EQ(m_basic->m_region_add_src, src);
-                EXPECT_EQ(m_basic->m_region_add_length, m_length);
+                EXPECT_EQ(this->m_basic->m_add_dest, dest);
+                EXPECT_EQ(this->m_basic->m_add_src, src);
+                EXPECT_EQ(this->m_basic->m_add_length, this->m_length);
             }
         };
 
@@ -323,28 +323,28 @@ namespace fifi
 
             virtual void test_aligned(value_type* dest, value_type* src)
             {
-                m_stack.region_subtract(dest, src, m_length);
+                this->m_stack.region_subtract(dest, src, this->m_length);
 
-                EXPECT_EQ(m_optimized->m_region_subtract_dest, dest);
-                EXPECT_EQ(m_optimized->m_region_subtract_src, src);
-                EXPECT_EQ(m_optimized->m_region_subtract_length, m_length);
+                EXPECT_EQ(this->m_optimized->m_subtract_dest, dest);
+                EXPECT_EQ(this->m_optimized->m_subtract_src, src);
+                EXPECT_EQ(this->m_optimized->m_subtract_length, this->m_length);
 
-                EXPECT_EQ(m_basic->m_region_subtract_dest, nullptr);
-                EXPECT_EQ(m_basic->m_region_subtract_src, nullptr);
-                EXPECT_EQ(m_basic->m_region_subtract_length, 0U);
+                EXPECT_EQ(this->m_basic->m_subtract_dest, nullptr);
+                EXPECT_EQ(this->m_basic->m_subtract_src, nullptr);
+                EXPECT_EQ(this->m_basic->m_subtract_length, 0U);
             }
 
             virtual void test_unaligned(value_type* dest, value_type* src)
             {
-                m_stack.region_subtract(dest, src, m_length);
+                this->m_stack.region_subtract(dest, src, this->m_length);
 
-                EXPECT_EQ(m_optimized->m_region_subtract_dest, nullptr);
-                EXPECT_EQ(m_optimized->m_region_subtract_src, nullptr);
-                EXPECT_EQ(m_optimized->m_region_subtract_length, 0U);
+                EXPECT_EQ(this->m_optimized->m_subtract_dest, nullptr);
+                EXPECT_EQ(this->m_optimized->m_subtract_src, nullptr);
+                EXPECT_EQ(this->m_optimized->m_subtract_length, 0U);
 
-                EXPECT_EQ(m_basic->m_region_subtract_dest, dest);
-                EXPECT_EQ(m_basic->m_region_subtract_src, src);
-                EXPECT_EQ(m_basic->m_region_subtract_length, m_length);
+                EXPECT_EQ(this->m_basic->m_subtract_dest, dest);
+                EXPECT_EQ(this->m_basic->m_subtract_src, src);
+                EXPECT_EQ(this->m_basic->m_subtract_length, this->m_length);
             }
         };
 
@@ -355,28 +355,28 @@ namespace fifi
 
             virtual void test_aligned(value_type* dest, value_type* src)
             {
-                m_stack.region_multiply(dest, src, m_length);
+                this->m_stack.region_multiply(dest, src, this->m_length);
 
-                EXPECT_EQ(m_optimized->m_region_multiply_dest, dest);
-                EXPECT_EQ(m_optimized->m_region_multiply_src, src);
-                EXPECT_EQ(m_optimized->m_region_multiply_length, m_length);
+                EXPECT_EQ(this->m_optimized->m_multiply_dest, dest);
+                EXPECT_EQ(this->m_optimized->m_multiply_src, src);
+                EXPECT_EQ(this->m_optimized->m_multiply_length, this->m_length);
 
-                EXPECT_EQ(m_basic->m_region_multiply_dest, nullptr);
-                EXPECT_EQ(m_basic->m_region_multiply_src, nullptr);
-                EXPECT_EQ(m_basic->m_region_multiply_length, 0U);
+                EXPECT_EQ(this->m_basic->m_multiply_dest, nullptr);
+                EXPECT_EQ(this->m_basic->m_multiply_src, nullptr);
+                EXPECT_EQ(this->m_basic->m_multiply_length, 0U);
             }
 
             virtual void test_unaligned(value_type* dest, value_type* src)
             {
-                m_stack.region_multiply(dest, src, m_length);
+                this->m_stack.region_multiply(dest, src, this->m_length);
 
-                EXPECT_EQ(m_optimized->m_region_multiply_dest, nullptr);
-                EXPECT_EQ(m_optimized->m_region_multiply_src, nullptr);
-                EXPECT_EQ(m_optimized->m_region_multiply_length, 0U);
+                EXPECT_EQ(this->m_optimized->m_multiply_dest, nullptr);
+                EXPECT_EQ(this->m_optimized->m_multiply_src, nullptr);
+                EXPECT_EQ(this->m_optimized->m_multiply_length, 0U);
 
-                EXPECT_EQ(m_basic->m_region_multiply_dest, dest);
-                EXPECT_EQ(m_basic->m_region_multiply_src, src);
-                EXPECT_EQ(m_basic->m_region_multiply_length, m_length);
+                EXPECT_EQ(this->m_basic->m_multiply_dest, dest);
+                EXPECT_EQ(this->m_basic->m_multiply_src, src);
+                EXPECT_EQ(this->m_basic->m_multiply_length, this->m_length);
             }
         };
 
@@ -387,28 +387,28 @@ namespace fifi
 
             virtual void test_aligned(value_type* dest, value_type* src)
             {
-                m_stack.region_divide(dest, src, m_length);
+                this->m_stack.region_divide(dest, src, this->m_length);
 
-                EXPECT_EQ(m_optimized->m_region_divide_dest, dest);
-                EXPECT_EQ(m_optimized->m_region_divide_src, src);
-                EXPECT_EQ(m_optimized->m_region_divide_length, m_length);
+                EXPECT_EQ(this->m_optimized->m_divide_dest, dest);
+                EXPECT_EQ(this->m_optimized->m_divide_src, src);
+                EXPECT_EQ(this->m_optimized->m_divide_length, this->m_length);
 
-                EXPECT_EQ(m_basic->m_region_divide_dest, nullptr);
-                EXPECT_EQ(m_basic->m_region_divide_src, nullptr);
-                EXPECT_EQ(m_basic->m_region_divide_length, 0U);
+                EXPECT_EQ(this->m_basic->m_divide_dest, nullptr);
+                EXPECT_EQ(this->m_basic->m_divide_src, nullptr);
+                EXPECT_EQ(this->m_basic->m_divide_length, 0U);
             }
 
             virtual void test_unaligned(value_type* dest, value_type* src)
             {
-                m_stack.region_divide(dest, src, m_length);
+                this->m_stack.region_divide(dest, src, this->m_length);
 
-                EXPECT_EQ(m_optimized->m_region_divide_dest, nullptr);
-                EXPECT_EQ(m_optimized->m_region_divide_src, nullptr);
-                EXPECT_EQ(m_optimized->m_region_divide_length, 0U);
+                EXPECT_EQ(this->m_optimized->m_divide_dest, nullptr);
+                EXPECT_EQ(this->m_optimized->m_divide_src, nullptr);
+                EXPECT_EQ(this->m_optimized->m_divide_length, 0U);
 
-                EXPECT_EQ(m_basic->m_region_divide_dest, dest);
-                EXPECT_EQ(m_basic->m_region_divide_src, src);
-                EXPECT_EQ(m_basic->m_region_divide_length, m_length);
+                EXPECT_EQ(this->m_basic->m_divide_dest, dest);
+                EXPECT_EQ(this->m_basic->m_divide_src, src);
+                EXPECT_EQ(this->m_basic->m_divide_length, this->m_length);
             }
         };
     }
