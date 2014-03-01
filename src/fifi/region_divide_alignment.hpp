@@ -181,8 +181,18 @@ namespace fifi
 
         uint32_t unaligned_head(const value_type* data) const
         {
-            return OptimizedSuper::alignment() - (uintptr_t)data %
-                   OptimizedSuper::alignment();
+            uint32_t alignment = OptimizedSuper::alignment();
+            uint32_t offset = (uintptr_t)data % alignment;
+            // Return zero if the data is aligned
+            if (offset == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                // Otherwise calculate the number of bytes
+                return alignment - offset;
+            }
         }
     };
 }
