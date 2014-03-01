@@ -172,11 +172,6 @@ namespace fifi
             }
         }
 
-        uint32_t alignment() const
-        {
-            return BasicSuper::alignment();
-        }
-
     private:
 
         uint32_t unaligned_head(const value_type* data) const
@@ -190,8 +185,13 @@ namespace fifi
             }
             else
             {
+                const uint32_t value_size = sizeof(value_type);
+
+                // Ensure that we do not split a value_type
+                // Do not allow offsets that are not multiples of the value_size
+                assert(value_size == 1 || (offset % value_size) == 0);
                 // Otherwise calculate the number of bytes
-                return alignment - offset;
+                return (alignment - offset) / value_size;
             }
         }
     };

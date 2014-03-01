@@ -3,9 +3,7 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <vector>
-#include <memory>
-#include <functional>
+#include <cstdint>
 
 #include <gtest/gtest.h>
 
@@ -39,13 +37,13 @@ namespace fifi
         };
 
         template<class Field>
-        class dummy_stack :
-            public region_equal_alignment<
-                   dummy_typedef_optimized_super<
-                   region_dummy<
-                   dummy_typedef_basic_super<
-                   region_dummy<
-                   final<Field> > > > > >
+        class dummy_stack : public
+            region_equal_alignment<
+            dummy_typedef_optimized_super<
+            region_dummy<
+            dummy_typedef_basic_super<
+            region_dummy<
+            final<Field> > > > > >
         { };
 
         template<class Field>
@@ -60,7 +58,7 @@ namespace fifi
 
             TestOperation()
             {
-                m_value_size = sizeof(typename field_type::value_type);
+                m_value_size = sizeof(value_type);
                 // The alignment is measured in bytes
                 m_alignment = 16;
                 m_length = 100;
