@@ -9,6 +9,7 @@
 
 #include <gtest/gtest.h>
 
+#include <fifi/binary.hpp>
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
 #include <fifi/binary16.hpp>
@@ -16,6 +17,7 @@
 #include <fifi/region_equal_alignment.hpp>
 
 #include "helper_test_buffer.hpp"
+#include "helper_region_dummy.hpp"
 
 namespace fifi
 {
@@ -33,167 +35,6 @@ namespace fifi
         {
         public:
             typedef Super OptimizedSuper;
-        };
-
-        template<class Super>
-        class region_dummy : public Super
-        {
-        public:
-
-            typedef typename Super::field_type field_type;
-
-            typedef typename Super::value_type value_type;
-
-        public:
-
-            void region_add(value_type* dest, const value_type* src,
-                uint32_t length) const
-            {
-                m_add_dest = dest;
-                m_add_src = src;
-                m_add_length = length;
-            }
-
-            void region_subtract(value_type* dest, const value_type* src,
-                uint32_t length) const
-            {
-                m_subtract_dest = dest;
-                m_subtract_src = src;
-                m_subtract_length = length;
-            }
-
-            void region_divide(value_type* dest, const value_type* src,
-                uint32_t length) const
-            {
-                m_divide_dest = dest;
-                m_divide_src = src;
-                m_divide_length = length;
-            }
-
-            void region_multiply(value_type* dest, const value_type* src,
-                uint32_t length) const
-            {
-                m_multiply_dest = dest;
-                m_multiply_src = src;
-                m_multiply_length = length;
-            }
-
-            void region_multiply_constant(value_type* dest, value_type constant,
-                uint32_t length) const
-            {
-                m_multiply_constant_dest = dest;
-                m_multiply_constant_constant = constant;
-                m_multiply_constant_length = length;
-            }
-
-            void region_multiply_add(value_type* dest, const value_type* src,
-                value_type constant, uint32_t length) const
-            {
-                m_multiply_add_dest = dest;
-                m_multiply_add_src = src;
-                m_multiply_add_constant = constant;
-                m_multiply_add_length = length;
-            }
-
-            void region_multiply_subtract(value_type* dest,
-                const value_type* src, value_type constant,
-                uint32_t length) const
-            {
-                m_multiply_subtract_dest = dest;
-                m_multiply_subtract_src = src;
-                m_multiply_subtract_constant = constant;
-                m_multiply_subtract_length = length;
-            }
-
-            uint32_t alignment() const
-            {
-                return m_alignment;
-            }
-
-            uint32_t max_alignment() const
-            {
-                return m_max_alignment;
-            }
-
-            void set_alignment(uint32_t alignment)
-            {
-                m_alignment = alignment;
-            }
-
-            void set_max_alignment(uint32_t max_alignment)
-            {
-                m_max_alignment = max_alignment;
-            }
-
-            void clear_test()
-            {
-                m_add_dest = 0;
-                m_add_src = 0;
-                m_add_length = 0;
-
-                m_subtract_dest = 0;
-                m_subtract_src = 0;
-                m_subtract_length = 0;
-
-                m_divide_dest = 0;
-                m_divide_src = 0;
-                m_divide_length = 0;
-
-                m_multiply_dest = 0;
-                m_multiply_src = 0;
-                m_multiply_length = 0;
-
-                m_multiply_constant_dest = 0;
-                m_multiply_constant_constant = 0;
-                m_multiply_constant_length = 0;
-
-                m_multiply_add_dest = 0;
-                m_multiply_add_src = 0;
-                m_multiply_add_constant = 0;
-                m_multiply_add_length = 0;
-
-                m_multiply_subtract_dest = 0;
-                m_multiply_subtract_src = 0;
-                m_multiply_subtract_constant = 0;
-                m_multiply_subtract_length = 0;
-            }
-
-        public:
-
-            mutable value_type* m_add_dest;
-            mutable const value_type* m_add_src;
-            mutable uint32_t m_add_length;
-
-            mutable value_type* m_subtract_dest;
-            mutable const value_type* m_subtract_src;
-            mutable uint32_t m_subtract_length;
-
-            mutable value_type* m_divide_dest;
-            mutable const value_type* m_divide_src;
-            mutable uint32_t m_divide_length;
-
-            mutable value_type* m_multiply_dest;
-            mutable const value_type* m_multiply_src;
-            mutable uint32_t m_multiply_length;
-
-            mutable value_type* m_multiply_constant_dest;
-            mutable value_type m_multiply_constant_constant;
-            mutable uint32_t m_multiply_constant_length;
-
-            mutable value_type* m_multiply_add_dest;
-            mutable const value_type* m_multiply_add_src;
-            mutable value_type m_multiply_add_constant;
-            mutable uint32_t m_multiply_add_length;
-
-            mutable value_type* m_multiply_subtract_dest;
-            mutable const value_type* m_multiply_subtract_src;
-            mutable value_type m_multiply_subtract_constant;
-            mutable uint32_t m_multiply_subtract_length;
-
-        private:
-
-            uint32_t m_alignment;
-            uint32_t m_max_alignment;
         };
 
         template<class Field>
@@ -411,6 +252,96 @@ namespace fifi
                 EXPECT_EQ(this->m_basic->m_divide_length, this->m_length);
             }
         };
+
+        template<class Field>
+        struct TestRegionMultiplyAdd : public TestOperationBase<Field>
+        {
+            typedef typename TestOperationBase<Field>::value_type value_type;
+
+            virtual void test_aligned(value_type* dest, value_type* src)
+            {
+                this->m_stack.region_multiply_add(dest, src, 0, this->m_length);
+
+                EXPECT_EQ(this->m_optimized->m_multiply_add_dest, dest);
+                EXPECT_EQ(this->m_optimized->m_multiply_add_src, src);
+                EXPECT_EQ(
+                    this->m_optimized->m_multiply_add_length, this->m_length);
+
+                EXPECT_EQ(this->m_basic->m_multiply_add_dest, nullptr);
+                EXPECT_EQ(this->m_basic->m_multiply_add_src, nullptr);
+                EXPECT_EQ(this->m_basic->m_multiply_add_length, 0U);
+            }
+
+            virtual void test_unaligned(value_type* dest, value_type* src)
+            {
+                this->m_stack.region_multiply_add(dest, src, 0, this->m_length);
+
+                EXPECT_EQ(this->m_optimized->m_multiply_add_dest, nullptr);
+                EXPECT_EQ(this->m_optimized->m_multiply_add_src, nullptr);
+                EXPECT_EQ(this->m_optimized->m_multiply_add_length, 0U);
+
+                EXPECT_EQ(this->m_basic->m_multiply_add_dest, dest);
+                EXPECT_EQ(this->m_basic->m_multiply_add_src, src);
+                EXPECT_EQ(this->m_basic->m_multiply_add_length, this->m_length);
+            }
+        };
+
+        template<class Field>
+        struct TestRegionMultiplySubtract : public TestOperationBase<Field>
+        {
+            typedef typename TestOperationBase<Field>::value_type value_type;
+
+            virtual void test_aligned(value_type* dest, value_type* src)
+            {
+                this->m_stack.region_multiply_subtract(
+                    dest, src, 0, this->m_length);
+
+                EXPECT_EQ(this->m_optimized->m_multiply_subtract_dest, dest);
+                EXPECT_EQ(this->m_optimized->m_multiply_subtract_src, src);
+                EXPECT_EQ(this->m_optimized->m_multiply_subtract_length,
+                          this->m_length);
+
+                EXPECT_EQ(this->m_basic->m_multiply_subtract_dest, nullptr);
+                EXPECT_EQ(this->m_basic->m_multiply_subtract_src, nullptr);
+                EXPECT_EQ(this->m_basic->m_multiply_subtract_length, 0U);
+            }
+
+            virtual void test_unaligned(value_type* dest, value_type* src)
+            {
+                this->m_stack.region_multiply_subtract(
+                    dest, src, 0, this->m_length);
+
+                EXPECT_EQ(this->m_optimized->m_multiply_subtract_dest, nullptr);
+                EXPECT_EQ(this->m_optimized->m_multiply_subtract_src, nullptr);
+                EXPECT_EQ(this->m_optimized->m_multiply_subtract_length, 0U);
+
+                EXPECT_EQ(this->m_basic->m_multiply_subtract_dest, dest);
+                EXPECT_EQ(this->m_basic->m_multiply_subtract_src, src);
+                EXPECT_EQ(this->m_basic->m_multiply_subtract_length,
+                          this->m_length);
+            }
+        };
+
+        template<template<class> class TestOperation>
+        void check_operation()
+        {
+            {
+                SCOPED_TRACE("binary");
+                TestOperation<binary>().run_test();
+            }
+            {
+                SCOPED_TRACE("binary4");
+                TestOperation<binary4>().run_test();
+            }
+            {
+                SCOPED_TRACE("binary8");
+                TestOperation<binary8>().run_test();
+            }
+            {
+                SCOPED_TRACE("binary16");
+                TestOperation<binary16>().run_test();
+            }
+        }
     }
 }
 
@@ -444,28 +375,30 @@ TEST(TestRegionEqualAlignment, max_alignment)
 
 TEST(TestRegionEqualAlignment, region_add)
 {
-    fifi::TestRegionAdd<fifi::binary4>().run_test();
-    fifi::TestRegionAdd<fifi::binary8>().run_test();
-    fifi::TestRegionAdd<fifi::binary16>().run_test();
+    fifi::check_operation<fifi::TestRegionAdd>();
 }
 
 TEST(TestRegionEqualAlignment, region_subtract)
 {
-    fifi::TestRegionSubtract<fifi::binary4>().run_test();
-    fifi::TestRegionSubtract<fifi::binary8>().run_test();
-    fifi::TestRegionSubtract<fifi::binary16>().run_test();
+    fifi::check_operation<fifi::TestRegionSubtract>();
 }
 
 TEST(TestRegionEqualAlignment, region_multiply)
 {
-    fifi::TestRegionMultiply<fifi::binary4>().run_test();
-    fifi::TestRegionMultiply<fifi::binary8>().run_test();
-    fifi::TestRegionMultiply<fifi::binary16>().run_test();
+    fifi::check_operation<fifi::TestRegionMultiply>();
 }
 
 TEST(TestRegionEqualAlignment, region_divide)
 {
-    fifi::TestRegionDivide<fifi::binary4>().run_test();
-    fifi::TestRegionDivide<fifi::binary8>().run_test();
-    fifi::TestRegionDivide<fifi::binary16>().run_test();
+    fifi::check_operation<fifi::TestRegionDivide>();
+}
+
+TEST(TestRegionEqualAlignment, region_multiply_add)
+{
+    fifi::check_operation<fifi::TestRegionMultiplyAdd>();
+}
+
+TEST(TestRegionEqualAlignment, region_multiply_subtract)
+{
+    fifi::check_operation<fifi::TestRegionMultiplySubtract>();
 }
