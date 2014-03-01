@@ -10,7 +10,10 @@
 
 namespace fifi
 {
-    /// Fall through for other fields
+    /// This is a convenience layer for region arithmetics which guarantees
+    /// that the optimized operations are only called on buffer fragments
+    /// which have the required granularity, i.e. their length is a multiple
+    /// of the granularity.
     template<class Super>
     class region_divide_granularity : public Super
     {
