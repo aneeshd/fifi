@@ -264,8 +264,8 @@ namespace fifi
 
                 EXPECT_EQ(this->m_optimized->m_multiply_add_dest, dest);
                 EXPECT_EQ(this->m_optimized->m_multiply_add_src, src);
-                EXPECT_EQ(
-                    this->m_optimized->m_multiply_add_length, this->m_length);
+                EXPECT_EQ(this->m_optimized->m_multiply_add_length,
+                          this->m_length);
 
                 EXPECT_EQ(this->m_basic->m_multiply_add_dest, nullptr);
                 EXPECT_EQ(this->m_basic->m_multiply_add_src, nullptr);
