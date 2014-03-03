@@ -84,6 +84,7 @@ namespace fifi
                 // If the buffers are aligned, the optimized approach is used.
                 for (uint32_t offset = 0; offset < m_length; offset++)
                 {
+                    SCOPED_TRACE(testing::Message() << "offset:" << offset);
                     value_type* dest = &dest_buffer.data()[offset];
                     value_type* src = &src_buffer.data()[offset];
                     ASSERT_EQ((uintptr_t)dest % m_alignment,
@@ -94,6 +95,7 @@ namespace fifi
                 // If the buffers are unaligned, the basic approach is used.
                 for (uint32_t offset = 1; offset < m_alignment; offset++)
                 {
+                    SCOPED_TRACE(testing::Message() << "offset:" << offset);
                     value_type* dest = (value_type*)&dest_buffer.data()[offset];
                     value_type* src = (value_type*)&src_buffer.data()[0];
 
