@@ -127,178 +127,6 @@ namespace fifi
             }
         }
 
-        template
-        <
-            class T,
-            typename std::enable_if<has_region_add<T>::value, uint8_t>::type = 0
-        >
-        void bind_region_add(const T* stack)
-        {
-            using namespace std::placeholders;
-            m_add = std::bind(&T::region_add, stack, _1, _2, _3);
-        }
-
-        template
-        <
-            class T,
-            typename std::enable_if<!has_region_add<T>::value, uint16_t>::type = 0
-        >
-        void bind_region_add(const T* stack)
-        {
-            // We do the assert here - to make sure that this call is
-            // not silently ignored in cases where the stack does not
-            // have the layer::region_add(value_type*, const
-            // value_type*, uint32_t) function. However, this assert
-            // can be avoided by using the has_region_add helper.
-            (void) stack;
-            assert(0);
-        }
-
-        template
-        <
-            class T,
-            typename std::enable_if<has_region_subtract<T>::value, uint8_t>::type = 0
-        >
-        void bind_region_subtract(const T* stack)
-        {
-            using namespace std::placeholders;
-            m_subtract = std::bind(
-                &T::region_subtract, stack, _1, _2, _3);
-        }
-
-        template
-        <
-            class T,
-            typename std::enable_if<!has_region_subtract<T>::value, uint16_t>::type = 0
-        >
-        void bind_region_subtract(const T* stack)
-        {
-            // @see bind_region_add(T*)
-            (void) stack;
-            assert(0);
-        }
-
-        template
-        <
-            class T,
-            typename std::enable_if<has_region_multiply<T>::value, uint8_t>::type = 0
-        >
-        void bind_region_multiply(const T* stack)
-        {
-            using namespace std::placeholders;
-            m_multiply = std::bind(
-                &T::region_multiply, stack, _1, _2, _3);
-        }
-
-        template
-        <
-            class T,
-            typename std::enable_if<!has_region_multiply<T>::value, uint16_t>::type = 0
-        >
-        void bind_region_multiply(const T* stack)
-        {
-            // @see bind_region_add(T*)
-            (void) stack;
-            assert(0);
-        }
-
-        template
-        <
-            class T,
-            typename std::enable_if<has_region_divide<T>::value, uint8_t>::type = 0
-        >
-        void bind_region_divide(const T* stack)
-        {
-            using namespace std::placeholders;
-            m_divide = std::bind(
-                &T::region_divide, stack, _1, _2, _3);
-        }
-
-        template
-        <
-            class T,
-            typename std::enable_if<!has_region_divide<T>::value, uint16_t>::type = 0
-        >
-        void bind_region_divide(const T* stack)
-        {
-            // @see bind_region_add(T*)
-            (void) stack;
-            assert(0);
-        }
-
-        template
-        <
-            class T,
-            typename std::enable_if<has_region_multiply_constant<T>::value, uint8_t>::type = 0
-        >
-        void bind_region_multiply_constant(const T* stack)
-        {
-            using namespace std::placeholders;
-            m_multiply_constant = std::bind(
-                &T::region_multiply_constant, stack, _1, _2, _3);
-        }
-
-        template
-        <
-            class T,
-            typename std::enable_if<!has_region_multiply_constant<T>::value, uint16_t>::type = 0
-        >
-        void bind_region_multiply_constant(const T* stack)
-        {
-            // @see bind_region_add(T*)
-            (void) stack;
-            assert(0);
-        }
-
-        template
-        <
-            class T,
-            typename std::enable_if<has_region_multiply_add<T>::value, uint8_t>::type = 0
-        >
-        void bind_region_multiply_add(const T* stack)
-        {
-            using namespace std::placeholders;
-            m_multiply_add = std::bind(
-                &T::region_multiply_add, stack, _1, _2, _3, _4);
-        }
-
-        template
-        <
-            class T,
-            typename std::enable_if<!has_region_multiply_add<T>::value, uint16_t>::type = 0
-        >
-        void bind_region_multiply_add(const T* stack)
-        {
-            // @see bind_region_add(T*)
-            (void) stack;
-            assert(0);
-        }
-
-
-        template
-        <
-            class T,
-            typename std::enable_if<has_region_multiply_subtract<T>::value, uint8_t>::type = 0
-        >
-        void bind_region_multiply_subtract(const T* stack)
-        {
-            using namespace std::placeholders;
-            m_multiply_subtract = std::bind(
-                &T::region_multiply_subtract, stack, _1, _2, _3, _4);
-        }
-
-        template
-        <
-            class T,
-            typename std::enable_if<!has_region_multiply_subtract<T>::value, uint16_t>::type = 0
-        >
-        void bind_region_multiply_subtract(const T* stack)
-        {
-            // @see bind_region_add(T*)
-            (void) stack;
-            assert(0);
-        }
-
         /// @copydoc layer::region_add(value_type*, const value_type*,
         ///                            uint32_t) const
         void region_add(value_type* dest, const value_type* src,
@@ -421,6 +249,220 @@ namespace fifi
         static bool enabled()
         {
             return Stack::enabled();
+        }
+
+    private:
+
+        /// Helper function for binding to the chosen
+        /// layer::region_add(value_type*, const value_type*,
+        /// uint32_t). The function uses SFINA to only bind if the
+        /// chosen stack supports the operation.
+        ///
+        /// @param stack Pointer to the stack where the operation
+        /// should be bound
+        template
+        <
+            class T,
+            typename std::enable_if<
+                has_region_add<T>::value, uint8_t>::type = 0
+        >
+        void bind_region_add(const T* stack)
+        {
+            using namespace std::placeholders;
+            m_add = std::bind(&T::region_add, stack, _1, _2, _3);
+        }
+
+        /// Helper function called if the chosen stack does not
+        /// support the desired operation. In this case this function
+        /// will be instantiated ensureing that the code will
+        /// compile. To avoid asserting the calling code should use
+        /// the has_region_add<T>::value helper
+        ///
+        /// @param stack Pointer to the stack where the operation
+        /// should be bound
+        template
+        <
+            class T,
+            typename std::enable_if<
+                !has_region_add<T>::value, uint16_t>::type = 0
+        >
+        void bind_region_add(const T* stack)
+        {
+            // We do the assert here - to make sure that this call is
+            // not silently ignored in cases where the stack does not
+            // have the layer::region_add(value_type*, const
+            // value_type*, uint32_t) function. However, this assert
+            // can be avoided by using the has_region_add helper.
+            (void) stack;
+            assert(0);
+        }
+
+        /// @copydoc bind_region_add(const T*)
+        template
+        <
+            class T,
+            typename std::enable_if<
+                has_region_subtract<T>::value, uint8_t>::type = 0
+        >
+        void bind_region_subtract(const T* stack)
+        {
+            using namespace std::placeholders;
+            m_subtract = std::bind(
+                &T::region_subtract, stack, _1, _2, _3);
+        }
+
+        /// @copydoc bind_region_add(const T*)
+        template
+        <
+            class T,
+            typename std::enable_if<
+                !has_region_subtract<T>::value, uint16_t>::type = 0
+        >
+        void bind_region_subtract(const T* stack)
+        {
+            // @see bind_region_add(T*)
+            (void) stack;
+            assert(0);
+        }
+
+        /// @copydoc bind_region_add(const T*)
+        template
+        <
+            class T,
+            typename std::enable_if<
+                has_region_multiply<T>::value, uint8_t>::type = 0
+        >
+        void bind_region_multiply(const T* stack)
+        {
+            using namespace std::placeholders;
+            m_multiply = std::bind(
+                &T::region_multiply, stack, _1, _2, _3);
+        }
+
+        /// @copydoc bind_region_add(const T*)
+        template
+        <
+            class T,
+            typename std::enable_if<
+                !has_region_multiply<T>::value, uint16_t>::type = 0
+        >
+        void bind_region_multiply(const T* stack)
+        {
+            // @see bind_region_add(T*)
+            (void) stack;
+            assert(0);
+        }
+
+        /// @copydoc bind_region_add(const T*)
+        template
+        <
+            class T,
+            typename std::enable_if<
+                has_region_divide<T>::value, uint8_t>::type = 0
+        >
+        void bind_region_divide(const T* stack)
+        {
+            using namespace std::placeholders;
+            m_divide = std::bind(
+                &T::region_divide, stack, _1, _2, _3);
+        }
+
+        /// @copydoc bind_region_add(const T*)
+        template
+        <
+            class T,
+            typename std::enable_if<
+                !has_region_divide<T>::value, uint16_t>::type = 0
+        >
+        void bind_region_divide(const T* stack)
+        {
+            // @see bind_region_add(T*)
+            (void) stack;
+            assert(0);
+        }
+
+        /// @copydoc bind_region_add(const T*)
+        template
+        <
+            class T,
+            typename std::enable_if<
+                has_region_multiply_constant<T>::value, uint8_t>::type = 0
+        >
+        void bind_region_multiply_constant(const T* stack)
+        {
+            using namespace std::placeholders;
+            m_multiply_constant = std::bind(
+                &T::region_multiply_constant, stack, _1, _2, _3);
+        }
+
+        /// @copydoc bind_region_add(const T*)
+        template
+        <
+            class T,
+            typename std::enable_if<
+                !has_region_multiply_constant<T>::value, uint16_t>::type = 0
+        >
+        void bind_region_multiply_constant(const T* stack)
+        {
+            // @see bind_region_add(T*)
+            (void) stack;
+            assert(0);
+        }
+
+        /// @copydoc bind_region_add(const T*)
+        template
+        <
+            class T,
+            typename std::enable_if<
+                has_region_multiply_add<T>::value, uint8_t>::type = 0
+        >
+        void bind_region_multiply_add(const T* stack)
+        {
+            using namespace std::placeholders;
+            m_multiply_add = std::bind(
+                &T::region_multiply_add, stack, _1, _2, _3, _4);
+        }
+
+        /// @copydoc bind_region_add(const T*)
+        template
+        <
+            class T,
+            typename std::enable_if<
+                !has_region_multiply_add<T>::value, uint16_t>::type = 0
+        >
+        void bind_region_multiply_add(const T* stack)
+        {
+            // @see bind_region_add(T*)
+            (void) stack;
+            assert(0);
+        }
+
+        /// @copydoc bind_region_add(const T*)
+        template
+        <
+            class T,
+            typename std::enable_if<
+                has_region_multiply_subtract<T>::value, uint8_t>::type = 0
+        >
+        void bind_region_multiply_subtract(const T* stack)
+        {
+            using namespace std::placeholders;
+            m_multiply_subtract = std::bind(
+                &T::region_multiply_subtract, stack, _1, _2, _3, _4);
+        }
+
+        /// @copydoc bind_region_add(const T*)
+        template
+        <
+            class T,
+            typename std::enable_if<
+                !has_region_multiply_subtract<T>::value, uint16_t>::type = 0
+        >
+        void bind_region_multiply_subtract(const T* stack)
+        {
+            // @see bind_region_add(T*)
+            (void) stack;
+            assert(0);
         }
 
     protected:
