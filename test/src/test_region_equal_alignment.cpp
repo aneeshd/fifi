@@ -69,14 +69,16 @@ namespace fifi
                 // The alignment is measured in bytes
                 m_alignment = 16;
                 m_length = 100;
+
+                m_size = m_length * m_value_size;
             }
 
             void run_test()
             {
-                fifi::helper_test_buffer<value_type> dest_buffer(
-                    m_length, m_alignment);
-                fifi::helper_test_buffer<value_type> src_buffer(
-                    m_length, m_alignment);
+                fifi::helper_test_buffer<uint8_t> dest_buffer(
+                    m_size, m_alignment);
+                fifi::helper_test_buffer<uint8_t> src_buffer(
+                    m_size, m_alignment);
 
                 random_constant<field_type> constants;
                 auto constant = constants.pack();
@@ -85,11 +87,11 @@ namespace fifi
                 for (uint32_t offset = 0; offset < m_length; offset++)
                 {
                     SCOPED_TRACE(testing::Message() << "offset:" << offset);
-                    value_type* dest = &dest_buffer.data()[offset];
-                    value_type* src = &src_buffer.data()[offset];
+                    value_type* dest = (value_type*)&dest_buffer.data()[offset];
+                    value_type* src = (value_type*)&src_buffer.data()[offset];
                     ASSERT_EQ((uintptr_t)dest % m_alignment,
                           (uintptr_t)src  % m_alignment);
-                    test(dest, src, constant, true);
+                    run_operations(dest, src, constant, true);
                 }
 
                 // If the buffers are unaligned, the basic approach is used.
@@ -102,11 +104,11 @@ namespace fifi
                     ASSERT_NE((uintptr_t)dest % m_alignment,
                               (uintptr_t)src  % m_alignment);
 
-                    test(dest, src, constant, false);
+                    run_operations(dest, src, constant, false);
                 }
             }
 
-            void test(value_type* dest, const value_type* src,
+            void run_operations(value_type* dest, const value_type* src,
                 value_type constant, bool aligned)
             {
                 run_operation(aligned,
@@ -180,6 +182,7 @@ namespace fifi
             uint32_t m_value_size;
             uint32_t m_alignment;
             uint32_t m_length;
+            uint32_t m_size;
         };
     }
 }
