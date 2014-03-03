@@ -97,7 +97,7 @@ namespace fifi
 
         /// @return true if the executable was built with SSSE3 binary4
         ///         full table support
-        static bool enabled();
+        bool enabled() const;
 
     private:
 

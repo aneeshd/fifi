@@ -93,9 +93,9 @@ namespace fifi
         /// @copydoc layer::max_granularity() const
         uint32_t max_granularity() const;
 
-        /// @return true if the executable was built with SSSE3 binary4
+        /// @return true if the executable was built with SSSE3 binary8
         ///         full table support
-        static bool enabled();
+        bool enabled() const;
 
     private:
 

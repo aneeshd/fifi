@@ -17,6 +17,8 @@
 #include "random_constant.hpp"
 #include "helper_test_buffer.hpp"
 #include "helper_region_dummy.hpp"
+#include "helper_fall_through.hpp"
+#include "helper_region_info.hpp"
 
 namespace fifi
 {
@@ -40,199 +42,173 @@ namespace fifi
         class dummy_stack : public
             region_divide_alignment<
             dummy_typedef_optimized_super<
-            region_dummy<
+            helper_region_info<0,0,0,0,
+            helper_fall_through<Field,
             dummy_typedef_basic_super<
-            region_dummy<
-            final<Field> > > > > >
+            helper_region_info<0,0,0,0,
+            helper_fall_through<Field,
+            final<Field> > > > > > > >
         { };
 
         template<class Field>
-        struct TestOperation
+        struct test_operation
         {
             typedef Field field_type;
-            typedef dummy_stack<field_type> stack_type;
 
             typedef typename field_type::value_type value_type;
+
+            typedef dummy_stack<field_type> stack_type;
+            typedef capture_calls<value_type> calls_type;
+
             typedef typename stack_type::BasicSuper basic_super;
             typedef typename stack_type::OptimizedSuper optimized_super;
 
-            TestOperation()
+            test_operation()
             {
                 m_value_size = sizeof(value_type);
+
                 // The alignment is measured in bytes
                 m_alignment = 16;
                 m_length = 100;
-
-                m_basic = &m_stack;
-                m_optimized = &m_stack;
-
-                m_basic->set_alignment(m_value_size);
-                m_optimized->set_alignment(m_alignment);
             }
 
-            void run_test(region_operation operation)
+            void run_test()
             {
                 fifi::helper_test_buffer<value_type> dest_buffer(
                     m_length, m_alignment);
                 fifi::helper_test_buffer<value_type> src_buffer(
                     m_length, m_alignment);
 
+                random_constant<field_type> constants;
+                auto constant = constants.pack();
+
                 // Test the division of the unaligned head and the aligned part
                 for (uint32_t offset = 0; offset < m_length; offset++)
                 {
-                    m_optimized->clear_test();
-                    m_basic->clear_test();
-
                     value_type* dest = &dest_buffer.data()[offset];
                     value_type* src = &src_buffer.data()[offset];
 
                     ASSERT_EQ((uintptr_t)dest % m_alignment,
                               (uintptr_t)src  % m_alignment);
 
-                    if (operation == region_operation::MULTIPLY_CONSTANT)
-                        src = 0;
-
                     uint32_t length = m_length - offset;
-                    run_operation(operation, dest, src, length);
 
-                    uint32_t modulo = (uintptr_t)dest % m_alignment;
+                    run_operation(
+                        std::mem_fn(&stack_type::region_add),
+                        std::mem_fn(&calls_type::call_region_add),
+                        length, dest, src);
 
-                    // If there is no unaligned head
-                    if (modulo == 0)
-                    {
-                        // The optimized implementation processes the entire
-                        // buffer
-                        EXPECT_EQ(m_optimized->m_last_operation, operation);
-                        EXPECT_EQ(m_optimized->m_dest, dest);
-                        EXPECT_EQ(m_optimized->m_src, src);
-                        EXPECT_EQ(m_optimized->m_length, length);
-                        EXPECT_EQ(m_optimized->m_constant, m_last_constant);
+                    run_operation(
+                        std::mem_fn(&stack_type::region_subtract),
+                        std::mem_fn(&calls_type::call_region_subtract),
+                        length, dest, src);
 
-                        // And the basic super should not be called
-                        EXPECT_EQ(m_basic->m_last_operation,
-                                  region_operation::NONE);
-                        EXPECT_EQ(m_basic->m_dest, nullptr);
-                        EXPECT_EQ(m_basic->m_src, nullptr);
-                        EXPECT_EQ(m_basic->m_length, 0U);
-                        EXPECT_EQ(m_basic->m_constant, 0U);
-                    }
-                    else
-                    {
-                        // Otherwise the buffer is divided to 2 parts
-                        uint32_t unaligned =
-                            (m_alignment - modulo) / m_value_size;
+                    run_operation(
+                        std::mem_fn(&stack_type::region_multiply),
+                        std::mem_fn(&calls_type::call_region_multiply),
+                        length, dest, src);
 
-                        //The basic implementation runs on the unaligned head
-                        EXPECT_EQ(m_basic->m_last_operation, operation);
-                        EXPECT_EQ(m_basic->m_dest, dest);
-                        EXPECT_EQ(m_basic->m_src, src);
-                        EXPECT_EQ(m_basic->m_length, unaligned);
-                        EXPECT_EQ(m_basic->m_constant, m_last_constant);
+                    run_operation(
+                        std::mem_fn(&stack_type::region_divide),
+                        std::mem_fn(&calls_type::call_region_divide),
+                        length, dest, src);
 
-                        // Calculate the number of remaining values
-                        uint32_t rest = length - unaligned;
+                    run_operation(
+                        std::mem_fn(&stack_type::region_multiply_constant),
+                        std::mem_fn(&calls_type::call_region_multiply_constant),
+                        length, dest, constant);
 
-                        if (rest > 0)
-                        {
-                            // The optimized implementation processes the
-                            // second part
-                            EXPECT_EQ(m_optimized->m_last_operation, operation);
-                            EXPECT_EQ(m_optimized->m_dest, dest + unaligned);
-                            EXPECT_EQ(m_optimized->m_src, src + unaligned);
-                            EXPECT_EQ(m_optimized->m_length, rest);
-                            EXPECT_EQ(m_optimized->m_constant, m_last_constant);
-                        }
-                        else
-                        {
-                            // If there is no second part, then the optimized
-                            // super should not be called
-                            EXPECT_EQ(m_optimized->m_last_operation,
-                                      region_operation::NONE);
-                            EXPECT_EQ(m_optimized->m_dest, nullptr);
-                            EXPECT_EQ(m_optimized->m_src, nullptr);
-                            EXPECT_EQ(m_optimized->m_length, 0U);
-                            EXPECT_EQ(m_optimized->m_constant, 0U);
-                        }
-                    }
+                    run_operation(
+                        std::mem_fn(&stack_type::region_multiply_add),
+                        std::mem_fn(&calls_type::call_region_multiply_add),
+                        length, dest, src, constant);
+
+                    run_operation(
+                        std::mem_fn(&stack_type::region_multiply_subtract),
+                        std::mem_fn(&calls_type::call_region_multiply_subtract),
+                        length, dest, src, constant);
                 }
             }
 
-            void run_operation(region_operation operation,
-                value_type* dest, value_type* src, uint32_t length)
+            template<class Function, class CallFunction, class... Args>
+            void run_operation(Function function, CallFunction call_function,
+                uint32_t length, value_type* dest, Args&&... args)
             {
-                m_last_constant = 0;
-                switch (operation)
+
+                basic_super& basic = m_stack;
+                optimized_super& optimized = m_stack;
+
+                basic.set_alignment(m_value_size);
+                optimized.set_alignment(m_alignment);
+
+                optimized.clear();
+                basic.clear();
+                m_basic_calls.clear();
+                m_optimized_calls.clear();
+
+                function(m_stack, dest, args..., length);
+
+                uint32_t modulo = (uintptr_t)dest % m_alignment;
+                // If there is no unaligned head
+                if (modulo == 0)
                 {
-                case region_operation::NONE:
-                    assert(0);
-                    break;
-                case region_operation::ADD:
-                    m_stack.region_add(dest, src, length);
-                    break;
-                case region_operation::SUBTRACT:
-                    m_stack.region_subtract(dest, src, length);
-                    break;
-                case region_operation::MULTIPLY:
-                    m_stack.region_multiply(dest, src, length);
-                    break;
-                case region_operation::DIVIDE:
-                    m_stack.region_divide(dest, src, length);
-                    break;
-                case region_operation::MULTIPLY_CONSTANT:
-                    m_last_constant = m_constants.pack();
-                    m_stack.region_multiply_constant(
-                        dest, m_last_constant, length);
-                    break;
-                case region_operation::MULTIPLY_ADD:
-                    m_last_constant = m_constants.pack();
-                    m_stack.region_multiply_add(
-                        dest, src, m_last_constant, length);
-                    break;
-                case region_operation::MULTIPLY_SUBTRACT:
-                    m_last_constant = m_constants.pack();
-                    m_stack.region_multiply_subtract(
-                        dest, src, m_last_constant, length);
-                    break;
-                default:
-                    assert(0);
-                    break;
+                    // The optimized implementation processes the entire
+                    // buffer
+                    call_function(m_optimized_calls, dest, args..., length);
                 }
+                else
+                {
+                    // Otherwise the buffer is divided to 2 parts
+                    uint32_t unaligned =
+                        (m_alignment - modulo) / m_value_size;
+
+                    //The basic implementation runs on the unaligned head
+                    call_function(m_basic_calls, dest, args..., unaligned);
+
+                    // Calculate the number of remaining values
+                    uint32_t rest = length - unaligned;
+
+                    if (rest > 0)
+                    {
+                        // The optimized implementation processes the
+                        // second part
+                        second_part_helper(
+                            call_function, unaligned, rest, dest, args...);
+                    }
+
+                }
+
+                EXPECT_EQ(m_optimized_calls, optimized.m_calls);
+                EXPECT_EQ(m_basic_calls, basic.m_calls);
+            }
+
+            template<class CallFunction, class... Args>
+            void second_part_helper(CallFunction call_function,
+                uint32_t unaligned, uint32_t length, value_type* dest,
+                const value_type* src, Args&&... args)
+            {
+                call_function(m_optimized_calls, dest + unaligned,
+                    src + unaligned, args..., length);
+            }
+
+            template<class CallFunction>
+            void second_part_helper(CallFunction call_function,
+                uint32_t unaligned, uint32_t length, value_type* dest, value_type constant)
+            {
+                call_function(m_optimized_calls, dest + unaligned, constant,
+                    length);
             }
 
         protected:
 
             stack_type m_stack;
-
-            basic_super* m_basic;
-            optimized_super* m_optimized;
+            calls_type m_basic_calls;
+            calls_type m_optimized_calls;
 
             uint32_t m_value_size;
             uint32_t m_alignment;
             uint32_t m_length;
-
-            random_constant<field_type> m_constants;
-            value_type m_last_constant;
         };
-
-        void check_operation(region_operation operation)
-        {
-            {
-                SCOPED_TRACE("binary");
-                TestOperation<binary>().run_test(operation);
-            }
-            {
-                SCOPED_TRACE("binary4");
-                TestOperation<binary4>().run_test(operation);
-            }
-            {
-                SCOPED_TRACE("binary8");
-                TestOperation<binary8>().run_test(operation);
-            }
-            {
-                SCOPED_TRACE("binary16");
-                TestOperation<binary16>().run_test(operation);
-            }
-        }
     }
 }
 
@@ -264,32 +240,22 @@ TEST(TestRegionDivideAlignment, max_alignment)
     EXPECT_EQ(16U, stack.max_alignment());
 }
 
-TEST(TestRegionDivideAlignment, region_add)
+TEST(TestRegionDivideAlignment, all)
 {
-    fifi::check_operation(fifi::region_operation::ADD);
-}
-
-TEST(TestRegionDivideAlignment, region_subtract)
-{
-    fifi::check_operation(fifi::region_operation::SUBTRACT);
-}
-
-TEST(TestRegionDivideAlignment, region_multiply)
-{
-    fifi::check_operation(fifi::region_operation::MULTIPLY);
-}
-
-TEST(TestRegionDivideAlignment, region_divide)
-{
-    fifi::check_operation(fifi::region_operation::DIVIDE);
-}
-
-TEST(TestRegionDivideAlignment, region_multiply_add)
-{
-    fifi::check_operation(fifi::region_operation::MULTIPLY_ADD);
-}
-
-TEST(TestRegionDivideAlignment, region_multiply_subtract)
-{
-    fifi::check_operation(fifi::region_operation::MULTIPLY_SUBTRACT);
+    {
+        SCOPED_TRACE("binary");
+        fifi::test_operation<fifi::binary>().run_test();
+    }
+    {
+        SCOPED_TRACE("binary4");
+        fifi::test_operation<fifi::binary4>().run_test();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        fifi::test_operation<fifi::binary8>().run_test();
+    }
+    {
+        SCOPED_TRACE("binary16");
+        fifi::test_operation<fifi::binary16>().run_test();
+    }
 }
