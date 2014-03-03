@@ -3,17 +3,20 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <vector>
-#include <memory>
-#include <functional>
+#include <cstdint>
 
 #include <gtest/gtest.h>
 
+#include <fifi/binary.hpp>
+#include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
+#include <fifi/binary16.hpp>
 #include <fifi/final.hpp>
 #include <fifi/region_equal_alignment.hpp>
 
+#include "random_constant.hpp"
 #include "helper_test_buffer.hpp"
+#include "helper_region_dummy.hpp"
 
 namespace fifi
 {
@@ -33,176 +36,181 @@ namespace fifi
             typedef Super OptimizedSuper;
         };
 
-        template<class Super>
-        class region_dummy : public Super
-        {
-        public:
-
-            typedef typename Super::field_type field_type;
-
-            typedef typename Super::value_type value_type;
-
-        public:
-
-            void region_add(value_type* dest, const value_type* src,
-                uint32_t length) const
-            {
-                m_region_add_dest = dest;
-                m_region_add_src = src;
-                m_region_add_length = length;
-            }
-
-            void region_subtract(value_type* dest, const value_type* src,
-                uint32_t length) const
-            {
-                m_region_subtract_dest = dest;
-                m_region_subtract_src = src;
-                m_region_subtract_length = length;
-            }
-
-            void region_divide(value_type* dest, const value_type* src,
-                uint32_t length) const
-            {
-                m_region_divide_dest = dest;
-                m_region_divide_src = src;
-                m_region_divide_length = length;
-            }
-
-            void region_multiply(value_type* dest, const value_type* src,
-                uint32_t length) const
-            {
-                m_region_multiply_dest = dest;
-                m_region_multiply_src = src;
-                m_region_multiply_length = length;
-            }
-
-            void region_multiply_constant(value_type* dest, value_type constant,
-                uint32_t length) const
-            {
-                m_region_multiply_constant_dest = dest;
-                m_region_multiply_constant_constant = constant;
-                m_region_multiply_constant_length = length;
-            }
-
-            void region_multiply_add(value_type* dest, const value_type* src,
-                value_type constant, uint32_t length) const
-            {
-                m_region_multiply_add_dest = dest;
-                m_region_multiply_add_src = src;
-                m_region_multiply_add_constant = constant;
-                m_region_multiply_add_length = length;
-            }
-
-            void region_multiply_subtract(value_type* dest,
-                const value_type* src, value_type constant,
-                uint32_t length) const
-            {
-                m_region_multiply_subtract_dest = dest;
-                m_region_multiply_subtract_src = src;
-                m_region_multiply_subtract_constant = constant;
-                m_region_multiply_subtract_length = length;
-            }
-
-            uint32_t alignment() const
-            {
-                return m_alignment;
-            }
-
-            uint32_t max_alignment() const
-            {
-                return m_max_alignment;
-            }
-
-            void set_alignment(uint32_t alignment)
-            {
-                m_alignment = alignment;
-            }
-
-            void set_max_alignment(uint32_t max_alignment)
-            {
-                m_max_alignment = max_alignment;
-            }
-
-            void clear_test()
-            {
-                m_region_add_dest = 0;
-                m_region_add_src = 0;
-                m_region_add_length = 0;
-
-                m_region_subtract_dest = 0;
-                m_region_subtract_src = 0;
-                m_region_subtract_length = 0;
-
-                m_region_divide_dest = 0;
-                m_region_divide_src = 0;
-                m_region_divide_length = 0;
-
-                m_region_multiply_dest = 0;
-                m_region_multiply_src = 0;
-                m_region_multiply_length = 0;
-
-                m_region_multiply_constant_dest = 0;
-                m_region_multiply_constant_constant = 0;
-                m_region_multiply_constant_length = 0;
-
-                m_region_multiply_add_dest = 0;
-                m_region_multiply_add_src = 0;
-                m_region_multiply_add_constant = 0;
-                m_region_multiply_add_length = 0;
-
-                m_region_multiply_subtract_dest = 0;
-                m_region_multiply_subtract_src = 0;
-                m_region_multiply_subtract_constant = 0;
-                m_region_multiply_subtract_length = 0;
-            }
-
-        public:
-
-            mutable value_type* m_region_add_dest;
-            mutable const value_type* m_region_add_src;
-            mutable uint32_t m_region_add_length;
-
-            mutable value_type* m_region_subtract_dest;
-            mutable const value_type* m_region_subtract_src;
-            mutable uint32_t m_region_subtract_length;
-
-            mutable value_type* m_region_divide_dest;
-            mutable const value_type* m_region_divide_src;
-            mutable uint32_t m_region_divide_length;
-
-            mutable value_type* m_region_multiply_dest;
-            mutable value_type* m_region_multiply_src;
-            mutable uint32_t m_region_multiply_length;
-
-            mutable value_type* m_region_multiply_constant_dest;
-            mutable value_type m_region_multiply_constant_constant;
-            mutable uint32_t m_region_multiply_constant_length;
-
-            mutable value_type* m_region_multiply_add_dest;
-            mutable const value_type* m_region_multiply_add_src;
-            mutable value_type m_region_multiply_add_constant;
-            mutable uint32_t m_region_multiply_add_length;
-
-            mutable value_type* m_region_multiply_subtract_dest;
-            mutable const value_type* m_region_multiply_subtract_src;
-            mutable value_type m_region_multiply_subtract_constant;
-            mutable uint32_t m_region_multiply_subtract_length;
-
-        private:
-
-            uint32_t m_alignment;
-            uint32_t m_max_alignment;
-        };
+        template<class Field>
+        class dummy_stack : public
+            region_equal_alignment<
+            dummy_typedef_optimized_super<
+            region_dummy<
+            dummy_typedef_basic_super<
+            region_dummy<
+            final<Field> > > > > >
+        { };
 
         template<class Field>
-        class dummy_stack :
-            public region_equal_alignment<
-                   dummy_typedef_optimized_super<
-                   region_dummy<
-                   dummy_typedef_basic_super<
-                   region_dummy<
-                   final<Field> > > > > >
-        { };
+        struct TestOperation
+        {
+            typedef Field field_type;
+            typedef dummy_stack<field_type> stack_type;
+
+            typedef typename field_type::value_type value_type;
+            typedef typename stack_type::BasicSuper basic_super;
+            typedef typename stack_type::OptimizedSuper optimized_super;
+
+            TestOperation()
+            {
+                m_value_size = sizeof(value_type);
+                // The alignment is measured in bytes
+                m_alignment = 16;
+                m_length = 100;
+                m_size = m_length * m_value_size;
+
+                m_basic = &m_stack;
+                m_optimized = &m_stack;
+
+                m_basic->set_alignment(m_value_size);
+                m_optimized->set_alignment(m_alignment);
+            }
+
+            void run_test(region_operation operation)
+            {
+                fifi::helper_test_buffer<uint8_t> dest_buffer(
+                    m_size, m_alignment);
+                fifi::helper_test_buffer<uint8_t> src_buffer(
+                    m_size, m_alignment);
+
+                // If the buffers are aligned, the optimized approach is used.
+                for (uint32_t offset = 0; offset < m_size; offset++)
+                {
+                    m_optimized->clear_test();
+                    m_basic->clear_test();
+
+                    value_type* dest = (value_type*)&dest_buffer.data()[offset];
+                    value_type* src = (value_type*)&src_buffer.data()[offset];
+
+                    ASSERT_EQ((uintptr_t)dest % m_alignment,
+                              (uintptr_t)src  % m_alignment);
+
+                    run_operation(operation, dest, src, m_length);
+
+                    EXPECT_EQ(m_optimized->m_last_operation, operation);
+                    EXPECT_EQ(m_optimized->m_dest, dest);
+                    EXPECT_EQ(m_optimized->m_src, src);
+                    EXPECT_EQ(m_optimized->m_length, m_length);
+                    EXPECT_EQ(m_optimized->m_constant, m_last_constant);
+
+                    EXPECT_EQ(m_basic->m_last_operation,
+                              region_operation::NONE);
+                    EXPECT_EQ(m_basic->m_dest, nullptr);
+                    EXPECT_EQ(m_basic->m_src, nullptr);
+                    EXPECT_EQ(m_basic->m_length, 0U);
+                    EXPECT_EQ(m_basic->m_constant, 0U);
+                }
+
+                // If the buffers are unaligned, the basic approach is used.
+                for (uint32_t offset = 1; offset < m_alignment; offset++)
+                {
+                    m_optimized->clear_test();
+                    m_basic->clear_test();
+
+                    value_type* dest = (value_type*)&dest_buffer.data()[offset];
+                    value_type* src = (value_type*)&src_buffer.data()[0];
+
+                    ASSERT_NE((uintptr_t)dest % m_alignment,
+                              (uintptr_t)src  % m_alignment);
+
+                    run_operation(operation, dest, src, m_length);
+
+                    EXPECT_EQ(m_optimized->m_last_operation,
+                              region_operation::NONE);
+                    EXPECT_EQ(m_optimized->m_dest, nullptr);
+                    EXPECT_EQ(m_optimized->m_src, nullptr);
+                    EXPECT_EQ(m_optimized->m_length, 0U);
+                    EXPECT_EQ(m_optimized->m_constant, 0U);
+
+                    EXPECT_EQ(m_basic->m_last_operation, operation);
+                    EXPECT_EQ(m_basic->m_dest, dest);
+                    EXPECT_EQ(m_basic->m_src, src);
+                    EXPECT_EQ(m_basic->m_length, m_length);
+                    EXPECT_EQ(m_basic->m_constant, m_last_constant);
+                }
+            }
+
+            void run_operation(region_operation operation,
+                value_type* dest, value_type* src, uint32_t length)
+            {
+                m_last_constant = 0;
+                switch (operation)
+                {
+                case region_operation::NONE:
+                    assert(0);
+                    break;
+                case region_operation::ADD:
+                    m_stack.region_add(dest, src, length);
+                    break;
+                case region_operation::SUBTRACT:
+                    m_stack.region_subtract(dest, src, length);
+                    break;
+                case region_operation::MULTIPLY:
+                    m_stack.region_multiply(dest, src, length);
+                    break;
+                case region_operation::DIVIDE:
+                    m_stack.region_divide(dest, src, length);
+                    break;
+                case region_operation::MULTIPLY_CONSTANT:
+                    // region_multiply_constant operates on a single buffer
+                    assert(0);
+                    break;
+                case region_operation::MULTIPLY_ADD:
+                    m_last_constant = m_constants.pack();
+                    m_stack.region_multiply_add(
+                        dest, src, m_last_constant, length);
+                    break;
+                case region_operation::MULTIPLY_SUBTRACT:
+                    m_last_constant = m_constants.pack();
+                    m_stack.region_multiply_subtract(
+                        dest, src, m_last_constant, length);
+                    break;
+                default:
+                    assert(0);
+                    break;
+                }
+            }
+
+        protected:
+
+            stack_type m_stack;
+
+            basic_super* m_basic;
+            optimized_super* m_optimized;
+
+            uint32_t m_value_size;
+            uint32_t m_alignment;
+            uint32_t m_length;
+            uint32_t m_size;
+
+            random_constant<field_type> m_constants;
+            value_type m_last_constant;
+        };
+
+        void check_operation(region_operation operation)
+        {
+            {
+                SCOPED_TRACE("binary");
+                TestOperation<binary>().run_test(operation);
+            }
+            {
+                SCOPED_TRACE("binary4");
+                TestOperation<binary4>().run_test(operation);
+            }
+            {
+                SCOPED_TRACE("binary8");
+                TestOperation<binary8>().run_test(operation);
+            }
+            {
+                SCOPED_TRACE("binary16");
+                TestOperation<binary16>().run_test(operation);
+            }
+        }
     }
 }
 
@@ -236,198 +244,30 @@ TEST(TestRegionEqualAlignment, max_alignment)
 
 TEST(TestRegionEqualAlignment, region_add)
 {
-    typedef fifi::binary16 field_type;
-    typedef field_type::value_type value_type;
-
-    uint32_t value_size = sizeof(field_type::value_type);
-    uint32_t alignment = value_size * 8;
-    uint32_t length = alignment * 8;
-
-    fifi::dummy_stack<field_type> stack;
-    fifi::dummy_stack<field_type>::BasicSuper& basic = stack;
-    fifi::dummy_stack<field_type>::OptimizedSuper& optimized = stack;
-
-    basic.set_alignment(value_size);
-    optimized.set_alignment(alignment);
-
-    // Test that when buffers are aligned, the optimized approach is used.
-    for (uint32_t test_offset = value_size; test_offset < length;
-        test_offset += value_size)
-    {
-        optimized.clear_test();
-        basic.clear_test();
-
-        fifi::helper_test_buffer<value_type> dest_buffer(length,
-            optimized.alignment());
-        fifi::helper_test_buffer<value_type> src_buffer(length,
-            optimized.alignment());
-
-        value_type* dest =
-            (value_type*)(((uintptr_t)dest_buffer.data()) + test_offset);
-        value_type* src =
-            (value_type*)(((uintptr_t)src_buffer.data()) + test_offset);
-
-        ASSERT_EQ((uintptr_t)dest % optimized.alignment(),
-                  (uintptr_t)src  % optimized.alignment());
-
-        stack.region_add(dest, src, length);
-
-        EXPECT_EQ(optimized.m_region_add_dest, dest);
-        EXPECT_EQ(optimized.m_region_add_src, src);
-        EXPECT_EQ(optimized.m_region_add_length, length);
-
-        EXPECT_EQ(basic.m_region_add_dest, nullptr);
-        EXPECT_EQ(basic.m_region_add_src, nullptr);
-        EXPECT_EQ(basic.m_region_add_length, 0U);
-    }
-
-    // Test that when buffers are unaligned, the basic approach is used.
-    for (uint32_t test_offset = value_size; test_offset < optimized.alignment();
-        test_offset += value_size)
-    {
-        optimized.clear_test();
-        basic.clear_test();
-
-        fifi::helper_test_buffer<value_type> dest_buffer(
-            length, optimized.alignment());
-        fifi::helper_test_buffer<value_type> src_buffer(
-            length, optimized.alignment());
-
-        value_type* dest =
-            (value_type*)(((uintptr_t)dest_buffer.data()) + test_offset);
-        value_type* src = (value_type*)(((uintptr_t)src_buffer.data()));
-
-        ASSERT_NE((uintptr_t)dest % optimized.alignment(),
-                  (uintptr_t)src  % optimized.alignment());
-
-        stack.region_add(dest, src, length);
-
-        EXPECT_EQ(optimized.m_region_add_dest, nullptr);
-        EXPECT_EQ(optimized.m_region_add_src, nullptr);
-        EXPECT_EQ(optimized.m_region_add_length, 0U);
-
-        EXPECT_EQ(basic.m_region_add_dest, dest);
-        EXPECT_EQ(basic.m_region_add_src, src);
-        EXPECT_EQ(basic.m_region_add_length, length);
-    }
+    fifi::check_operation(fifi::region_operation::ADD);
 }
 
-template
-<
-    class Field,
-    class Stack,
-    class Function,
-    class BasicDestMember,
-    class BasicSrcMember,
-    class BasicLengthMember,
-    class OptimizedDestMember,
-    class OptimizedSrcMember,
-    class OptimizedLengthMember
->
-void gerneric_test(
-    Function function,
-    BasicDestMember basic_dest_member,
-    BasicSrcMember basic_src_member,
-    BasicLengthMember basic_length_member,
-    OptimizedDestMember optimized_dest_member,
-    OptimizedSrcMember optimized_src_member,
-    OptimizedLengthMember optimized_length_member)
+TEST(TestRegionEqualAlignment, region_subtract)
 {
-    typedef Field field_type;
-    typedef typename field_type::value_type value_type;
-    typedef typename Stack::BasicSuper basic_super;
-    typedef typename Stack::OptimizedSuper optimized_super;
-
-    uint32_t value_size = sizeof(typename field_type::value_type);
-    uint32_t alignment = value_size * 8;
-    uint32_t length = alignment * 8;
-
-    Stack stack;
-
-    basic_super& basic = stack;
-    optimized_super& optimized = stack;
-
-    basic.set_alignment(value_size);
-    optimized.set_alignment(alignment);
-
-    // Test that when buffers are aligned, the optimized approach is used.
-    for (uint32_t test_offset = value_size; test_offset < length;
-        test_offset += value_size)
-    {
-        optimized.clear_test();
-        basic.clear_test();
-
-        fifi::helper_test_buffer<value_type> dest_buffer(length,
-            optimized.alignment());
-        fifi::helper_test_buffer<value_type> src_buffer(length,
-            optimized.alignment());
-
-        value_type* dest =
-            (value_type*)(((uintptr_t)dest_buffer.data()) + test_offset);
-        value_type* src =
-            (value_type*)(((uintptr_t)src_buffer.data()) + test_offset);
-
-        ASSERT_EQ((uintptr_t)dest % optimized.alignment(),
-                  (uintptr_t)src  % optimized.alignment());
-
-        function(stack, dest, src, length);
-
-        EXPECT_EQ(optimized.*optimized_dest_member, dest);
-        EXPECT_EQ(optimized.*optimized_src_member, src);
-        EXPECT_EQ(optimized.*optimized_length_member, length);
-
-        EXPECT_EQ(basic.*basic_dest_member, nullptr);
-        EXPECT_EQ(basic.*basic_src_member, nullptr);
-        EXPECT_EQ(basic.*basic_length_member, 0U);
-
-    }
-
-    // Test that when buffers are unaligned, the basic approach is used.
-    for (uint32_t test_offset = value_size; test_offset < optimized.alignment();
-        test_offset += value_size)
-    {
-        optimized.clear_test();
-        basic.clear_test();
-
-        fifi::helper_test_buffer<value_type> dest_buffer(length,
-            optimized.alignment());
-        fifi::helper_test_buffer<value_type> src_buffer(length,
-            optimized.alignment());
-
-        value_type* dest =
-            (value_type*)(((uintptr_t)dest_buffer.data()) + test_offset);
-        value_type* src =
-            (value_type*)(((uintptr_t)src_buffer.data()));
-
-        ASSERT_NE((uintptr_t)dest % optimized.alignment(),
-                  (uintptr_t)src  % optimized.alignment());
-
-        function(stack, dest, src, length);
-
-        EXPECT_EQ(optimized.*optimized_dest_member, nullptr);
-        EXPECT_EQ(optimized.*optimized_src_member, nullptr);
-        EXPECT_EQ(optimized.*optimized_length_member, 0U);
-
-        EXPECT_EQ(basic.*basic_dest_member, dest);
-        EXPECT_EQ(basic.*basic_src_member, src);
-        EXPECT_EQ(basic.*basic_length_member, length);
-
-    }
+    fifi::check_operation(fifi::region_operation::SUBTRACT);
 }
 
-TEST(TestRegionEqualAlignment, generic)
+TEST(TestRegionEqualAlignment, region_multiply)
 {
-    typedef fifi::binary16 field_type;
-    typedef fifi::dummy_stack<field_type> stack;
-    typedef stack::OptimizedSuper optimized_stack;
-    typedef stack::BasicSuper basic_stack;
+    fifi::check_operation(fifi::region_operation::MULTIPLY);
+}
 
-    gerneric_test<field_type, stack>(
-        std::mem_fn(&stack::region_add),
-        &basic_stack::m_region_add_dest,
-        &basic_stack::m_region_add_src,
-        &basic_stack::m_region_add_length,
-        &optimized_stack::m_region_add_dest,
-        &optimized_stack::m_region_add_src,
-        &optimized_stack::m_region_add_length);
+TEST(TestRegionEqualAlignment, region_divide)
+{
+    fifi::check_operation(fifi::region_operation::DIVIDE);
+}
+
+TEST(TestRegionEqualAlignment, region_multiply_add)
+{
+    fifi::check_operation(fifi::region_operation::MULTIPLY_ADD);
+}
+
+TEST(TestRegionEqualAlignment, region_multiply_subtract)
+{
+    fifi::check_operation(fifi::region_operation::MULTIPLY_SUBTRACT);
 }

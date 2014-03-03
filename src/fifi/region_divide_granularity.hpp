@@ -8,11 +8,12 @@
 #include <cassert>
 #include <cstdint>
 
-#include "binary4.hpp"
-
 namespace fifi
 {
-    /// Fall through for other fields
+    /// This is a convenience layer for region arithmetics which guarantees
+    /// that the optimized operations are only called on buffer fragments
+    /// which have the required granularity, i.e. their length is a multiple
+    /// of the granularity.
     template<class Super>
     class region_divide_granularity : public Super
     {
@@ -30,21 +31,19 @@ namespace fifi
         void region_add(value_type* dest, const value_type* src,
             uint32_t length) const
         {
-            assert(dest != 0);
-            assert(src != 0);
-            assert(length > 0);
+            uint32_t mask = (OptimizedSuper::granularity() - 1);
+            uint32_t optimized = length & ~mask;
 
-            auto optimizable = granulated_length(length);
-            if (optimizable != 0)
+            if (optimized != 0)
             {
-                Super::region_add(dest, src, optimizable);
+                Super::region_add(dest, src, optimized);
             }
 
-            auto rest = length - optimizable;
-            if (rest != 0)
+            uint32_t tail = length & mask;
+
+            if (tail != 0)
             {
-                BasicSuper::region_add(dest + optimizable,
-                    src + optimizable, rest);
+                BasicSuper::region_add(dest + optimized, src + optimized, tail);
             }
         }
 
@@ -116,7 +115,6 @@ namespace fifi
         {
             assert(dest != 0);
             assert(length > 0);
-            assert(is_packed_constant<field_type>(constant));
 
             auto optimizable = granulated_length(length);
             if (optimizable != 0)

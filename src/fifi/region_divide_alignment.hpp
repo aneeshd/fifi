@@ -8,7 +8,7 @@
 #include <cassert>
 #include <cstdint>
 
-#include "binary4.hpp"
+#include "is_packed_constant.hpp"
 
 namespace fifi
 {
@@ -134,6 +134,7 @@ namespace fifi
             assert(dest != 0);
             assert(src  != 0);
             assert(length > 0);
+            assert(is_packed_constant<field_type>(constant));
 
             auto unaligned = unaligned_head(dest);
             if (unaligned != 0)
@@ -156,6 +157,7 @@ namespace fifi
             assert(dest != 0);
             assert(src  != 0);
             assert(length > 0);
+            assert(is_packed_constant<field_type>(constant));
 
             auto unaligned = unaligned_head(dest);
             if (unaligned != 0)
@@ -172,17 +174,27 @@ namespace fifi
             }
         }
 
-        uint32_t alignment() const
-        {
-            return BasicSuper::alignment();
-        }
-
     private:
 
         uint32_t unaligned_head(const value_type* data) const
         {
-            return OptimizedSuper::alignment() - (uintptr_t)data %
-                   OptimizedSuper::alignment();
+            uint32_t alignment = OptimizedSuper::alignment();
+            uint32_t offset = (uintptr_t)data % alignment;
+            // Return zero if the data is aligned
+            if (offset == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                const uint32_t value_size = sizeof(value_type);
+
+                // Ensure that we do not split a value_type
+                // Do not allow offsets that are not multiples of the value_size
+                assert(value_size == 1 || (offset % value_size) == 0);
+                // Otherwise calculate the number of bytes
+                return (alignment - offset) / value_size;
+            }
         }
     };
 }

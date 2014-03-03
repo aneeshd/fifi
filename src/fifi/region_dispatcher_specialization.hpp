@@ -127,10 +127,10 @@ namespace fifi
         void region_add(value_type* dest, const value_type* src,
             uint32_t length) const
         {
-            assert(dest != 0);
-            assert(src  != 0);
-            assert(length > 0);
-            assert(m_add);
+//             assert(dest != 0);
+//             assert(src  != 0);
+//             assert(length > 0);
+//             assert(m_add);
 
             m_add(dest, src, length);
         }
