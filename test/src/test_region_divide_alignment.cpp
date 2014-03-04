@@ -67,12 +67,11 @@ namespace fifi
             {
                 // The alignment is measured in bytes
                 m_alignment = 16;
-
             }
 
             void run_test()
             {
-                auto length = 100;
+                uint32_t length = 100;
 
                 fifi::helper_test_buffer<value_type> dest_buffer(
                     length, m_alignment);
@@ -92,10 +91,9 @@ namespace fifi
                               (uintptr_t)src  % m_alignment);
 
                     uint32_t test_length = length - offset;
-                    SCOPED_TRACE(testing::Message() << "offset: "
-                                                    << offset);
-                    SCOPED_TRACE(testing::Message() << "test_length: "
-                                                    << test_length);
+                    SCOPED_TRACE(testing::Message() << "offset: " << offset);
+                    SCOPED_TRACE(
+                        testing::Message() << "test_length: " << test_length);
                     {
                         SCOPED_TRACE("region_add");
                         run_operation(

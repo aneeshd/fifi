@@ -71,8 +71,8 @@ namespace fifi
 
             void run_test()
             {
-                auto length = 100;
-                auto size = length * sizeof(value_type);
+                uint32_t length = 100;
+                uint32_t size = length * sizeof(value_type);
                 fifi::helper_test_buffer<uint8_t> dest_buffer(
                     size, m_alignment);
                 fifi::helper_test_buffer<uint8_t> src_buffer(
@@ -111,10 +111,8 @@ namespace fifi
             void run_operations(value_type* dest, const value_type* src,
                 value_type constant, uint32_t length, bool aligned)
             {
-                SCOPED_TRACE(testing::Message() << "length: "
-                                                << length);
-                SCOPED_TRACE(testing::Message() << "aligned: "
-                                                << aligned);
+                SCOPED_TRACE(testing::Message() << "length: " << length);
+                SCOPED_TRACE(testing::Message() << "aligned: " << aligned);
                 {
                     SCOPED_TRACE("region_add");
                     run_operation(aligned,

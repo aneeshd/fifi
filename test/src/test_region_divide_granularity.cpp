@@ -72,8 +72,8 @@ namespace fifi
             void run_test()
             {
                 // The alignment is measured in bytes
-                auto alignment = 16;
-                auto length = 100;
+                uint32_t alignment = 16;
+                uint32_t length = 100;
 
                 fifi::helper_test_buffer<value_type> dest_buffer(
                     length, alignment);
