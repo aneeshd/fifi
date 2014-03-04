@@ -28,7 +28,7 @@ namespace fifi
         class dummy_typedef_basic_super : public Super
         {
         public:
-           typedef Super BasicSuper;
+            typedef Super BasicSuper;
         };
 
         template<class Super>
@@ -65,34 +65,33 @@ namespace fifi
 
             test_operation()
             {
-                m_value_size = sizeof(value_type);
-
                 // The alignment is measured in bytes
                 m_alignment = 16;
-                m_length = 100;
-
-                m_size = m_length * m_value_size;
             }
 
             void run_test()
             {
+                auto length = 100;
+                auto size = length * sizeof(value_type);
                 fifi::helper_test_buffer<uint8_t> dest_buffer(
-                    m_size, m_alignment);
+                    size, m_alignment);
                 fifi::helper_test_buffer<uint8_t> src_buffer(
-                    m_size, m_alignment);
+                    size, m_alignment);
 
                 random_constant<field_type> constants;
                 auto constant = constants.pack();
 
                 // If the buffers are aligned, the optimized approach is used.
-                for (uint32_t offset = 0; offset < m_length; offset++)
+                for (uint32_t offset = 0; offset < length; offset++)
                 {
                     SCOPED_TRACE(testing::Message() << "offset:" << offset);
                     value_type* dest = (value_type*)&dest_buffer.data()[offset];
                     value_type* src = (value_type*)&src_buffer.data()[offset];
+
                     ASSERT_EQ((uintptr_t)dest % m_alignment,
-                          (uintptr_t)src  % m_alignment);
-                    run_operations(dest, src, constant, true);
+                              (uintptr_t)src  % m_alignment);
+
+                    run_operations(dest, src, constant, length, true);
                 }
 
                 // If the buffers are unaligned, the basic approach is used.
@@ -105,42 +104,59 @@ namespace fifi
                     ASSERT_NE((uintptr_t)dest % m_alignment,
                               (uintptr_t)src  % m_alignment);
 
-                    run_operations(dest, src, constant, false);
+                    run_operations(dest, src, constant, length, false);
                 }
             }
 
             void run_operations(value_type* dest, const value_type* src,
-                value_type constant, bool aligned)
+                value_type constant, uint32_t length, bool aligned)
             {
-                run_operation(aligned,
-                    std::mem_fn(&stack_type::region_add),
-                    std::mem_fn(&calls_type::call_region_add),
-                    m_length, dest, src);
-
-                run_operation(aligned,
-                    std::mem_fn(&stack_type::region_subtract),
-                    std::mem_fn(&calls_type::call_region_subtract),
-                    m_length, dest, src);
-
-                run_operation(aligned,
-                    std::mem_fn(&stack_type::region_multiply),
-                    std::mem_fn(&calls_type::call_region_multiply),
-                    m_length, dest, src);
-
-                run_operation(aligned,
-                    std::mem_fn(&stack_type::region_divide),
-                    std::mem_fn(&calls_type::call_region_divide),
-                    m_length, dest, src);
-
-                run_operation(aligned,
-                    std::mem_fn(&stack_type::region_multiply_add),
-                    std::mem_fn(&calls_type::call_region_multiply_add),
-                    m_length, dest, src, constant);
-
-                run_operation(aligned,
-                    std::mem_fn(&stack_type::region_multiply_subtract),
-                    std::mem_fn(&calls_type::call_region_multiply_subtract),
-                    m_length, dest, src, constant);
+                SCOPED_TRACE(testing::Message() << "length: "
+                                                << length);
+                SCOPED_TRACE(testing::Message() << "aligned: "
+                                                << aligned);
+                {
+                    SCOPED_TRACE("region_add");
+                    run_operation(aligned,
+                        std::mem_fn(&stack_type::region_add),
+                        std::mem_fn(&calls_type::call_region_add),
+                        length, dest, src);
+                }
+                {
+                    SCOPED_TRACE("region_subtract");
+                    run_operation(aligned,
+                        std::mem_fn(&stack_type::region_subtract),
+                        std::mem_fn(&calls_type::call_region_subtract),
+                        length, dest, src);
+                }
+                {
+                    SCOPED_TRACE("region_multiply");
+                    run_operation(aligned,
+                        std::mem_fn(&stack_type::region_multiply),
+                        std::mem_fn(&calls_type::call_region_multiply),
+                        length, dest, src);
+                }
+                {
+                    SCOPED_TRACE("region_divide");
+                    run_operation(aligned,
+                        std::mem_fn(&stack_type::region_divide),
+                        std::mem_fn(&calls_type::call_region_divide),
+                        length, dest, src);
+                }
+                {
+                    SCOPED_TRACE("region_multiply_add");
+                    run_operation(aligned,
+                        std::mem_fn(&stack_type::region_multiply_add),
+                        std::mem_fn(&calls_type::call_region_multiply_add),
+                        length, dest, src, constant);
+                }
+                {
+                    SCOPED_TRACE("region_multiply_subtract");
+                    run_operation(aligned,
+                        std::mem_fn(&stack_type::region_multiply_subtract),
+                        std::mem_fn(&calls_type::call_region_multiply_subtract),
+                        length, dest, src, constant);
+                }
             }
 
             template<class Function, class CallFunction, class... Args>
@@ -151,7 +167,7 @@ namespace fifi
                 basic_super& basic = m_stack;
                 optimized_super& optimized = m_stack;
 
-                basic.set_alignment(m_value_size);
+                basic.set_alignment(sizeof(value_type));
                 optimized.set_alignment(m_alignment);
 
                 optimized.clear();
@@ -180,10 +196,7 @@ namespace fifi
             calls_type m_basic_calls;
             calls_type m_optimized_calls;
 
-            uint32_t m_value_size;
             uint32_t m_alignment;
-            uint32_t m_length;
-            uint32_t m_size;
         };
     }
 }

@@ -65,19 +65,20 @@ namespace fifi
 
             test_operation()
             {
-                // The alignment is measured in bytes
-                m_alignment = 16;
                 // The granularity is measured in value_types
                 m_granularity = 16;
-                m_length = 100;
             }
 
             void run_test()
             {
+                // The alignment is measured in bytes
+                auto alignment = 16;
+                auto length = 100;
+
                 fifi::helper_test_buffer<value_type> dest_buffer(
-                    m_length, m_alignment);
+                    length, alignment);
                 fifi::helper_test_buffer<value_type> src_buffer(
-                    m_length, m_alignment);
+                    length, alignment);
 
                 random_constant<field_type> constants;
                 auto constant = constants.pack();
@@ -85,48 +86,64 @@ namespace fifi
                 value_type* dest = &dest_buffer.data()[0];
                 value_type* src = &src_buffer.data()[0];
 
-                ASSERT_EQ((uintptr_t)dest % m_alignment,
-                          (uintptr_t)src  % m_alignment);
+                ASSERT_EQ((uintptr_t)dest % alignment,
+                          (uintptr_t)src  % alignment);
 
                 // Test the division of the granulated part and the tail
-                for (uint32_t length = 1; length <= m_length; length++)
+                for (uint32_t test_length = 1; test_length <= length;
+                    test_length++)
                 {
-                    run_operation(
-                        std::mem_fn(&stack_type::region_add),
-                        std::mem_fn(&calls_type::call_region_add),
-                        length, dest, src);
-
-                    run_operation(
-                        std::mem_fn(&stack_type::region_subtract),
-                        std::mem_fn(&calls_type::call_region_subtract),
-                        length, dest, src);
-
-                    run_operation(
-                        std::mem_fn(&stack_type::region_multiply),
-                        std::mem_fn(&calls_type::call_region_multiply),
-                        length, dest, src);
-
-                    run_operation(
-                        std::mem_fn(&stack_type::region_divide),
-                        std::mem_fn(&calls_type::call_region_divide),
-                        length, dest, src);
-
-                    run_operation(
-                        std::mem_fn(&stack_type::region_multiply_add),
-                        std::mem_fn(&calls_type::call_region_multiply_add),
-                        length, dest, src, constant);
-
-                    run_operation(
-                        std::mem_fn(&stack_type::region_multiply_subtract),
-                        std::mem_fn(&calls_type::call_region_multiply_subtract),
-                        length, dest, src, constant);
+                    SCOPED_TRACE(testing::Message() << "test_length: "
+                                                    << test_length);
+                    {
+                        SCOPED_TRACE("region_add");
+                        run_operation(
+                            std::mem_fn(&stack_type::region_add),
+                            std::mem_fn(&calls_type::call_region_add),
+                            test_length, dest, src);
+                    }
+                    {
+                        SCOPED_TRACE("region_subtract");
+                        run_operation(
+                            std::mem_fn(&stack_type::region_subtract),
+                            std::mem_fn(&calls_type::call_region_subtract),
+                            test_length, dest, src);
+                    }
+                    {
+                        SCOPED_TRACE("region_multiply");
+                        run_operation(
+                            std::mem_fn(&stack_type::region_multiply),
+                            std::mem_fn(&calls_type::call_region_multiply),
+                            test_length, dest, src);
+                    }
+                    {
+                        SCOPED_TRACE("region_divide");
+                        run_operation(
+                            std::mem_fn(&stack_type::region_divide),
+                            std::mem_fn(&calls_type::call_region_divide),
+                            test_length, dest, src);
+                    }
+                    {
+                        SCOPED_TRACE("region_multiply_add");
+                        run_operation(
+                            std::mem_fn(&stack_type::region_multiply_add),
+                            std::mem_fn(&calls_type::call_region_multiply_add),
+                            test_length, dest, src, constant);
+                    }
+                    {
+                        SCOPED_TRACE("region_multiply_subtract");
+                        run_operation(
+                            std::mem_fn(&stack_type::region_multiply_subtract),
+                            std::mem_fn(&calls_type::call_region_multiply_subtract),
+                            test_length, dest, src, constant);
+                    }
                 }
             }
 
 
             template<class Function, class CallFunction, class... Args>
             void run_operation(Function function,
-                CallFunction call_function,  uint32_t length, value_type* dest,
+                CallFunction call_function, uint32_t length, value_type* dest,
                 Args&&... args)
             {
                 basic_super& basic = m_stack;
@@ -193,9 +210,7 @@ namespace fifi
             calls_type m_basic_calls;
             calls_type m_optimized_calls;
 
-            uint32_t m_alignment;
             uint32_t m_granularity;
-            uint32_t m_length;
         };
     }
 }
