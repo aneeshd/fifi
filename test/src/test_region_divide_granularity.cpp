@@ -16,7 +16,11 @@
 
 #include "random_constant.hpp"
 #include "helper_test_buffer.hpp"
-#include "helper_region_dummy.hpp"
+#include "capture_calls.hpp"
+#include "helper_region_info.hpp"
+#include "helper_fall_through.hpp"
+
+#include <iostream>
 
 namespace fifi
 {
@@ -40,19 +44,24 @@ namespace fifi
         class dummy_stack : public
             region_divide_granularity<
             dummy_typedef_optimized_super<
-            region_dummy<
+            helper_region_info<0,0,0,0,
+            helper_fall_through<Field,
             dummy_typedef_basic_super<
-            region_dummy<
-            final<Field> > > > > >
+            helper_region_info<0,0,0,0,
+            helper_fall_through<Field,
+            final<Field> > > > > > > >
         { };
 
         template<class Field>
         struct test_operation
         {
             typedef Field field_type;
-            typedef dummy_stack<field_type> stack_type;
 
             typedef typename field_type::value_type value_type;
+
+            typedef dummy_stack<field_type> stack_type;
+            typedef capture_calls<value_type> calls_type;
+
             typedef typename stack_type::BasicSuper basic_super;
             typedef typename stack_type::OptimizedSuper optimized_super;
 
@@ -63,16 +72,7 @@ namespace fifi
                 m_alignment = 16;
                 // The granularity is measured in value_types
                 m_granularity = 16;
-                m_length = 1000;
-
-                m_basic = &m_stack;
-                m_optimized = &m_stack;
-
-                m_basic->set_alignment(m_value_size);
-                m_optimized->set_alignment(m_alignment);
-
-                m_basic->set_granularity(1U);
-                m_optimized->set_granularity(m_granularity);
+                m_length = 100;
             }
 
             void run_test()
@@ -94,32 +94,33 @@ namespace fifi
                 // Test the division of the granulated part and the tail
                 for (uint32_t length = 1; length <= m_length; length++)
                 {
-                    run_operation(aligned,
+                    std::cout << "region_add" << std::endl;
+                    run_operation(
                         std::mem_fn(&stack_type::region_add),
                         std::mem_fn(&calls_type::call_region_add),
                         length, dest, src);
-
-                    run_operation(aligned,
+                    std::cout << "region_subtract" << std::endl;
+                    run_operation(
                         std::mem_fn(&stack_type::region_subtract),
                         std::mem_fn(&calls_type::call_region_subtract),
                         length, dest, src);
-
-                    run_operation(aligned,
+                    std::cout << "region_multiply" << std::endl;
+                    run_operation(
                         std::mem_fn(&stack_type::region_multiply),
                         std::mem_fn(&calls_type::call_region_multiply),
                         length, dest, src);
-
-                    run_operation(aligned,
+                    std::cout << "region_divide" << std::endl;
+                    run_operation(
                         std::mem_fn(&stack_type::region_divide),
                         std::mem_fn(&calls_type::call_region_divide),
                         length, dest, src);
 
-                    run_operation(aligned,
+                    run_operation(
                         std::mem_fn(&stack_type::region_multiply_add),
                         std::mem_fn(&calls_type::call_region_multiply_add),
                         length, dest, src, constant);
 
-                    run_operation(aligned,
+                    run_operation(
                         std::mem_fn(&stack_type::region_multiply_subtract),
                         std::mem_fn(&calls_type::call_region_multiply_subtract),
                         length, dest, src, constant);
@@ -128,7 +129,7 @@ namespace fifi
 
 
             template<class Function, class CallFunction, class... Args>
-            void run_operation(bool aligned, Function function,
+            void run_operation(Function function,
                 CallFunction call_function,  uint32_t length, value_type* dest,
                 Args&&... args)
             {
@@ -142,27 +143,32 @@ namespace fifi
                 basic.clear();
                 m_basic_calls.clear();
                 m_optimized_calls.clear();
-
+                std::cout << "function(m_stack, " << (uintptr_t)dest << ", " << "args..." << ", " << length << ");" << std::endl;
                 function(m_stack, dest, args..., length);
-
+                std::cout << "after function call" << std::endl;
                 // Calculate the tail that is not granulated correctly
                 uint32_t tail = length % m_granularity;
 
                 // Calculate the number of granulated values
-                uint32_t optimized = length - tail;
+                uint32_t optimizable = length - tail;
 
-                if (optimized > 0)
+                std::cout << "debug:" << std::endl;
+                std::cout << optimizable << std::endl;
+                std::cout << tail << std::endl;
+                std::cout << "debug done" << std::endl;
+                if (optimizable > 0)
                 {
+                    std::cout << "optimizable" << std::endl;
                     // The optimized implementation processes the
                     // granulated part
-                    call_function(m_optimized_calls, dest, args..., optimized);
+                    call_function(m_optimized_calls, dest, args..., optimizable);
                 }
 
                 if (tail > 0)
-                {
+                {   std::cout << "tail" << std::endl;
                     //The basic implementation runs on the tail
                     second_part_helper(
-                        call_function, optimized, tail, dest, args...);
+                        call_function, optimizable, tail, dest, args...);
                 }
 
                 EXPECT_EQ(m_optimized_calls, optimized.m_calls);
@@ -171,27 +177,26 @@ namespace fifi
 
             template<class CallFunction, class... Args>
             void second_part_helper(CallFunction call_function,
-                uint32_t optimized, uint32_t length, value_type* dest,
+                uint32_t optimizable, uint32_t length, value_type* dest,
                 const value_type* src, Args&&... args)
             {
-                call_function(m_basic_calls, dest + optimized,
-                    src + optimized, args..., length);
+                call_function(m_basic_calls, dest + optimizable,
+                    src + optimizable, args..., length);
             }
 
             template<class CallFunction>
             void second_part_helper(CallFunction call_function,
-                uint32_t optimized, uint32_t length, value_type* dest, value_type constant)
+                uint32_t optimizable, uint32_t length, value_type* dest, value_type constant)
             {
-                call_function(m_basic_calls, dest + optimized, constant,
+                call_function(m_basic_calls, dest + optimizable, constant,
                     length);
             }
 
         protected:
 
             stack_type m_stack;
-
-            basic_super* m_basic;
-            optimized_super* m_optimized;
+            calls_type m_basic_calls;
+            calls_type m_optimized_calls;
 
             uint32_t m_value_size;
             uint32_t m_alignment;
