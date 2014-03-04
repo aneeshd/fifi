@@ -16,7 +16,8 @@
 
 TEST(TestSSSE3Binary4FullTable, region_add)
 {
-    if (fifi::ssse3_binary4_full_table::enabled())
+    fifi::ssse3_binary4_full_table stack;
+    if (stack.enabled())
     {
         check_results_region_add<fifi::ssse3_binary4_full_table>();
     }
@@ -24,7 +25,8 @@ TEST(TestSSSE3Binary4FullTable, region_add)
 
 TEST(TestSSSE3Binary4FullTable, region_subtract)
 {
-    if (fifi::ssse3_binary4_full_table::enabled())
+    fifi::ssse3_binary4_full_table stack;
+    if (stack.enabled())
     {
         check_results_region_subtract<fifi::ssse3_binary4_full_table>();
     }
@@ -32,7 +34,8 @@ TEST(TestSSSE3Binary4FullTable, region_subtract)
 
 TEST(TestSSSE3Binary4FullTable, region_multiply_constant)
 {
-    if (fifi::ssse3_binary4_full_table::enabled())
+    fifi::ssse3_binary4_full_table stack;
+    if (stack.enabled())
     {
         check_results_region_multiply_constant<
             fifi::ssse3_binary4_full_table>();
@@ -41,7 +44,8 @@ TEST(TestSSSE3Binary4FullTable, region_multiply_constant)
 
 TEST(TestSSSE3Binary4FullTable, region_multiply_add)
 {
-    if (fifi::ssse3_binary4_full_table::enabled())
+    fifi::ssse3_binary4_full_table stack;
+    if (stack.enabled())
     {
         check_results_region_multiply_add<
             fifi::ssse3_binary4_full_table>();
@@ -50,7 +54,8 @@ TEST(TestSSSE3Binary4FullTable, region_multiply_add)
 
 TEST(TestSSSE3Binary4FullTable, region_multiply_subtract)
 {
-    if (fifi::ssse3_binary4_full_table::enabled())
+    fifi::ssse3_binary4_full_table stack;
+    if (stack.enabled())
     {
         check_results_region_multiply_subtract<
             fifi::ssse3_binary4_full_table>();

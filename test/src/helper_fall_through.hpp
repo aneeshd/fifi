@@ -14,11 +14,14 @@
 
 namespace fifi
 {
-
+    namespace {
+        struct final_default
+        { };
+    }
 
     /// @todo Add documentation
-    template<class Field>
-    struct helper_fall_through
+    template<class Field, class Super = final_default>
+    struct helper_fall_through : public Super
     {
 
         typedef Field field_type;
@@ -169,6 +172,11 @@ namespace fifi
             m_calls.call_region_multiply_subtract(dest, src, constant, length);
         }
 
+        void clear()
+        {
+            m_calls.clear();
+        }
+
         mutable capture_calls<value_type> m_calls;
         mutable random_constant<field_type> m_constants;
     };
@@ -181,7 +189,7 @@ namespace fifi
         fifi::capture_calls<typename Stack::value_type> expected_calls;
         Stack s;
 
-        s.m_calls.clear();
+        s.clear();
         expected_calls.clear();
 
         call_function(expected_calls, a);
@@ -201,7 +209,7 @@ namespace fifi
         fifi::capture_calls<typename Stack::value_type> expected_calls;
         Stack s;
 
-        s.m_calls.clear();
+        s.clear();
         expected_calls.clear();
 
         call_function(expected_calls, a, b);
@@ -211,6 +219,23 @@ namespace fifi
         call_return(expected_calls, r);
 
         EXPECT_EQ(expected_calls, s.m_calls);
+    }
+
+    template
+    <
+        class Stack, class Function, class Calls, class CallFunction,
+        class... Args
+    >
+    void fall_through_region_tester(Stack& stack, Function function,
+        Calls& calls, CallFunction call_function, Args&&... args)
+    {
+        calls.clear();
+        stack.clear();
+
+        call_function(calls, args...);
+        function(stack, args...);
+
+        EXPECT_EQ(calls, stack.m_calls);
     }
 
     template<class Stack, class Function, class CallFunction>
@@ -224,19 +249,28 @@ namespace fifi
         auto src_vector = std::vector<value_type>(length,
             std::numeric_limits<value_type>::max());
 
-        fifi::capture_calls<value_type> expected_calls;
-
+        fifi::capture_calls<value_type> c;
         Stack s;
 
-        s.m_calls.clear();
-        expected_calls.clear();
+        fall_through_region_tester(s, function, c, call_function,
+            dest_vector.data(), src_vector.data(), length);
+    }
 
-        call_function(expected_calls, dest_vector.data(), src_vector.data(),
-            length);
+    template<class Stack, class Function, class CallFunction>
+    void test_fall_through_ptr_value_length(Function function,
+        CallFunction call_function)
+    {
+        typedef typename Stack::value_type value_type;
 
-        function(s, dest_vector.data(), src_vector.data(), length);
+        uint32_t length = 10;
+        auto dest_vector = std::vector<value_type>(length);
+        auto constant = std::numeric_limits<value_type>::max();
 
-        EXPECT_EQ(expected_calls, s.m_calls);
+        fifi::capture_calls<value_type> c;
+        Stack s;
+
+        fall_through_region_tester(s, function, c, call_function,
+            dest_vector.data(), constant, length);
     }
 
     template<class Stack, class Function, class CallFunction>
@@ -251,19 +285,11 @@ namespace fifi
             std::numeric_limits<value_type>::max());
         auto constant = std::numeric_limits<value_type>::max();
 
-        fifi::capture_calls<value_type> expected_calls;
-
+        fifi::capture_calls<value_type> c;
         Stack s;
 
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        call_function(expected_calls, dest_vector.data(), src_vector.data(),
-            constant, length);
-
-        function(s, dest_vector.data(), src_vector.data(), constant, length);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        fall_through_region_tester(s, function, c, call_function,
+            dest_vector.data(), src_vector.data(), constant, length);
     }
 
     template<class Stack>
@@ -411,27 +437,10 @@ namespace fifi
     template<class Stack>
     void test_fall_through_region_multiply_constant()
     {
-        typedef Stack stack;
-        typedef typename stack::field_type field_type;
-        typedef typename field_type::value_type value_type;
-
-        uint32_t length = 10;
-        auto dest_vector = std::vector<value_type>(length);
-        auto constant = fifi::pack<field_type>(1);
-
-        fifi::capture_calls<value_type> expected_calls;
-
-        stack s;
-
-        s.m_calls.clear();
-        expected_calls.clear();
-
-        expected_calls.call_region_multiply_constant(dest_vector.data(),
-            constant, length);
-
-        s.region_multiply_constant(dest_vector.data(), constant, length);
-
-        EXPECT_EQ(expected_calls, s.m_calls);
+        typedef typename fifi::capture_calls<typename Stack::value_type> calls;
+        test_fall_through_ptr_value_length<Stack>(
+            std::mem_fn(&Stack::region_multiply_constant),
+            std::mem_fn(&calls::call_region_multiply_constant));
     }
 
     template<class Stack>

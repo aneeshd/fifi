@@ -14,9 +14,11 @@
 #include <fifi/final.hpp>
 #include <fifi/region_equal_alignment.hpp>
 
-#include "random_constant.hpp"
+#include "capture_calls.hpp"
+#include "helper_fall_through.hpp"
+#include "helper_region_info.hpp"
 #include "helper_test_buffer.hpp"
-#include "helper_region_dummy.hpp"
+#include "random_constant.hpp"
 
 namespace fifi
 {
@@ -26,7 +28,7 @@ namespace fifi
         class dummy_typedef_basic_super : public Super
         {
         public:
-           typedef Super BasicSuper;
+            typedef Super BasicSuper;
         };
 
         template<class Super>
@@ -40,177 +42,162 @@ namespace fifi
         class dummy_stack : public
             region_equal_alignment<
             dummy_typedef_optimized_super<
-            region_dummy<
+            helper_region_info<0,0,0,0,
+            helper_fall_through<Field,
             dummy_typedef_basic_super<
-            region_dummy<
-            final<Field> > > > > >
+            helper_region_info<0,0,0,0,
+            helper_fall_through<Field,
+            final<Field> > > > > > > >
         { };
 
         template<class Field>
-        struct TestOperation
+        struct test_operation
         {
             typedef Field field_type;
-            typedef dummy_stack<field_type> stack_type;
 
             typedef typename field_type::value_type value_type;
+
+            typedef dummy_stack<field_type> stack_type;
+            typedef capture_calls<value_type> calls_type;
+
             typedef typename stack_type::BasicSuper basic_super;
             typedef typename stack_type::OptimizedSuper optimized_super;
 
-            TestOperation()
+            test_operation()
             {
-                m_value_size = sizeof(value_type);
                 // The alignment is measured in bytes
                 m_alignment = 16;
-                m_length = 100;
-                m_size = m_length * m_value_size;
-
-                m_basic = &m_stack;
-                m_optimized = &m_stack;
-
-                m_basic->set_alignment(m_value_size);
-                m_optimized->set_alignment(m_alignment);
             }
 
-            void run_test(region_operation operation)
+            void run_test()
             {
+                auto length = 100;
+                auto size = length * sizeof(value_type);
                 fifi::helper_test_buffer<uint8_t> dest_buffer(
-                    m_size, m_alignment);
+                    size, m_alignment);
                 fifi::helper_test_buffer<uint8_t> src_buffer(
-                    m_size, m_alignment);
+                    size, m_alignment);
+
+                random_constant<field_type> constants;
+                auto constant = constants.pack();
 
                 // If the buffers are aligned, the optimized approach is used.
-                for (uint32_t offset = 0; offset < m_size; offset++)
+                for (uint32_t offset = 0; offset < length; offset++)
                 {
-                    m_optimized->clear_test();
-                    m_basic->clear_test();
-
+                    SCOPED_TRACE(testing::Message() << "offset:" << offset);
                     value_type* dest = (value_type*)&dest_buffer.data()[offset];
                     value_type* src = (value_type*)&src_buffer.data()[offset];
 
                     ASSERT_EQ((uintptr_t)dest % m_alignment,
                               (uintptr_t)src  % m_alignment);
 
-                    run_operation(operation, dest, src, m_length);
-
-                    EXPECT_EQ(m_optimized->m_last_operation, operation);
-                    EXPECT_EQ(m_optimized->m_dest, dest);
-                    EXPECT_EQ(m_optimized->m_src, src);
-                    EXPECT_EQ(m_optimized->m_length, m_length);
-                    EXPECT_EQ(m_optimized->m_constant, m_last_constant);
-
-                    EXPECT_EQ(m_basic->m_last_operation,
-                              region_operation::NONE);
-                    EXPECT_EQ(m_basic->m_dest, nullptr);
-                    EXPECT_EQ(m_basic->m_src, nullptr);
-                    EXPECT_EQ(m_basic->m_length, 0U);
-                    EXPECT_EQ(m_basic->m_constant, 0U);
+                    run_operations(dest, src, constant, length, true);
                 }
 
                 // If the buffers are unaligned, the basic approach is used.
                 for (uint32_t offset = 1; offset < m_alignment; offset++)
                 {
-                    m_optimized->clear_test();
-                    m_basic->clear_test();
-
+                    SCOPED_TRACE(testing::Message() << "offset:" << offset);
                     value_type* dest = (value_type*)&dest_buffer.data()[offset];
                     value_type* src = (value_type*)&src_buffer.data()[0];
 
                     ASSERT_NE((uintptr_t)dest % m_alignment,
                               (uintptr_t)src  % m_alignment);
 
-                    run_operation(operation, dest, src, m_length);
-
-                    EXPECT_EQ(m_optimized->m_last_operation,
-                              region_operation::NONE);
-                    EXPECT_EQ(m_optimized->m_dest, nullptr);
-                    EXPECT_EQ(m_optimized->m_src, nullptr);
-                    EXPECT_EQ(m_optimized->m_length, 0U);
-                    EXPECT_EQ(m_optimized->m_constant, 0U);
-
-                    EXPECT_EQ(m_basic->m_last_operation, operation);
-                    EXPECT_EQ(m_basic->m_dest, dest);
-                    EXPECT_EQ(m_basic->m_src, src);
-                    EXPECT_EQ(m_basic->m_length, m_length);
-                    EXPECT_EQ(m_basic->m_constant, m_last_constant);
+                    run_operations(dest, src, constant, length, false);
                 }
             }
 
-            void run_operation(region_operation operation,
-                value_type* dest, value_type* src, uint32_t length)
+            void run_operations(value_type* dest, const value_type* src,
+                value_type constant, uint32_t length, bool aligned)
             {
-                m_last_constant = 0;
-                switch (operation)
+                SCOPED_TRACE(testing::Message() << "length: "
+                                                << length);
+                SCOPED_TRACE(testing::Message() << "aligned: "
+                                                << aligned);
                 {
-                case region_operation::NONE:
-                    assert(0);
-                    break;
-                case region_operation::ADD:
-                    m_stack.region_add(dest, src, length);
-                    break;
-                case region_operation::SUBTRACT:
-                    m_stack.region_subtract(dest, src, length);
-                    break;
-                case region_operation::MULTIPLY:
-                    m_stack.region_multiply(dest, src, length);
-                    break;
-                case region_operation::DIVIDE:
-                    m_stack.region_divide(dest, src, length);
-                    break;
-                case region_operation::MULTIPLY_CONSTANT:
-                    // region_multiply_constant operates on a single buffer
-                    assert(0);
-                    break;
-                case region_operation::MULTIPLY_ADD:
-                    m_last_constant = m_constants.pack();
-                    m_stack.region_multiply_add(
-                        dest, src, m_last_constant, length);
-                    break;
-                case region_operation::MULTIPLY_SUBTRACT:
-                    m_last_constant = m_constants.pack();
-                    m_stack.region_multiply_subtract(
-                        dest, src, m_last_constant, length);
-                    break;
-                default:
-                    assert(0);
-                    break;
+                    SCOPED_TRACE("region_add");
+                    run_operation(aligned,
+                        std::mem_fn(&stack_type::region_add),
+                        std::mem_fn(&calls_type::call_region_add),
+                        length, dest, src);
                 }
+                {
+                    SCOPED_TRACE("region_subtract");
+                    run_operation(aligned,
+                        std::mem_fn(&stack_type::region_subtract),
+                        std::mem_fn(&calls_type::call_region_subtract),
+                        length, dest, src);
+                }
+                {
+                    SCOPED_TRACE("region_multiply");
+                    run_operation(aligned,
+                        std::mem_fn(&stack_type::region_multiply),
+                        std::mem_fn(&calls_type::call_region_multiply),
+                        length, dest, src);
+                }
+                {
+                    SCOPED_TRACE("region_divide");
+                    run_operation(aligned,
+                        std::mem_fn(&stack_type::region_divide),
+                        std::mem_fn(&calls_type::call_region_divide),
+                        length, dest, src);
+                }
+                {
+                    SCOPED_TRACE("region_multiply_add");
+                    run_operation(aligned,
+                        std::mem_fn(&stack_type::region_multiply_add),
+                        std::mem_fn(&calls_type::call_region_multiply_add),
+                        length, dest, src, constant);
+                }
+                {
+                    SCOPED_TRACE("region_multiply_subtract");
+                    run_operation(aligned,
+                        std::mem_fn(&stack_type::region_multiply_subtract),
+                        std::mem_fn(&calls_type::call_region_multiply_subtract),
+                        length, dest, src, constant);
+                }
+            }
+
+            template<class Function, class CallFunction, class... Args>
+            void run_operation(bool aligned, Function function,
+                CallFunction call_function,  uint32_t length, value_type* dest,
+                Args&&... args)
+            {
+                basic_super& basic = m_stack;
+                optimized_super& optimized = m_stack;
+
+                basic.set_alignment(sizeof(value_type));
+                optimized.set_alignment(m_alignment);
+
+                optimized.clear();
+                basic.clear();
+                m_basic_calls.clear();
+                m_optimized_calls.clear();
+
+                function(m_stack, dest, args..., length);
+
+                if (aligned)
+                {
+                    call_function(m_optimized_calls, dest, args..., length);
+                }
+                else
+                {
+                    call_function(m_basic_calls, dest, args..., length);
+                }
+
+                EXPECT_EQ(m_optimized_calls, optimized.m_calls);
+                EXPECT_EQ(m_basic_calls, basic.m_calls);
             }
 
         protected:
 
             stack_type m_stack;
+            calls_type m_basic_calls;
+            calls_type m_optimized_calls;
 
-            basic_super* m_basic;
-            optimized_super* m_optimized;
-
-            uint32_t m_value_size;
             uint32_t m_alignment;
-            uint32_t m_length;
-            uint32_t m_size;
-
-            random_constant<field_type> m_constants;
-            value_type m_last_constant;
         };
-
-        void check_operation(region_operation operation)
-        {
-            {
-                SCOPED_TRACE("binary");
-                TestOperation<binary>().run_test(operation);
-            }
-            {
-                SCOPED_TRACE("binary4");
-                TestOperation<binary4>().run_test(operation);
-            }
-            {
-                SCOPED_TRACE("binary8");
-                TestOperation<binary8>().run_test(operation);
-            }
-            {
-                SCOPED_TRACE("binary16");
-                TestOperation<binary16>().run_test(operation);
-            }
-        }
     }
 }
 
@@ -242,32 +229,22 @@ TEST(TestRegionEqualAlignment, max_alignment)
     EXPECT_EQ(16U, stack.max_alignment());
 }
 
-TEST(TestRegionEqualAlignment, region_add)
+TEST(TestRegionEqualAlignment, all)
 {
-    fifi::check_operation(fifi::region_operation::ADD);
-}
-
-TEST(TestRegionEqualAlignment, region_subtract)
-{
-    fifi::check_operation(fifi::region_operation::SUBTRACT);
-}
-
-TEST(TestRegionEqualAlignment, region_multiply)
-{
-    fifi::check_operation(fifi::region_operation::MULTIPLY);
-}
-
-TEST(TestRegionEqualAlignment, region_divide)
-{
-    fifi::check_operation(fifi::region_operation::DIVIDE);
-}
-
-TEST(TestRegionEqualAlignment, region_multiply_add)
-{
-    fifi::check_operation(fifi::region_operation::MULTIPLY_ADD);
-}
-
-TEST(TestRegionEqualAlignment, region_multiply_subtract)
-{
-    fifi::check_operation(fifi::region_operation::MULTIPLY_SUBTRACT);
+    {
+        SCOPED_TRACE("binary");
+        fifi::test_operation<fifi::binary>().run_test();
+    }
+    {
+        SCOPED_TRACE("binary4");
+        fifi::test_operation<fifi::binary4>().run_test();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        fifi::test_operation<fifi::binary8>().run_test();
+    }
+    {
+        SCOPED_TRACE("binary16");
+        fifi::test_operation<fifi::binary16>().run_test();
+    }
 }

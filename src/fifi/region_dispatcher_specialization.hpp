@@ -40,7 +40,7 @@ namespace fifi
         region_dispatcher_specialization()
         {
             Super* stack = this;
-            if (Stack::enabled())
+            if (m_stack.enabled())
             {
                 bind_region_add(&m_stack);
                 bind_region_subtract(&m_stack);
@@ -220,7 +220,7 @@ namespace fifi
         /// @copydoc layer::alignment()
         uint32_t alignment() const
         {
-            if (Stack::enabled())
+            if (m_stack.enabled())
             {
                 return std::max(m_stack.alignment(),
                                 Super::alignment());
@@ -234,7 +234,7 @@ namespace fifi
         /// @copydoc layer::max_alignment()
         uint32_t max_alignment() const
         {
-            if (Stack::enabled())
+            if (m_stack.enabled())
             {
                 return std::max(m_stack.max_alignment(),
                                 Super::max_alignment());
@@ -248,7 +248,7 @@ namespace fifi
         /// @copydoc layer::granularity()
         uint32_t granularity() const
         {
-            if (Stack::enabled())
+            if (m_stack.enabled())
             {
                 return std::max(m_stack.granularity(),
                                 Super::granularity());
@@ -262,7 +262,7 @@ namespace fifi
         /// @copydoc layer::max_granularity()
         uint32_t max_granularity() const
         {
-            if (Stack::enabled())
+            if (m_stack.enabled())
             {
                 return std::max(m_stack.max_granularity(),
                                 Super::max_granularity());
@@ -273,9 +273,9 @@ namespace fifi
             }
         }
 
-        static bool enabled()
+        bool enabled() const
         {
-            return Stack::enabled();
+            return m_stack.enabled();
         }
 
     private:

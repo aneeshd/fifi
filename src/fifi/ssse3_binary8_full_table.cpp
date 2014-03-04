@@ -218,7 +218,7 @@ namespace fifi
         return granularity();
     }
 
-    bool ssse3_binary8_full_table::enabled()
+    bool ssse3_binary8_full_table::enabled() const
     {
         static cpuid::cpuinfo info;
         return info.has_ssse3();
@@ -292,7 +292,7 @@ namespace fifi
         return 0;
     }
 
-    bool ssse3_binary8_full_table::enabled()
+    bool ssse3_binary8_full_table::enabled() const
     {
         return false;
     }
