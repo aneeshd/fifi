@@ -134,7 +134,8 @@ namespace fifi
                         SCOPED_TRACE("region_multiply_subtract");
                         run_operation(
                             std::mem_fn(&stack_type::region_multiply_subtract),
-                            std::mem_fn(&calls_type::call_region_multiply_subtract),
+                            std::mem_fn(
+                                &calls_type::call_region_multiply_subtract),
                             test_length, dest, src, constant);
                     }
                 }
