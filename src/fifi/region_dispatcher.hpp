@@ -5,26 +5,13 @@
 
 #pragma once
 
-#include <type_traits>
+#include "has_basic_super.hpp"
 
 #include "region_dispatcher_specialization.hpp"
 
+
 namespace fifi
 {
-    template<typename T>
-    class has_basic_super
-    {
-        typedef uint8_t yes;
-        typedef uint32_t no;
-
-        template <typename U> static yes check(typename U::BasicSuper*);
-        template <typename U> static no  check(...);
-
-    public:
-
-        enum { value = (sizeof(check<T>(0)) == sizeof(yes)) };
-    };
-
     /// Helper class for easing the use of region_dispatcher_specialization.
     template<class Stack, class Super>
     class region_dispatcher :
