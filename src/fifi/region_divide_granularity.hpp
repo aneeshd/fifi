@@ -34,14 +34,14 @@ namespace fifi
             uint32_t mask = (OptimizedSuper::granularity() - 1);
             uint32_t optimized = length & ~mask;
 
-            if (optimized != 0)
+            if (optimized > 0)
             {
                 Super::region_add(dest, src, optimized);
             }
 
             uint32_t tail = length & mask;
 
-            if (tail != 0)
+            if (tail > 0)
             {
                 BasicSuper::region_add(dest + optimized, src + optimized, tail);
             }
