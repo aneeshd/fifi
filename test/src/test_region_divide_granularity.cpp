@@ -94,22 +94,22 @@ namespace fifi
                 // Test the division of the granulated part and the tail
                 for (uint32_t length = 1; length <= m_length; length++)
                 {
-                    std::cout << "region_add" << std::endl;
+
                     run_operation(
                         std::mem_fn(&stack_type::region_add),
                         std::mem_fn(&calls_type::call_region_add),
                         length, dest, src);
-                    std::cout << "region_subtract" << std::endl;
+
                     run_operation(
                         std::mem_fn(&stack_type::region_subtract),
                         std::mem_fn(&calls_type::call_region_subtract),
                         length, dest, src);
-                    std::cout << "region_multiply" << std::endl;
+
                     run_operation(
                         std::mem_fn(&stack_type::region_multiply),
                         std::mem_fn(&calls_type::call_region_multiply),
                         length, dest, src);
-                    std::cout << "region_divide" << std::endl;
+
                     run_operation(
                         std::mem_fn(&stack_type::region_divide),
                         std::mem_fn(&calls_type::call_region_divide),
@@ -136,36 +136,31 @@ namespace fifi
                 basic_super& basic = m_stack;
                 optimized_super& optimized = m_stack;
 
-                basic.set_alignment(m_value_size);
-                optimized.set_alignment(m_alignment);
+                basic.set_granularity(1U);
+                optimized.set_granularity(m_granularity);
 
                 optimized.clear();
                 basic.clear();
                 m_basic_calls.clear();
                 m_optimized_calls.clear();
-                std::cout << "function(m_stack, " << (uintptr_t)dest << ", " << "args..." << ", " << length << ");" << std::endl;
                 function(m_stack, dest, args..., length);
-                std::cout << "after function call" << std::endl;
+
                 // Calculate the tail that is not granulated correctly
                 uint32_t tail = length % m_granularity;
 
                 // Calculate the number of granulated values
                 uint32_t optimizable = length - tail;
 
-                std::cout << "debug:" << std::endl;
-                std::cout << optimizable << std::endl;
-                std::cout << tail << std::endl;
-                std::cout << "debug done" << std::endl;
                 if (optimizable > 0)
                 {
-                    std::cout << "optimizable" << std::endl;
                     // The optimized implementation processes the
                     // granulated part
-                    call_function(m_optimized_calls, dest, args..., optimizable);
+                    call_function(
+                        m_optimized_calls, dest, args..., optimizable);
                 }
 
                 if (tail > 0)
-                {   std::cout << "tail" << std::endl;
+                {
                     //The basic implementation runs on the tail
                     second_part_helper(
                         call_function, optimizable, tail, dest, args...);
