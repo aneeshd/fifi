@@ -18,7 +18,8 @@ namespace fifi
         class dummy : public Super
         {
         public:
-            static bool enabled()
+
+            bool enabled() const
             {
                 return Enabled;
             }

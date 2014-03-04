@@ -246,7 +246,7 @@ namespace fifi
             }
         }
 
-        static bool enabled()
+        bool enabled() const
         {
             return m_stack.enabled();
         }
