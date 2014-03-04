@@ -182,6 +182,8 @@ namespace fifi
                 EXPECT_EQ(m_basic_calls, basic.m_calls);
             }
 
+
+            // Helper function to have a common api for all region arithmetics
             template<class CallFunction, class... Args>
             void second_part_helper(CallFunction call_function,
                 uint32_t unaligned, uint32_t length, value_type* dest,
@@ -191,9 +193,12 @@ namespace fifi
                     src + unaligned, args..., length);
             }
 
+            // Helper function to have a common api for all region arithmetics
+            // specialized for multiply_constant
             template<class CallFunction>
             void second_part_helper(CallFunction call_function,
-                uint32_t unaligned, uint32_t length, value_type* dest, value_type constant)
+                uint32_t unaligned, uint32_t length, value_type* dest,
+                value_type constant)
             {
                 call_function(m_optimized_calls, dest + unaligned, constant,
                     length);

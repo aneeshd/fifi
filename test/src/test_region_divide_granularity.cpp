@@ -20,8 +20,6 @@
 #include "helper_region_info.hpp"
 #include "helper_fall_through.hpp"
 
-#include <iostream>
-
 namespace fifi
 {
     namespace
@@ -67,7 +65,6 @@ namespace fifi
 
             test_operation()
             {
-                m_value_size = sizeof(value_type);
                 // The alignment is measured in bytes
                 m_alignment = 16;
                 // The granularity is measured in value_types
@@ -94,7 +91,6 @@ namespace fifi
                 // Test the division of the granulated part and the tail
                 for (uint32_t length = 1; length <= m_length; length++)
                 {
-
                     run_operation(
                         std::mem_fn(&stack_type::region_add),
                         std::mem_fn(&calls_type::call_region_add),
@@ -170,6 +166,7 @@ namespace fifi
                 EXPECT_EQ(m_basic_calls, basic.m_calls);
             }
 
+            // Helper function to have a common api for all region arithmetics
             template<class CallFunction, class... Args>
             void second_part_helper(CallFunction call_function,
                 uint32_t optimizable, uint32_t length, value_type* dest,
@@ -179,9 +176,12 @@ namespace fifi
                     src + optimizable, args..., length);
             }
 
+            // Helper function to have a common api for all region arithmetics
+            // specialized for multiply_constant
             template<class CallFunction>
             void second_part_helper(CallFunction call_function,
-                uint32_t optimizable, uint32_t length, value_type* dest, value_type constant)
+                uint32_t optimizable, uint32_t length, value_type* dest,
+                value_type constant)
             {
                 call_function(m_basic_calls, dest + optimizable, constant,
                     length);
@@ -193,13 +193,9 @@ namespace fifi
             calls_type m_basic_calls;
             calls_type m_optimized_calls;
 
-            uint32_t m_value_size;
             uint32_t m_alignment;
             uint32_t m_granularity;
             uint32_t m_length;
-
-            random_constant<field_type> m_constants;
-            value_type m_last_constant;
         };
     }
 }
