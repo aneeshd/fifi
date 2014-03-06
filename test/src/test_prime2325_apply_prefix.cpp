@@ -14,7 +14,7 @@
 #include <sak/storage.hpp>
 
 
-TEST(TestPrime2325ApplyPrefix, prime2325_apply_prefix)
+TEST(test_prime2325_apply_prefix, prime2325_apply_prefix)
 {
     uint32_t tests = 10;
     std::vector<uint32_t> data(tests);

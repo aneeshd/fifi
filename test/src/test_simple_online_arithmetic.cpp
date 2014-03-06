@@ -75,7 +75,7 @@ inline void helper_fall_through<fifi::binary>()
     EXPECT_EQ(expected_calls, s.m_calls);
 }
 
-TEST(TestSimpleOnlineArithmetic, fall_through)
+TEST(test_simple_online_arithmetic, fall_through)
 {
     {
         SCOPED_TRACE("binary");
@@ -95,7 +95,7 @@ TEST(TestSimpleOnlineArithmetic, fall_through)
     }
 }
 
-TEST(TestSimpleOnlineArithmetic, add)
+TEST(test_simple_online_arithmetic, add)
 {
     {
         SCOPED_TRACE("binary");
@@ -115,7 +115,7 @@ TEST(TestSimpleOnlineArithmetic, add)
     }
 }
 
-TEST(TestSimpleOnlineArithmetic, subtract)
+TEST(test_simple_online_arithmetic, subtract)
 {
     {
         SCOPED_TRACE("binary");
@@ -135,7 +135,7 @@ TEST(TestSimpleOnlineArithmetic, subtract)
     }
 }
 
-TEST(TestSimpleOnlineArithmetic, multiply)
+TEST(test_simple_online_arithmetic, multiply)
 {
     {
         SCOPED_TRACE("binary4");
@@ -151,7 +151,7 @@ TEST(TestSimpleOnlineArithmetic, multiply)
     }
 }
 
-TEST(TestSimpleOnlineArithmetic, divide)
+TEST(test_simple_online_arithmetic, divide)
 {
     {
         SCOPED_TRACE("binary4");
@@ -167,7 +167,7 @@ TEST(TestSimpleOnlineArithmetic, divide)
     }
 }
 
-TEST(TestSimpleOnlineArithmetic, invert)
+TEST(test_simple_online_arithmetic, invert)
 {
     {
         SCOPED_TRACE("binary4");
@@ -183,7 +183,7 @@ TEST(TestSimpleOnlineArithmetic, invert)
     }
 }
 
-TEST(TestSimpleOnlineArithmetic, random)
+TEST(test_simple_online_arithmetic, random)
 {
     {
         SCOPED_TRACE("binary4");

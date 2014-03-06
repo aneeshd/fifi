@@ -21,7 +21,7 @@ namespace fifi
     }
 }
 
-TEST(TestHasRegionMultiply, api)
+TEST(test_has_region_multiply, api)
 {
     EXPECT_FALSE(fifi::has_region_multiply<fifi::dummy_stack>::value);
 

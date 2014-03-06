@@ -14,47 +14,47 @@
 #include "helper_test_packed_arithmetic.hpp"
 #include "helper_test_region_arithmetic.hpp"
 
-TEST(TestExtendedLogTable, binary4)
+TEST(test_extended_log_table, binary4)
 {
     fifi::check_all<fifi::extended_log_table<fifi::binary4>>();
 }
 
-TEST(TestExtendedLogTable, binary8)
+TEST(test_extended_log_table, binary8)
 {
     fifi::check_all<fifi::extended_log_table<fifi::binary8>>();
 }
 
-TEST(TestExtendedLogTable, binary16)
+TEST(test_extended_log_table, binary16)
 {
     fifi::check_all<fifi::extended_log_table<fifi::binary16>>();
 }
 
-TEST(TestExtendedLogTable, packed_binary4)
+TEST(test_extended_log_table, packed_binary4)
 {
     fifi::check_packed_all<fifi::extended_log_table<fifi::binary4>>();
 }
 
-TEST(TestExtendedLogTable, packed_binary8)
+TEST(test_extended_log_table, packed_binary8)
 {
     fifi::check_packed_all<fifi::extended_log_table<fifi::binary8>>();
 }
 
-TEST(TestExtendedLogTable, packed_binary16)
+TEST(test_extended_log_table, packed_binary16)
 {
     fifi::check_packed_all<fifi::extended_log_table<fifi::binary16>>();
 }
 
-TEST(TestExtendedLogTable, region_binary4)
+TEST(test_extended_log_table, region_binary4)
 {
     fifi::check_region_all<fifi::extended_log_table<fifi::binary4>>();
 }
 
-TEST(TestExtendedLogTable, region_binary8)
+TEST(test_extended_log_table, region_binary8)
 {
     fifi::check_region_all<fifi::extended_log_table<fifi::binary8>>();
 }
 
-TEST(TestExtendedLogTable, region_binary16)
+TEST(test_extended_log_table, region_binary16)
 {
     fifi::check_region_all<fifi::extended_log_table<fifi::binary16>>();
 }

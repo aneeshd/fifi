@@ -14,7 +14,7 @@
 #include "helper_test_region_arithmetic.hpp"
 
 
-TEST(TestSSSE3Binary4FullTable, region_add)
+TEST(test_ssse3_binary4_full_table, region_add)
 {
     fifi::ssse3_binary4_full_table stack;
     if (stack.enabled())
@@ -23,7 +23,7 @@ TEST(TestSSSE3Binary4FullTable, region_add)
     }
 }
 
-TEST(TestSSSE3Binary4FullTable, region_subtract)
+TEST(test_ssse3_binary4_full_table, region_subtract)
 {
     fifi::ssse3_binary4_full_table stack;
     if (stack.enabled())
@@ -32,7 +32,7 @@ TEST(TestSSSE3Binary4FullTable, region_subtract)
     }
 }
 
-TEST(TestSSSE3Binary4FullTable, region_multiply_constant)
+TEST(test_ssse3_binary4_full_table, region_multiply_constant)
 {
     fifi::ssse3_binary4_full_table stack;
     if (stack.enabled())
@@ -42,7 +42,7 @@ TEST(TestSSSE3Binary4FullTable, region_multiply_constant)
     }
 }
 
-TEST(TestSSSE3Binary4FullTable, region_multiply_add)
+TEST(test_ssse3_binary4_full_table, region_multiply_add)
 {
     fifi::ssse3_binary4_full_table stack;
     if (stack.enabled())
@@ -52,7 +52,7 @@ TEST(TestSSSE3Binary4FullTable, region_multiply_add)
     }
 }
 
-TEST(TestSSSE3Binary4FullTable, region_multiply_subtract)
+TEST(test_ssse3_binary4_full_table, region_multiply_subtract)
 {
     fifi::ssse3_binary4_full_table stack;
     if (stack.enabled())

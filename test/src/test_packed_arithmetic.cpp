@@ -26,7 +26,7 @@ namespace fifi
 
 /// Check that the packed_arithmetic layer correctly forwards the calls
 /// to the arithmetic layer.
-TEST(TestPackedArithmetic, fall_through)
+TEST(test_packed_arithmetic, fall_through)
 {
     typedef fifi::binary8 field_type;
     typedef field_type::value_type value_type;

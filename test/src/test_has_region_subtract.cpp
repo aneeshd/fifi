@@ -21,7 +21,7 @@ namespace fifi
     }
 }
 
-TEST(TestHasRegionSubtract, api)
+TEST(test_has_region_subtract, api)
 {
     EXPECT_FALSE(fifi::has_region_subtract<fifi::dummy_stack>::value);
 

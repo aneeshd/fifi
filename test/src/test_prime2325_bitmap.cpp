@@ -15,7 +15,7 @@
 #include "helper_prime2325_find_a_prefix.hpp"
 #include "helper_prime2325_find_one_prefix.hpp"
 
-TEST(TestPrime2325Bitmap, prefix_bitmap)
+TEST(test_prime2325_bitmap, prefix_bitmap)
 {
     uint32_t block_length = 255;
     std::vector<uint32_t> data(block_length, 0);
@@ -37,7 +37,7 @@ TEST(TestPrime2325Bitmap, prefix_bitmap)
     EXPECT_NE(0x02000000U, prefix);
 }
 
-TEST(TestPrime2325Bitmap, find_one_prefix)
+TEST(test_prime2325_bitmap, find_one_prefix)
 {
     fifi::helper_prime2325_find_one_prefix<fifi::prime2325_bitmap>(7);
     fifi::helper_prime2325_find_one_prefix<fifi::prime2325_bitmap>(8);
@@ -49,7 +49,7 @@ TEST(TestPrime2325Bitmap, find_one_prefix)
 }
 
 /// Tests the size_needed function for the prime2325_bitmap
-TEST(TestPrime2325Bitmap, size_needed_bitmap)
+TEST(test_prime2325_bitmap, size_needed_bitmap)
 {
     // The size returned is in bytes. We need one bit
     // per possible field value. For a block length of 255
@@ -66,7 +66,7 @@ TEST(TestPrime2325Bitmap, size_needed_bitmap)
 }
 
 /// For different block sizes find a prefix
-TEST(TestPrime2325Bitmap, find_a_prefix)
+TEST(test_prime2325_bitmap, find_a_prefix)
 {
 
     fifi::helper_prime2325_find_a_prefix<fifi::prime2325_bitmap>(7);

@@ -44,7 +44,7 @@ namespace fifi
     }
 }
 
-TEST(TestRegionDispatcher, test_region_dispatcher)
+TEST(test_region_dispatcher, test_region_dispatcher)
 {
     fifi::dummy_stack stack;
     fifi::dummy_stack::BasicSuper& basic = stack;

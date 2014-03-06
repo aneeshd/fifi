@@ -13,7 +13,7 @@
 
 #include <gtest/gtest.h>
 
-TEST(TestDefaultField, binary_default_field)
+TEST(test_default_field, binary_default_field)
 {
     bool test= std::is_same<
         fifi::default_field<fifi::binary>::type,
@@ -22,7 +22,7 @@ TEST(TestDefaultField, binary_default_field)
     EXPECT_TRUE(test);
 }
 
-TEST(TestDefaultField, binary4_default_field)
+TEST(test_default_field, binary4_default_field)
 {
     bool test= std::is_same<
         fifi::default_field<fifi::binary4>::type,
@@ -31,7 +31,7 @@ TEST(TestDefaultField, binary4_default_field)
     EXPECT_TRUE(test);
 }
 
-TEST(TestDefaultField, binary8_default_field)
+TEST(test_default_field, binary8_default_field)
 {
     bool test= std::is_same<
         fifi::default_field<fifi::binary8>::type,
@@ -39,7 +39,8 @@ TEST(TestDefaultField, binary8_default_field)
 
     EXPECT_TRUE(test);
 }
-TEST(TestDefaultField, binary16_default_field)
+
+TEST(test_default_field, binary16_default_field)
 {
     bool test= std::is_same<
         fifi::default_field<fifi::binary16>::type,
@@ -47,7 +48,8 @@ TEST(TestDefaultField, binary16_default_field)
 
     EXPECT_TRUE(test);
 }
-TEST(TestDefaultField, prime2325_default_field)
+
+TEST(test_default_field, prime2325_default_field)
 {
     bool test= std::is_same<
         fifi::default_field<fifi::prime2325>::type,

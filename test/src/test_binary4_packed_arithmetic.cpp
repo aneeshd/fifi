@@ -43,12 +43,12 @@ namespace fifi
     }
 }
 
-TEST(TestBinary4PackedArithmetic, fall_through_binary)
+TEST(test_binary4_packed_arithmetic, fall_through_binary)
 {
     fifi::test_packed_fall_through<fifi::fall_through_stack<fifi::binary>>();
 }
 
-TEST(TestBinary4PackedArithmetic, fall_through_binary4)
+TEST(test_binary4_packed_arithmetic, fall_through_binary4)
 {
     typedef fifi::fall_through_stack<fifi::binary4> stack;
     typedef stack::field_type field_type;
@@ -127,37 +127,37 @@ TEST(TestBinary4PackedArithmetic, fall_through_binary4)
     }
 }
 
-TEST(TestBinary4PackedArithmetic, fall_through_binary8)
+TEST(test_binary4_packed_arithmetic, fall_through_binary8)
 {
     fifi::test_packed_fall_through<fifi::fall_through_stack<fifi::binary8>>();
 }
 
-TEST(TestBinary4PackedArithmetic, fall_through_binary16)
+TEST(test_binary4_packed_arithmetic, fall_through_binary16)
 {
     fifi::test_packed_fall_through<fifi::fall_through_stack<fifi::binary16>>();
 }
 
-TEST(TestBinary4PackedArithmetic, packed_add)
+TEST(test_binary4_packed_arithmetic, packed_add)
 {
     check_results_packed_add<fifi::arithmetic_stack<fifi::binary4>>();
 }
 
-TEST(TestBinary4PackedArithmetic, packed_subtract)
+TEST(test_binary4_packed_arithmetic, packed_subtract)
 {
     check_results_packed_subtract<fifi::arithmetic_stack<fifi::binary4>>();
 }
 
-TEST(TestBinary4PackedArithmetic, packed_multiply)
+TEST(test_binary4_packed_arithmetic, packed_multiply)
 {
     check_results_packed_multiply<fifi::arithmetic_stack<fifi::binary4>>();
 }
 
-TEST(TestBinary4PackedArithmetic, packed_divide)
+TEST(test_binary4_packed_arithmetic, packed_divide)
 {
     check_results_packed_divide<fifi::arithmetic_stack<fifi::binary4>>();
 }
 
-TEST(TestBinary4PackedArithmetic, packed_invert)
+TEST(test_binary4_packed_arithmetic, packed_invert)
 {
     check_results_packed_invert<fifi::arithmetic_stack<fifi::binary4>>();
 }

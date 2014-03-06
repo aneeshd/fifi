@@ -135,7 +135,7 @@ namespace fifi
     }
 }
 
-TEST(TestRegionDispatcherSpecialization, alignment)
+TEST(test_region_dispatcher_specialization, alignment)
 {
     fifi::dummy_stack_disabled disabled_stack;
     fifi::dummy_stack_enabled enabled_stack;
@@ -144,7 +144,7 @@ TEST(TestRegionDispatcherSpecialization, alignment)
     EXPECT_EQ(enabled_stack.alignment(), 2U);
 }
 
-TEST(TestRegionDispatcherSpecialization, max_alignment)
+TEST(test_region_dispatcher_specialization, max_alignment)
 {
     fifi::dummy_stack_disabled disabled_stack;
     fifi::dummy_stack_enabled enabled_stack;
@@ -153,7 +153,7 @@ TEST(TestRegionDispatcherSpecialization, max_alignment)
     EXPECT_EQ(enabled_stack.max_alignment(), 20U);
 }
 
-TEST(TestRegionDispatcherSpecialization, granularity)
+TEST(test_region_dispatcher_specialization, granularity)
 {
     fifi::dummy_stack_disabled disabled_stack;
     fifi::dummy_stack_enabled enabled_stack;
@@ -162,7 +162,7 @@ TEST(TestRegionDispatcherSpecialization, granularity)
     EXPECT_EQ(enabled_stack.granularity(), 4U);
 }
 
-TEST(TestRegionDispatcherSpecialization, max_granularity)
+TEST(test_region_dispatcher_specialization, max_granularity)
 {
     fifi::dummy_stack_disabled disabled_stack;
     fifi::dummy_stack_enabled enabled_stack;
@@ -171,7 +171,7 @@ TEST(TestRegionDispatcherSpecialization, max_granularity)
     EXPECT_EQ(enabled_stack.max_granularity(), 40U);
 }
 
-TEST(TestRegionDispatcherSpecialization, region_multiply_constant)
+TEST(test_region_dispatcher_specialization, region_multiply_constant)
 {
     fifi::dummy_stack_enabled enabled_stack;
     fifi::dummy_stack_disabled disabled_stack;

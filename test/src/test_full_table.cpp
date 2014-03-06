@@ -13,32 +13,32 @@
 #include "helper_test_packed_arithmetic.hpp"
 #include "helper_test_region_arithmetic.hpp"
 
-TEST(TestFullTable, binary4)
+TEST(test_full_table, binary4)
 {
     fifi::check_all<fifi::full_table<fifi::binary4>>();
 }
 
-TEST(TestFullTable, binary8)
+TEST(test_full_table, binary8)
 {
     fifi::check_all<fifi::full_table<fifi::binary8>>();
 }
 
-TEST(TestFullTable, packed_binary4)
+TEST(test_full_table, packed_binary4)
 {
     fifi::check_packed_all<fifi::full_table<fifi::binary4>>();
 }
 
-TEST(TestFullTable, packed_binary8)
+TEST(test_full_table, packed_binary8)
 {
     fifi::check_packed_all<fifi::full_table<fifi::binary8>>();
 }
 
-TEST(TestFullTable, region_binary4)
+TEST(test_full_table, region_binary4)
 {
     fifi::check_region_all<fifi::full_table<fifi::binary4>>();
 }
 
-TEST(TestFullTable, region_binary8)
+TEST(test_full_table, region_binary8)
 {
     fifi::check_region_all<fifi::full_table<fifi::binary8>>();
 }

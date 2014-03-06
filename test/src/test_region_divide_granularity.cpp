@@ -216,7 +216,7 @@ namespace fifi
     }
 }
 
-TEST(TestRegionDivideGranularity, granularity)
+TEST(test_region_divide_granularity, granularity)
 {
     fifi::dummy_stack<fifi::binary8> stack;
     fifi::dummy_stack<fifi::binary8>::BasicSuper& basic = stack;
@@ -230,7 +230,7 @@ TEST(TestRegionDivideGranularity, granularity)
     EXPECT_EQ(16U, stack.granularity());
 }
 
-TEST(TestRegionDivideGranularity, max_granularity)
+TEST(test_region_divide_granularity, max_granularity)
 {
     fifi::dummy_stack<fifi::binary8> stack;
     fifi::dummy_stack<fifi::binary8>::BasicSuper& basic = stack;
@@ -244,7 +244,7 @@ TEST(TestRegionDivideGranularity, max_granularity)
     EXPECT_EQ(16U, stack.max_granularity());
 }
 
-TEST(TestRegionDivideGranularity, all)
+TEST(test_region_divide_granularity, all)
 {
     {
         SCOPED_TRACE("binary");

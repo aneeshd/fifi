@@ -49,7 +49,7 @@ namespace fifi
         { };
     }
 }
-TEST(TestBinaryRegionArithmetic, fall_through_binary)
+TEST(test_binary_region_arithmetic, fall_through_binary)
 {
     typedef fifi::dummy_stack_fall_through<fifi::binary> stack;
     typedef stack::field_type field_type;
@@ -107,35 +107,35 @@ TEST(TestBinaryRegionArithmetic, fall_through_binary)
     fifi::test_fall_through_region_divide<stack>();
 }
 
-TEST(TestBinaryRegionArithmetic, fall_through_binary4)
+TEST(test_binary_region_arithmetic, fall_through_binary4)
 {
     fifi::test_region_fall_through<
         fifi::dummy_stack_fall_through<fifi::binary4>>();
 }
 
-TEST(TestBinaryRegionArithmetic, fall_through_binary8)
+TEST(test_binary_region_arithmetic, fall_through_binary8)
 {
     fifi::test_region_fall_through<
         fifi::dummy_stack_fall_through<fifi::binary8>>();
 }
 
-TEST(TestBinaryRegionArithmetic, fall_through_binary16)
+TEST(test_binary_region_arithmetic, fall_through_binary16)
 {
     fifi::test_region_fall_through<
         fifi::dummy_stack_fall_through<fifi::binary16>>();
 }
 
-TEST(TestBinaryRegionArithmetic, multiply_constant)
+TEST(test_binary_region_arithmetic, multiply_constant)
 {
     check_results_region_multiply_constant<fifi::dummy_stack<fifi::binary> >();
 }
 
-TEST(TestBinaryRegionArithmetic, multiply_add)
+TEST(test_binary_region_arithmetic, multiply_add)
 {
     check_results_region_multiply_add<fifi::dummy_stack<fifi::binary> >();
 }
 
-TEST(TestBinaryRegionArithmetic, multiply_subtract)
+TEST(test_binary_region_arithmetic, multiply_subtract)
 {
     check_results_region_multiply_subtract<fifi::dummy_stack<fifi::binary> >();
 }

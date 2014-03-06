@@ -21,7 +21,7 @@ namespace fifi
     }
 }
 
-TEST(TestHasRegionAdd, api)
+TEST(test_has_region_Add, api)
 {
     EXPECT_FALSE(fifi::has_region_add<fifi::dummy_stack>::value);
     EXPECT_TRUE(fifi::has_region_add<fifi::simple_online<fifi::binary>>::value);

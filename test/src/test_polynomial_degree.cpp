@@ -30,7 +30,7 @@ namespace fifi
     }
 }
 
-TEST(TestPolynomialDegree, polynomial_degree)
+TEST(test_polynomial_degree, polynomial_degree)
 {
     {
         SCOPED_TRACE("binary");

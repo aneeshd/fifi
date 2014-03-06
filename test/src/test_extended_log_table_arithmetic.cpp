@@ -59,7 +59,7 @@ inline void helper_fall_through()
 }
 
 
-TEST(TestExtendedLogTableArithmetic, fall_through)
+TEST(test_extended_log_table_arithmetic, fall_through)
 {
     {
         SCOPED_TRACE("binary4");
@@ -75,7 +75,7 @@ TEST(TestExtendedLogTableArithmetic, fall_through)
     }
 }
 
-TEST(TestExtendedLogTableArithmetic, multiply)
+TEST(test_extended_log_table_arithmetic, multiply)
 {
     {
         SCOPED_TRACE("binary4");
@@ -91,7 +91,7 @@ TEST(TestExtendedLogTableArithmetic, multiply)
     }
 }
 
-TEST(TestExtendedLogTableArithmetic, divide)
+TEST(test_extended_log_table_arithmetic, divide)
 {
     {
         SCOPED_TRACE("binary4");
@@ -107,7 +107,7 @@ TEST(TestExtendedLogTableArithmetic, divide)
     }
 }
 
-TEST(TestExtendedLogTableArithmetic, invert)
+TEST(test_extended_log_table_arithmetic, invert)
 {
     {
         SCOPED_TRACE("binary4");
@@ -123,7 +123,7 @@ TEST(TestExtendedLogTableArithmetic, invert)
     }
 }
 
-TEST(TestExtendedLogTableArithmetic, random)
+TEST(test_extended_log_table_arithmetic, random)
 {
     {
         SCOPED_TRACE("binary4");

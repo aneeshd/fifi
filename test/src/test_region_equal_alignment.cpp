@@ -199,7 +199,7 @@ namespace fifi
     }
 }
 
-TEST(TestRegionEqualAlignment, alignment)
+TEST(test_region_equal_alignment, alignment)
 {
     fifi::dummy_stack<fifi::binary8> stack;
     fifi::dummy_stack<fifi::binary8>::BasicSuper& basic = stack;
@@ -213,7 +213,7 @@ TEST(TestRegionEqualAlignment, alignment)
     EXPECT_EQ(16U, stack.alignment());
 }
 
-TEST(TestRegionEqualAlignment, max_alignment)
+TEST(test_region_equal_alignment, max_alignment)
 {
     fifi::dummy_stack<fifi::binary8> stack;
     fifi::dummy_stack<fifi::binary8>::BasicSuper& basic = stack;
@@ -227,7 +227,7 @@ TEST(TestRegionEqualAlignment, max_alignment)
     EXPECT_EQ(16U, stack.max_alignment());
 }
 
-TEST(TestRegionEqualAlignment, all)
+TEST(test_region_equal_alignment, all)
 {
     {
         SCOPED_TRACE("binary");

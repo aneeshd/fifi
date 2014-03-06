@@ -61,12 +61,12 @@ namespace fifi
     }
 }
 
-TEST(TestBinary8RegionArithmeticFullTable, fall_through_binary4)
+TEST(test_binary8_region_arithmetic_full_table, fall_through_binary4)
 {
     fifi::test_region_fall_through<fifi::fall_through_stack<fifi::binary4>>();
 }
 
-TEST(TestBinary8RegionArithmeticFullTable, fall_through_binary8)
+TEST(test_binary8_region_arithmetic_full_table, fall_through_binary8)
 {
     typedef fifi::fall_through_stack<fifi::binary8> stack;
     typedef stack::field_type field_type;
@@ -112,13 +112,13 @@ TEST(TestBinary8RegionArithmeticFullTable, fall_through_binary8)
     fifi::test_fall_through_region_multiply_constant<stack>();
 }
 
-TEST(TestBinary8RegionArithmeticFullTable, multiply_add)
+TEST(test_binary8_region_arithmetic_full_table, multiply_add)
 {
     check_results_region_multiply_add<
         fifi::arithmetic_stack<fifi::binary8>>();
 }
 
-TEST(TestBinary8RegionArithmeticFullTable, multiply_subtract)
+TEST(test_binary8_region_arithmetic_full_table, multiply_subtract)
 {
     check_results_region_multiply_subtract<
         fifi::arithmetic_stack<fifi::binary8>>();

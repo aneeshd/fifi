@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-TEST(TestPrime2325, prime2325)
+TEST(test_prime2325, prime2325)
 {
     EXPECT_EQ(4294967290U, fifi::prime2325::max_value);
     EXPECT_EQ(0U, fifi::prime2325::min_value);

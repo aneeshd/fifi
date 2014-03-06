@@ -8,7 +8,7 @@
 #include <fifi/prime2325_prefix_length.hpp>
 
 
-TEST(TestPrime2325PrefixLength, prime2325_prefix_length)
+TEST(test_prime2325_prefix_length, prime2325_prefix_length)
 {
     // 2^y => 1 << y
 

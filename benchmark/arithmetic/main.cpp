@@ -457,7 +457,7 @@ BENCHMARK_OPTION(arithmetic_options)
 typedef arithmetic_setup<fifi::simple_online<fifi::binary8>>
     setup_simple_online_binary8;
 
-BENCHMARK_F(setup_simple_online_binary8, Arithmetic, SimpleOnline8, 5)
+BENCHMARK_F(setup_simple_online_binary8, Arithmetic, simple_online_binary8, 5)
 {
     benchmark();
 }
@@ -465,7 +465,7 @@ BENCHMARK_F(setup_simple_online_binary8, Arithmetic, SimpleOnline8, 5)
 typedef arithmetic_setup<fifi::simple_online<fifi::binary16>>
     setup_simple_online_binary16;
 
-BENCHMARK_F(setup_simple_online_binary16, Arithmetic, SimpleOnline16, 5)
+BENCHMARK_F(setup_simple_online_binary16, arithmetic, simple_online_binary16, 5)
 {
     benchmark();
 }
@@ -477,7 +477,7 @@ BENCHMARK_F(setup_simple_online_binary16, Arithmetic, SimpleOnline16, 5)
 typedef arithmetic_setup<fifi::full_table<fifi::binary4>>
     setup_full_table_binary4;
 
-BENCHMARK_F(setup_full_table_binary4, Arithmetic, FullTable4, 5)
+BENCHMARK_F(setup_full_table_binary4, arithmetic, full_table_binary4, 5)
 {
     benchmark();
 }
@@ -485,7 +485,7 @@ BENCHMARK_F(setup_full_table_binary4, Arithmetic, FullTable4, 5)
 typedef arithmetic_setup<fifi::full_table<fifi::binary8>>
     setup_full_table_binary8;
 
-BENCHMARK_F(setup_full_table_binary8, Arithmetic, FullTable8, 5)
+BENCHMARK_F(setup_full_table_binary8, arithmetic, full_table_binary8, 5)
 {
     benchmark();
 }
@@ -497,7 +497,7 @@ BENCHMARK_F(setup_full_table_binary8, Arithmetic, FullTable8, 5)
 typedef arithmetic_setup< fifi::log_table<fifi::binary8>>
     setup_log_table_binary8;
 
-BENCHMARK_F(setup_log_table_binary8, Arithmetic, LogTable8, 5)
+BENCHMARK_F(setup_log_table_binary8, arithmetic, log_table_binary8, 5)
 {
     benchmark();
 }
@@ -505,7 +505,7 @@ BENCHMARK_F(setup_log_table_binary8, Arithmetic, LogTable8, 5)
 typedef arithmetic_setup< fifi::log_table<fifi::binary16>>
     setup_log_table_binary16;
 
-BENCHMARK_F(setup_log_table_binary16, Arithmetic, LogTable16, 5)
+BENCHMARK_F(setup_log_table_binary16, arithmetic, log_table_binary16, 5)
 {
     benchmark();
 }
@@ -517,7 +517,8 @@ BENCHMARK_F(setup_log_table_binary16, Arithmetic, LogTable16, 5)
 typedef arithmetic_setup< fifi::extended_log_table<fifi::binary8>>
     setup_extended_log_table_binary8;
 
-BENCHMARK_F(setup_extended_log_table_binary8, Arithmetic, ExtendedLogTable8, 5)
+BENCHMARK_F(setup_extended_log_table_binary8, arithmetic,
+            extended_log_table_binary8, 5)
 {
     benchmark();
 }
@@ -525,7 +526,8 @@ BENCHMARK_F(setup_extended_log_table_binary8, Arithmetic, ExtendedLogTable8, 5)
 typedef arithmetic_setup< fifi::extended_log_table<fifi::binary16>>
     setup_extended_log_table_binary16;
 
-BENCHMARK_F(setup_extended_log_table_binary16, Arithmetic, ExtendedLogTable16, 5)
+BENCHMARK_F(setup_extended_log_table_binary16, arithmetic,
+            extended_log_table_binary16, 5)
 {
     benchmark();
 }
@@ -537,7 +539,7 @@ BENCHMARK_F(setup_extended_log_table_binary16, Arithmetic, ExtendedLogTable16, 5
 typedef arithmetic_setup< fifi::optimal_prime<fifi::prime2325>>
     setup_optimal_prime2325;
 
-BENCHMARK_F(setup_optimal_prime2325, Arithmetic, OptimalPrime2325, 5)
+BENCHMARK_F(setup_optimal_prime2325, arithmetic, optimal_prime2325, 5)
 {
     benchmark();
 }
@@ -549,7 +551,7 @@ BENCHMARK_F(setup_optimal_prime2325, Arithmetic, OptimalPrime2325, 5)
 typedef arithmetic_setup<fifi::unoptimized_binary8<fifi::binary8>>
     setup_unoptimized_binary8;
 
-BENCHMARK_F(setup_unoptimized_binary8, Arithmetic, UnoptimizedBinary8, 5)
+BENCHMARK_F(setup_unoptimized_binary8, arithmetic, unoptimized_binary8, 5)
 {
     benchmark();
 }

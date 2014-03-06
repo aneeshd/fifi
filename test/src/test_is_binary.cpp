@@ -12,7 +12,7 @@
 
 #include <gtest/gtest.h>
 
-TEST(TestIsBinary, is_binary)
+TEST(test_is_binary, is_binary)
 {
     EXPECT_TRUE(fifi::is_binary<fifi::binary>::value);
     EXPECT_FALSE(fifi::is_binary<fifi::binary4>::value);

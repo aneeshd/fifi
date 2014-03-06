@@ -9,7 +9,7 @@
 #include <fifi/binary.hpp>
 #include <fifi/binary4.hpp>
 
-TEST(TestIsValidElement, api)
+TEST(test_is_valid_element, api)
 {
     EXPECT_TRUE(fifi::is_valid_element<fifi::binary>(0U));
     EXPECT_TRUE(fifi::is_valid_element<fifi::binary>(1U));

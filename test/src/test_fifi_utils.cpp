@@ -11,7 +11,7 @@
 
 #include <gtest/gtest.h>
 
-TEST(TestFifiUtils, elements_to_size)
+TEST(test_fifi_utils, elements_to_size)
 {
     {
         SCOPED_TRACE("binary");
@@ -48,7 +48,7 @@ TEST(TestFifiUtils, elements_to_size)
     }
 }
 
-TEST(TestFifiUtils, elements_to_length)
+TEST(test_fifi_utils, elements_to_length)
 {
     {
         SCOPED_TRACE("binary");
@@ -81,7 +81,7 @@ TEST(TestFifiUtils, elements_to_length)
         EXPECT_EQ(100U, fifi::elements_to_length<fifi::prime2325>(100));
 }}
 
-TEST(TestFifiUtils, size_to_length)
+TEST(test_fifi_utils, size_to_length)
 {
     {
         SCOPED_TRACE("binary");
@@ -114,7 +114,7 @@ TEST(TestFifiUtils, size_to_length)
     }
 }
 
-TEST(TestFifiUtils, length_to_size)
+TEST(test_fifi_utils, length_to_size)
 {
     {
         SCOPED_TRACE("binary");
@@ -159,7 +159,7 @@ TEST(TestFifiUtils, length_to_size)
     }
 }
 
-TEST(TestFifiUtils, size_to_elements)
+TEST(test_fifi_utils, size_to_elements)
 {
     {
         SCOPED_TRACE("binary");
@@ -192,7 +192,7 @@ TEST(TestFifiUtils, size_to_elements)
     }
 }
 
-TEST(TestFifiUtils, length_to_elements)
+TEST(test_fifi_utils, length_to_elements)
 {
     {
         SCOPED_TRACE("binary");
@@ -225,7 +225,7 @@ TEST(TestFifiUtils, length_to_elements)
     }
 }
 
-TEST(TestFifiUtils, set_value_binary)
+TEST(test_fifi_utils, set_value_binary)
 {
     fifi::binary::value_type test[2] = { 0, 0 };
 
@@ -247,7 +247,7 @@ TEST(TestFifiUtils, set_value_binary)
     EXPECT_EQ(1U, test[1]);
 }
 
-TEST(TestFifiUtils, set_value_binary4)
+TEST(test_fifi_utils, set_value_binary4)
 {
     fifi::binary4::value_type test[2] = { 0, 0 };
 
@@ -290,7 +290,7 @@ TEST(TestFifiUtils, set_value_binary4)
     EXPECT_EQ(1U, test[1]);
 }
 
-TEST(TestFifiUtils, set_value_binary8)
+TEST(test_fifi_utils, set_value_binary8)
 {
     fifi::binary8::value_type test[2] = { 0, 0 };
 
@@ -312,7 +312,7 @@ TEST(TestFifiUtils, set_value_binary8)
     EXPECT_EQ(1U, test[1]);
 }
 
-TEST(TestFifiUtils, set_value_binary16)
+TEST(test_fifi_utils, set_value_binary16)
 {
     fifi::binary16::value_type test[2] = { 0, 0 };
 
@@ -334,7 +334,7 @@ TEST(TestFifiUtils, set_value_binary16)
     EXPECT_EQ(1U, test[1]);
 }
 
-TEST(TestFifiUtils, set_value_prime2325)
+TEST(test_fifi_utils, set_value_prime2325)
 {
     fifi::prime2325::value_type test[2] = { 0, 0 };
 
@@ -356,7 +356,7 @@ TEST(TestFifiUtils, set_value_prime2325)
     EXPECT_EQ(1U, test[1]);
 }
 
-TEST(TestFifiUtils, get_value_binary)
+TEST(test_fifi_utils, get_value_binary)
 {
     fifi::binary::value_type test[2] = { 0, 0 };
 
@@ -368,7 +368,7 @@ TEST(TestFifiUtils, get_value_binary)
     EXPECT_EQ(1U, fifi::get_value<fifi::binary>(&test_const[0], 7));
 }
 
-TEST(TestFifiUtils, get_value_binary4)
+TEST(test_fifi_utils, get_value_binary4)
 {
     fifi::binary4::value_type test[2] = { 0, 0 };
 
@@ -384,7 +384,7 @@ TEST(TestFifiUtils, get_value_binary4)
     EXPECT_EQ(4U, fifi::get_value<fifi::binary4>(&test_const[0],1));
 }
 
-TEST(TestFifiUtils, get_value_binary8)
+TEST(test_fifi_utils, get_value_binary8)
 {
     fifi::binary8::value_type test[2] = { 0, 0 };
 
@@ -398,7 +398,7 @@ TEST(TestFifiUtils, get_value_binary8)
     EXPECT_EQ(183U, fifi::get_value<fifi::binary8>(&test_const[0],1));
 }
 
-TEST(TestFifiUtils, get_value_binary16)
+TEST(test_fifi_utils, get_value_binary16)
 {
     fifi::binary16::value_type test[2] = { 0, 0 };
 
@@ -412,7 +412,7 @@ TEST(TestFifiUtils, get_value_binary16)
     EXPECT_EQ(1873U, fifi::get_value<fifi::binary16>(&test_const[0],1));
 }
 
-TEST(TestFifiUtils, swap_values_binary)
+TEST(test_fifi_utils, swap_values_binary)
 {
     fifi::binary::value_type test[2] = { 0x00, 0xff };
 
@@ -429,7 +429,7 @@ TEST(TestFifiUtils, swap_values_binary)
     EXPECT_EQ(0x00, test_const[1]);
 }
 
-TEST(TestFifiUtils, swap_values_binary4)
+TEST(test_fifi_utils, swap_values_binary4)
 {
     fifi::binary4::value_type test[2] = { 0x00, 0xff };
 
@@ -446,7 +446,7 @@ TEST(TestFifiUtils, swap_values_binary4)
     EXPECT_EQ(0x00, test_const[1]);
 }
 
-TEST(TestFifiUtils, swap_values_binary8)
+TEST(test_fifi_utils, swap_values_binary8)
 {
     fifi::binary8::value_type test[2] = { 0x00, 0xff };
 
@@ -459,7 +459,7 @@ TEST(TestFifiUtils, swap_values_binary8)
     EXPECT_EQ(0x00, test_const[1]);
 }
 
-TEST(TestFifiUtils, pack)
+TEST(test_fifi_utils, pack)
 {
     {
         SCOPED_TRACE("binary");

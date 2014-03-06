@@ -21,7 +21,7 @@ void test_is_packed_constant(typename Field::value_type constant, bool expected)
     EXPECT_EQ(expected, fifi::is_packed_constant<Field>(constant));
 }
 
-TEST(TestIsPackedConstant, binary)
+TEST(test_is_packed_constant, binary)
 {
     test_is_packed_constant<fifi::binary>(0x00, true);
     test_is_packed_constant<fifi::binary>(0xFF, true);
@@ -31,7 +31,7 @@ TEST(TestIsPackedConstant, binary)
     test_is_packed_constant<fifi::binary>(0xFA, false);
 }
 
-TEST(TestIsPackedConstant, binary4)
+TEST(test_is_packed_constant, binary4)
 {
     test_is_packed_constant<fifi::binary4>(0x00, true);
     test_is_packed_constant<fifi::binary4>(0x11, true);
@@ -80,7 +80,7 @@ TEST(TestIsPackedConstant, binary4)
     test_is_packed_constant<fifi::binary4>(0xFE, false);
 }
 
-TEST(TestIsPackedConstant, binary8)
+TEST(test_is_packed_constant, binary8)
 {
     test_is_packed_constant<fifi::binary8>(0x00, true);
     test_is_packed_constant<fifi::binary8>(0x34, true);
@@ -89,7 +89,7 @@ TEST(TestIsPackedConstant, binary8)
     test_is_packed_constant<fifi::binary8>(0xFF, true);
 }
 
-TEST(TestIsPackedConstant, binary16)
+TEST(test_is_packed_constant, binary16)
 {
     test_is_packed_constant<fifi::binary16>(0x0000, true);
     test_is_packed_constant<fifi::binary16>(0x34FA, true);
@@ -98,7 +98,7 @@ TEST(TestIsPackedConstant, binary16)
     test_is_packed_constant<fifi::binary16>(0xFFFF, true);
 }
 
-TEST(TestIsPackedConstant, prime2325)
+TEST(test_is_packed_constant, prime2325)
 {
     test_is_packed_constant<fifi::prime2325>(0x00000000, true);
     test_is_packed_constant<fifi::prime2325>(0x34FAA5D3, true);

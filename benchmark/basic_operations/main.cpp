@@ -212,22 +212,22 @@ protected:
 typedef basic_operations_setup< fifi::simple_online<fifi::binary8> >
     setup_simple_online_binary8;
 
-BENCHMARK_F(setup_simple_online_binary8, SimpleOnline8, Multiply, 5)
+BENCHMARK_F(setup_simple_online_binary8, simple_online_binary8, multiply, 5)
 {
     run_multiply();
 }
 
-BENCHMARK_F(setup_simple_online_binary8, SimpleOnline8, Divide, 5)
+BENCHMARK_F(setup_simple_online_binary8, simple_online_binary8, divide, 5)
 {
     run_divide();
 }
 
-BENCHMARK_F(setup_simple_online_binary8, SimpleOnline8, Add, 5)
+BENCHMARK_F(setup_simple_online_binary8, simple_online_binary8, add, 5)
 {
     run_add();
 }
 
-BENCHMARK_F(setup_simple_online_binary8, SimpleOnline8, Subtract, 5)
+BENCHMARK_F(setup_simple_online_binary8, simple_online_binary8, subtract, 5)
 {
     run_subtract();
 }
@@ -236,22 +236,22 @@ BENCHMARK_F(setup_simple_online_binary8, SimpleOnline8, Subtract, 5)
 typedef basic_operations_setup< fifi::simple_online<fifi::binary16> >
     setup_simple_online_binary16;
 
-BENCHMARK_F(setup_simple_online_binary16, SimpleOnline16, Multiply, 5)
+BENCHMARK_F(setup_simple_online_binary16, simple_online_binary16, multiply, 5)
 {
     run_multiply();
 }
 
-BENCHMARK_F(setup_simple_online_binary16, SimpleOnline16, Divide, 5)
+BENCHMARK_F(setup_simple_online_binary16, simple_online_binary16, divide, 5)
 {
     run_divide();
 }
 
-BENCHMARK_F(setup_simple_online_binary16, SimpleOnline16, Add, 5)
+BENCHMARK_F(setup_simple_online_binary16, simple_online_binary16, add, 5)
 {
     run_add();
 }
 
-BENCHMARK_F(setup_simple_online_binary16, SimpleOnline16, Subtract, 5)
+BENCHMARK_F(setup_simple_online_binary16, simple_online_binary16, subtract, 5)
 {
     run_subtract();
 }
@@ -260,22 +260,22 @@ BENCHMARK_F(setup_simple_online_binary16, SimpleOnline16, Subtract, 5)
 typedef basic_operations_setup< fifi::full_table<fifi::binary8> >
     setup_full_table_binary8;
 
-BENCHMARK_F(setup_full_table_binary8, FullTable8, Multiply, 5)
+BENCHMARK_F(setup_full_table_binary8, full_table_binary8, multiply, 5)
 {
     run_multiply();
 }
 
-BENCHMARK_F(setup_full_table_binary8, FullTable8, Divide, 5)
+BENCHMARK_F(setup_full_table_binary8, full_table_binary8, divide, 5)
 {
     run_divide();
 }
 
-BENCHMARK_F(setup_full_table_binary8, FullTable8, Add, 5)
+BENCHMARK_F(setup_full_table_binary8, full_table_binary8, add, 5)
 {
     run_add();
 }
 
-BENCHMARK_F(setup_full_table_binary8, FullTable8, Subtract, 5)
+BENCHMARK_F(setup_full_table_binary8, full_table_binary8, subtract, 5)
 {
     run_subtract();
 }
@@ -284,22 +284,22 @@ BENCHMARK_F(setup_full_table_binary8, FullTable8, Subtract, 5)
 typedef basic_operations_setup< fifi::log_table<fifi::binary8> >
     setup_log_table_binary8;
 
-BENCHMARK_F(setup_log_table_binary8, LogTable8, Multiply, 5)
+BENCHMARK_F(setup_log_table_binary8, log_table_binary8, multiply, 5)
 {
     run_multiply();
 }
 
-BENCHMARK_F(setup_log_table_binary8, LogTable8, Divide, 5)
+BENCHMARK_F(setup_log_table_binary8, log_table_binary8, divide, 5)
 {
     run_divide();
 }
 
-BENCHMARK_F(setup_log_table_binary8, LogTable8, Add, 5)
+BENCHMARK_F(setup_log_table_binary8, log_table_binary8, add, 5)
 {
     run_add();
 }
 
-BENCHMARK_F(setup_log_table_binary8, LogTable8, Subtract, 5)
+BENCHMARK_F(setup_log_table_binary8, log_table_binary8, subtract, 5)
 {
     run_subtract();
 }
@@ -308,22 +308,22 @@ BENCHMARK_F(setup_log_table_binary8, LogTable8, Subtract, 5)
 typedef basic_operations_setup< fifi::log_table<fifi::binary16> >
     setup_log_table_binary16;
 
-BENCHMARK_F(setup_log_table_binary16, LogTable16, Multiply, 5)
+BENCHMARK_F(setup_log_table_binary16, log_table_binary16, multiply, 5)
 {
     run_multiply();
 }
 
-BENCHMARK_F(setup_log_table_binary16, LogTable16, Divide, 5)
+BENCHMARK_F(setup_log_table_binary16, log_table_binary16, divide, 5)
 {
     run_divide();
 }
 
-BENCHMARK_F(setup_log_table_binary16, LogTable16, Add, 5)
+BENCHMARK_F(setup_log_table_binary16, log_table_binary16, add, 5)
 {
     run_add();
 }
 
-BENCHMARK_F(setup_log_table_binary16, LogTable16, Subtract, 5)
+BENCHMARK_F(setup_log_table_binary16, log_table_binary16, subtract, 5)
 {
     run_subtract();
 }
@@ -332,22 +332,22 @@ BENCHMARK_F(setup_log_table_binary16, LogTable16, Subtract, 5)
 typedef basic_operations_setup< fifi::extended_log_table<fifi::binary8> >
     setup_extended_log_table_binary8;
 
-BENCHMARK_F(setup_extended_log_table_binary8, ExtendedLogTable8, Multiply, 5)
+BENCHMARK_F(setup_extended_log_table_binary8, extended_log_table_binary8, multiply, 5)
 {
     run_multiply();
 }
 
-BENCHMARK_F(setup_extended_log_table_binary8, ExtendedLogTable8, Divide, 5)
+BENCHMARK_F(setup_extended_log_table_binary8, extended_log_table_binary8, divide, 5)
 {
     run_divide();
 }
 
-BENCHMARK_F(setup_extended_log_table_binary8, ExtendedLogTable8, Add, 5)
+BENCHMARK_F(setup_extended_log_table_binary8, extended_log_table_binary8, add, 5)
 {
     run_add();
 }
 
-BENCHMARK_F(setup_extended_log_table_binary8, ExtendedLogTable8, Subtract, 5)
+BENCHMARK_F(setup_extended_log_table_binary8, extended_log_table_binary8, subtract, 5)
 {
     run_subtract();
 }
@@ -356,22 +356,26 @@ BENCHMARK_F(setup_extended_log_table_binary8, ExtendedLogTable8, Subtract, 5)
 typedef basic_operations_setup< fifi::extended_log_table<fifi::binary16> >
     setup_extended_log_table_binary16;
 
-BENCHMARK_F(setup_extended_log_table_binary16, ExtendedLogTable16, Multiply, 5)
+BENCHMARK_F(setup_extended_log_table_binary16,
+            extended_log_table_binary16, multiply, 5)
 {
     run_multiply();
 }
 
-BENCHMARK_F(setup_extended_log_table_binary16, ExtendedLogTable16, Divide, 5)
+BENCHMARK_F(setup_extended_log_table_binary16,
+            extended_log_table_binary16, divide, 5)
 {
     run_divide();
 }
 
-BENCHMARK_F(setup_extended_log_table_binary16, ExtendedLogTable16, Add, 5)
+BENCHMARK_F(setup_extended_log_table_binary16,
+            extended_log_table_binary16, add, 5)
 {
     run_add();
 }
 
-BENCHMARK_F(setup_extended_log_table_binary16, ExtendedLogTable16, Subtract, 5)
+BENCHMARK_F(setup_extended_log_table_binary16,
+            extended_log_table_binary16, subtract, 5)
 {
     run_subtract();
 }
@@ -380,22 +384,22 @@ BENCHMARK_F(setup_extended_log_table_binary16, ExtendedLogTable16, Subtract, 5)
 typedef basic_operations_setup< fifi::optimal_prime<fifi::prime2325> >
     setup_optimal_prime2325;
 
-BENCHMARK_F(setup_optimal_prime2325, OptimalPrime2325, Multiply, 5)
+BENCHMARK_F(setup_optimal_prime2325, optimal_prime2325, multiply, 5)
 {
     run_multiply();
 }
 
-BENCHMARK_F(setup_optimal_prime2325, OptimalPrime2325, Divide, 5)
+BENCHMARK_F(setup_optimal_prime2325, optimal_prime2325, divide, 5)
 {
     run_divide();
 }
 
-BENCHMARK_F(setup_optimal_prime2325, OptimalPrime2325, Add, 5)
+BENCHMARK_F(setup_optimal_prime2325, optimal_prime2325, add, 5)
 {
     run_add();
 }
 
-BENCHMARK_F(setup_optimal_prime2325, OptimalPrime2325, Subtract, 5)
+BENCHMARK_F(setup_optimal_prime2325, optimal_prime2325, subtract, 5)
 {
     run_subtract();
 }

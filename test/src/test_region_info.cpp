@@ -52,7 +52,7 @@ void test_region_max_granularity()
 }
 
 
-TEST(TestRegionInfo, alignment)
+TEST(test_region_info, alignment)
 {
     {
         SCOPED_TRACE("binary");
@@ -76,7 +76,7 @@ TEST(TestRegionInfo, alignment)
     }
 }
 
-TEST(TestRegionInfo, max_alignment)
+TEST(test_region_info, max_alignment)
 {
     {
         SCOPED_TRACE("binary");
@@ -100,7 +100,7 @@ TEST(TestRegionInfo, max_alignment)
     }
 }
 
-TEST(TestRegionInfo, granularity)
+TEST(test_region_info, granularity)
 {
     {
         SCOPED_TRACE("binary");
@@ -124,7 +124,7 @@ TEST(TestRegionInfo, granularity)
     }
 }
 
-TEST(TestRegionInfo, max_granularity)
+TEST(test_region_info, max_granularity)
 {
     {
         SCOPED_TRACE("binary");

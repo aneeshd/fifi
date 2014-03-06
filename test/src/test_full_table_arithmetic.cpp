@@ -59,7 +59,7 @@ inline void helper_fall_through()
     fifi::test_fall_through_subtract<stack>();
 }
 
-TEST(TestFullTableArithmetic, fall_through)
+TEST(test_full_table_arithmetic, fall_through)
 {
     {
         SCOPED_TRACE("binary4");
@@ -71,7 +71,7 @@ TEST(TestFullTableArithmetic, fall_through)
     }
 }
 
-TEST(TestFullTableArithmetic, multiply)
+TEST(test_full_table_arithmetic, multiply)
 {
     {
         SCOPED_TRACE("binary4");
@@ -83,7 +83,7 @@ TEST(TestFullTableArithmetic, multiply)
     }
 }
 
-TEST(TestFullTableArithmetic, divide)
+TEST(test_full_table_arithmetic, divide)
 {
     {
         SCOPED_TRACE("binary4");
@@ -95,7 +95,7 @@ TEST(TestFullTableArithmetic, divide)
     }
 }
 
-TEST(TestFullTableArithmetic, invert)
+TEST(test_full_table_arithmetic, invert)
 {
     {
         SCOPED_TRACE("binary4");
@@ -107,7 +107,7 @@ TEST(TestFullTableArithmetic, invert)
     }
 }
 
-TEST(TestFullTableArithmetic, random)
+TEST(test_full_table_arithmetic, random)
 {
     {
         SCOPED_TRACE("binary4");

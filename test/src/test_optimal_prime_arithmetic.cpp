@@ -23,23 +23,23 @@ namespace fifi
     }
 }
 
-TEST(TestOptimalPrimeArithmetic, multiply)
+TEST(test_optimal_prime_arithmetic, multiply)
 {
     check_results_multiply<fifi::dummy_stack<fifi::prime2325> >();
 }
 
-TEST(TestOptimalPrimeArithmetic, divide)
+TEST(test_optimal_prime_arithmetic, divide)
 {
     check_results_divide<fifi::dummy_stack<fifi::prime2325> >();
 }
 
-TEST(TestOptimalPrimeArithmetic, invert)
+TEST(test_optimal_prime_arithmetic, invert)
 {
 
     check_results_invert<fifi::dummy_stack<fifi::prime2325> >();
 }
 
-TEST(TestOptimalPrimeArithmetic, random)
+TEST(test_optimal_prime_arithmetic, random)
 {
     check_random_default<fifi::dummy_stack<fifi::prime2325> >();
 }

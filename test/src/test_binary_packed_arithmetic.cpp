@@ -34,7 +34,7 @@ namespace fifi
     }
 }
 
-TEST(TestBinaryPackedArithmetic, fall_through_binary)
+TEST(test_binary_packed_arithmetic, fall_through_binary)
 {
     typedef fifi::dummy_stack<fifi::binary> stack;
     // The binary field specialization for this layer implements multiply,
@@ -53,42 +53,42 @@ TEST(TestBinaryPackedArithmetic, fall_through_binary)
     EXPECT_EQ(expected_calls, s.m_calls);
 }
 
-TEST(TestBinaryPackedArithmetic, fall_through_binary4)
+TEST(test_binary_packed_arithmetic, fall_through_binary4)
 {
     fifi::test_fall_through<fifi::dummy_stack<fifi::binary4>>();
 }
 
-TEST(TestBinaryPackedArithmetic, fall_through_binary8)
+TEST(test_binary_packed_arithmetic, fall_through_binary8)
 {
     fifi::test_fall_through<fifi::dummy_stack<fifi::binary8>>();
 }
 
-TEST(TestBinaryPackedArithmetic, fall_through_binary16)
+TEST(test_binary_packed_arithmetic, fall_through_binary16)
 {
     fifi::test_fall_through<fifi::dummy_stack<fifi::binary16>>();
 }
 
-TEST(TestBinaryPackedArithmetic, add)
+TEST(test_binary_packed_arithmetic, add)
 {
     check_results_packed_add<fifi::dummy_stack<fifi::binary>>();
 }
 
-TEST(TestBinaryPackedArithmetic, subtract)
+TEST(test_binary_packed_arithmetic, subtract)
 {
     check_results_packed_subtract<fifi::dummy_stack<fifi::binary>>();
 }
 
-TEST(TestBinaryPackedArithmetic, multiply)
+TEST(test_binary_packed_arithmetic, multiply)
 {
     check_results_packed_multiply<fifi::dummy_stack<fifi::binary> >();
 }
 
-TEST(TestBinaryPackedArithmetic, divide)
+TEST(test_binary_packed_arithmetic, divide)
 {
     check_results_packed_divide<fifi::dummy_stack<fifi::binary>>();
 }
 
-TEST(TestBinaryPackedArithmetic, invert)
+TEST(test_binary_packed_arithmetic, invert)
 {
     check_results_packed_invert<fifi::dummy_stack<fifi::binary>>();
 }

@@ -25,7 +25,7 @@ namespace fifi
     }
 }
 
-TEST(TestHasBasicSuper, api)
+TEST(test_has_basic_super, api)
 {
     EXPECT_FALSE(fifi::has_basic_super<fifi::dummy_stack1>::value);
     EXPECT_TRUE(fifi::has_basic_super<fifi::dummy_stack2>::value);

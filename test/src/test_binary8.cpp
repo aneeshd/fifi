@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-TEST(TestBinary8, binary8)
+TEST(test_binary8, binary8)
 {
     EXPECT_EQ(255U, fifi::binary8::max_value);
     EXPECT_EQ(0U, fifi::binary8::min_value);

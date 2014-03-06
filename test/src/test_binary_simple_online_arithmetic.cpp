@@ -29,7 +29,7 @@ namespace fifi
     }
 }
 
-TEST(TestBinarySimpleOnlineArithmetic, fall_through_binary)
+TEST(test_binary_simple_online_arithmetic, fall_through_binary)
 {
     typedef fifi::dummy_stack<fifi::binary> stack;
     // The binary field specialization for this layer implements multiply,
@@ -50,37 +50,37 @@ TEST(TestBinarySimpleOnlineArithmetic, fall_through_binary)
     fifi::test_fall_through_subtract<stack>();
 }
 
-TEST(TestBinarySimpleOnlineArithmetic, fall_through_binary4)
+TEST(test_binary_simple_online_arithmetic, fall_through_binary4)
 {
     fifi::test_fall_through<fifi::dummy_stack<fifi::binary4>>();
 }
 
-TEST(TestBinarySimpleOnlineArithmetic, fall_through_binary8)
+TEST(test_binary_simple_online_arithmetic, fall_through_binary8)
 {
     fifi::test_fall_through<fifi::dummy_stack<fifi::binary8>>();
 }
 
-TEST(TestBinarySimpleOnlineArithmetic, fall_through_binary16)
+TEST(test_binary_simple_online_arithmetic, fall_through_binary16)
 {
     fifi::test_fall_through<fifi::dummy_stack<fifi::binary16>>();
 }
 
-TEST(TestBinarySimpleOnlineArithmetic, multiply)
+TEST(test_binary_simple_online_arithmetic, multiply)
 {
     check_results_multiply<fifi::dummy_stack<fifi::binary> >();
 }
 
-TEST(TestBinarySimpleOnlineArithmetic, divide)
+TEST(test_binary_simple_online_arithmetic, divide)
 {
     check_results_divide<fifi::dummy_stack<fifi::binary>>();
 }
 
-TEST(TestBinarySimpleOnlineArithmetic, invert)
+TEST(test_binary_simple_online_arithmetic, invert)
 {
     check_results_invert<fifi::dummy_stack<fifi::binary>>();
 }
 
-TEST(TestBinarySimpleOnlineArithmetic, random)
+TEST(test_binary_simple_online_arithmetic, random)
 {
     check_random_default<fifi::dummy_stack<fifi::binary>>();
 }

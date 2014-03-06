@@ -46,7 +46,7 @@ inline void check_results_sum_modulo()
 }
 
 
-TEST(TestSumModulo, sum_modulo)
+TEST(test_sum_modulo, sum_modulo)
 {
     {
         SCOPED_TRACE("binary");
