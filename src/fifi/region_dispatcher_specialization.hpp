@@ -268,13 +268,13 @@ namespace fifi
         >
         void bind_region_add(const T* stack)
         {
-            using namespace std::placeholders;
-            m_add = std::bind(&T::region_add, stack, _1, _2, _3);
+            namespace sp = std::placeholders;
+            m_add = std::bind(&T::region_add, stack, sp::_1, sp::_2, sp::_3);
         }
 
         /// Helper function called if the chosen stack does not
-        /// support the desired operation. In this case this function
-        /// will be instantiated ensureing that the code will
+        /// support the desired operation. In this case, this function
+        /// will be instantiated ensuring that the code will
         /// compile. To avoid asserting the calling code should use
         /// the has_region_add<T>::value helper
         ///
@@ -306,9 +306,9 @@ namespace fifi
         >
         void bind_region_subtract(const T* stack)
         {
-            using namespace std::placeholders;
+            namespace sp = std::placeholders;
             m_subtract = std::bind(
-                &T::region_subtract, stack, _1, _2, _3);
+                &T::region_subtract, stack, sp::_1, sp::_2, sp::_3);
         }
 
         /// @copydoc bind_region_add(const T*)
@@ -334,9 +334,9 @@ namespace fifi
         >
         void bind_region_multiply(const T* stack)
         {
-            using namespace std::placeholders;
+            namespace sp = std::placeholders;
             m_multiply = std::bind(
-                &T::region_multiply, stack, _1, _2, _3);
+                &T::region_multiply, stack, sp::_1, sp::_2, sp::_3);
         }
 
         /// @copydoc bind_region_add(const T*)
@@ -362,9 +362,9 @@ namespace fifi
         >
         void bind_region_divide(const T* stack)
         {
-            using namespace std::placeholders;
+            namespace sp = std::placeholders;
             m_divide = std::bind(
-                &T::region_divide, stack, _1, _2, _3);
+                &T::region_divide, stack, sp::_1, sp::_2, sp::_3);
         }
 
         /// @copydoc bind_region_add(const T*)
@@ -390,9 +390,9 @@ namespace fifi
         >
         void bind_region_multiply_constant(const T* stack)
         {
-            using namespace std::placeholders;
+            namespace sp = std::placeholders;
             m_multiply_constant = std::bind(
-                &T::region_multiply_constant, stack, _1, _2, _3);
+                &T::region_multiply_constant, stack, sp::_1, sp::_2, sp::_3);
         }
 
         /// @copydoc bind_region_add(const T*)
@@ -418,9 +418,9 @@ namespace fifi
         >
         void bind_region_multiply_add(const T* stack)
         {
-            using namespace std::placeholders;
+            namespace sp = std::placeholders;
             m_multiply_add = std::bind(
-                &T::region_multiply_add, stack, _1, _2, _3, _4);
+                &T::region_multiply_add, stack, sp::_1, sp::_2, sp::_3, sp::_4);
         }
 
         /// @copydoc bind_region_add(const T*)
@@ -446,9 +446,9 @@ namespace fifi
         >
         void bind_region_multiply_subtract(const T* stack)
         {
-            using namespace std::placeholders;
-            m_multiply_subtract = std::bind(
-                &T::region_multiply_subtract, stack, _1, _2, _3, _4);
+            namespace sp = std::placeholders;
+            m_multiply_subtract = std::bind(&T::region_multiply_subtract,
+                stack, sp::_1, sp::_2, sp::_3, sp::_4);
         }
 
         /// @copydoc bind_region_add(const T*)
