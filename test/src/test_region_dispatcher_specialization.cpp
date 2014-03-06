@@ -186,21 +186,18 @@ TEST(TestRegionDispatcherSpecialization, region_multiply_constant)
     disabled_stack.region_multiply(dest.data(), src.data(), length);
     disabled_stack.region_divide(dest.data(), src.data(), length);
     disabled_stack.region_multiply_constant(dest.data(), constant, length);
-    disabled_stack.region_multiply_add(dest.data(), src.data(), constant,
-        length);
-    disabled_stack.region_multiply_subtract(dest.data(), src.data(), constant,
-        length);
+    disabled_stack.region_multiply_add(
+        dest.data(), src.data(), constant, length);
+    disabled_stack.region_multiply_subtract(
+        dest.data(), src.data(), constant, length);
 
     enabled_stack.region_add(dest.data(), src.data(), length);
     enabled_stack.region_subtract(dest.data(), src.data(), length);
-
-    /// @todo enable this when we've fixed the problem in the dispatcher.
-    //enabled_stack.region_multiply(dest.data(), src.data(), length);
-    //enabled_stack.region_divide(dest.data(), src.data(), length);
-
+    enabled_stack.region_multiply(dest.data(), src.data(), length);
+    enabled_stack.region_divide(dest.data(), src.data(), length);
     enabled_stack.region_multiply_constant(dest.data(), constant, length);
-    enabled_stack.region_multiply_add(dest.data(), src.data(), constant,
-        length);
-    enabled_stack.region_multiply_subtract(dest.data(), src.data(), constant,
-        length);
+    enabled_stack.region_multiply_add(
+        dest.data(), src.data(), constant, length);
+    enabled_stack.region_multiply_subtract(
+        dest.data(), src.data(), constant, length);
 }
