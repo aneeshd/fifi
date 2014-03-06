@@ -17,12 +17,15 @@
 
 namespace fifi
 {
+    // Put dummy layers and tests classes in an anonymous namespace
+    // to avoid violations of ODF (one-definition-rule) in other
+    // translation units
     namespace
     {
         template<class Field>
         struct dummy_stack : public
-        polynomial_degree<
-        final<Field> >
+            polynomial_degree<
+            final<Field> >
         { };
     }
 }

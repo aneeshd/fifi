@@ -91,7 +91,7 @@ namespace fifi
                 EXPECT_TRUE(Enabled);
             }
 
-            static bool enabled()
+            bool enabled() const
             {
                 return Enabled;
             }
@@ -101,20 +101,36 @@ namespace fifi
             public region_dispatcher_specialization<
                        binary,
                        helper_region_info<
-                           2U, 20U, 4U, 40U, dummy<binary, true>>,
+                           /*alignment=*/2U,
+                           /*max_alignment=*/20U,
+                           /*granularity=*/4U,
+                           /*max_granularity=*/40U,
+                       dummy<binary, true>>,
                        binary,
                        helper_region_info<
-                           1U, 10U, 3U, 30U, dummy<binary, false>>>
+                           /*alignment=*/1U,
+                           /*max_alignment=*/10U,
+                           /*granularity=*/3U,
+                           /*max_granularity=*/30U,
+                       dummy<binary, false>>>
         { };
 
         class dummy_stack_disabled :
             public region_dispatcher_specialization<
                        binary,
                        helper_region_info<
-                           2U, 20U, 4U, 40U, dummy<binary, false>>,
+                           /*alignment=*/2U,
+                           /*max_alignment=*/20U,
+                           /*granularity=*/4U,
+                           /*max_granularity=*/40U,
+                       dummy<binary, false>>,
                        binary,
                        helper_region_info<
-                           1U, 10U, 3U, 30U, dummy<binary, true>>>
+                           /*alignment=*/1U,
+                           /*max_alignment=*/10U,
+                           /*granularity=*/3U,
+                           /*max_granularity=*/30U,
+                       dummy<binary, true>>>
         { };
     }
 }
@@ -170,21 +186,18 @@ TEST(TestRegionDispatcherSpecialization, region_multiply_constant)
     disabled_stack.region_multiply(dest.data(), src.data(), length);
     disabled_stack.region_divide(dest.data(), src.data(), length);
     disabled_stack.region_multiply_constant(dest.data(), constant, length);
-    disabled_stack.region_multiply_add(dest.data(), src.data(), constant,
-        length);
-    disabled_stack.region_multiply_subtract(dest.data(), src.data(), constant,
-        length);
+    disabled_stack.region_multiply_add(
+        dest.data(), src.data(), constant, length);
+    disabled_stack.region_multiply_subtract(
+        dest.data(), src.data(), constant, length);
 
     enabled_stack.region_add(dest.data(), src.data(), length);
     enabled_stack.region_subtract(dest.data(), src.data(), length);
-
-    /// @todo enable this when we've fixed the problem in the dispatcher.
-    //enabled_stack.region_multiply(dest.data(), src.data(), length);
-    //enabled_stack.region_divide(dest.data(), src.data(), length);
-
+    enabled_stack.region_multiply(dest.data(), src.data(), length);
+    enabled_stack.region_divide(dest.data(), src.data(), length);
     enabled_stack.region_multiply_constant(dest.data(), constant, length);
-    enabled_stack.region_multiply_add(dest.data(), src.data(), constant,
-        length);
-    enabled_stack.region_multiply_subtract(dest.data(), src.data(), constant,
-        length);
+    enabled_stack.region_multiply_add(
+        dest.data(), src.data(), constant, length);
+    enabled_stack.region_multiply_subtract(
+        dest.data(), src.data(), constant, length);
 }

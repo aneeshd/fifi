@@ -58,16 +58,6 @@ namespace fifi
         void region_subtract(
             value_type* dest, const value_type* src, uint32_t length) const;
 
-        /// @copydoc layer::region_multiply(
-        ///     value_type*, value_type*, uint32_t) const
-        void region_multiply(
-            value_type* dest, const value_type* src, uint32_t length) const;
-
-        /// @copydoc layer::region_divide(
-        ///     value_type*, value_type*, uint32_t) const
-        void region_divide(
-            value_type* dest, const value_type* src, uint32_t length) const;
-
         /// @copydoc layer::region_multiply_constant(
         ///      value_type*, value_type, uint32_t) const
         void region_multiply_constant(
@@ -97,7 +87,7 @@ namespace fifi
 
         /// @return true if the executable was built with SSSE3 binary4
         ///         full table support
-        static bool enabled();
+        bool enabled() const;
 
     private:
 

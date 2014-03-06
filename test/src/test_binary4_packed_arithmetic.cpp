@@ -60,7 +60,7 @@ TEST(TestBinary4PackedArithmetic, fall_through_binary4)
         s.m_calls.clear();
         expected_calls.clear();
 
-        // Only add and subtract is independenct of the underlying implementation
+        // add and subtract are independent of the underlying implementation
         s.packed_add(1U, 1U);
         s.packed_subtract(1U, 1U);
 
@@ -161,4 +161,3 @@ TEST(TestBinary4PackedArithmetic, packed_invert)
 {
     check_results_packed_invert<fifi::arithmetic_stack<fifi::binary4>>();
 }
-

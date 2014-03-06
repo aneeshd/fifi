@@ -206,10 +206,10 @@ namespace fifi
     uint32_t ssse3_binary8_full_table::granularity() const
     {
         // We are working over 16 bytes at a time i.e. 128 bits so we
-        // require a length granularity of 16. We expect that binary4
+        // require a length granularity of 16. We expect that binary8
         // uses uint8_t as value_type
         static_assert(std::is_same<value_type, uint8_t>::value,
-                      "Here we expect binary4 to use uint8_t as value_type");
+                      "Here we expect binary8 to use uint8_t as value_type");
         return 16U;
     }
 
@@ -218,7 +218,7 @@ namespace fifi
         return granularity();
     }
 
-    bool ssse3_binary8_full_table::enabled()
+    bool ssse3_binary8_full_table::enabled() const
     {
         static cpuid::cpuinfo info;
         return info.has_ssse3();
@@ -292,7 +292,7 @@ namespace fifi
         return 0;
     }
 
-    bool ssse3_binary8_full_table::enabled()
+    bool ssse3_binary8_full_table::enabled() const
     {
         return false;
     }

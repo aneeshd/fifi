@@ -14,15 +14,7 @@
 
 namespace fifi
 {
-    /// sizeof(value_type) = 2
-    /// alignement = 16
-    /// extra = 8
-    ///
-    /// length = 5
-    /// alignement = 8;
-    /// ValueType uint16_t
-    ///
-    ///
+    /// Helper class to allocate a buffer with a given length and alignment
     template<class ValueType>
     class helper_test_buffer
     {
@@ -83,7 +75,7 @@ namespace fifi
 
         bool operator==(const helper_test_buffer &other) const
         {
-            if(m_length != other.m_length)
+            if (m_length != other.m_length)
                 return false;
 
             return std::equal(m_data_ptr, m_data_ptr + m_length,
@@ -104,8 +96,8 @@ namespace fifi
 
         uint32_t m_length;
         uint32_t m_alignment;
-        std::vector<ValueType> m_data;
-        ValueType* m_data_ptr;
+        std::vector<value_type> m_data;
+        value_type* m_data_ptr;
     };
 
     template<class Field>

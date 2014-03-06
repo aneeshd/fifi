@@ -419,7 +419,7 @@ namespace fifi
 
         // Arithmetic
 
-        if (calls.m_call_add.empty())
+        if (!calls.m_call_add.empty())
             out << "\tm_call_add:" << std::endl;
         for (const auto& v : calls.m_call_add)
         {
@@ -427,7 +427,7 @@ namespace fifi
                 << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
         }
 
-        if (calls.m_call_subtract.empty())
+        if (!calls.m_call_subtract.empty())
             out << "\tm_call_subtract:" << std::endl;
         for (const auto& v : calls.m_call_subtract)
         {
@@ -435,7 +435,7 @@ namespace fifi
                 << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
         }
 
-        if (calls.m_call_multiply.empty())
+        if (!calls.m_call_multiply.empty())
             out << "\tm_call_multiply:" << std::endl;
         for (const auto& v : calls.m_call_multiply)
         {
@@ -443,7 +443,7 @@ namespace fifi
                 << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
         }
 
-        if (calls.m_call_divide.empty())
+        if (!calls.m_call_divide.empty())
             out << "\tm_call_divide:" << std::endl;
         for (const auto& v : calls.m_call_divide)
         {
@@ -451,7 +451,7 @@ namespace fifi
                 << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
         }
 
-        if (calls.m_call_invert.empty())
+        if (!calls.m_call_invert.empty())
             out << "\tm_call_invert:" << std::endl;
         for (const auto& v : calls.m_call_invert)
         {
@@ -460,35 +460,35 @@ namespace fifi
 
         // Arithmetic returns
 
-        if (calls.m_return_add.empty())
+        if (!calls.m_return_add.empty())
             out << "\tm_return_add:" << std::endl;
         for (const auto& v : calls.m_return_add)
         {
             out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
         }
 
-        if (calls.m_return_subtract.empty())
+        if (!calls.m_return_subtract.empty())
             out << "\tm_return_subtract:" << std::endl;
         for (const auto& v : calls.m_return_subtract)
         {
             out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
         }
 
-        if (calls.m_return_multiply.empty())
+        if (!calls.m_return_multiply.empty())
             out << "\tm_return_multiply:" << std::endl;
         for (const auto& v : calls.m_return_multiply)
         {
             out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
         }
 
-        if (calls.m_return_divide.empty())
+        if (!calls.m_return_divide.empty())
             out << "\tm_return_divide:" << std::endl;
         for (const auto& v : calls.m_return_divide)
         {
             out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
         }
 
-        if (calls.m_return_invert.empty())
+        if (!calls.m_return_invert.empty())
             out << "\tm_return_invert:" << std::endl;
         for (const auto& v : calls.m_return_invert)
         {
@@ -497,7 +497,7 @@ namespace fifi
 
         // Packed arithmetic
 
-        if (calls.m_call_packed_add.empty())
+        if (!calls.m_call_packed_add.empty())
             out << "\tm_call_packed_add:" << std::endl;
         for (const auto& v : calls.m_call_packed_add)
         {
@@ -505,7 +505,7 @@ namespace fifi
                 << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
         }
 
-        if (calls.m_call_packed_subtract.empty())
+        if (!calls.m_call_packed_subtract.empty())
             out << "\tm_call_packed_subtract:" << std::endl;
         for (const auto& v : calls.m_call_packed_subtract)
         {
@@ -513,7 +513,7 @@ namespace fifi
                 << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
         }
 
-        if (calls.m_call_packed_multiply.empty())
+        if (!calls.m_call_packed_multiply.empty())
             out << "\tm_call_packed_multiply:" << std::endl;
         for (const auto& v : calls.m_call_packed_multiply)
         {
@@ -521,7 +521,7 @@ namespace fifi
                 << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
         }
 
-        if (calls.m_call_packed_divide.empty())
+        if (!calls.m_call_packed_divide.empty())
             out << "\tm_call_packed_divide:" << std::endl;
         for (const auto& v : calls.m_call_packed_divide)
         {
@@ -529,7 +529,7 @@ namespace fifi
                 << " b = " << ((uint32_t) std::get<1>(v)) << std::endl;
         }
 
-        if (calls.m_call_packed_invert.empty())
+        if (!calls.m_call_packed_invert.empty())
             out << "\tm_call_packed_invert:" << std::endl;
         for (const auto& v : calls.m_call_packed_invert)
         {
@@ -538,35 +538,35 @@ namespace fifi
 
         // Packed arithmetic returns
 
-        if (calls.m_return_packed_add.empty())
+        if (!calls.m_return_packed_add.empty())
             out << "\tm_return_packed_add:" << std::endl;
         for (const auto& v : calls.m_return_packed_add)
         {
             out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
         }
 
-        if (calls.m_return_packed_subtract.empty())
+        if (!calls.m_return_packed_subtract.empty())
             out << "\tm_return_packed_subtract:" << std::endl;
         for (const auto& v : calls.m_return_packed_subtract)
         {
             out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
         }
 
-        if (calls.m_return_packed_multiply.empty())
+        if (!calls.m_return_packed_multiply.empty())
             out << "\tm_return_packed_multiply:" << std::endl;
         for (const auto& v : calls.m_return_packed_multiply)
         {
             out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
         }
 
-        if (calls.m_return_packed_divide.empty())
+        if (!calls.m_return_packed_divide.empty())
             out << "\tm_return_packed_divide:" << std::endl;
         for (const auto& v : calls.m_return_packed_divide)
         {
             out << "\t\t" << "r = " << ((uint32_t) std::get<0>(v)) << std::endl;
         }
 
-        if (calls.m_return_packed_invert.empty())
+        if (!calls.m_return_packed_invert.empty())
             out << "\tm_return_packed_invert:" << std::endl;
         for (const auto& v : calls.m_return_packed_invert)
         {
@@ -575,7 +575,7 @@ namespace fifi
 
         // Region arithmetics
 
-        if (calls.m_call_region_add.empty())
+        if (!calls.m_call_region_add.empty())
             out << "\tm_call_region_add:" << std::endl;
         for (const auto& v : calls.m_call_region_add)
         {
@@ -584,7 +584,7 @@ namespace fifi
                 << " length = " << ((uint32_t) std::get<2>(v)) << std::endl;
         }
 
-        if (calls.m_call_region_subtract.empty())
+        if (!calls.m_call_region_subtract.empty())
             out << "\tm_call_region_subtract:" << std::endl;
         for (const auto& v : calls.m_call_region_subtract)
         {
@@ -593,7 +593,7 @@ namespace fifi
                 << " length = " << ((uint32_t) std::get<2>(v)) << std::endl;
         }
 
-        if (calls.m_call_region_multiply.empty())
+        if (!calls.m_call_region_multiply.empty())
             out << "\tm_call_region_multiply:" << std::endl;
         for (const auto& v : calls.m_call_region_multiply)
         {
@@ -602,7 +602,7 @@ namespace fifi
                 << " length = " << ((uint32_t) std::get<2>(v)) << std::endl;
         }
 
-        if (calls.m_call_region_divide.empty())
+        if (!calls.m_call_region_divide.empty())
             out << "\tm_call_region_divide:" << std::endl;
         for (const auto& v : calls.m_call_region_divide)
         {
@@ -611,7 +611,7 @@ namespace fifi
                 << " length = " << ((uint32_t) std::get<2>(v)) << std::endl;
         }
 
-        if (calls.m_call_region_multiply_constant.empty())
+        if (!calls.m_call_region_multiply_constant.empty())
             out << "\tm_call_region_multiply_constant:" << std::endl;
         for (const auto& v : calls.m_call_region_multiply_constant)
         {
@@ -620,7 +620,7 @@ namespace fifi
                 << " length = " << ((uint32_t) std::get<2>(v)) << std::endl;
         }
 
-        if (calls.m_call_region_multiply_add.empty())
+        if (!calls.m_call_region_multiply_add.empty())
             out << "\tm_call_region_multiply_add:" << std::endl;
         for (const auto& v : calls.m_call_region_multiply_add)
         {
@@ -630,7 +630,7 @@ namespace fifi
                 << " length = " << ((uint32_t) std::get<3>(v)) << std::endl;
         }
 
-        if (calls.m_call_region_multiply_subtract.empty())
+        if (!calls.m_call_region_multiply_subtract.empty())
             out << "\tm_call_region_multiply_subtract:" << std::endl;
         for (const auto& v : calls.m_call_region_multiply_subtract)
         {
