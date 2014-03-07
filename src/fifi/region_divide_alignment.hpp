@@ -12,12 +12,16 @@
 
 namespace fifi
 {
+    /// The region_divide_alignment layer
     template<class Super>
     class region_divide_alignment : public Super
     {
     public:
 
+        /// Access to the "basic" layers in the stack
         typedef typename Super::BasicSuper BasicSuper;
+
+        /// Access to the "optimized" layers in the stack
         typedef typename Super::OptimizedSuper OptimizedSuper;
 
         /// @copydoc layer::field_type
@@ -25,6 +29,8 @@ namespace fifi
 
         /// @copydoc layer::value_type
         typedef typename Super::value_type value_type;
+
+    public:
 
         void region_add(value_type* dest, const value_type* src,
             uint32_t length) const

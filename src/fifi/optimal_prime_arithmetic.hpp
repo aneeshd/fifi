@@ -27,6 +27,7 @@ namespace fifi
         /// @copydoc layer::field_type
         typedef typename Super::field_type field_type;
 
+        /// Static field check
         static_assert(std::is_same<prime2325, field_type>::value,
                       "This layer only support the 2^32 - 5 prime field");
 

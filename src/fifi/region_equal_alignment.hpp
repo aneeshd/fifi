@@ -17,7 +17,9 @@ namespace fifi
     /// arithmetics have equal alignment. If the do not then we will
     /// not be able to "adjust" both buffers in a way that they both
     /// become aligned. This can be an issue when using SIMD
-    /// acceleration stacks that require alignment.
+    /// acceleration stacks that require alignment. Note, that in some
+    /// cases SIMD allows unaligned loads in this case this layer is
+    /// not needed.
     template<class Super>
     class region_equal_alignment : public Super
     {
@@ -154,8 +156,9 @@ namespace fifi
             }
         }
 
-    private:
+    protected:
 
+        /// @return True if the two buffers have equal alignment
         bool alignment_is_equal(const value_type* dest,
             const value_type* src) const
         {
