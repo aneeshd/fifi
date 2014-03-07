@@ -192,7 +192,7 @@ namespace fifi
             m_multiply_subtract(dest, src, constant, length);
         }
 
-        /// @copydoc layer::alignment()
+        /// @copydoc layer::alignment() const
         uint32_t alignment() const
         {
             if (m_stack.enabled())
@@ -205,7 +205,7 @@ namespace fifi
             }
         }
 
-        /// @copydoc layer::max_alignment()
+        /// @copydoc layer::max_alignment() const
         uint32_t max_alignment() const
         {
             if (m_stack.enabled())
@@ -219,7 +219,7 @@ namespace fifi
             }
         }
 
-        /// @copydoc layer::granularity()
+        /// @copydoc layer::granularity() const
         uint32_t granularity() const
         {
             if (m_stack.enabled())
@@ -232,7 +232,7 @@ namespace fifi
             }
         }
 
-        /// @copydoc layer::max_granularity()
+        /// @copydoc layer::max_granularity() const
         uint32_t max_granularity() const
         {
             if (m_stack.enabled())
@@ -246,6 +246,8 @@ namespace fifi
             }
         }
 
+        /// @return True if the embedded stack is enabled i.e. if it
+        /// can be used for computations
         bool enabled() const
         {
             return m_stack.enabled();

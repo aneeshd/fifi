@@ -73,16 +73,16 @@ namespace fifi
         void region_multiply_subtract(value_type* dest, const value_type* src,
             value_type constant, uint32_t length) const;
 
-        /// @copydoc layer::alignment()
+        /// @copydoc layer::alignment() const
         uint32_t alignment() const;
 
-        /// @copydoc layer::max_alignment()
+        /// @copydoc layer::max_alignment() const
         uint32_t max_alignment() const;
 
-        /// @copydoc layer::granularity()
+        /// @copydoc layer::granularity() const
         uint32_t granularity() const;
 
-        /// @copydoc layer::max_granularity()
+        /// @copydoc layer::max_granularity() const
         uint32_t max_granularity() const;
 
         /// @return true if the executable was built with SSSE3 binary4

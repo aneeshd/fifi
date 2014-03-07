@@ -12,12 +12,21 @@
 
 namespace fifi
 {
+
+    /// This layer checks whether two buffers used in region
+    /// arithmetics have equal alignment. If the do not then we will
+    /// not be able to "adjust" both buffers in a way that they both
+    /// become aligned. This can be an issue when using SIMD
+    /// acceleration stacks that require alignment.
     template<class Super>
     class region_equal_alignment : public Super
     {
     public:
 
+        /// Typedef to the basic layers i.e. by-passing optimizations
         typedef typename Super::BasicSuper BasicSuper;
+
+        /// Typedef to the optimized layers
         typedef typename Super::OptimizedSuper OptimizedSuper;
 
         /// @copydoc layer::field_type
