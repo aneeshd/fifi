@@ -39,7 +39,7 @@ namespace fifi
             uint32_t length) const
         {
             uint32_t optimized, tail;
-            granulate(length, optimized, tail);
+            granulated_length(length, optimized, tail);
 
             if (optimized > 0)
             {
@@ -57,21 +57,18 @@ namespace fifi
         void region_subtract(value_type* dest, const value_type* src,
             uint32_t length) const
         {
-            assert(dest != 0);
-            assert(src != 0);
-            assert(length > 0);
+            uint32_t optimized, tail;
+            granulated_length(length, optimized, tail);
 
-            auto optimizable = granulated_length(length);
-            if (optimizable != 0)
+            if (optimized > 0)
             {
-                Super::region_subtract(dest, src, optimizable);
+                Super::region_subtract(dest, src, optimized);
             }
 
-            auto rest = length - optimizable;
-            if (rest != 0)
+            if (tail > 0)
             {
-                BasicSuper::region_subtract(dest + optimizable,
-                    src + optimizable, rest);
+                BasicSuper::region_subtract(
+                    dest + optimized, src + optimized, tail);
             }
         }
 
@@ -80,21 +77,18 @@ namespace fifi
         void region_multiply(value_type* dest, const value_type* src,
             uint32_t length) const
         {
-            assert(dest != 0);
-            assert(src != 0);
-            assert(length > 0);
+            uint32_t optimized, tail;
+            granulated_length(length, optimized, tail);
 
-            auto optimizable = granulated_length(length);
-            if (optimizable != 0)
+            if (optimized > 0)
             {
-                Super::region_multiply(dest, src, optimizable);
+                Super::region_multiply(dest, src, optimized);
             }
 
-            auto rest = length - optimizable;
-            if (rest != 0)
+            if (tail > 0)
             {
-                BasicSuper::region_multiply(dest + optimizable,
-                    src + optimizable, rest);
+                BasicSuper::region_multiply(
+                    dest + optimized, src + optimized, tail);
             }
         }
 
@@ -103,21 +97,18 @@ namespace fifi
         void region_divide(value_type* dest, const value_type* src,
             uint32_t length) const
         {
-            assert(dest != 0);
-            assert(src != 0);
-            assert(length > 0);
+            uint32_t optimized, tail;
+            granulated_length(length, optimized, tail);
 
-            auto optimizable = granulated_length(length);
-            if (optimizable != 0)
+            if (optimized > 0)
             {
-                Super::region_divide(dest, src, optimizable);
+                Super::region_divide(dest, src, optimized);
             }
 
-            auto rest = length - optimizable;
-            if (rest != 0)
+            if (tail > 0)
             {
-                BasicSuper::region_divide(dest + optimizable,
-                    src + optimizable, rest);
+                BasicSuper::region_divide(
+                    dest + optimized, src + optimized, tail);
             }
         }
 
@@ -126,21 +117,18 @@ namespace fifi
         void region_multiply_constant(value_type* dest, value_type constant,
             uint32_t length) const
         {
-            assert(dest != 0);
-            assert(length > 0);
+            uint32_t optimized, tail;
+            granulated_length(length, optimized, tail);
 
-            auto optimizable = granulated_length(length);
-            if (optimizable != 0)
+            if (optimized > 0)
             {
-                Super::region_multiply_constant(dest, constant,
-                    optimizable);
+                Super::region_multiply_constant(dest, constant, optimized);
             }
 
-            auto rest = length - optimizable;
-            if (rest != 0)
+            if (tail > 0)
             {
                 BasicSuper::region_multiply_constant(
-                    dest + optimizable, constant, rest);
+                    dest + optimized, constant, tail);
             }
         }
 
@@ -149,23 +137,18 @@ namespace fifi
         void region_multiply_add(value_type* dest, const value_type* src,
             value_type constant, uint32_t length) const
         {
-            assert(dest != 0);
-            assert(src != 0);
-            assert(length > 0);
+            uint32_t optimized, tail;
+            granulated_length(length, optimized, tail);
 
-            auto optimizable = granulated_length(length);
-            if (optimizable != 0)
+            if (optimized > 0)
             {
-                Super::region_multiply_add(dest, src, constant,
-                    optimizable);
+                Super::region_multiply_add(dest, src, constant, optimized);
             }
 
-            auto rest = length - optimizable;
-            if (rest != 0)
+            if (tail > 0)
             {
                 BasicSuper::region_multiply_add(
-                    dest + optimizable, src + optimizable,
-                    constant, rest);
+                    dest + optimized, src + optimized, constant, tail);
             }
         }
 
@@ -176,57 +159,49 @@ namespace fifi
         void region_multiply_subtract(value_type* dest, const value_type* src,
             value_type constant, uint32_t length) const
         {
-            assert(dest != 0);
-            assert(src != 0);
-            assert(length > 0);
+            uint32_t optimized, tail;
+            granulated_length(length, optimized, tail);
 
-            auto optimizable = granulated_length(length);
-            if (optimizable != 0)
+            if (optimized > 0)
             {
-                Super::region_multiply_subtract(dest, src, constant,
-                    optimizable);
+                Super::region_multiply_subtract(dest, src, constant, optimized);
             }
 
-            auto rest = length - optimizable;
-            if (rest != 0)
+            if (tail > 0)
             {
                 BasicSuper::region_multiply_subtract(
-                    dest + optimizable, src + optimizable,
-                    constant, rest);
+                    dest + optimized, src + optimized, constant, tail);
             }
         }
 
     protected:
 
-        /// Given a specific length this function return a new length
-        /// which is guarenteed to be a multiple of the
-        /// granularity. As an example SSSE3 SIMD works 16 bytes at a
+        /// Given a specific length, this function splits the buffer to
+        /// two fragments: the optimized fragment will have a length
+        /// which is guarenteed to be a multiple of the granularity, and
+        /// the tail fragment will contain the remaining data.
+        /// As an example SSSE3 SIMD works 16 bytes at a
         /// time for the binary4 field this corresponds to a
         /// granularity of 16 (containing 32 binary4 field
-        /// elements). If we pass a length of 50 to this function we
-        /// would return 48 which is the 3 times the granularity. The
-        /// remaining two value_type values have to be calculated
-        /// using a layer with a lower granularity.
+        /// elements). If we pass a length of 50 to this function, the
+        /// length of the optimized fragment will be 48 and the tail will
+        /// contain the remaining 2 value_type values (which must be processed
+        /// by a layer with a lower granularity requirement).
         ///
         /// @param length The length in value_type elements
-        /// @return The number of value_type elements which are a multiple of
-        /// the granularity
-        uint32_t granulated_length(uint32_t length) const
-        {
-            assert(OptimizedSuper::granularity() != 0);
-            assert(length != 0);
-
-            return length - (length % OptimizedSuper::granularity());
-        }
-
-        void granulate(uint32_t length, uint32_t& optimized,
+        /// @param optimized The number of value_type elements which are a
+        /// multiple of the granularity
+        /// @param tail The number of remaining value_type elements
+        void granulated_length(uint32_t length, uint32_t& optimized,
             uint32_t& tail) const
         {
-            assert(length != 0);
+            assert(length > 0);
 
             uint32_t granularity = OptimizedSuper::granularity();
-            assert(granularity != 0);
+            assert(granularity > 0);
 
+            // The granularity mask is used instead of a modulo and subtraction
+            // since this part is performance critical
             uint32_t mask = granularity - 1;
             optimized = length & ~mask;
             tail = length & mask;
