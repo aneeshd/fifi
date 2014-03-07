@@ -34,7 +34,7 @@ namespace fifi
     }
 }
 
-TEST(TestRegionArithmetic, fall_through)
+TEST(test_region_arithmetic, fall_through)
 {
     typedef fifi::binary8 field_type;
     typedef field_type::value_type value_type;

@@ -332,22 +332,26 @@ BENCHMARK_F(setup_log_table_binary16, log_table_binary16, subtract, 5)
 typedef basic_operations_setup< fifi::extended_log_table<fifi::binary8> >
     setup_extended_log_table_binary8;
 
-BENCHMARK_F(setup_extended_log_table_binary8, extended_log_table_binary8, multiply, 5)
+BENCHMARK_F(setup_extended_log_table_binary8,
+            extended_log_table_binary8, multiply, 5)
 {
     run_multiply();
 }
 
-BENCHMARK_F(setup_extended_log_table_binary8, extended_log_table_binary8, divide, 5)
+BENCHMARK_F(setup_extended_log_table_binary8,
+            extended_log_table_binary8, divide, 5)
 {
     run_divide();
 }
 
-BENCHMARK_F(setup_extended_log_table_binary8, extended_log_table_binary8, add, 5)
+BENCHMARK_F(setup_extended_log_table_binary8,
+            extended_log_table_binary8, add, 5)
 {
     run_add();
 }
 
-BENCHMARK_F(setup_extended_log_table_binary8, extended_log_table_binary8, subtract, 5)
+BENCHMARK_F(setup_extended_log_table_binary8,
+            extended_log_table_binary8, subtract, 5)
 {
     run_subtract();
 }
