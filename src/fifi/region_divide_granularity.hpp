@@ -38,32 +38,17 @@ namespace fifi
         void region_add(value_type* dest, const value_type* src,
             uint32_t length) const
         {
-//             uint32_t mask = (OptimizedSuper::granularity() - 1);
-//             uint32_t optimized = length & ~mask;
-//
-//             if (optimized > 0)
-//             {
-//                 Super::region_add(dest, src, optimized);
-//             }
-//
-//             uint32_t tail = length & mask;
-//
-//             if (tail > 0)
-//             {
-//                 BasicSuper::region_add(dest + optimized, src + optimized, tail);
-//             }
+            uint32_t optimized, tail;
+            granulate(length, optimized, tail);
 
-            auto optimizable = granulated_length(length);
-            if (optimizable != 0)
+            if (optimized > 0)
             {
-                Super::region_add(dest, src, optimizable);
+                Super::region_add(dest, src, optimized);
             }
 
-            auto rest = length - optimizable;
-            if (rest != 0)
+            if (tail > 0)
             {
-                BasicSuper::region_add(dest + optimizable,
-                    src + optimizable, rest);
+                BasicSuper::region_add(dest + optimized, src + optimized, tail);
             }
         }
 
@@ -232,6 +217,19 @@ namespace fifi
             assert(length != 0);
 
             return length - (length % OptimizedSuper::granularity());
+        }
+
+        void granulate(uint32_t length, uint32_t& optimized,
+            uint32_t& tail) const
+        {
+            assert(length != 0);
+
+            uint32_t granularity = OptimizedSuper::granularity();
+            assert(granularity != 0);
+
+            uint32_t mask = granularity - 1;
+            optimized = length & ~mask;
+            tail = length & mask;
         }
     };
 }
