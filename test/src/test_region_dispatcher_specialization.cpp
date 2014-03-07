@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 
-#include "helper_region_info.hpp"
+#include "fifi_unit_test/helper_region_info.hpp"
 
 namespace fifi
 {

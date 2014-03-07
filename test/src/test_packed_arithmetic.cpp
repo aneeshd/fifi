@@ -7,7 +7,7 @@
 
 #include <fifi/binary8.hpp>
 #include <fifi/packed_arithmetic.hpp>
-#include "helper_fall_through.hpp"
+#include "fifi_unit_test/helper_fall_through.hpp"
 
 namespace fifi
 {

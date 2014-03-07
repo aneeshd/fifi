@@ -7,8 +7,8 @@
 
 #include <fifi/binary.hpp>
 #include <fifi/region_dispatcher.hpp>
-#include "helper_fall_through.hpp"
-#include "helper_region_info.hpp"
+#include "fifi_unit_test/helper_fall_through.hpp"
+#include "fifi_unit_test/helper_region_info.hpp"
 
 namespace fifi
 {

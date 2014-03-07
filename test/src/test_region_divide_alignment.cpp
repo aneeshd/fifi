@@ -14,11 +14,11 @@
 #include <fifi/final.hpp>
 #include <fifi/region_divide_alignment.hpp>
 
-#include "capture_calls.hpp"
-#include "helper_fall_through.hpp"
-#include "helper_region_info.hpp"
-#include "helper_test_buffer.hpp"
-#include "random_constant.hpp"
+#include "fifi_unit_test/capture_calls.hpp"
+#include "fifi_unit_test/helper_fall_through.hpp"
+#include "fifi_unit_test/helper_region_info.hpp"
+#include "fifi_unit_test/helper_test_buffer.hpp"
+#include "fifi_unit_test/random_constant.hpp"
 
 namespace fifi
 {

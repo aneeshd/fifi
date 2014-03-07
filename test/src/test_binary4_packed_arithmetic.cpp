@@ -15,8 +15,8 @@
 
 #include <gtest/gtest.h>
 
-#include "expected_results.hpp"
-#include "helper_fall_through.hpp"
+#include "fifi_unit_test/expected_results.hpp"
+#include "fifi_unit_test/helper_fall_through.hpp"
 
 namespace fifi
 {

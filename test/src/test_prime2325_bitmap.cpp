@@ -12,8 +12,8 @@
 
 #include <sak/storage.hpp>
 
-#include "helper_prime2325_find_a_prefix.hpp"
-#include "helper_prime2325_find_one_prefix.hpp"
+#include "fifi_unit_test/helper_prime2325_find_a_prefix.hpp"
+#include "fifi_unit_test/helper_prime2325_find_one_prefix.hpp"
 
 TEST(test_prime2325_bitmap, prefix_bitmap)
 {

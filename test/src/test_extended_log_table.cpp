@@ -10,9 +10,9 @@
 
 #include <gtest/gtest.h>
 
-#include "helper_test_arithmetic.hpp"
-#include "helper_test_packed_arithmetic.hpp"
-#include "helper_test_region_arithmetic.hpp"
+#include "fifi_unit_test/helper_test_arithmetic.hpp"
+#include "fifi_unit_test/helper_test_packed_arithmetic.hpp"
+#include "fifi_unit_test/helper_test_region_arithmetic.hpp"
 
 TEST(test_extended_log_table, binary4)
 {

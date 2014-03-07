@@ -9,7 +9,7 @@
 
 #include <gtest/gtest.h>
 
-#include "expected_results.hpp"
+#include "fifi_unit_test/expected_results.hpp"
 
 namespace fifi
 {
