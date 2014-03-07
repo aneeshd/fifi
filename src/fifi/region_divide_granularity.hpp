@@ -38,19 +38,32 @@ namespace fifi
         void region_add(value_type* dest, const value_type* src,
             uint32_t length) const
         {
-            uint32_t mask = (OptimizedSuper::granularity() - 1);
-            uint32_t optimized = length & ~mask;
+//             uint32_t mask = (OptimizedSuper::granularity() - 1);
+//             uint32_t optimized = length & ~mask;
+//
+//             if (optimized > 0)
+//             {
+//                 Super::region_add(dest, src, optimized);
+//             }
+//
+//             uint32_t tail = length & mask;
+//
+//             if (tail > 0)
+//             {
+//                 BasicSuper::region_add(dest + optimized, src + optimized, tail);
+//             }
 
-            if (optimized > 0)
+            auto optimizable = granulated_length(length);
+            if (optimizable != 0)
             {
-                Super::region_add(dest, src, optimized);
+                Super::region_add(dest, src, optimizable);
             }
 
-            uint32_t tail = length & mask;
-
-            if (tail > 0)
+            auto rest = length - optimizable;
+            if (rest != 0)
             {
-                BasicSuper::region_add(dest + optimized, src + optimized, tail);
+                BasicSuper::region_add(dest + optimizable,
+                    src + optimizable, rest);
             }
         }
 
