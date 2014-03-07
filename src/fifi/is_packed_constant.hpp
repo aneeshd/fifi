@@ -7,6 +7,7 @@
 
 #include <cstdint>
 #include <limits>
+#include <type_traits>
 
 #include "binary.hpp"
 #include "binary4.hpp"
@@ -28,7 +29,17 @@ namespace fifi
     /// @param constant Field element to be checked if it is packed or not
     /// @return true if constant is packed, otherwise false
     template<class Field>
-    inline bool is_packed_constant(typename Field::value_type constant);
+    inline bool is_packed_constant(typename Field::value_type constant)
+    {
+        static_assert(std::is_same<Field, binary8>::value ||
+                      std::is_same<Field, binary16>::value ||
+                      std::is_same<Field, prime2325>::value,
+                      "The generic version is only supported by "
+                      "field guaranteed to be packed");
+
+        (void) constant;
+        return true;
+    }
 
     /// Specialization for binary
     /// @copydoc is_packed_constant(value_type)
@@ -48,33 +59,33 @@ namespace fifi
         return ((constant & 0xF0) >> 4) == (constant & 0x0F);
     }
 
-    /// Specialization for binary8
-    /// @copydoc is_packed_constant(value_type)
-    template<>
-    inline bool is_packed_constant<binary8>(
-        typename binary8::value_type constant)
-    {
-        (void) constant;
-        return true;
-    }
+    // /// Specialization for binary8
+    // /// @copydoc is_packed_constant(value_type)
+    // template<>
+    // inline bool is_packed_constant<binary8>(
+    //     typename binary8::value_type constant)
+    // {
+    //     (void) constant;
+    //     return true;
+    // }
 
-    /// Specialization for binary16
-    /// @copydoc is_packed_constant(value_type)
-    template<>
-    inline bool is_packed_constant<binary16>(
-        typename binary16::value_type constant)
-    {
-        (void) constant;
-        return true;
-    }
+    // /// Specialization for binary16
+    // /// @copydoc is_packed_constant(value_type)
+    // template<>
+    // inline bool is_packed_constant<binary16>(
+    //     typename binary16::value_type constant)
+    // {
+    //     (void) constant;
+    //     return true;
+    // }
 
-    /// Specialization for prime2325
-    /// @copydoc is_packed_constant(value_type)
-    template<>
-    inline bool is_packed_constant<prime2325>(
-        typename prime2325::value_type constant)
-    {
-        (void) constant;
-        return true;
-    }
+    // /// Specialization for prime2325
+    // /// @copydoc is_packed_constant(value_type)
+    // template<>
+    // inline bool is_packed_constant<prime2325>(
+    //     typename prime2325::value_type constant)
+    // {
+    //     (void) constant;
+    //     return true;
+    // }
 }
