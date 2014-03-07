@@ -38,6 +38,9 @@ namespace fifi
         void region_add(value_type* dest, const value_type* src,
             uint32_t length) const
         {
+            assert(dest != 0);
+            assert(src  != 0);
+
             uint32_t optimized, tail;
             granulated_length(length, optimized, tail);
 
@@ -57,6 +60,9 @@ namespace fifi
         void region_subtract(value_type* dest, const value_type* src,
             uint32_t length) const
         {
+            assert(dest != 0);
+            assert(src  != 0);
+
             uint32_t optimized, tail;
             granulated_length(length, optimized, tail);
 
@@ -77,6 +83,9 @@ namespace fifi
         void region_multiply(value_type* dest, const value_type* src,
             uint32_t length) const
         {
+            assert(dest != 0);
+            assert(src  != 0);
+
             uint32_t optimized, tail;
             granulated_length(length, optimized, tail);
 
@@ -97,6 +106,9 @@ namespace fifi
         void region_divide(value_type* dest, const value_type* src,
             uint32_t length) const
         {
+            assert(dest != 0);
+            assert(src  != 0);
+
             uint32_t optimized, tail;
             granulated_length(length, optimized, tail);
 
@@ -117,6 +129,8 @@ namespace fifi
         void region_multiply_constant(value_type* dest, value_type constant,
             uint32_t length) const
         {
+            assert(dest != 0);
+
             uint32_t optimized, tail;
             granulated_length(length, optimized, tail);
 
@@ -137,6 +151,9 @@ namespace fifi
         void region_multiply_add(value_type* dest, const value_type* src,
             value_type constant, uint32_t length) const
         {
+            assert(dest != 0);
+            assert(src  != 0);
+
             uint32_t optimized, tail;
             granulated_length(length, optimized, tail);
 
@@ -159,6 +176,9 @@ namespace fifi
         void region_multiply_subtract(value_type* dest, const value_type* src,
             value_type constant, uint32_t length) const
         {
+            assert(dest != 0);
+            assert(src  != 0);
+
             uint32_t optimized, tail;
             granulated_length(length, optimized, tail);
 
