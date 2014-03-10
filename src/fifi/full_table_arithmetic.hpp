@@ -56,8 +56,10 @@ namespace fifi
         /// Constructor
         full_table_arithmetic()
         {
-            m_multtable.resize(field_type::order * field_type::order, '\0');
-            m_divitable.resize(field_type::order * field_type::order, '\0');
+            m_multiplication_table.resize(
+                field_type::order * field_type::order, '\0');
+            m_division_table.resize(
+                field_type::order * field_type::order, '\0');
 
             for (uint32_t i = 0; i < field_type::order; ++i)
             {
@@ -65,12 +67,12 @@ namespace fifi
 
                 for (uint32_t j = 0; j < field_type::order; ++j)
                 {
-                    m_multtable[offset + j] = Super::multiply(i,j);
+                    m_multiplication_table[offset + j] = Super::multiply(i,j);
 
                     if (j == 0) // Cannot divide by zero
                         continue;
 
-                    m_divitable[offset + j] = Super::divide(i,j);
+                    m_division_table[offset + j] = Super::divide(i,j);
                 }
             }
         }
@@ -81,7 +83,7 @@ namespace fifi
             assert(is_valid_element<field_type>(a));
             assert(is_valid_element<field_type>(b));
 
-            return m_multtable[(a << field_type::degree) + b];
+            return m_multiplication_table[(a << field_type::degree) + b];
         }
 
         /// @copydoc layer::divide(value_type, value_type) const
@@ -90,7 +92,8 @@ namespace fifi
             assert(is_valid_element<field_type>(numerator));
             assert(is_valid_element<field_type>(denominator));
 
-            return m_divitable[(numerator << field_type::degree) + denominator];
+            return m_division_table[
+                (numerator << field_type::degree) + denominator];
         }
 
         /// @copydoc layer::invert(value_type) const
@@ -101,12 +104,29 @@ namespace fifi
             return divide(1, a);
         }
 
-    public:
+        /// Get a pointer to a row in the multiplication table
+        /// @param row Index of the row
+        /// @return Row from the table
+        const value_type* multiplication_row(uint32_t row) const
+        {
+            assert(row <= field_type::order);
+            return &m_multiplication_table[row << field_type::degree];
+        }
 
+        /// Get a pointer to a row in the multiplication table
+        /// @param row Index of the row
+        /// @return Row from the table
+        const value_type* division_row(uint32_t row) const
+        {
+            assert(row <= field_type::order);
+            return &m_division_table[row << field_type::degree];
+        }
+
+    private:
         /// The multiplication table.
-        std::vector<value_type> m_multtable;
+        std::vector<value_type> m_multiplication_table;
 
         /// The division table
-        std::vector<value_type> m_divitable;
+        std::vector<value_type> m_division_table;
     };
 }

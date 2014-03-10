@@ -134,7 +134,7 @@ namespace fifi
             return m_antilog[power];
         }
 
-    public:
+    private:
 
         /// The Log table
         std::vector<value_type> m_log;

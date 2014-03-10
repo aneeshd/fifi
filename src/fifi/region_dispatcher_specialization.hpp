@@ -479,7 +479,7 @@ namespace fifi
             void (value_type*, const value_type*, value_type, uint32_t)>
             ptr_ptr_const_function;
 
-    protected:
+    private:
 
         /// The stack to use for dispatching
         Stack m_stack;

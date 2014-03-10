@@ -33,11 +33,17 @@ namespace fifi
         public:
             multtable_mock()
             {
-                m_multtable.resize(field_type::order * field_type::order, '\0');
+                m_multiplication_table.resize(field_type::order, '\0');
+            }
+
+            const value_type* multiplication_row(uint32_t row) const
+            {
+                (void)row;
+                return m_multiplication_table.data();
             }
 
         protected:
-            std::vector<value_type> m_multtable;
+            std::vector<value_type> m_multiplication_table;
         };
 
         template<class Field>
