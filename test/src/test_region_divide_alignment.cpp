@@ -82,7 +82,8 @@ namespace fifi
                 auto constant = constants.pack();
 
                 // Test the division of the unaligned head and the aligned part
-                for (uint32_t offset = 0; offset < length; offset++)
+                for (uint32_t offset = 0; offset < (length - m_alignment);
+                    offset++)
                 {
                     value_type* dest = &dest_buffer.data()[offset];
                     value_type* src = &src_buffer.data()[offset];
@@ -159,6 +160,7 @@ namespace fifi
 
                 basic.set_alignment(value_size);
                 optimized.set_alignment(m_alignment);
+                optimized.set_granularity(m_alignment);
 
                 optimized.clear();
                 basic.clear();

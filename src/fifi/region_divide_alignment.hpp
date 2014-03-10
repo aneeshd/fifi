@@ -22,6 +22,12 @@ namespace fifi
     /// 2) In step two we take the remaining buffer which now is
     /// guaranteed to start at an aligned offset and pass it to our
     /// optimized routines.
+    /// Requirements:
+    /// The layer requires the provided buffers to be of equal alignment, and
+    /// furthermore the buffers must be larger than the granularity of the
+    /// optimized stack.
+    /// These requirements can be handled by region_equal_alignment, and
+    /// region_divide_granularity respectively.
     template<class Super>
     class region_divide_alignment : public Super
     {
@@ -48,12 +54,7 @@ namespace fifi
         {
             assert(dest != 0);
             assert(src  != 0);
-            assert(length > 0);
-
-            /// @todo mvp: This looks quite unsafe what if length is
-            /// smaller than the amount we have to adjust before we
-            /// reach alignment. It seems we assume here that the
-            /// length is more but we don't actually check.
+            assert(length > OptimizedSuper::granularity());
 
             auto unaligned = unaligned_head(dest);
             if (unaligned != 0)
@@ -75,7 +76,7 @@ namespace fifi
         {
             assert(dest != 0);
             assert(src  != 0);
-            assert(length > 0);
+            assert(length > OptimizedSuper::granularity());
 
             auto unaligned = unaligned_head(dest);
             if (unaligned != 0)
@@ -97,7 +98,7 @@ namespace fifi
         {
             assert(dest != 0);
             assert(src  != 0);
-            assert(length > 0);
+            assert(length > OptimizedSuper::granularity());
 
             auto unaligned = unaligned_head(dest);
             if (unaligned != 0)
@@ -119,7 +120,7 @@ namespace fifi
         {
             assert(dest != 0);
             assert(src  != 0);
-            assert(length > 0);
+            assert(length > OptimizedSuper::granularity());
 
             auto unaligned = unaligned_head(dest);
             if (unaligned != 0)
@@ -140,7 +141,7 @@ namespace fifi
             uint32_t length) const
         {
             assert(dest != 0);
-            assert(length > 0);
+            assert(length > OptimizedSuper::granularity());
             assert(is_packed_constant<field_type>(constant));
 
             auto unaligned = unaligned_head(dest);
@@ -165,7 +166,7 @@ namespace fifi
         {
             assert(dest != 0);
             assert(src  != 0);
-            assert(length > 0);
+            assert(length > OptimizedSuper::granularity());
             assert(is_packed_constant<field_type>(constant));
 
             auto unaligned = unaligned_head(dest);
@@ -192,7 +193,7 @@ namespace fifi
         {
             assert(dest != 0);
             assert(src  != 0);
-            assert(length > 0);
+            assert(length > OptimizedSuper::granularity());
             assert(is_packed_constant<field_type>(constant));
 
             auto unaligned = unaligned_head(dest);
