@@ -463,44 +463,44 @@ TEST(test_fifi_utils, pack)
 {
     {
         SCOPED_TRACE("binary");
-        EXPECT_EQ(0U, fifi::pack<fifi::binary>(0));
-        EXPECT_EQ(255U, fifi::pack<fifi::binary>(1));
+        EXPECT_EQ(0U, fifi::pack_constant<fifi::binary>(0));
+        EXPECT_EQ(255U, fifi::pack_constant<fifi::binary>(1));
     }
 
     {
         SCOPED_TRACE("binary4");
-        EXPECT_EQ(0x11, fifi::pack<fifi::binary4>(1));
-        EXPECT_EQ(0x22, fifi::pack<fifi::binary4>(2));
-        EXPECT_EQ(0x33, fifi::pack<fifi::binary4>(3));
-        EXPECT_EQ(0x44, fifi::pack<fifi::binary4>(4));
-        EXPECT_EQ(0x55, fifi::pack<fifi::binary4>(5));
-        EXPECT_EQ(0x66, fifi::pack<fifi::binary4>(6));
-        EXPECT_EQ(0x77, fifi::pack<fifi::binary4>(7));
-        EXPECT_EQ(0x88, fifi::pack<fifi::binary4>(8));
-        EXPECT_EQ(0x99, fifi::pack<fifi::binary4>(9));
-        EXPECT_EQ(0xAA, fifi::pack<fifi::binary4>(10));
-        EXPECT_EQ(0xBB, fifi::pack<fifi::binary4>(11));
-        EXPECT_EQ(0xCC, fifi::pack<fifi::binary4>(12));
-        EXPECT_EQ(0xDD, fifi::pack<fifi::binary4>(13));
-        EXPECT_EQ(0xEE, fifi::pack<fifi::binary4>(14));
-        EXPECT_EQ(0xFF, fifi::pack<fifi::binary4>(15));
+        EXPECT_EQ(0x11, fifi::pack_constant<fifi::binary4>(1));
+        EXPECT_EQ(0x22, fifi::pack_constant<fifi::binary4>(2));
+        EXPECT_EQ(0x33, fifi::pack_constant<fifi::binary4>(3));
+        EXPECT_EQ(0x44, fifi::pack_constant<fifi::binary4>(4));
+        EXPECT_EQ(0x55, fifi::pack_constant<fifi::binary4>(5));
+        EXPECT_EQ(0x66, fifi::pack_constant<fifi::binary4>(6));
+        EXPECT_EQ(0x77, fifi::pack_constant<fifi::binary4>(7));
+        EXPECT_EQ(0x88, fifi::pack_constant<fifi::binary4>(8));
+        EXPECT_EQ(0x99, fifi::pack_constant<fifi::binary4>(9));
+        EXPECT_EQ(0xAA, fifi::pack_constant<fifi::binary4>(10));
+        EXPECT_EQ(0xBB, fifi::pack_constant<fifi::binary4>(11));
+        EXPECT_EQ(0xCC, fifi::pack_constant<fifi::binary4>(12));
+        EXPECT_EQ(0xDD, fifi::pack_constant<fifi::binary4>(13));
+        EXPECT_EQ(0xEE, fifi::pack_constant<fifi::binary4>(14));
+        EXPECT_EQ(0xFF, fifi::pack_constant<fifi::binary4>(15));
     }
 
     {
         SCOPED_TRACE("binary8");
-        EXPECT_EQ(1U, fifi::pack<fifi::binary8>(1));
-        EXPECT_EQ(9U, fifi::pack<fifi::binary8>(9));
+        EXPECT_EQ(1U, fifi::pack_constant<fifi::binary8>(1));
+        EXPECT_EQ(9U, fifi::pack_constant<fifi::binary8>(9));
     }
 
     {
         SCOPED_TRACE("binary16");
-        EXPECT_EQ(1U, fifi::pack<fifi::binary16>(1));
-        EXPECT_EQ(9U, fifi::pack<fifi::binary16>(9));
+        EXPECT_EQ(1U, fifi::pack_constant<fifi::binary16>(1));
+        EXPECT_EQ(9U, fifi::pack_constant<fifi::binary16>(9));
     }
 
     {
         SCOPED_TRACE("prime2325");
-        EXPECT_EQ(1U, fifi::pack<fifi::prime2325>(1));
-        EXPECT_EQ(9U, fifi::pack<fifi::prime2325>(9));
+        EXPECT_EQ(1U, fifi::pack_constant<fifi::prime2325>(1));
+        EXPECT_EQ(9U, fifi::pack_constant<fifi::prime2325>(9));
     }
 }

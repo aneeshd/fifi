@@ -34,7 +34,7 @@ namespace fifi
 
         value_type pack()
         {
-            return fifi::pack<field_type>(value());
+            return fifi::pack_constant<field_type>(value());
         }
 
         std::uniform_int_distribution<uint32_t> m_distribution;

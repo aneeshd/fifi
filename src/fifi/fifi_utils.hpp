@@ -10,6 +10,9 @@
 
 #include "binary.hpp"
 #include "binary4.hpp"
+#include "binary8.hpp"
+#include "binary16.hpp"
+#include "prime2325.hpp"
 #include "is_valid_element.hpp"
 
 namespace fifi
@@ -43,6 +46,8 @@ namespace fifi
     inline uint32_t elements_to_length<binary4>(uint32_t elements)
     {
         assert(elements > 0);
+
+
 
         return sak::ceil_division(elements, 2);
     }
@@ -291,13 +296,11 @@ namespace fifi
         set_value<Field>(elements, index2, value1);
     }
 
-    /// @todo Rename function to pack_constant
-    ///
-    /// Useful abstraction function for creating packed constants. In
-    /// Fifi we refer to values as packed if they utilize the entire
+    /// Helper function for creating packed constants. In Fifi we
+    /// refer to values as packed if they utilize the entire
     /// underlying data type. As an example binary4 uses four bits for
     /// every field element but since no 4-bit data types are
-    /// available we store it's value in an uint8_t. When use APIs
+    /// available we store it's value in an uint8_t. When using APIs
     /// requiring packed data we therefore have to pack the constant
     /// which ensures that both the high an low 4 bits have the right
     /// constant value (in the case of binary4).
@@ -305,7 +308,8 @@ namespace fifi
     /// @param constant The constant to pack.
     /// @return The packed constant
     template<class Field>
-    inline typename Field::value_type pack(typename Field::value_type constant)
+    inline typename Field::value_type
+    pack_constant(typename Field::value_type constant)
     {
         static_assert(std::is_same<Field, binary8>::value ||
                       std::is_same<Field, binary16>::value ||
@@ -316,24 +320,43 @@ namespace fifi
         return constant;
     }
 
-    /// Useful abstraction function for creating packed constants
-    /// @param constant the constant to pack.
-    template<>
-    inline binary::value_type pack<binary>(binary::value_type constant)
+    // Do not expose implementation details to users of this header file
+    namespace detail
     {
-        assert(is_valid_element<binary>(constant));
-
-        typedef typename Field::value_type value_type;
-
-        value_type result = 0;
-
-        uint32_t elements = size_to_elements<Field>(sizeof(value_type));
-        for (uint32_t i = 0; i < elements; ++i)
+        /// @copydoc pack(typename Field::value_type)
+        template<class Field>
+        inline typename Field::value_type
+        pack_constant(typename Field::value_type constant)
         {
-            set_value<Field>(&result, i, constant);
-        }
+            assert(is_valid_element<Field>(constant));
 
-        return result;
+            typedef typename Field::value_type value_type;
+
+            value_type result = 0;
+
+            uint32_t elements = size_to_elements<Field>(sizeof(value_type));
+            for (uint32_t i = 0; i < elements; ++i)
+            {
+                set_value<Field>(&result, i, constant);
+            }
+
+            return result;
+        }
+    }
+
+    /// @copydoc pack(typename Field::value_type)
+    template<>
+    inline binary::value_type pack_constant<binary>(binary::value_type constant)
+    {
+        return detail::pack_constant<binary>(constant);
+    }
+
+    /// @copydoc pack(typename Field::value_type)
+    template<>
+    inline binary4::value_type pack_constant<binary4>(binary4::value_type constant)
+    {
+        return detail::pack_constant<binary4>(constant);
     }
 
 }
+

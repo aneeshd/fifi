@@ -42,7 +42,7 @@ TEST(test_region_arithmetic, fall_through)
 
     value_type dest[2] = {0xf0, 0x0f};
     value_type src[2] = {0xab, 0xba};
-    value_type constant = fifi::pack<field_type>(1U);
+    value_type constant = fifi::pack_constant<field_type>(1U);
 
     uint32_t length = 2;
 

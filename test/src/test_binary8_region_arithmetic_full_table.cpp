@@ -80,7 +80,7 @@ TEST(test_binary8_region_arithmetic_full_table, fall_through_binary8)
     uint32_t length = 10;
     auto dest_vector = std::vector<value_type>(length);
     auto src_vector = std::vector<value_type>(length);
-    auto constant = fifi::pack<field_type>(1);
+    auto constant = fifi::pack_constant<field_type>(1);
 
     s.m_calls.clear();
     expected_calls.clear();

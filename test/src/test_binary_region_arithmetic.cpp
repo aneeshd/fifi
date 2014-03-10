@@ -63,7 +63,7 @@ TEST(test_binary_region_arithmetic, fall_through_binary)
 
         uint32_t length = 10;
         auto dest_vector = std::vector<value_type>(length);
-        auto constant = fifi::pack<field_type>(1);
+        auto constant = fifi::pack_constant<field_type>(1);
 
         s.m_calls.clear();
         expected_calls.clear();
@@ -79,7 +79,7 @@ TEST(test_binary_region_arithmetic, fall_through_binary)
         uint32_t length = 10;
         auto dest_vector = std::vector<value_type>(length);
         auto src_vector = std::vector<value_type>(length);
-        auto constant = fifi::pack<field_type>(1);
+        auto constant = fifi::pack_constant<field_type>(1);
 
         s.m_calls.clear();
         expected_calls.clear();
