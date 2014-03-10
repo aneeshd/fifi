@@ -27,7 +27,6 @@ namespace fifi
                packed_arithmetic<
                full_table_arithmetic<
                simple_online_arithmetic<
-               polynomial_degree<
-               final<Field> > > > > > > > >
+               final<Field> > > > > > > >
     { };
 }

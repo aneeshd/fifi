@@ -7,7 +7,6 @@
 #include <fifi/binary8.hpp>
 #include <fifi/final.hpp>
 #include <fifi/full_table_arithmetic.hpp>
-#include <fifi/polynomial_degree.hpp>
 #include <fifi/simple_online_arithmetic.hpp>
 #include <fifi/simple_online.hpp>
 
@@ -33,8 +32,7 @@ namespace fifi
         struct dummy_stack : public
             full_table_arithmetic<
             simple_online_arithmetic<
-            polynomial_degree<
-            final<Field> > > >
+            final<Field> > >
         { };
     }
 }

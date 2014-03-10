@@ -69,15 +69,15 @@ const uint32_t invert_results<fifi::binary>::m_size =
     dimension_of(invert_results<fifi::binary>::m_results);
 
 const expected_result_unary<fifi::binary>
-find_degree_results<fifi::binary>::m_results[] =
+find_polynomial_degree_results<fifi::binary>::m_results[] =
 {
     // m_input1, m_result
     { 0, 0 },
     { 1, 0 },
 };
 
-const uint32_t find_degree_results<fifi::binary>::m_size =
-    dimension_of(find_degree_results<fifi::binary>::m_results);
+const uint32_t find_polynomial_degree_results<fifi::binary>::m_size =
+    dimension_of(find_polynomial_degree_results<fifi::binary>::m_results);
 
 const expected_result_binary<fifi::binary>
 sum_modulo_results<fifi::binary>::m_results[] =
@@ -309,7 +309,7 @@ const uint32_t invert_results<fifi::binary4>::m_size =
     dimension_of(invert_results<fifi::binary4>::m_results);
 
 const expected_result_unary<fifi::binary4>
-find_degree_results<fifi::binary4>::m_results[] =
+find_polynomial_degree_results<fifi::binary4>::m_results[] =
 {
     // m_input1, m_result
     {  0, 0 },
@@ -330,8 +330,8 @@ find_degree_results<fifi::binary4>::m_results[] =
     { 15, 3 },
 };
 
-const uint32_t find_degree_results<fifi::binary4>::m_size =
-    dimension_of(find_degree_results<fifi::binary4>::m_results);
+const uint32_t find_polynomial_degree_results<fifi::binary4>::m_size =
+    dimension_of(find_polynomial_degree_results<fifi::binary4>::m_results);
 
 const expected_result_binary<fifi::binary4>
 sum_modulo_results<fifi::binary4>::m_results[] =
@@ -665,7 +665,7 @@ const uint32_t invert_results<fifi::binary8>::m_size =
     dimension_of(invert_results<fifi::binary8>::m_results);
 
 const expected_result_unary<fifi::binary8>
-find_degree_results<fifi::binary8>::m_results[] =
+find_polynomial_degree_results<fifi::binary8>::m_results[] =
 {
     // m_input1, m_result
     {   0, 0 },
@@ -696,8 +696,8 @@ find_degree_results<fifi::binary8>::m_results[] =
     { 255, 7 },
 };
 
-const uint32_t find_degree_results<fifi::binary8>::m_size =
-    dimension_of(find_degree_results<fifi::binary8>::m_results);
+const uint32_t find_polynomial_degree_results<fifi::binary8>::m_size =
+    dimension_of(find_polynomial_degree_results<fifi::binary8>::m_results);
 
 const expected_result_binary<fifi::binary8>
 sum_modulo_results<fifi::binary8>::m_results[] =
@@ -874,7 +874,7 @@ const uint32_t invert_results<fifi::binary16>::m_size =
     dimension_of(invert_results<fifi::binary16>::m_results);
 
 const expected_result_unary<fifi::binary16>
-find_degree_results<fifi::binary16>::m_results[] =
+find_polynomial_degree_results<fifi::binary16>::m_results[] =
 {
     // m_input1, m_result
     {     0,  0 },
@@ -921,8 +921,8 @@ find_degree_results<fifi::binary16>::m_results[] =
     { 65535, 15 },
 };
 
-const uint32_t find_degree_results<fifi::binary16>::m_size =
-    dimension_of(find_degree_results<fifi::binary16>::m_results);
+const uint32_t find_polynomial_degree_results<fifi::binary16>::m_size =
+    dimension_of(find_polynomial_degree_results<fifi::binary16>::m_results);
 
 const expected_result_binary<fifi::binary16>
 sum_modulo_results<fifi::binary16>::m_results[] =
@@ -1129,7 +1129,7 @@ const uint32_t invert_results<fifi::prime2325>::m_size =
 
 
 const expected_result_unary<fifi::prime2325>
-find_degree_results<fifi::prime2325>::m_results[] =
+find_polynomial_degree_results<fifi::prime2325>::m_results[] =
 {
     // m_input1, m_result
     {           0,  0 },
@@ -1177,8 +1177,8 @@ find_degree_results<fifi::prime2325>::m_results[] =
     { 4294967290U, 31 },
 };
 
-const uint32_t find_degree_results<fifi::prime2325>::m_size =
-    dimension_of(find_degree_results<fifi::prime2325>::m_results);
+const uint32_t find_polynomial_degree_results<fifi::prime2325>::m_size =
+    dimension_of(find_polynomial_degree_results<fifi::prime2325>::m_results);
 
 const expected_result_binary<fifi::prime2325>
 sum_modulo_results<fifi::prime2325>::m_results[] =

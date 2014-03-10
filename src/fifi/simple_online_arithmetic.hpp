@@ -10,6 +10,7 @@
 #include <utility>
 
 #include "fifi_utils.hpp"
+#include "find_polynomial_degree.hpp"
 #include "is_valid_element.hpp"
 
 namespace fifi
@@ -133,7 +134,8 @@ namespace fifi
             // prime degree. In the following iterations of the
             // algorithm the degree of r_large, which initially holds
             // our polynomial will be representable in value_type
-            int32_t j = field_type::degree - Super::find_degree(r_small);
+            int32_t j = field_type::degree -
+                find_polynomial_degree<field_type>(r_small);
 
             assert(j > 0);
 
@@ -147,7 +149,8 @@ namespace fifi
             {
                 assert(r_large > 1);
 
-                j = Super::find_degree(r_large) - Super::find_degree(r_small);
+                j = find_polynomial_degree<field_type>(r_large) -
+                    find_polynomial_degree<field_type>(r_small);
 
                 if (j < 0)
                 {

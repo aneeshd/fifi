@@ -9,7 +9,6 @@
 #include <fifi/final.hpp>
 #include <fifi/full_table_arithmetic.hpp>
 #include <fifi/packed_arithmetic.hpp>
-#include <fifi/polynomial_degree.hpp>
 #include <fifi/region_arithmetic.hpp>
 #include <fifi/region_info.hpp>
 #include <fifi/simple_online_arithmetic.hpp>
@@ -61,8 +60,7 @@ namespace fifi
         packed_arithmetic<
         full_table_arithmetic<
         simple_online_arithmetic<
-        polynomial_degree<
-        final<Field> > > > > > > >
+        final<Field> > > > > > >
         { };
     }
 }
