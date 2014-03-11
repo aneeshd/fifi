@@ -27,7 +27,8 @@ bld.stlib(features = 'cxx',
           export_includes = ['..'])
 
 
-# We want to make sure we can still build the library without any specific
+# We want to make sure we can still build the library without any cpu specific
+# optimizations
 bld.stlib(features = 'cxx',
           source   = bld.path.ant_glob('**/*.cpp'),
           target = 'fifi_no_dispatch',
