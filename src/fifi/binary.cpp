@@ -10,8 +10,6 @@
 
 #include "binary.hpp"
 
-#include "binary.hpp"
-
 namespace fifi
 {
     const binary::value_type binary::max_value;
