@@ -3,6 +3,11 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#include <platform/config.hpp>
+
+// This file causes double definition warnings with MSVC
+#if !defined(PLATFORM_MSVC)
+
 #include "binary4.hpp"
 
 namespace fifi
@@ -14,3 +19,5 @@ namespace fifi
     const binary4::value_type binary4::prime;
     const bool binary4::is_exact;
 }
+
+#endif

@@ -3,6 +3,11 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#include <platform/config.hpp>
+
+// This file causes double definition warnings with MSVC
+#if !defined(PLATFORM_MSVC)
+
 #include "prime2325.hpp"
 
 namespace fifi
@@ -15,3 +20,5 @@ namespace fifi
     const uint32_t prime2325::max_block_length;
     const bool prime2325::is_exact;
 }
+
+#endif
