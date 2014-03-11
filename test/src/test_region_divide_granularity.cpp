@@ -42,11 +42,12 @@ namespace fifi
         class dummy_stack : public
             region_divide_granularity<
             dummy_typedef_optimized_super<
-            helper_region_info<0,0,0,0,
+            helper_region_info<0,0,16,16,
             helper_fall_through<Field,
             dummy_typedef_basic_super<
+            helper_region_info<0,0,1,1,
             helper_fall_through<Field,
-            final<Field> > > > > > >
+            final<Field> > > > > > > >
         { };
 
         template<class Field>

@@ -33,6 +33,16 @@ namespace fifi
 
     public:
 
+        region_divide_granularity()
+        {
+            // The basic granularity needs to be one, i.e., without requirements
+            assert(BasicSuper::granularity() == 1U);
+
+            // The granularity needs to be a power of two
+            assert((OptimizedSuper::granularity() &
+                   (OptimizedSuper::granularity() -1)) == 0);
+        }
+
         /// @copydoc layer::region_add(value_type*, const value_type*,
         ///                            uint32_t) const
         void region_add(value_type* dest, const value_type* src,
@@ -42,7 +52,7 @@ namespace fifi
             assert(src  != 0);
 
             uint32_t optimized, tail;
-            granulated_length(length, optimized, tail);
+            split_length(&optimized, &tail, length);
 
             if (optimized > 0)
             {
@@ -64,7 +74,7 @@ namespace fifi
             assert(src  != 0);
 
             uint32_t optimized, tail;
-            granulated_length(length, optimized, tail);
+            split_length(&optimized, &tail, length);
 
             if (optimized > 0)
             {
@@ -87,7 +97,7 @@ namespace fifi
             assert(src  != 0);
 
             uint32_t optimized, tail;
-            granulated_length(length, optimized, tail);
+            split_length(&optimized, &tail, length);
 
             if (optimized > 0)
             {
@@ -110,7 +120,7 @@ namespace fifi
             assert(src  != 0);
 
             uint32_t optimized, tail;
-            granulated_length(length, optimized, tail);
+            split_length(&optimized, &tail, length);
 
             if (optimized > 0)
             {
@@ -132,7 +142,7 @@ namespace fifi
             assert(dest != 0);
 
             uint32_t optimized, tail;
-            granulated_length(length, optimized, tail);
+            split_length(&optimized, &tail, length);
 
             if (optimized > 0)
             {
@@ -155,7 +165,7 @@ namespace fifi
             assert(src  != 0);
 
             uint32_t optimized, tail;
-            granulated_length(length, optimized, tail);
+            split_length(&optimized, &tail, length);
 
             if (optimized > 0)
             {
@@ -180,7 +190,7 @@ namespace fifi
             assert(src  != 0);
 
             uint32_t optimized, tail;
-            granulated_length(length, optimized, tail);
+            split_length(&optimized, &tail, length);
 
             if (optimized > 0)
             {
@@ -212,8 +222,8 @@ namespace fifi
         /// @param optimized The number of value_type elements which are a
         /// multiple of the granularity
         /// @param tail The number of remaining value_type elements
-        void granulated_length(uint32_t length, uint32_t& optimized,
-            uint32_t& tail) const
+        void split_length(uint32_t* optimized,
+            uint32_t* tail, uint32_t length) const
         {
             assert(length > 0);
 
@@ -223,8 +233,8 @@ namespace fifi
             // The granularity mask is used instead of a modulo and subtraction
             // since this part is performance critical
             uint32_t mask = granularity - 1;
-            optimized = length & ~mask;
-            tail = length & mask;
+            *optimized = length & ~mask;
+            *tail = length & mask;
         }
     };
 }
