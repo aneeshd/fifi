@@ -3,8 +3,6 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <iostream>
-
 #include <platform/config.hpp>
 #include <cpuid/cpuinfo.hpp>
 
