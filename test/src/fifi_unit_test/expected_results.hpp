@@ -271,7 +271,7 @@ inline void check_results_region_ptr_const(
             for (uint32_t j = 0; j < constants; ++j)
             {
                 // Get the constant to multiply with
-                auto constant = fifi::pack<test_field>(
+                auto constant = fifi::pack_constant<test_field>(
                     rand() % test_field::order);
                 SCOPED_TRACE(testing::Message() << "constant: " << constant);
 
@@ -358,7 +358,7 @@ inline void check_results_region_ptr_ptr_const(
             for (uint32_t j = 0; j < constants; ++j)
             {
                 // Get the constant to multiply with
-                auto constant = fifi::pack<test_field>(
+                auto constant = fifi::pack_constant<test_field>(
                     rand() % test_field::order);
                 SCOPED_TRACE(testing::Message() << "constant: " << constant);
 

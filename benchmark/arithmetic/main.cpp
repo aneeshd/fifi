@@ -221,7 +221,7 @@ public:
             RUN
             {
                 value_type constant = rand() % field_type::max_value;
-                constant = fifi::pack<field_type>(constant);
+                constant = fifi::pack_constant<field_type>(constant);
 
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
@@ -236,7 +236,7 @@ public:
             RUN
             {
                 value_type constant = rand() % field_type::max_value;
-                constant = fifi::pack<field_type>(constant);
+                constant = fifi::pack_constant<field_type>(constant);
 
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
@@ -257,7 +257,7 @@ public:
                     for (uint32_t j = 0; j < vectors; ++j)
                     {
                         value_type constant = rand() % field_type::max_value;
-                        constant = fifi::pack<field_type>(constant);
+                        constant = fifi::pack_constant<field_type>(constant);
 
                         (m_field.*function)(m_symbols_one[i],
                             m_symbols_two[j], constant, length);
@@ -285,7 +285,7 @@ public:
             RUN
             {
                 value_type constant = rand() % field_type::max_value;
-                constant = fifi::pack<field_type>(constant);
+                constant = fifi::pack_constant<field_type>(constant);
 
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
@@ -299,7 +299,7 @@ public:
             RUN
             {
                 value_type constant = rand() % field_type::max_value;
-                constant = fifi::pack<field_type>(constant);
+                constant = fifi::pack_constant<field_type>(constant);
 
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
