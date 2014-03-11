@@ -54,6 +54,8 @@ namespace fifi
         {
             assert(dest != 0);
             assert(src  != 0);
+            assert(((uintptr_t)dest % OptimizedSuper::alignment()) ==
+                   ((uintptr_t)src  % OptimizedSuper::alignment()));
             assert(length > OptimizedSuper::granularity());
 
             auto unaligned = unaligned_head(dest);
@@ -76,6 +78,8 @@ namespace fifi
         {
             assert(dest != 0);
             assert(src  != 0);
+            assert(((uintptr_t)dest % OptimizedSuper::alignment()) ==
+                   ((uintptr_t)src  % OptimizedSuper::alignment()));
             assert(length > OptimizedSuper::granularity());
 
             auto unaligned = unaligned_head(dest);
@@ -98,6 +102,8 @@ namespace fifi
         {
             assert(dest != 0);
             assert(src  != 0);
+            assert(((uintptr_t)dest % OptimizedSuper::alignment()) ==
+                   ((uintptr_t)src  % OptimizedSuper::alignment()));
             assert(length > OptimizedSuper::granularity());
 
             auto unaligned = unaligned_head(dest);
@@ -120,6 +126,8 @@ namespace fifi
         {
             assert(dest != 0);
             assert(src  != 0);
+            assert(((uintptr_t)dest % OptimizedSuper::alignment()) ==
+                   ((uintptr_t)src  % OptimizedSuper::alignment()));
             assert(length > OptimizedSuper::granularity());
 
             auto unaligned = unaligned_head(dest);
@@ -166,6 +174,8 @@ namespace fifi
         {
             assert(dest != 0);
             assert(src  != 0);
+            assert(((uintptr_t)dest % OptimizedSuper::alignment()) ==
+                   ((uintptr_t)src  % OptimizedSuper::alignment()));
             assert(length > OptimizedSuper::granularity());
             assert(is_packed_constant<field_type>(constant));
 
@@ -193,6 +203,8 @@ namespace fifi
         {
             assert(dest != 0);
             assert(src  != 0);
+            assert(((uintptr_t)dest % OptimizedSuper::alignment()) ==
+                   ((uintptr_t)src  % OptimizedSuper::alignment()));
             assert(length > OptimizedSuper::granularity());
             assert(is_packed_constant<field_type>(constant));
 
@@ -215,7 +227,10 @@ namespace fifi
 
         uint32_t unaligned_head(const value_type* data) const
         {
+            assert(data != 0);
             uint32_t alignment = OptimizedSuper::alignment();
+            assert(alignment != 0);
+
             uint32_t offset = (uintptr_t)data % alignment;
             // Return zero if the data is aligned
             if (offset == 0)
