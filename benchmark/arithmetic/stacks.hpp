@@ -8,9 +8,6 @@
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
 #include <fifi/region_dispatcher.hpp>
-#include <fifi/region_divide_alignment.hpp>
-#include <fifi/region_divide_granularity.hpp>
-#include <fifi/region_equal_alignment.hpp>
 #include <fifi/simple_online.hpp>
 #include <fifi/ssse3_binary4_full_table.hpp>
 #include <fifi/ssse3_binary8_full_table.hpp>
