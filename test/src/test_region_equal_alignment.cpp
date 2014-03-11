@@ -45,9 +45,8 @@ namespace fifi
             helper_region_info<0,0,0,0,
             helper_fall_through<Field,
             dummy_typedef_basic_super<
-            helper_region_info<0,0,0,0,
             helper_fall_through<Field,
-            final<Field> > > > > > > >
+            final<Field> > > > > > >
         { };
 
         template<class Field>
@@ -165,7 +164,6 @@ namespace fifi
                 basic_super& basic = m_stack;
                 optimized_super& optimized = m_stack;
 
-                basic.set_alignment(sizeof(value_type));
                 optimized.set_alignment(m_alignment);
 
                 optimized.clear();
@@ -202,13 +200,10 @@ namespace fifi
 TEST(test_region_equal_alignment, alignment)
 {
     fifi::dummy_stack<fifi::binary8> stack;
-    fifi::dummy_stack<fifi::binary8>::BasicSuper& basic = stack;
     fifi::dummy_stack<fifi::binary8>::OptimizedSuper& optimized = stack;
 
-    basic.set_alignment(1U);
     optimized.set_alignment(16U);
 
-    EXPECT_EQ(1U, basic.alignment());
     EXPECT_EQ(16U, optimized.alignment());
     EXPECT_EQ(16U, stack.alignment());
 }
@@ -216,13 +211,10 @@ TEST(test_region_equal_alignment, alignment)
 TEST(test_region_equal_alignment, max_alignment)
 {
     fifi::dummy_stack<fifi::binary8> stack;
-    fifi::dummy_stack<fifi::binary8>::BasicSuper& basic = stack;
     fifi::dummy_stack<fifi::binary8>::OptimizedSuper& optimized = stack;
 
-    basic.set_max_alignment(1U);
     optimized.set_max_alignment(16U);
 
-    EXPECT_EQ(1U, basic.max_alignment());
     EXPECT_EQ(16U, optimized.max_alignment());
     EXPECT_EQ(16U, stack.max_alignment());
 }

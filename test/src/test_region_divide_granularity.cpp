@@ -45,9 +45,8 @@ namespace fifi
             helper_region_info<0,0,0,0,
             helper_fall_through<Field,
             dummy_typedef_basic_super<
-            helper_region_info<0,0,0,0,
             helper_fall_through<Field,
-            final<Field> > > > > > > >
+            final<Field> > > > > > >
         { };
 
         template<class Field>
@@ -150,7 +149,6 @@ namespace fifi
                 basic_super& basic = m_stack;
                 optimized_super& optimized = m_stack;
 
-                basic.set_granularity(1U);
                 optimized.set_granularity(m_granularity);
 
                 optimized.clear();
@@ -219,13 +217,10 @@ namespace fifi
 TEST(test_region_divide_granularity, granularity)
 {
     fifi::dummy_stack<fifi::binary8> stack;
-    fifi::dummy_stack<fifi::binary8>::BasicSuper& basic = stack;
     fifi::dummy_stack<fifi::binary8>::OptimizedSuper& optimized = stack;
 
-    basic.set_granularity(1U);
     optimized.set_granularity(16U);
 
-    EXPECT_EQ(1U, basic.granularity());
     EXPECT_EQ(16U, optimized.granularity());
     EXPECT_EQ(16U, stack.granularity());
 }
@@ -233,13 +228,10 @@ TEST(test_region_divide_granularity, granularity)
 TEST(test_region_divide_granularity, max_granularity)
 {
     fifi::dummy_stack<fifi::binary8> stack;
-    fifi::dummy_stack<fifi::binary8>::BasicSuper& basic = stack;
     fifi::dummy_stack<fifi::binary8>::OptimizedSuper& optimized = stack;
 
-    basic.set_max_granularity(1U);
     optimized.set_max_granularity(16U);
 
-    EXPECT_EQ(1U, basic.max_granularity());
     EXPECT_EQ(16U, optimized.max_granularity());
     EXPECT_EQ(16U, stack.max_granularity());
 }
