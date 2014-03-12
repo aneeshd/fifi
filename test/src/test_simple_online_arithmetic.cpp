@@ -8,7 +8,6 @@
 #include <fifi/binary4.hpp>
 #include <fifi/binary8.hpp>
 #include <fifi/final.hpp>
-#include <fifi/polynomial_degree.hpp>
 #include <fifi/simple_online_arithmetic.hpp>
 
 #include <gtest/gtest.h>
@@ -26,15 +25,13 @@ namespace fifi
         template<class Field>
         struct dummy_stack_fall_through : public
             simple_online_arithmetic<
-            polynomial_degree<
-            helper_fall_through<Field> > >
+            helper_fall_through<Field> >
         { };
 
         template<class Field>
         struct dummy_stack : public
             simple_online_arithmetic<
-            polynomial_degree<
-            final<Field> > >
+            final<Field> >
         { };
     }
 }

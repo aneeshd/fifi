@@ -7,8 +7,8 @@
 #include <fifi/binary8.hpp>
 #include <fifi/final.hpp>
 #include <fifi/full_table_arithmetic.hpp>
-#include <fifi/polynomial_degree.hpp>
 #include <fifi/simple_online_arithmetic.hpp>
+#include <fifi/simple_online.hpp>
 
 #include <gtest/gtest.h>
 
@@ -32,8 +32,7 @@ namespace fifi
         struct dummy_stack : public
             full_table_arithmetic<
             simple_online_arithmetic<
-            polynomial_degree<
-            final<Field> > > >
+            final<Field> > >
         { };
     }
 }
@@ -57,6 +56,41 @@ inline void helper_fall_through()
     // Test that other calls does fall through.
     fifi::test_fall_through_add<stack>();
     fifi::test_fall_through_subtract<stack>();
+}
+
+template<class Field>
+inline void helper_test_table()
+{
+    typedef fifi::dummy_stack<Field> test_stack;
+    typedef fifi::simple_online<Field> reference_stack;
+
+    typedef typename test_stack::value_type value_type;
+    test_stack test;
+    reference_stack reference;
+
+    for (uint32_t i = 0; i < Field::order; ++i)
+    {
+        const value_type* multiplication_row = test.multiplication_row(i);
+        const value_type* division_row = test.division_row(i);
+        for (uint32_t j = 0; j < Field::order; ++j)
+        {
+            EXPECT_EQ(reference.multiply(i,j), multiplication_row[j]);
+            if (j != 0)
+                EXPECT_EQ(reference.divide(i,j), division_row[j]);
+        }
+    }
+}
+
+TEST(test_full_table_arithmetic, table)
+{
+    {
+        SCOPED_TRACE("binary4");
+        helper_test_table<fifi::binary4>();
+    }
+    {
+        SCOPED_TRACE("binary8");
+        helper_test_table<fifi::binary8>();
+    }
 }
 
 TEST(test_full_table_arithmetic, fall_through)

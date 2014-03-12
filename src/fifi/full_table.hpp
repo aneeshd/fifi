@@ -12,7 +12,6 @@
 #include "final.hpp"
 #include "full_table_arithmetic.hpp"
 #include "packed_arithmetic.hpp"
-#include "polynomial_degree.hpp"
 #include "region_arithmetic.hpp"
 #include "region_dispatcher.hpp"
 #include "region_divide_granularity.hpp"
@@ -37,7 +36,6 @@ namespace fifi
         packed_arithmetic<
         full_table_arithmetic<
         simple_online_arithmetic<
-        polynomial_degree<
-        final<Field> > > > > > > > > > > >
+        final<Field> > > > > > > > > > >
     { };
 }

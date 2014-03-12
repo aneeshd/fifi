@@ -15,7 +15,6 @@
 
 namespace fifi
 {
-    /// ssse3_binary4_full_table_dispatch
     /// ssse3_binary4_full_table
     ///
     /// Stack implementing SSSE3 SIMD accelerated finite field

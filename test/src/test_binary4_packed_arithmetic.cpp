@@ -9,7 +9,6 @@
 #include <fifi/binary4_packed_arithmetic.hpp>
 #include <fifi/binary8.hpp>
 #include <fifi/packed_arithmetic.hpp>
-#include <fifi/polynomial_degree.hpp>
 #include <fifi/prime2325.hpp>
 #include <fifi/simple_online_arithmetic.hpp>
 
@@ -37,8 +36,7 @@ namespace fifi
         struct arithmetic_stack : public
             binary4_packed_arithmetic<Field,
             simple_online_arithmetic<
-            polynomial_degree<
-            final<Field> > > >
+            final<Field> > >
         { };
     }
 }

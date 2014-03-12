@@ -3,8 +3,10 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
+#include <platform/config.hpp>
+
 // This file causes double definition warnings with MSVC
-#if !defined(_MSC_VER)
+#if !defined(PLATFORM_MSVC)
 
 #include "binary8.hpp"
 

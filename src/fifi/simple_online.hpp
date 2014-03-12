@@ -11,7 +11,6 @@
 #include "binary_simple_online_arithmetic.hpp"
 #include "final.hpp"
 #include "packed_arithmetic.hpp"
-#include "polynomial_degree.hpp"
 #include "region_arithmetic.hpp"
 #include "region_info.hpp"
 #include "simple_online_arithmetic.hpp"
@@ -30,7 +29,6 @@ namespace fifi
                packed_arithmetic<
                binary_simple_online_arithmetic<Field,
                simple_online_arithmetic<
-               polynomial_degree<
-               final<Field> > > > > > > > > >
+               final<Field> > > > > > > > >
     { };
 }

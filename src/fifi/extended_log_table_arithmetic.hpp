@@ -120,7 +120,7 @@ namespace fifi
             return divide(1, a);
         }
 
-    public:
+    private:
 
         /// The Log table
         std::vector<value_type> m_log_data;

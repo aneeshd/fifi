@@ -38,36 +38,38 @@ namespace fifi
             typedef Super OptimizedSuper;
         };
 
-        template<class Field>
+        template<class Field, uint32_t Granularity>
         class dummy_stack : public
             region_divide_granularity<
             dummy_typedef_optimized_super<
-            helper_region_info<0,0,0,0,
+            helper_region_info<
+               /*alignment=*/0U,
+               /*max_alignment=*/0U,
+               /*granularity=*/Granularity,
+               /*max_granularity=*/Granularity,
             helper_fall_through<Field,
             dummy_typedef_basic_super<
-            helper_region_info<0,0,0,0,
+            helper_region_info<
+               /*alignment=*/0U,
+               /*max_alignment=*/0U,
+               /*granularity=*/1U,
+               /*max_granularity=*/1U,
             helper_fall_through<Field,
             final<Field> > > > > > > >
         { };
 
-        template<class Field>
+        template<class Field, uint32_t Granularity>
         struct test_operation
         {
             typedef Field field_type;
 
             typedef typename field_type::value_type value_type;
 
-            typedef dummy_stack<field_type> stack_type;
+            typedef dummy_stack<field_type, Granularity> stack_type;
             typedef capture_calls<value_type> calls_type;
 
             typedef typename stack_type::BasicSuper basic_super;
             typedef typename stack_type::OptimizedSuper optimized_super;
-
-            test_operation()
-            {
-                // The granularity is measured in value_types
-                m_granularity = 16;
-            }
 
             void run_test()
             {
@@ -150,9 +152,6 @@ namespace fifi
                 basic_super& basic = m_stack;
                 optimized_super& optimized = m_stack;
 
-                basic.set_granularity(1U);
-                optimized.set_granularity(m_granularity);
-
                 optimized.clear();
                 basic.clear();
                 m_basic_calls.clear();
@@ -160,7 +159,7 @@ namespace fifi
                 function(m_stack, dest, args..., length);
 
                 // Calculate the tail that is not granulated correctly
-                uint32_t tail = length % m_granularity;
+                uint32_t tail = length % m_stack.granularity();
 
                 // Calculate the number of granulated values
                 uint32_t optimizable = length - tail;
@@ -210,20 +209,39 @@ namespace fifi
             stack_type m_stack;
             calls_type m_basic_calls;
             calls_type m_optimized_calls;
-
-            uint32_t m_granularity;
         };
+
+        template<int Granularity>
+        void test_granularity()
+        {
+            {
+                SCOPED_TRACE("binary");
+                test_operation<fifi::binary, Granularity>().run_test();
+            }
+            {
+                SCOPED_TRACE("binary4");
+                test_operation<fifi::binary4, Granularity>().run_test();
+            }
+            {
+                SCOPED_TRACE("binary8");
+                test_operation<fifi::binary8, Granularity>().run_test();
+            }
+            {
+                SCOPED_TRACE("binary16");
+                test_operation<fifi::binary16, Granularity>().run_test();
+            }
+        }
     }
 }
 
 TEST(test_region_divide_granularity, granularity)
 {
-    fifi::dummy_stack<fifi::binary8> stack;
-    fifi::dummy_stack<fifi::binary8>::BasicSuper& basic = stack;
-    fifi::dummy_stack<fifi::binary8>::OptimizedSuper& optimized = stack;
+    // Create a stack and set the granularity and max granularity to 16.
+    typedef fifi::dummy_stack<fifi::binary8, 16U> stack_type;
+    stack_type stack;
 
-    basic.set_granularity(1U);
-    optimized.set_granularity(16U);
+    stack_type::BasicSuper& basic = stack;
+    stack_type::OptimizedSuper& optimized = stack;
 
     EXPECT_EQ(1U, basic.granularity());
     EXPECT_EQ(16U, optimized.granularity());
@@ -232,12 +250,12 @@ TEST(test_region_divide_granularity, granularity)
 
 TEST(test_region_divide_granularity, max_granularity)
 {
-    fifi::dummy_stack<fifi::binary8> stack;
-    fifi::dummy_stack<fifi::binary8>::BasicSuper& basic = stack;
-    fifi::dummy_stack<fifi::binary8>::OptimizedSuper& optimized = stack;
+    // Create a stack and set the granularity and max granularity to 16.
+    typedef fifi::dummy_stack<fifi::binary8, 16U> stack_type;
+    stack_type stack;
 
-    basic.set_max_granularity(1U);
-    optimized.set_max_granularity(16U);
+    stack_type::BasicSuper& basic = stack;
+    stack_type::OptimizedSuper& optimized = stack;
 
     EXPECT_EQ(1U, basic.max_granularity());
     EXPECT_EQ(16U, optimized.max_granularity());
@@ -247,19 +265,15 @@ TEST(test_region_divide_granularity, max_granularity)
 TEST(test_region_divide_granularity, all)
 {
     {
-        SCOPED_TRACE("binary");
-        fifi::test_operation<fifi::binary>().run_test();
+        SCOPED_TRACE("granularity = 8");
+        fifi::test_granularity<8>();
     }
     {
-        SCOPED_TRACE("binary4");
-        fifi::test_operation<fifi::binary4>().run_test();
+        SCOPED_TRACE("granularity = 16");
+        fifi::test_granularity<16>();
     }
     {
-        SCOPED_TRACE("binary8");
-        fifi::test_operation<fifi::binary8>().run_test();
-    }
-    {
-        SCOPED_TRACE("binary16");
-        fifi::test_operation<fifi::binary16>().run_test();
+        SCOPED_TRACE("granularity = 32");
+        fifi::test_granularity<32>();
     }
 }

@@ -9,7 +9,6 @@
 #include <fifi/final.hpp>
 #include <fifi/full_table_arithmetic.hpp>
 #include <fifi/packed_arithmetic.hpp>
-#include <fifi/polynomial_degree.hpp>
 #include <fifi/region_arithmetic.hpp>
 #include <fifi/region_info.hpp>
 #include <fifi/simple_online_arithmetic.hpp>
@@ -33,11 +32,17 @@ namespace fifi
         public:
             multtable_mock()
             {
-                m_multtable.resize(field_type::order * field_type::order, '\0');
+                m_multiplication_table.resize(field_type::order, '\0');
+            }
+
+            const value_type* multiplication_row(uint32_t row) const
+            {
+                (void)row;
+                return m_multiplication_table.data();
             }
 
         protected:
-            std::vector<value_type> m_multtable;
+            std::vector<value_type> m_multiplication_table;
         };
 
         template<class Field>
@@ -55,8 +60,7 @@ namespace fifi
         packed_arithmetic<
         full_table_arithmetic<
         simple_online_arithmetic<
-        polynomial_degree<
-        final<Field> > > > > > > >
+        final<Field> > > > > > >
         { };
     }
 }
