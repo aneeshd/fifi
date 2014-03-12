@@ -56,6 +56,19 @@ def options(opt):
             git_repository = 'github.com/steinwurf/tables.git',
             major_version = 4))
 
+    bundle.add_dependency(opt,
+        resolve.ResolveGitMajorVersion(
+            name = 'cpuid',
+            git_repository = 'github.com/steinwurf/cpuid.git',
+            major_version = 3))
+
+    bundle.add_dependency(opt,
+        resolve.ResolveGitMajorVersion(
+            name = 'platform',
+            git_repository = 'github.com/steinwurf/platform.git',
+            major_version = 1))
+
+
     opt.load('wurf_dependency_bundle')
     opt.load('wurf_tools')
 
@@ -76,6 +89,31 @@ def configure(conf):
         recurse_helper(conf, 'sak')
         recurse_helper(conf, 'gauge')
         recurse_helper(conf, 'tables')
+        recurse_helper(conf, 'cpuid')
+        recurse_helper(conf, 'platform')
+
+    set_simd_flags(conf)
+
+def set_simd_flags(conf):
+    """
+    Sets flags used to compile in SIMD mode
+    """
+    CXX = conf.env.get_flat("CXX")
+    flags = []
+    defines = []
+
+    # Matches both /usr/bin/g++ and /user/bin/clang++
+    if 'g++' in CXX or 'clang' in CXX:
+        flags += conf.mkspec_try_flags('cxxflags', ['-mssse3'])
+
+    elif 'CL.exe' in CXX or 'cl.exe' in CXX:
+        pass
+
+    else:
+        conf.fatal('Unknown compiler - no SIMD flags specified')
+
+    conf.env['CFLAGS_FIFI_SIMD'] = flags
+    conf.env['CXXFLAGS_FIFI_SIMD'] = flags
 
 def build(bld):
 
@@ -87,12 +125,13 @@ def build(bld):
 
         bld.load('wurf_dependency_bundle')
 
-
         recurse_helper(bld, 'boost')
         recurse_helper(bld, 'gtest')
         recurse_helper(bld, 'sak')
         recurse_helper(bld, 'gauge')
         recurse_helper(bld, 'tables')
+        recurse_helper(bld, 'cpuid')
+        recurse_helper(bld, 'platform')
 
         # Only build test and benchmarks when executed from the
         # top-level wscript i.e. not when included as a dependency
@@ -102,6 +141,8 @@ def build(bld):
         bld.recurse('benchmark/basic_operations')
         bld.recurse('benchmark/arithmetic')
         bld.recurse('benchmark/prime2325')
+
+    bld.recurse('src/fifi')
 
 
 

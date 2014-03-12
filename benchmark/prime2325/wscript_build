@@ -5,6 +5,6 @@ bld.program(
     features = 'cxx benchmark',
     source   = ['main.cpp'],
     target   = 'fifi_prime2325_benchmarks',
-    use      = ['gtest','fifi_includes', 'boost_includes',
+    use      = ['gtest', 'fifi', 'fifi_includes', 'boost_includes',
                 'boost_chrono', 'boost_system',
                 'sak_includes', 'gauge'])

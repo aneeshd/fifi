@@ -1,12 +1,26 @@
 News for fifi
-============
+=============
 
 This file lists the major changes between versions. For a more detailed list
 of every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Major: Changed Fifi into a static library. Essentially this change
+  was motivated by the desire to introduce SIMD accelerated arithmetics,
+  but keep the library as easy to use as possible. SIMD introduces a number
+  of CPU-dependent algorithms, this increases both compile-time and run-time
+  complexity. These complexities can be handled internally in Fifi by using
+  a static library, which means that they are hidden from its users.
+* Major: Redid the Fifi architecture to use mix-in layers. This design
+  technique allows a highly flexible design where most functionality
+  can be customized to specific needs.
+* Major: Moved optimizations from ``arithmetics.hpp`` to separate layers.
+* Major: Split ``field_types.hpp`` into separate files for each field.
+* Minor: Added unit tests for all classes.
+* Minor: Introduced the binary4 finite field i.e. (2^4).
+* Minor: Introduced SIMD accelerated full table arithmetics for binary4 and
+  binary8.
 
 10.0.0
 ------

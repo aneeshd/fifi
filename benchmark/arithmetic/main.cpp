@@ -9,20 +9,26 @@
 #include <vector>
 #include <ctime>
 #include <cmath>
+#include <limits>
+
+#include <sak/aligned_allocator.hpp>
 
 #include <gauge/gauge.hpp>
 #include <gauge/console_printer.hpp>
 #include <gauge/csv_printer.hpp>
 #include <gauge/python_printer.hpp>
 
-#include <fifi/arithmetics.hpp>
 #include <fifi/fifi_utils.hpp>
 #include <fifi/simple_online.hpp>
 #include <fifi/full_table.hpp>
 #include <fifi/log_table.hpp>
 #include <fifi/extended_log_table.hpp>
 #include <fifi/optimal_prime.hpp>
-#include <fifi/field_types.hpp>
+#include <fifi/binary8.hpp>
+#include <fifi/binary16.hpp>
+#include <fifi/prime2325.hpp>
+
+#include "stacks.hpp"
 
 /// Benchmark fixture for the arithmetic benchmark
 template<class FieldImpl>
@@ -77,34 +83,6 @@ public:
         auto operations = options["operations"].as<std::vector<std::string>>();
         auto access = options["access"].as<std::vector<std::string>>();
 
-        // We make one pool with random data as source for the
-        // computations
-        uint32_t max_size =
-            *std::max_element(sizes.begin(), sizes.end());
-
-        assert((max_size % sizeof(value_type)) == 0);
-        uint32_t max_length = max_size / sizeof(value_type);
-
-        uint32_t max_vectors =
-            *std::max_element(vectors.begin(), vectors.end());
-
-        m_random_symbols_one.resize(max_vectors);
-        m_random_symbols_two.resize(max_vectors);
-
-        m_temp.resize(max_length);
-
-        for (uint32_t j = 0; j < max_vectors; ++j)
-        {
-            m_random_symbols_one[j].resize(max_length);
-            m_random_symbols_two[j].resize(max_length);
-
-            for (uint32_t i = 0; i < max_length; ++i)
-            {
-                m_random_symbols_one[j][i] = rand();
-                m_random_symbols_two[j][i] = rand();
-            }
-        }
-
         assert(sizes.size() > 0);
         assert(vectors.size() > 0);
         assert(operations.size() > 0);
@@ -118,6 +96,11 @@ public:
                 {
                     for (const auto& a : access)
                     {
+                        // The encoding benchmark pattern is not applicable
+                        // to multiply_constant
+                        if (o == "multiply_constant" && a == "encoding")
+                            continue;
+
                         gauge::config_set cs;
                         cs.set_value<uint32_t>("vector_size", s);
 
@@ -148,25 +131,24 @@ public:
         uint32_t length = cs.get_value<uint32_t>("vector_length");
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
 
-        if (vectors != m_symbols_one.size())
+        // Prepare the continuous data blocks
+        m_data_one.resize(vectors * length);
+        m_data_two.resize(vectors * length);
+
+        for (uint32_t i = 0; i < length; ++i)
         {
-            m_symbols_one.resize(vectors);
-            m_symbols_two.resize(vectors);
+            m_data_one[i] = rand() % field_type::max_value;
+            m_data_two[i] = rand() % field_type::max_value;
         }
 
-        for (uint32_t j = 0; j < vectors; ++j)
+        // Prepare the symbol pointers
+        m_symbols_one.resize(vectors);
+        m_symbols_two.resize(vectors);
+
+        for (uint32_t i = 0; i < vectors; ++i)
         {
-            if (length != m_symbols_one[j].size())
-            {
-                m_symbols_one[j].resize(length);
-                m_symbols_two[j].resize(length);
-            }
-
-            std::copy_n(&m_random_symbols_one[j][0], length,
-                        &m_symbols_one[j][0]);
-
-            std::copy_n(&m_random_symbols_two[j][0], length,
-                        &m_symbols_two[j][0]);
+            m_symbols_one[i] = &m_data_one[i * length];
+            m_symbols_two[i] = &m_data_two[i * length];
         }
     }
 
@@ -179,14 +161,14 @@ public:
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
         std::string data_access = cs.get_value<std::string>("data_access");
 
-        if (data_access == "linear")
+        if(data_access == "linear")
         {
             RUN
             {
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
-                    function(m_field, &(m_symbols_one[i][0]),
-                             &(m_symbols_two[i][0]), length);
+                    (m_field.*function)(m_symbols_one[i], m_symbols_two[i],
+                        length);
                 }
             }
         }
@@ -199,8 +181,22 @@ public:
                     uint32_t index_one = rand() % vectors;
                     uint32_t index_two = rand() % vectors;
 
-                    function(m_field, &(m_symbols_one[index_one][0]),
-                             &(m_symbols_two[index_two][0]), length);
+                    (m_field.*function)(m_symbols_one[index_one],
+                        m_symbols_two[index_two], length);
+                }
+            }
+        }
+        else if (data_access == "encoding")
+        {
+            RUN
+            {
+                for (uint32_t i = 0; i < vectors; ++i)
+                {
+                    for (uint32_t j = 0; j < vectors; ++j)
+                    {
+                        (m_field.*function)(m_symbols_one[i],
+                            m_symbols_two[j], length);
+                    }
                 }
             }
         }
@@ -219,17 +215,18 @@ public:
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
         std::string data_access = cs.get_value<std::string>("data_access");
 
-        if (data_access == "linear")
+        if(data_access == "linear")
         {
             // Clock is ticking
             RUN
             {
                 value_type constant = rand() % field_type::max_value;
+                constant = fifi::pack_constant<field_type>(constant);
 
-                for(uint32_t i = 0; i < vectors; ++i)
+                for (uint32_t i = 0; i < vectors; ++i)
                 {
-                    function(m_field, constant, &(m_symbols_one[i][0]),
-                             &(m_symbols_two[i][0]), &m_temp[0], length);
+                    (m_field.*function)(m_symbols_one[i],
+                        m_symbols_two[i], constant, length);
                 }
             }
         }
@@ -239,14 +236,32 @@ public:
             RUN
             {
                 value_type constant = rand() % field_type::max_value;
+                constant = fifi::pack_constant<field_type>(constant);
 
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
                     uint32_t index_one = rand() % vectors;
                     uint32_t index_two = rand() % vectors;
 
-                    function(m_field, constant, &(m_symbols_one[index_one][0]),
-                             &(m_symbols_two[index_two][0]), &m_temp[0], length);
+                    (m_field.*function)(m_symbols_one[index_one],
+                        m_symbols_two[index_two], constant, length);
+                }
+            }
+        }
+        else if (data_access == "encoding")
+        {
+            RUN
+            {
+                for (uint32_t i = 0; i < vectors; ++i)
+                {
+                    for (uint32_t j = 0; j < vectors; ++j)
+                    {
+                        value_type constant = rand() % field_type::max_value;
+                        constant = fifi::pack_constant<field_type>(constant);
+
+                        (m_field.*function)(m_symbols_one[i],
+                            m_symbols_two[j], constant, length);
+                    }
                 }
             }
         }
@@ -265,15 +280,17 @@ public:
         uint32_t vectors = cs.get_value<uint32_t>("vectors");
         std::string data_access = cs.get_value<std::string>("data_access");
 
-        if (data_access == "linear")
+        if(data_access == "linear")
         {
             RUN
             {
                 value_type constant = rand() % field_type::max_value;
+                constant = fifi::pack_constant<field_type>(constant);
 
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
-                    function(m_field, constant, &(m_symbols_one[i][0]), length);
+                    (m_field.*function)(m_symbols_one[i], constant,
+                        length);
                 }
             }
         }
@@ -282,13 +299,14 @@ public:
             RUN
             {
                 value_type constant = rand() % field_type::max_value;
+                constant = fifi::pack_constant<field_type>(constant);
 
                 for (uint32_t i = 0; i < vectors; ++i)
                 {
                     uint32_t index = rand() % vectors;
 
-                    function(m_field, constant, &(m_symbols_one[index][0]),
-                             length);
+                    (m_field.*function)(m_symbols_one[index], constant,
+                        length);
                 }
             }
         }
@@ -307,32 +325,32 @@ public:
         if (operation == "add")
         {
             // dest[i] = dest[i] + src[i]
-            run_binary(&fifi::add<field_impl>);
+            run_binary(&field_impl::region_add);
         }
         else if (operation == "subtract")
         {
             // dest[i] = dest[i] - src[i]
-            run_binary(&fifi::subtract<field_impl>);
+            run_binary(&field_impl::region_subtract);
         }
         else if (operation == "multiply")
         {
             // dest[i] = dest[i] * src[i]
-            run_binary(&fifi::multiply<field_impl>);
+            run_binary(&field_impl::region_multiply);
         }
         else if (operation == "multiply_add")
         {
             // dest[i] = dest[i] + (constant * src[i])
-            run_binary_constant(&fifi::multiply_add<field_impl>);
+            run_binary_constant(&field_impl::region_multiply_add);
         }
         else if (operation == "multiply_subtract")
         {
             // dest[i] = dest[i] - (constant * src[i])
-            run_binary_constant(&fifi::multiply_subtract<field_impl>);
+            run_binary_constant(&field_impl::region_multiply_subtract);
         }
         else if (operation == "multiply_constant")
         {
             // dest[i] = dest[i] * constant
-            run_unary_constant(&fifi::multiply_constant<field_impl>);
+            run_unary_constant(&field_impl::region_multiply_constant);
         }
         else
         {
@@ -345,21 +363,21 @@ protected:
     /// The field implementation
     field_impl m_field;
 
+    /// Type of the aligned vector
+    typedef std::vector<value_type, sak::aligned_allocator<value_type>>
+        aligned_vector;
+
     /// The first buffer of vectors
-    std::vector< std::vector<value_type> > m_symbols_one;
+    std::vector<value_type*> m_symbols_one;
 
     /// The second buffer of vectors
-    std::vector< std::vector<value_type> > m_symbols_two;
+    std::vector<value_type*> m_symbols_two;
 
-    /// Random data for the first buffer of symbols
-    std::vector< std::vector<value_type> > m_random_symbols_one;
+    /// Random data for the first continuous buffer
+    aligned_vector m_data_one;
 
-    /// Random data for the second buffer of symbols
-    std::vector< std::vector<value_type> > m_random_symbols_two;
-
-    /// Temp buffer required for composite algorithms
-    std::vector<value_type> m_temp;
-
+    /// Random data for the second continuous buffer
+    aligned_vector m_data_two;
 };
 
 
@@ -371,8 +389,8 @@ BENCHMARK_OPTION(arithmetic_options)
     gauge::po::options_description options;
 
     std::vector<uint32_t> size;
-    size.push_back(100);
-    size.push_back(2000);
+    size.push_back(64);
+    size.push_back(1600);
 
     auto default_size =
         gauge::po::value<std::vector<uint32_t>>()->default_value(
@@ -381,8 +399,7 @@ BENCHMARK_OPTION(arithmetic_options)
     std::vector<uint32_t> vectors;
     vectors.push_back(16);
     vectors.push_back(64);
-    vectors.push_back(128);
-    vectors.push_back(512);
+    vectors.push_back(256);
 
     auto default_vectors =
         gauge::po::value<std::vector<uint32_t>>()->default_value(
@@ -403,6 +420,7 @@ BENCHMARK_OPTION(arithmetic_options)
     std::vector<std::string> access;
     access.push_back("random");
     access.push_back("linear");
+    access.push_back("encoding");
 
     auto default_access =
         gauge::po::value<std::vector<std::string> >()->default_value(
@@ -424,6 +442,10 @@ BENCHMARK_OPTION(arithmetic_options)
     gauge::runner::instance().register_options(options);
 }
 
+//------------------------------------------------------------------
+// SimpleOnline
+//------------------------------------------------------------------
+
 // typedef arithmetic_setup< fifi::simple_online<fifi::binary> >
 //     setup_simple_online_binary;
 
@@ -432,66 +454,104 @@ BENCHMARK_OPTION(arithmetic_options)
 //     benchmark();
 // }
 
-typedef arithmetic_setup< fifi::simple_online<fifi::binary8> >
+typedef arithmetic_setup<fifi::simple_online<fifi::binary8>>
     setup_simple_online_binary8;
 
-BENCHMARK_F(setup_simple_online_binary8, Arithmetic, SimpleOnline8, 5)
+BENCHMARK_F(setup_simple_online_binary8, Arithmetic, simple_online_binary8, 5)
 {
     benchmark();
 }
 
-typedef arithmetic_setup< fifi::simple_online<fifi::binary16> >
+typedef arithmetic_setup<fifi::simple_online<fifi::binary16>>
     setup_simple_online_binary16;
 
-BENCHMARK_F(setup_simple_online_binary16, Arithmetic, SimpleOnline16, 5)
+BENCHMARK_F(setup_simple_online_binary16, arithmetic, simple_online_binary16, 5)
 {
     benchmark();
 }
 
-typedef arithmetic_setup< fifi::full_table<fifi::binary8> >
+//------------------------------------------------------------------
+// FullTable
+//------------------------------------------------------------------
+
+typedef arithmetic_setup<fifi::full_table<fifi::binary4>>
+    setup_full_table_binary4;
+
+BENCHMARK_F(setup_full_table_binary4, arithmetic, full_table_binary4, 5)
+{
+    benchmark();
+}
+
+typedef arithmetic_setup<fifi::full_table<fifi::binary8>>
     setup_full_table_binary8;
 
-BENCHMARK_F(setup_full_table_binary8, Arithmetic, FullTable8, 5)
+BENCHMARK_F(setup_full_table_binary8, arithmetic, full_table_binary8, 5)
 {
     benchmark();
 }
 
-typedef arithmetic_setup< fifi::log_table<fifi::binary8> >
+//------------------------------------------------------------------
+// LogTable
+//------------------------------------------------------------------
+
+typedef arithmetic_setup< fifi::log_table<fifi::binary8>>
     setup_log_table_binary8;
 
-BENCHMARK_F(setup_log_table_binary8, Arithmetic, LogTable8, 5)
+BENCHMARK_F(setup_log_table_binary8, arithmetic, log_table_binary8, 5)
 {
     benchmark();
 }
 
-typedef arithmetic_setup< fifi::log_table<fifi::binary16> >
+typedef arithmetic_setup< fifi::log_table<fifi::binary16>>
     setup_log_table_binary16;
 
-BENCHMARK_F(setup_log_table_binary16, Arithmetic, LogTable16, 5)
+BENCHMARK_F(setup_log_table_binary16, arithmetic, log_table_binary16, 5)
 {
     benchmark();
 }
 
-typedef arithmetic_setup< fifi::extended_log_table<fifi::binary8> >
+//------------------------------------------------------------------
+// ExtendedLogTable
+//------------------------------------------------------------------
+
+typedef arithmetic_setup< fifi::extended_log_table<fifi::binary8>>
     setup_extended_log_table_binary8;
 
-BENCHMARK_F(setup_extended_log_table_binary8, Arithmetic, ExtendedLogTable8, 5)
+BENCHMARK_F(setup_extended_log_table_binary8, arithmetic,
+            extended_log_table_binary8, 5)
 {
     benchmark();
 }
 
-typedef arithmetic_setup< fifi::extended_log_table<fifi::binary16> >
+typedef arithmetic_setup< fifi::extended_log_table<fifi::binary16>>
     setup_extended_log_table_binary16;
 
-BENCHMARK_F(setup_extended_log_table_binary16, Arithmetic, ExtendedLogTable16, 5)
+BENCHMARK_F(setup_extended_log_table_binary16, arithmetic,
+            extended_log_table_binary16, 5)
 {
     benchmark();
 }
 
-typedef arithmetic_setup< fifi::optimal_prime<fifi::prime2325> >
+//------------------------------------------------------------------
+// OptimalPrime
+//------------------------------------------------------------------
+
+typedef arithmetic_setup< fifi::optimal_prime<fifi::prime2325>>
     setup_optimal_prime2325;
 
-BENCHMARK_F(setup_optimal_prime2325, Arithmetic, OptimalPrime2325, 5)
+BENCHMARK_F(setup_optimal_prime2325, arithmetic, optimal_prime2325, 5)
+{
+    benchmark();
+}
+
+//------------------------------------------------------------------
+// Unoptimized
+//------------------------------------------------------------------
+
+typedef arithmetic_setup<fifi::unoptimized_binary8<fifi::binary8>>
+    setup_unoptimized_binary8;
+
+BENCHMARK_F(setup_unoptimized_binary8, arithmetic, unoptimized_binary8, 5)
 {
     benchmark();
 }

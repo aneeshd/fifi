@@ -70,7 +70,7 @@ public:
     std::vector<uint32_t> m_block;
 };
 
-BENCHMARK_F(run_prime2325_bitmap, Prime2325Bitmap, FindPrefix, 5)
+BENCHMARK_F(run_prime2325_bitmap, prime2325_bitmap, find_prefix, 5)
 {
 
     gauge::config_set cs = get_current_configuration();
@@ -127,7 +127,8 @@ public:
     std::vector<uint32_t> m_block;
 };
 
-BENCHMARK_F(run_prime2325_binary_search, Prime2325BinarySearch, FindPrefix, 5)
+BENCHMARK_F(run_prime2325_binary_search,
+            prime2325_binary_search, find_prefix, 5)
 {
 
     gauge::config_set cs = get_current_configuration();
