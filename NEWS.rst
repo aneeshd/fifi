@@ -7,12 +7,11 @@ of every change, see the Git log.
 Latest
 ------
 * Major: Changed Fifi into a static library. Essentially this change
-  was motivated by the desire to introduced SIMD accelerated
-  arithmetics but keep the library as easy to used as possible. SIMD
-  introduces a number of CPU dependent algorithms this not only
-  introduces a compile time complexity but also run-time. Using a
-  static library these complexities can be handled internally in Fifi
-  and the hidden from its users.
+  was motivated by the desire to introduce SIMD accelerated arithmetics,
+  but keep the library as easy to use as possible. SIMD introduces a number
+  of CPU-dependent algorithms, this increases both compile-time and run-time
+  complexity. These complexities can be handled internally in Fifi by using
+  a static library, which means that they are hidden from its users.
 * Major: Redid the Fifi architecture to use mix-in layers. This design
   technique allows a highly flexible design where most functionality
   can be customized to specific needs.
