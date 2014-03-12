@@ -42,10 +42,18 @@ namespace fifi
         class dummy_stack : public
             region_divide_granularity<
             dummy_typedef_optimized_super<
-            helper_region_info<0,0,Granularity,Granularity,
+            helper_region_info<
+               /*alignment=*/0U,
+               /*max_alignment=*/0U,
+               /*granularity=*/Granularity,
+               /*max_granularity=*/Granularity,
             helper_fall_through<Field,
             dummy_typedef_basic_super<
-            helper_region_info<0,0,1,1,
+            helper_region_info<
+               /*alignment=*/0U,
+               /*max_alignment=*/0U,
+               /*granularity=*/1U,
+               /*max_granularity=*/1U,
             helper_fall_through<Field,
             final<Field> > > > > > > >
         { };
@@ -228,9 +236,12 @@ namespace fifi
 
 TEST(test_region_divide_granularity, granularity)
 {
-    fifi::dummy_stack<fifi::binary8, 16U> stack;
-    fifi::dummy_stack<fifi::binary8, 16U>::BasicSuper& basic = stack;
-    fifi::dummy_stack<fifi::binary8, 16U>::OptimizedSuper& optimized = stack;
+    // Create a stack and set the granularity and max granularity to 16.
+    typedef fifi::dummy_stack<fifi::binary8, 16U> stack_type;
+    stack_type stack;
+
+    stack_type::BasicSuper& basic = stack;
+    stack_type::OptimizedSuper& optimized = stack;
 
     EXPECT_EQ(1U, basic.granularity());
     EXPECT_EQ(16U, optimized.granularity());
@@ -239,9 +250,12 @@ TEST(test_region_divide_granularity, granularity)
 
 TEST(test_region_divide_granularity, max_granularity)
 {
-    fifi::dummy_stack<fifi::binary8, 16U> stack;
-    fifi::dummy_stack<fifi::binary8, 16U>::BasicSuper& basic = stack;
-    fifi::dummy_stack<fifi::binary8, 16U>::OptimizedSuper& optimized = stack;
+    // Create a stack and set the granularity and max granularity to 16.
+    typedef fifi::dummy_stack<fifi::binary8, 16U> stack_type;
+    stack_type stack;
+
+    stack_type::BasicSuper& basic = stack;
+    stack_type::OptimizedSuper& optimized = stack;
 
     EXPECT_EQ(1U, basic.max_granularity());
     EXPECT_EQ(16U, optimized.max_granularity());
