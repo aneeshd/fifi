@@ -19,63 +19,25 @@ namespace fifi
     >
     class helper_region_info : public Super
     {
-
     public:
-
-        helper_region_info() :
-            m_alignment(Alignment),
-            m_max_alignment(MaxAlignment),
-            m_granularity(Granularity),
-            m_max_granularity(MaxGranularity)
-        { }
-
-
         uint32_t alignment() const
         {
-            return m_alignment;
-        }
-
-        void set_alignment(uint32_t alignment)
-        {
-            m_alignment = alignment;
+            return Alignment;
         }
 
         uint32_t max_alignment() const
         {
-            return m_max_alignment;
-        }
-
-        void set_max_alignment(uint32_t max_alignment)
-        {
-            m_max_alignment = max_alignment;
+            return MaxAlignment;
         }
 
         uint32_t granularity() const
         {
-            return m_granularity;
-        }
-
-        void set_granularity(uint32_t granularity)
-        {
-            m_granularity = granularity;
+            return Granularity;
         }
 
         uint32_t max_granularity() const
         {
-            return m_max_granularity;
+            return MaxGranularity;
         }
-
-        void set_max_granularity(uint32_t max_granularity)
-        {
-            m_max_granularity = max_granularity;
-        }
-
-    private:
-
-        uint32_t m_alignment;
-        uint32_t m_max_alignment;
-        uint32_t m_granularity;
-        uint32_t m_max_granularity;
-
     };
 }
