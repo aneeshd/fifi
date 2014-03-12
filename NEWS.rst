@@ -6,6 +6,10 @@ of every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+11.0.0
+------
 * Major: Changed Fifi into a static library. Essentially this change
   was motivated by the desire to introduce SIMD accelerated arithmetics,
   but keep the library as easy to use as possible. SIMD introduces a number
