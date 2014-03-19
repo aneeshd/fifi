@@ -56,6 +56,9 @@ namespace fifi
         assert(length > 0);
         assert((length % granularity()) == 0);
 
+        assert((uintptr_t)dest % 16 == 0);
+        assert((uintptr_t)src % 16 == 0);
+
         // We loop 8 bytes at-a-time so we calculate how many loops we need
         uint32_t neon_size = length / granularity();
         assert(neon_size > 0);
