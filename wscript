@@ -104,7 +104,7 @@ def set_simd_flags(conf):
 
     # Matches both /usr/bin/g++ and /user/bin/clang++
     if 'g++' in CXX or 'clang' in CXX:
-        flags += conf.mkspec_try_flags('cxxflags', ['-mssse3'])
+        flags += conf.mkspec_try_flags('cxxflags', ['-mssse3', '-mfpu=neon'])
 
     elif 'CL.exe' in CXX or 'cl.exe' in CXX:
         pass

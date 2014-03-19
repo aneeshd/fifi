@@ -5,6 +5,7 @@ optimized_sources = \
 {
     'ssse3_binary4_full_table': ['-mssse3'],
     'ssse3_binary8_full_table': ['-mssse3'],
+    'neon_binary8_full_table':  ['-mfpu=neon'],
 }
 
 for source, flags in optimized_sources.items():
