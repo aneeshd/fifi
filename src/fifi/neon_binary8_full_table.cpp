@@ -68,9 +68,9 @@ namespace fifi
             uint64x1_t d0 = vld1_u64(dest_ptr);
             uint64x1_t d1 = vld1_u64(src_ptr);
             // Xor these values together
-            d0 = veor_u64(d0, d1);
+            uint64x1_t result = veor_u64(d0, d1);
             // Store the result in the destination buffer
-            vst1_u64(dest_ptr, d0);
+            vst1_u64(dest_ptr, result);
         }
     }
 
