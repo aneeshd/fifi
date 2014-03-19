@@ -56,8 +56,8 @@ namespace fifi
         assert(length > 0);
         assert((length % granularity()) == 0);
 
-        assert(((uintptr_t)dest % 16) == 0);
-        assert(((uintptr_t)src % 16) == 0);
+        //assert(((uintptr_t)dest % 16) == 0);
+        //assert(((uintptr_t)src % 16) == 0);
 
         // We loop 8 bytes at-a-time so we calculate how many loops we need
         uint32_t neon_size = length / granularity();
@@ -77,12 +77,12 @@ namespace fifi
         }
     }
 
-//     void neon_binary8_full_table::region_subtract(
-//         value_type* dest, const value_type* src, uint32_t length) const
-//     {
-//         // In a binary extension field addition is the same as subtraction
-//         region_add(dest, src, length);
-//     }
+    void neon_binary8_full_table::region_subtract(
+        value_type* dest, const value_type* src, uint32_t length) const
+    {
+        // In a binary extension field addition is the same as subtraction
+        region_add(dest, src, length);
+    }
 //
 //     void neon_binary8_full_table::region_multiply_constant(
 //         value_type* dest, value_type constant, uint32_t length) const
@@ -239,13 +239,13 @@ namespace fifi
         // Not implemented
         assert(0);
     }
-//
-//     void neon_binary8_full_table::region_subtract(
-//         value_type*, const value_type*, uint32_t) const
-//     {
-//         // Not implemented
-//         assert(0);
-//     }
+
+    void neon_binary8_full_table::region_subtract(
+        value_type*, const value_type*, uint32_t) const
+    {
+        // Not implemented
+        assert(0);
+    }
 //
 //     void neon_binary8_full_table::region_multiply_constant(
 //         value_type*, value_type, uint32_t) const
