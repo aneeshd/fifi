@@ -46,44 +46,34 @@ namespace fifi
                 m_table_two[i * 16 + j] = v2;
             }
         }
+    }
 
-        if (enabled())
+    void neon_binary8_full_table::region_add(
+        value_type* dest, const value_type* src, uint32_t length) const
+    {
+        assert(dest != 0);
+        assert(src != 0);
+        assert(length > 0);
+        assert((length % granularity()) == 0);
+
+        // We loop 8 bytes at-a-time so we calculate how many loops we need
+        uint32_t neon_size = length / granularity();
+        assert(neon_size > 0);
+
+        uint64_t* src_ptr = (uint64_t*)src;
+        uint64_t* dest_ptr = (uint64_t*)dest;
+        for (uint32_t i = 0; i < neon_size; i++, src_ptr++, dest_ptr++)
         {
-            printf("Neon enabled\n");
-            int32_t a[] = {2,3,4,5};
-            int32x4_t vin = vld1q_s32(a);
-            int32x4_t vout = vaddq_s32(vin, vin);
-            vst1q_s32(a, vout);
-            printf("Neon add: %d %d %d %d\n", a[0], a[1], a[2], a[3]);
+            // Load the next 8-bytes of the destination and source buffers
+            uint64x1_t d0 = vld1_u64(dest_ptr);
+            uint64x1_t d1 = vld1_u64(src_ptr);
+            // Xor these values together
+            d0 = veor_u64(d0, d1);
+            // Store the result in the destination buffer
+            vst1_u64(dest_ptr, d0);
         }
     }
 
-//     void neon_binary8_full_table::region_add(
-//         value_type* dest, const value_type* src, uint32_t length) const
-//     {
-//         assert(dest != 0);
-//         assert(src != 0);
-//         assert(length > 0);
-//         assert((length % granularity()) == 0);
-//
-//         // We loop 16 bytes at-a-time so we calculate how many loops we need
-//         uint32_t ssse3_size = length / granularity();
-//         assert(ssse3_size > 0);
-//
-//         __m128i* src_ptr = (__m128i*)src;
-//         __m128i* dest_ptr = (__m128i*)dest;
-//         for (uint32_t i = 0; i < ssse3_size; i++, src_ptr++, dest_ptr++)
-//         {
-//             // Load the next 16-bytes of the destination and source buffers
-//             __m128i xmm0 = _mm_loadu_si128(dest_ptr);
-//             __m128i xmm1 = _mm_loadu_si128(src_ptr);
-//             // Xor these values together
-//             xmm0 = _mm_xor_si128(xmm0, xmm1);
-//             // Store the result in the destination buffer
-//             _mm_storeu_si128(dest_ptr, xmm0);
-//         }
-//     }
-//
 //     void neon_binary8_full_table::region_subtract(
 //         value_type* dest, const value_type* src, uint32_t length) const
 //     {
@@ -240,12 +230,12 @@ namespace fifi
     neon_binary8_full_table::neon_binary8_full_table()
     { }
 
-//     void neon_binary8_full_table::region_add(
-//         value_type*, const value_type*, uint32_t) const
-//     {
-//         // Not implemented
-//         assert(0);
-//     }
+    void neon_binary8_full_table::region_add(
+        value_type*, const value_type*, uint32_t) const
+    {
+        // Not implemented
+        assert(0);
+    }
 //
 //     void neon_binary8_full_table::region_subtract(
 //         value_type*, const value_type*, uint32_t) const

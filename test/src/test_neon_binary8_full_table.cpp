@@ -19,7 +19,7 @@ TEST(test_neon_binary8_full_table, region_add)
     fifi::neon_binary8_full_table stack;
     if (stack.enabled())
     {
-        //check_results_region_add<fifi::neon_binary8_full_table>();
+        check_results_region_add<fifi::neon_binary8_full_table>();
     }
 }
 
