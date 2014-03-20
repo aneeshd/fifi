@@ -68,12 +68,12 @@ namespace fifi
         for (uint32_t i = 0; i < neon_size; i++, src_ptr++, dest_ptr++)
         {
             // Load the next 8-bytes of the destination and source buffers
-            uint64x1_t d0 = vld1_u64(dest_ptr);
-            uint64x1_t d1 = vld1_u64(src_ptr);
+            uint64x2_t q0 = vld1q_u64(dest_ptr);
+            uint64x2_t q1 = vld1q_u64(src_ptr);
             // Xor these values together
-            uint64x1_t result = veor_u64(d0, d1);
+            uint64x2_t result = veorq_u64(q0, q1);
             // Store the result in the destination buffer
-            vst1_u64(dest_ptr, result);
+            vst1q_u64(dest_ptr, result);
         }
     }
 
@@ -209,12 +209,12 @@ namespace fifi
 
     uint32_t neon_binary8_full_table::granularity() const
     {
-        // We are working over 8 bytes (64 bits) at a time, so we
-        // require a length granularity of 8. We expect that binary8
+        // We are working over 16 bytes (128 bits) at a time, so we
+        // require a length granularity of 16. We expect that binary8
         // uses uint8_t as value_type
         static_assert(std::is_same<value_type, uint8_t>::value,
             "Here we expect binary8 to use uint8_t as value_type");
-        return 8U;
+        return 16U;
     }
 
     uint32_t neon_binary8_full_table::max_granularity() const
