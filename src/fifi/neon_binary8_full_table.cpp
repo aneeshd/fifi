@@ -65,7 +65,7 @@ namespace fifi
 
         uint64_t* src_ptr = (uint64_t*)src;
         uint64_t* dest_ptr = (uint64_t*)dest;
-        for (uint32_t i = 0; i < neon_size; i++, src_ptr++, dest_ptr++)
+        for (uint32_t i = 0; i < neon_size; i++, src_ptr+=2, dest_ptr+=2)
         {
             // Load the next 8-bytes of the destination and source buffers
             uint64x2_t q0 = vld1q_u64(dest_ptr);
