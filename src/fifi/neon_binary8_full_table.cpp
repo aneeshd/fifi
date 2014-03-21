@@ -98,13 +98,17 @@ namespace fifi
         uint32_t simd_size = length / granularity();
         assert(simd_size > 0);
 
+        #define uint8x16_to_8x8x2(v) ((uint8x8x2_t) { vget_low_u8(v), vget_high_u8(v) } )
+
         // Initialize the look-up tables
         // Load the 16-byte row that contains pre-calculated multiplication
         // results with the low-half of the constant
-        uint8x8x2_t table1 = vld2_u8(&m_table_one[0] + constant * 16);
+        uint8x8x2_t table1 = uint8x16_to_8x8x2(
+            vld1q_u8(&m_table_one[0] + constant * 16));
 
         // table2 contains the results with the high-half of the constant
-        uint8x8x2_t table2 = vld2_u8(&m_table_two[0] + constant * 16);
+        uint8x8x2_t table2 = uint8x16_to_8x8x2(
+            vld1q_u8(&m_table_two[0] + constant * 16));
 
         // Create low and high bitmasks by replicating the mask values 16 times
         uint8x8_t mask1 = vdup_n_u8((uint8_t)0x0f);
