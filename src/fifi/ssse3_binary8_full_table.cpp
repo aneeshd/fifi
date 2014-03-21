@@ -174,7 +174,7 @@ namespace fifi
             // Xor the high and low halves together to get the final result
             xmm0 = _mm_xor_si128(h, l);
 
-            // Add the src to the dest
+            // Add this product to the dest
 
             // Load the next 16-bytes of the destination buffer
             __m128i xmm1 = _mm_loadu_si128(dest_ptr);

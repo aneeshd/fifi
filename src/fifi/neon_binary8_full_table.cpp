@@ -92,7 +92,6 @@ namespace fifi
         assert((length % granularity()) == 0);
 
         //assert(((uintptr_t)dest % 16) == 0);
-        //assert(((uintptr_t)src % 16) == 0);
 
         // We loop 16 bytes at-a-time so we calculate how many loops we need
         uint32_t simd_size = length / granularity();
@@ -139,70 +138,73 @@ namespace fifi
         }
     }
 
-//     void neon_binary8_full_table::region_multiply_add(value_type* dest,
-//         const value_type* src, value_type constant, uint32_t length) const
-//     {
-//         assert(dest != 0);
-//         assert(src != 0);
-//         assert(length > 0);
-//         assert((length % granularity()) == 0);
-//
-//         // We loop 16 bytes at-a-time so we calculate how many loops we need
-//         uint32_t simd_size = length / granularity();
-//         assert(simd_size > 0);
-//
-//         // Initialize the look-up tables
-//         // Load the 16-byte row that contains pre-calculated multiplication
-//         // results with the constant
-//         __m128i table1 = _mm_load_si128(
-//             (const __m128i*)(&m_table_one[0] + (constant * 16)));
-//
-//         // table2 contains the same results shifted left by 4 bits
-//         __m128i table2 = _mm_load_si128(
-//             (const __m128i*)(&m_table_two[0] + (constant * 16)));
-//
-//         // Create low and high bitmasks by replicating the mask values 16 times
-//         __m128i mask1 = _mm_set1_epi8((char)0x0f);
-//         __m128i mask2 = _mm_set1_epi8((char)0xf0);
-//
-//         __m128i* src_ptr = (__m128i*)src;
-//         __m128i* dest_ptr = (__m128i*)dest;
-//         for (uint32_t i = 0; i < simd_size; i++, src_ptr++, dest_ptr++)
-//         {
-//             // Multiply the src with the constant
-//
-//             // Load the next 16-bytes of the source buffer
-//             __m128i xmm0 = _mm_loadu_si128(src_ptr);
-//             // Apply mask1 to get the low-half of the data
-//             __m128i l = _mm_and_si128(xmm0, mask1);
-//             // Perform 16 simultaneous table lookups to multiply the low-half
-//             l = _mm_shuffle_epi8(table1, l);
-//             // Apply mask2 to get the high-half of the data
-//             __m128i h = _mm_and_si128(xmm0, mask2);
-//             // Right shift the high-half by 4 bits to get values in [0,15]
-//             h = _mm_srli_epi64(h, 4);
-//             // Perform table lookup with these indices to multiply the high-half
-//             h = _mm_shuffle_epi8(table2, h);
-//             // Xor the high and low halves together to get the final result
-//             xmm0 = _mm_xor_si128(h, l);
-//
-//             // Add the src to the dest
-//
-//             // Load the next 16-bytes of the destination buffer
-//             __m128i xmm1 = _mm_loadu_si128(dest_ptr);
-//             // Xor the multiplication result and the destination value
-//             xmm0 = _mm_xor_si128(xmm0, xmm1);
-//             // Store the result in the destination buffer
-//             _mm_storeu_si128(dest_ptr, xmm0);
-//         }
-//     }
-//
-//     void neon_binary8_full_table::region_multiply_subtract(value_type* dest,
-//         const value_type* src, value_type constant, uint32_t length) const
-//     {
-//         // In a binary extension field addition is the same as subtraction
-//         region_multiply_add(dest, src, constant, length);
-//     }
+    void neon_binary8_full_table::region_multiply_add(value_type* dest,
+        const value_type* src, value_type constant, uint32_t length) const
+    {
+        assert(dest != 0);
+        assert(src != 0);
+        assert(length > 0);
+        assert((length % granularity()) == 0);
+
+        // We loop 16 bytes at-a-time so we calculate how many loops we need
+        uint32_t simd_size = length / granularity();
+        assert(simd_size > 0);
+
+        // Initialize the look-up tables
+        // Load the 16-byte row that contains pre-calculated multiplication
+        // results with the low-half of the constant
+        // Convert to uint8x8x2_t as vtbl2_u8 expects two 8-byte arrays
+        uint8x16_t t1 = vld1q_u8(&m_table_one[0] + constant * 16);
+        uint8x8x2_t table1 = {{ vget_low_u8(t1), vget_high_u8(t1) }};
+
+        // table2 contains the results with the high-half of the constant
+        uint8x16_t t2 = vld1q_u8(&m_table_two[0] + constant * 16);
+        uint8x8x2_t table2 = {{ vget_low_u8(t2), vget_high_u8(t2) }};
+
+        // Create low and high bitmasks by replicating the mask values 16 times
+        uint8x16_t mask1 = vdupq_n_u8((uint8_t)0x0f);
+        uint8x16_t mask2 = vdupq_n_u8((uint8_t)0xf0);
+
+        uint8_t* src_ptr = (uint8_t*)src;
+        uint8_t* dest_ptr = (uint8_t*)dest;
+        for (uint32_t i = 0; i < simd_size; i++, src_ptr+=16, dest_ptr+=16)
+        {
+            // Load the next 16-bytes of the destination buffer
+            uint8x16_t q0 = vld1q_u8(src_ptr);
+            // Apply mask1 to get the low-half of the data
+            uint8x16_t l = vandq_u8(q0, mask1);
+            // Perform 8 simultaneous table lookups to multiply the low-half
+            // The lookup is performed twice due to NEON restrictions
+            l = vcombine_u8(vtbl2_u8(table1, vget_low_u8(l)),
+                vtbl2_u8(table1, vget_high_u8(l)));
+            // Apply mask2 to get the high-half of the data
+            uint8x16_t h = vandq_u8(q0, mask2);
+            // Right shift the high-half by 4 bits to get values in [0,15]
+            h = vshrq_n_u8(h, 4);
+            // Perform table lookup with these indices to multiply the high-half
+            // The lookup is performed twice due to NEON restrictions
+            h = vcombine_u8(vtbl2_u8(table2, vget_low_u8(h)),
+                vtbl2_u8(table2, vget_high_u8(h)));
+            // Xor the high and low halves together to get the final result
+            uint8x16_t result = veorq_u8(h, l);
+
+            // Add this product to the dest
+
+            // Load the next 16-bytes of the destination buffer
+            uint8x16_t q1 = vld1q_u8(dest_ptr);
+            // Xor the multiplication result and the destination value
+            result = veorq_u8(result, q1);
+            // Store the result in the destination buffer
+            vst1q_u8(dest_ptr, result);
+        }
+    }
+
+    void neon_binary8_full_table::region_multiply_subtract(value_type* dest,
+        const value_type* src, value_type constant, uint32_t length) const
+    {
+        // In a binary extension field addition is the same as subtraction
+        region_multiply_add(dest, src, constant, length);
+    }
 
 
     uint32_t neon_binary8_full_table::alignment() const
@@ -262,19 +264,19 @@ namespace fifi
         assert(0);
     }
 
-//     void neon_binary8_full_table::region_multiply_add(
-//         value_type*, const value_type*, value_type, uint32_t) const
-//     {
-//         // Not implemented
-//         assert(0);
-//     }
-//
-//     void neon_binary8_full_table::region_multiply_subtract(
-//         value_type*, const value_type*, value_type, uint32_t) const
-//     {
-//         // Not implemented
-//         assert(0);
-//     }
+    void neon_binary8_full_table::region_multiply_add(
+        value_type*, const value_type*, value_type, uint32_t) const
+    {
+        // Not implemented
+        assert(0);
+    }
+
+    void neon_binary8_full_table::region_multiply_subtract(
+        value_type*, const value_type*, value_type, uint32_t) const
+    {
+        // Not implemented
+        assert(0);
+    }
 
     uint32_t neon_binary8_full_table::alignment() const
     {
