@@ -63,17 +63,17 @@ namespace fifi
         uint32_t simd_size = length / granularity();
         assert(simd_size > 0);
 
-        uint64_t* src_ptr = (uint64_t*)src;
-        uint64_t* dest_ptr = (uint64_t*)dest;
-        for (uint32_t i = 0; i < simd_size; i++, src_ptr+=2, dest_ptr+=2)
+        uint8_t* src_ptr = (uint8_t*)src;
+        uint8_t* dest_ptr = (uint8_t*)dest;
+        for (uint32_t i = 0; i < simd_size; i++, src_ptr+=16, dest_ptr+=16)
         {
             // Load the next 16-bytes of the destination and source buffers
-            uint64x2_t q0 = vld1q_u64(dest_ptr);
-            uint64x2_t q1 = vld1q_u64(src_ptr);
+            uint8x16_t q0 = vld1q_u8(dest_ptr);
+            uint8x16_t q1 = vld1q_u8(src_ptr);
             // Xor these values together
-            uint64x2_t result = veorq_u64(q0, q1);
+            uint8x16_t result = veorq_u8(q0, q1);
             // Store the result in the destination buffer
-            vst1q_u64(dest_ptr, result);
+            vst1q_u8(dest_ptr, result);
         }
     }
 
@@ -110,28 +110,32 @@ namespace fifi
         uint8x8x2_t table2 = {{ vget_low_u8(t2), vget_high_u8(t2) }};
 
         // Create low and high bitmasks by replicating the mask values 16 times
-        uint8x8_t mask1 = vdup_n_u8((uint8_t)0x0f);
-        uint8x8_t mask2 = vdup_n_u8((uint8_t)0xf0);
+        uint8x16_t mask1 = vdupq_n_u8((uint8_t)0x0f);
+        uint8x16_t mask2 = vdupq_n_u8((uint8_t)0xf0);
 
         uint8_t* dest_ptr = (uint8_t*)dest;
-        for (uint32_t i = 0; i < simd_size * 2; i++, dest_ptr+=8)
+        for (uint32_t i = 0; i < simd_size; i++, dest_ptr+=16)
         {
-            // Load the next 8-bytes of the destination buffer
-            uint8x8_t q0 = vld1_u8(dest_ptr);
+            // Load the next 16-bytes of the destination buffer
+            uint8x16_t q0 = vld1q_u8(dest_ptr);
             // Apply mask1 to get the low-half of the data
-            uint8x8_t l = vand_u8(q0, mask1);
+            uint8x16_t l = vandq_u8(q0, mask1);
             // Perform 8 simultaneous table lookups to multiply the low-half
-            l = vtbl2_u8(table1, l);
+            // The lookup is performed twice due to NEON restrictions
+            l = vcombine_u8(vtbl2_u8(table1, vget_low_u8(l)),
+                            vtbl2_u8(table1, vget_high_u8(l)));
             // Apply mask2 to get the high-half of the data
-            uint8x8_t h = vand_u8(q0, mask2);
+            uint8x16_t h = vandq_u8(q0, mask2);
             // Right shift the high-half by 4 bits to get values in [0,15]
-            h = vshr_n_u8(h, 4);
+            h = vshrq_n_u8(h, 4);
             // Perform table lookup with these indices to multiply the high-half
-            h = vtbl2_u8(table2, h);
+            // The lookup is performed twice due to NEON restrictions
+            h = vcombine_u8(vtbl2_u8(table2, vget_low_u8(h)),
+                            vtbl2_u8(table2, vget_high_u8(h)));
             // Xor the high and low halves together to get the final result
-            uint8x8_t result = veor_u8(h, l);
+            uint8x16_t result = veorq_u8(h, l);
             // Store the result in the destination buffer
-            vst1_u8(dest_ptr, result);
+            vst1q_u8(dest_ptr, result);
         }
     }
 
