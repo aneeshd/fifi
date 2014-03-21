@@ -38,20 +38,12 @@ namespace fifi
             // Only take the constants whose first 4 bits are zero
             for (uint32_t j = 0; j < 16; ++j)
             {
-                // Calculate the interleaved indices, considering that the NEON
-                // vld2_u8 intrinsic will load the 16 consecutive bytes into
-                // two, interleaved 8-byte arrays
-                // Base index for the even-numbered elements
-                uint32_t interleaved = j / 2;
-                // Shift all the odd-numbered indices to the second half
-                if (j % 2 == 1) interleaved += 8;
-
                 // Calculate 8-bit product with the low-half
                 auto v1 = field.multiply(i, j);
-                m_table_one[i * 16 + interleaved] = v1;
+                m_table_one[i * 16 + j] = v1;
                 // Calculate 8-bit product with the high-half
                 auto v2 = field.multiply(i, j << 4);
-                m_table_two[i * 16 + interleaved] = v2;
+                m_table_two[i * 16 + j] = v2;
             }
         }
     }
@@ -109,14 +101,13 @@ namespace fifi
         // Initialize the look-up tables
         // Load the 16-byte row that contains pre-calculated multiplication
         // results with the low-half of the constant
-        //uint8x16_t t1 = vld1q_u8(&m_table_one[0] + constant * 16);
-        //uint8x8x2_t table1 = { vget_low_u8(t1), vget_high_u8(t1) };
-        uint8x8x2_t table1 = vld2_u8(&m_table_one[0] + constant * 16);
+        // Convert to uint8x8x2_t as vtbl2_u8 expects two 8-byte arrays
+        uint8x16_t t1 = vld1q_u8(&m_table_one[0] + constant * 16);
+        uint8x8x2_t table1 = { vget_low_u8(t1), vget_high_u8(t1) };
 
         // table2 contains the results with the high-half of the constant
-        //uint8x16_t t2 = vld1q_u8(&m_table_two[0] + constant * 16);
-        //uint8x8x2_t table2 = { vget_low_u8(t2), vget_high_u8(t2) };
-        uint8x8x2_t table2 = vld2_u8(&m_table_two[0] + constant * 16);
+        uint8x16_t t2 = vld1q_u8(&m_table_two[0] + constant * 16);
+        uint8x8x2_t table2 = { vget_low_u8(t2), vget_high_u8(t2) };
 
         // Create low and high bitmasks by replicating the mask values 16 times
         uint8x8_t mask1 = vdup_n_u8((uint8_t)0x0f);
