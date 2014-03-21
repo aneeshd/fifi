@@ -113,7 +113,7 @@ namespace fifi
         uint8x8_t mask2 = vdup_n_u8((uint8_t)0xf0);
 
         uint8_t* dest_ptr = (uint8_t*)dest;
-        for (uint32_t i = 0; i < simd_size * 2; i++, dest_ptr++)
+        for (uint32_t i = 0; i < simd_size * 2; i++, dest_ptr+=8)
         {
             // Load the next 8-bytes of the destination buffer
             uint8x8_t q0 = vld1_u8(dest_ptr);
