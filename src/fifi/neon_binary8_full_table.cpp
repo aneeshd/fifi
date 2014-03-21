@@ -103,11 +103,11 @@ namespace fifi
         // results with the low-half of the constant
         // Convert to uint8x8x2_t as vtbl2_u8 expects two 8-byte arrays
         uint8x16_t t1 = vld1q_u8(&m_table_one[0] + constant * 16);
-        uint8x8x2_t table1 = { vget_low_u8(t1), vget_high_u8(t1) };
+        uint8x8x2_t table1 = {{ vget_low_u8(t1), vget_high_u8(t1) }};
 
         // table2 contains the results with the high-half of the constant
         uint8x16_t t2 = vld1q_u8(&m_table_two[0] + constant * 16);
-        uint8x8x2_t table2 = { vget_low_u8(t2), vget_high_u8(t2) };
+        uint8x8x2_t table2 = {{ vget_low_u8(t2), vget_high_u8(t2) }};
 
         // Create low and high bitmasks by replicating the mask values 16 times
         uint8x8_t mask1 = vdup_n_u8((uint8_t)0x0f);
