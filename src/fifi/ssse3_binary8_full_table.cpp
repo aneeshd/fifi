@@ -93,11 +93,11 @@ namespace fifi
 
         // Initialize the look-up tables
         // Load the 16-byte row that contains pre-calculated multiplication
-        // results with the constant
+        // results with the low-half of the constant
         __m128i table1 = _mm_load_si128(
             (const __m128i*)(&m_table_one[0] + (constant * 16)));
 
-        // table2 contains the same results shifted left by 4 bits
+        // table2 contains the results with the high-half of the constant
         __m128i table2 = _mm_load_si128(
             (const __m128i*)(&m_table_two[0] + (constant * 16)));
 
@@ -141,11 +141,11 @@ namespace fifi
 
         // Initialize the look-up tables
         // Load the 16-byte row that contains pre-calculated multiplication
-        // results with the constant
+        // results with the low-half of the constant
         __m128i table1 = _mm_load_si128(
             (const __m128i*)(&m_table_one[0] + (constant * 16)));
 
-        // table2 contains the same results shifted left by 4 bits
+        // table2 contains the results with the high-half of the constant
         __m128i table2 = _mm_load_si128(
             (const __m128i*)(&m_table_two[0] + (constant * 16)));
 

@@ -32,16 +32,16 @@ TEST(test_neon_binary8_full_table, region_subtract)
     }
 }
 
-// TEST(test_neon_binary8_full_table, region_multiply_constant)
-// {
-//     fifi::neon_binary8_full_table stack;
-//     if (stack.enabled())
-//     {
-//         check_results_region_multiply_constant<
-//             fifi::neon_binary8_full_table>();
-//     }
-// }
-//
+TEST(test_neon_binary8_full_table, region_multiply_constant)
+{
+    fifi::neon_binary8_full_table stack;
+    if (stack.enabled())
+    {
+        check_results_region_multiply_constant<
+            fifi::neon_binary8_full_table>();
+    }
+}
+
 // TEST(test_neon_binary8_full_table, region_multiply_add)
 // {
 //     fifi::neon_binary8_full_table stack;
