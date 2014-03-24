@@ -19,6 +19,7 @@
 #include "simple_online_arithmetic.hpp"
 #include "ssse3_binary4_full_table.hpp"
 #include "ssse3_binary8_full_table.hpp"
+#include "neon_binary4_full_table.hpp"
 #include "neon_binary8_full_table.hpp"
 
 namespace fifi
@@ -30,6 +31,7 @@ namespace fifi
         region_divide_granularity<
         region_dispatcher<ssse3_binary4_full_table,
         region_dispatcher<ssse3_binary8_full_table,
+        region_dispatcher<neon_binary4_full_table,
         region_dispatcher<neon_binary8_full_table,
         binary8_region_arithmetic_full_table<Field,
         region_arithmetic<
@@ -38,6 +40,6 @@ namespace fifi
         packed_arithmetic<
         full_table_arithmetic<
         simple_online_arithmetic<
-        final<Field> > > > > > > > > > > >
+        final<Field> > > > > > > > > > > > >
     { };
 }
