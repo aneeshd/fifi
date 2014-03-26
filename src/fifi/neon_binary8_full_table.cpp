@@ -7,7 +7,7 @@
 #include <platform/config.hpp>
 #include <cpuid/cpuinfo.hpp>
 
-// Include x86 intrinsics for GCC-compatible compilers on x86/x86_64
+// Include ARM NEON intrinsics
 #if defined(PLATFORM_NEON)
 #include <arm_neon.h>
 #endif
@@ -60,17 +60,15 @@ namespace fifi
         uint32_t simd_size = length / granularity();
         assert(simd_size > 0);
 
-        uint8_t* src_ptr = (uint8_t*)src;
-        uint8_t* dest_ptr = (uint8_t*)dest;
-        for (uint32_t i = 0; i < simd_size; i++, src_ptr+=16, dest_ptr+=16)
+        for (uint32_t i = 0; i < simd_size; i++, src+=16, dest+=16)
         {
             // Load the next 16-bytes of the destination and source buffers
-            uint8x16_t q0 = vld1q_u8(dest_ptr);
-            uint8x16_t q1 = vld1q_u8(src_ptr);
+            uint8x16_t q0 = vld1q_u8(dest);
+            uint8x16_t q1 = vld1q_u8(src);
             // Xor these values together
             uint8x16_t result = veorq_u8(q0, q1);
             // Store the result in the destination buffer
-            vst1q_u8(dest_ptr, result);
+            vst1q_u8(dest, result);
         }
     }
 
@@ -107,11 +105,10 @@ namespace fifi
         uint8x16_t mask1 = vdupq_n_u8((uint8_t)0x0f);
         uint8x16_t mask2 = vdupq_n_u8((uint8_t)0xf0);
 
-        uint8_t* dest_ptr = (uint8_t*)dest;
-        for (uint32_t i = 0; i < simd_size; i++, dest_ptr+=16)
+        for (uint32_t i = 0; i < simd_size; i++, dest+=16)
         {
             // Load the next 16-bytes of the destination buffer
-            uint8x16_t q0 = vld1q_u8(dest_ptr);
+            uint8x16_t q0 = vld1q_u8(dest);
             // Apply mask1 to get the low-half of the data
             uint8x16_t l = vandq_u8(q0, mask1);
             // Perform 8 simultaneous table lookups to multiply the low-half
@@ -129,7 +126,7 @@ namespace fifi
             // Xor the high and low halves together to get the final result
             uint8x16_t result = veorq_u8(h, l);
             // Store the result in the destination buffer
-            vst1q_u8(dest_ptr, result);
+            vst1q_u8(dest, result);
         }
     }
 
@@ -160,12 +157,10 @@ namespace fifi
         uint8x16_t mask1 = vdupq_n_u8((uint8_t)0x0f);
         uint8x16_t mask2 = vdupq_n_u8((uint8_t)0xf0);
 
-        uint8_t* src_ptr = (uint8_t*)src;
-        uint8_t* dest_ptr = (uint8_t*)dest;
-        for (uint32_t i = 0; i < simd_size; i++, src_ptr+=16, dest_ptr+=16)
+        for (uint32_t i = 0; i < simd_size; i++, src+=16, dest+=16)
         {
             // Load the next 16-bytes of the destination buffer
-            uint8x16_t q0 = vld1q_u8(src_ptr);
+            uint8x16_t q0 = vld1q_u8(src);
             // Apply mask1 to get the low-half of the data
             uint8x16_t l = vandq_u8(q0, mask1);
             // Perform 8 simultaneous table lookups to multiply the low-half
@@ -186,11 +181,11 @@ namespace fifi
             // Add this product to the dest
 
             // Load the next 16-bytes of the destination buffer
-            uint8x16_t q1 = vld1q_u8(dest_ptr);
+            uint8x16_t q1 = vld1q_u8(dest);
             // Xor the multiplication result and the destination value
             result = veorq_u8(result, q1);
             // Store the result in the destination buffer
-            vst1q_u8(dest_ptr, result);
+            vst1q_u8(dest, result);
         }
     }
 
