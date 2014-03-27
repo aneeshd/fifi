@@ -104,7 +104,13 @@ def set_simd_flags(conf):
 
     # Matches both /usr/bin/g++ and /user/bin/clang++
     if 'g++' in CXX or 'clang' in CXX:
-        flags += conf.mkspec_try_flags('cxxflags', ['-mssse3'])
+        # DEST_CPU should be set explicitly for clang cross-compilers
+        cpu = conf.env['DEST_CPU']
+        # Test different compiler flags based on the target CPU
+        if cpu == 'x86' or cpu == 'x86_64':
+            flags += conf.mkspec_try_flags('cxxflags', ['-mssse3'])
+        elif cpu == 'arm':
+            flags += conf.mkspec_try_flags('cxxflags', ['-mfpu=neon'])
 
     elif 'CL.exe' in CXX or 'cl.exe' in CXX:
         pass
