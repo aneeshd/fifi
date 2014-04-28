@@ -6,7 +6,8 @@ of every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Minor: Added NEON intrinsics for binary4 and binary8 to speed up arithmetics
+  on recent ARM CPUs.
 
 11.0.0
 ------
@@ -22,9 +23,9 @@ Latest
 * Major: Moved optimizations from ``arithmetics.hpp`` to separate layers.
 * Major: Split ``field_types.hpp`` into separate files for each field.
 * Minor: Added unit tests for all classes.
-* Minor: Introduced the binary4 finite field i.e. (2^4).
+* Minor: Introduced the binary4 finite field, i.e. GF(2^4).
 * Minor: Introduced SIMD accelerated full table arithmetics for binary4 and
-  binary8.
+  binary8 (using SSSE3 intrinsics).
 
 10.0.0
 ------
