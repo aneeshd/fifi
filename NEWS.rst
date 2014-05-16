@@ -8,6 +8,8 @@ Latest
 ------
 * Minor: Added NEON intrinsics for binary4 and binary8 to speed up arithmetics
   on recent ARM CPUs.
+* Minor: Update to waf 1.8.0-pre1
+* Minor: Made python files comply with pep8
 
 11.0.0
 ------
@@ -88,7 +90,7 @@ Latest
 
 1.0.2
 -----
-* Added bechmarks
+* Added benchmarks
 * Added dependency on sak providing timer functionality
   used in benchmarks
 * Bumped dependency version for gtest to 1.0.3-gtest_1_6_0
