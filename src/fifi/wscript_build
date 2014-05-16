@@ -2,6 +2,8 @@
 # encoding: utf-8
 
 optimized_sources = {
+    'avx2_binary4_full_table': ['-mavx2', '/arch:AVX2'],
+    'avx2_binary8_full_table': ['-mavx2', '/arch:AVX2'],
     'ssse3_binary4_full_table': ['-mssse3'],
     'ssse3_binary8_full_table': ['-mssse3'],
     'neon_binary4_full_table':  ['-mfpu=neon'],
