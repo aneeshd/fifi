@@ -17,6 +17,8 @@
 #include "region_divide_granularity.hpp"
 #include "region_info.hpp"
 #include "simple_online_arithmetic.hpp"
+#include "avx2_binary4_full_table.hpp"
+#include "avx2_binary8_full_table.hpp"
 #include "ssse3_binary4_full_table.hpp"
 #include "ssse3_binary8_full_table.hpp"
 #include "neon_binary4_full_table.hpp"
@@ -29,6 +31,8 @@ namespace fifi
     template<class Field>
     class full_table : public
         region_divide_granularity<
+        region_dispatcher<avx2_binary4_full_table,
+        region_dispatcher<avx2_binary8_full_table,
         region_dispatcher<ssse3_binary4_full_table,
         region_dispatcher<ssse3_binary8_full_table,
         region_dispatcher<neon_binary4_full_table,
@@ -40,6 +44,6 @@ namespace fifi
         packed_arithmetic<
         full_table_arithmetic<
         simple_online_arithmetic<
-        final<Field> > > > > > > > > > > > >
+        final<Field> > > > > > > > > > > > > > >
     { };
 }
