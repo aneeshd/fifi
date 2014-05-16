@@ -142,11 +142,11 @@ namespace fifi
         // Load the 32-byte row that contains pre-calculated multiplication
         // results with the low-half of the constant
         __m256i table1 = _mm256_loadu_si256(
-            (const __m256i*)(&m_table_one[0] + (constant * 16)));
+            (const __m256i*)(&m_table_one[0] + (constant * 32)));
 
         // table2 contains the results with the high-half of the constant
         __m256i table2 = _mm256_loadu_si256(
-            (const __m256i*)(&m_table_two[0] + (constant * 16)));
+            (const __m256i*)(&m_table_two[0] + (constant * 32)));
 
         // Create low and high bitmasks by replicating the mask values 32 times
         __m256i mask1 = _mm256_set1_epi8((char)0x0f);
