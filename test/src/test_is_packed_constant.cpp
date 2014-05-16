@@ -17,7 +17,7 @@
 template<class Field>
 void test_is_packed_constant(typename Field::value_type constant, bool expected)
 {
-    SCOPED_TRACE(testing::Message() << "constant: " << constant);
+    SCOPED_TRACE(testing::Message() << "constant: " << (uint32_t)constant);
     EXPECT_EQ(expected, fifi::is_packed_constant<Field>(constant));
 }
 

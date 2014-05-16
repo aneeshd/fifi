@@ -361,7 +361,8 @@ inline void check_results_region_ptr_ptr_const(
                 // Get the constant to multiply with
                 auto constant = fifi::pack_constant<test_field>(
                     rand() % test_field::order);
-                SCOPED_TRACE(testing::Message() << "constant: " << constant);
+                SCOPED_TRACE(
+                    testing::Message() << "constant: " << (uint32_t)constant);
 
                 // Create buffer and created the expected results using the
                 // reference arithmetics
