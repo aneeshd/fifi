@@ -58,6 +58,7 @@ def options(opt):
         git_repository='github.com/steinwurf/platform.git',
         major_version=1))
 
+    opt.load('wurf_configure_output')
     opt.load('wurf_dependency_bundle')
     opt.load('wurf_tools')
 
