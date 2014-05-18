@@ -29,17 +29,20 @@ namespace fifi
     template<class Field>
     class full_table : public
         region_divide_granularity<
+        use_region_dispatcher<
+        region_dispatcher_v2<ssse3_binary4_full_table,
         region_dispatcher<ssse3_binary4_full_table,
         region_dispatcher<ssse3_binary8_full_table,
         region_dispatcher<neon_binary4_full_table,
         region_dispatcher<neon_binary8_full_table,
         binary8_region_arithmetic_full_table<Field,
+        bind_region_arithmetic<
         region_arithmetic<
         region_info<
         binary4_packed_arithmetic<Field,
         packed_arithmetic<
         full_table_arithmetic<
         simple_online_arithmetic<
-        final<Field> > > > > > > > > > > > >
+        final<Field> > > > > > > > > > > > > > > >
     { };
 }
