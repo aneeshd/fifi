@@ -11,6 +11,9 @@
 #include <functional>
 #include <type_traits>
 
+#include <sak/easy_bind.hpp>
+#include <sak/optional_bind.hpp>
+
 #include "is_packed_constant.hpp"
 #include "has_region_add.hpp"
 #include "has_region_subtract.hpp"
@@ -22,6 +25,291 @@
 
 namespace fifi
 {
+
+    namespace detail
+    {
+        struct region_add
+        {
+            template<class T>
+            static auto bind(const T* t) ->
+                decltype(sak::easy_bind(&T::region_add, t))
+            {
+                return sak::easy_bind(&T::region_add, t);
+            }
+        };
+
+        struct region_subtract
+        {
+            template<class T>
+            static auto bind(const T* t) ->
+                decltype(sak::easy_bind(&T::region_subtract, t))
+            {
+                return sak::easy_bind(&T::region_subtract, t);
+            }
+        };
+
+        struct region_divide
+        {
+            template<class T>
+            static auto bind(const T* t) ->
+                decltype(sak::easy_bind(&T::region_divide, t))
+            {
+                return sak::easy_bind(&T::region_divide, t);
+            }
+        };
+
+        struct region_multiply
+        {
+            template<class T>
+            static auto bind(const T* t) ->
+                decltype(sak::easy_bind(&T::region_multiply, t))
+            {
+                return sak::easy_bind(&T::region_multiply, t);
+            }
+        };
+
+        struct region_multiply_constant
+        {
+            template<class T>
+            static auto bind(const T* t) ->
+                decltype(sak::easy_bind(&T::region_multiply_constant, t))
+            {
+                return sak::easy_bind(&T::region_multiply_constant, t);
+            }
+        };
+
+        struct region_multiply_add
+        {
+            template<class T>
+            static auto bind(const T* t) ->
+                decltype(sak::easy_bind(&T::region_multiply_add, t))
+            {
+                return sak::easy_bind(&T::region_multiply_add, t);
+            }
+        };
+
+        struct region_multiply_subtract
+        {
+            template<class T>
+            static auto bind(const T* t) ->
+                decltype(sak::easy_bind(&T::region_multiply_subtract, t))
+            {
+                return sak::easy_bind(&T::region_multiply_subtract, t);
+            }
+        };
+
+
+    }
+
+    template<class Field, class Stack, class StackField, class Super>
+    class region_dispatcher_specialization_v2 : public Super
+    { };
+
+    /// Specialization of the dispatcher which is enabled when the main
+    /// stack and the dispatch stack have matching fields.
+    template<class Field, class Stack, class Super>
+    class region_dispatcher_specialization_v2<Field, Stack, Field, Super> :
+        public Super
+    {
+    public:
+
+        /// @copydoc layer::field_type
+        typedef typename Super::field_type field_type;
+
+        /// @copydoc layer::value_type
+        typedef typename Super::value_type value_type;
+
+        using call_region_add =
+            typename Super::call_region_add;
+
+        using call_region_subtract =
+            typename Super::call_region_subtract;
+
+        using call_region_divide =
+            typename Super::call_region_divide;
+
+        using call_region_multiply =
+            typename Super::call_region_multiply;
+
+        using call_region_multiply_constant =
+            typename Super::call_region_multiply_constant;
+
+        using call_region_multiply_add =
+            typename Super::call_region_multiply_add;
+
+        using call_region_multiply_subtract =
+            typename Super::call_region_multiply_subtract;
+
+    public:
+
+        call_region_add dispatch_region_add() const
+        {
+            call_region_add call;
+
+            auto f = sak::optional_bind<detail::region_add>(&m_stack);
+
+            if (sak::is_bind_expression(f) && m_stack.enabled())
+            {
+                call = f;
+            }
+
+            return Super::dispatch_region_add();
+        }
+
+        call_region_subtract dispatch_region_subtract() const
+        {
+            auto call = sak::optional_bind<detail::region_subtract>(&m_stack);
+
+            if (sak::is_bind_expression(call) && m_stack.enabled())
+            {
+                return call;
+            }
+
+            return Super::dispatch_region_subtract();
+        }
+
+        call_region_divide dispatch_region_divide() const
+        {
+            call_region_divide call;
+
+            auto f = sak::optional_bind<detail::region_divide>(&m_stack);
+
+            if (sak::is_bind_expression(call) && m_stack.enabled())
+            {
+                call = f;
+            }
+
+            return Super::dispatch_region_divide();
+        }
+
+        call_region_multiply dispatch_region_multiply() const
+        {
+            auto call = sak::optional_bind<detail::region_multiply>(&m_stack);
+
+            if (sak::is_bind_expression(call) && m_stack.enabled())
+            {
+                return call;
+            }
+
+            return Super::dispatch_region_multiply();
+        }
+
+        call_region_multiply_constant
+        dispatch_region_multiply_constant() const
+        {
+            auto call =
+                sak::optional_bind<detail::region_multiply_constant>(&m_stack);
+
+            if (sak::is_bind_expression(call) && m_stack.enabled())
+            {
+                return call;
+            }
+
+            return Super::dispatch_region_multiply_constant();
+        }
+
+        call_region_multiply_add dispatch_region_multiply_add() const
+        {
+            auto call =
+                sak::optional_bind<detail::region_multiply_add>(&m_stack);
+
+            if (sak::is_bind_expression(call) && m_stack.enabled())
+            {
+                return call;
+            }
+
+            return Super::dispatch_region_multiply_add();
+        }
+
+        auto dispatch_region_multiply_subtract() const ->
+            call_region_multiply_subtract
+        {
+            auto call =
+                sak::optional_bind<detail::region_multiply_subtract>(&m_stack);
+
+            if (sak::is_bind_expression(call) && m_stack.enabled())
+            {
+                return call;
+            }
+
+            return Super::dispatch_region_multiply_subtract();
+        }
+
+        /// @copydoc layer::alignment() const
+        uint32_t alignment() const
+        {
+            if (m_stack.enabled())
+            {
+                return std::max(m_stack.alignment(), Super::alignment());
+            }
+            else
+            {
+                return Super::alignment();
+            }
+        }
+
+        /// @copydoc layer::max_alignment() const
+        uint32_t max_alignment() const
+        {
+            if (m_stack.enabled())
+            {
+                return std::max(m_stack.max_alignment(),
+                                Super::max_alignment());
+            }
+            else
+            {
+                return Super::max_alignment();
+            }
+        }
+
+        /// @copydoc layer::granularity() const
+        uint32_t granularity() const
+        {
+            if (m_stack.enabled())
+            {
+                return std::max(m_stack.granularity(), Super::granularity());
+            }
+            else
+            {
+                return Super::granularity();
+            }
+        }
+
+        /// @copydoc layer::max_granularity() const
+        uint32_t max_granularity() const
+        {
+            if (m_stack.enabled())
+            {
+                return std::max(m_stack.max_granularity(),
+                                Super::max_granularity());
+            }
+            else
+            {
+                return Super::max_granularity();
+            }
+        }
+
+        /// @return True if the embedded stack is enabled i.e. if it
+        /// can be used for computations
+        bool enabled() const
+        {
+            return m_stack.enabled();
+        }
+
+    protected:
+
+        /// The stack to use for dispatching
+        Stack m_stack;
+
+    };
+
+
+
+
+
+
+
+
     /// This class is typically not used directly in the finite field
     /// stacks. Instead use the convenience class region_dispatcher
     /// which "extracts" the template arguments needed by this layer
