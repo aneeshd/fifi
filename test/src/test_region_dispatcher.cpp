@@ -26,7 +26,7 @@ namespace fifi
         };
 
         class dummy_stack :
-            public region_dispatcher<
+            public region_dispatcher_temp<
                    helper_region_info<
                        /*alignment=*/2U,
                        /*max_alignment=*/20U,
