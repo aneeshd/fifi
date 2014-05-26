@@ -14,9 +14,9 @@ namespace fifi
 {
     /// Region arithmetic makes it easy to perform finite field
     /// arithmetic over memory regions instead of single finite field
-    /// elements. Note, that the region arithmetic assumes that the
-    /// memory is "packed" i.e. multiple elements per value_type if
-    /// possible. See more about packed arithmetic in
+    /// elements. Note that the region arithmetic assumes that the
+    /// memory is "packed", i.e. multiple elements are stored per value_type
+    /// if possible. See more about packed arithmetic in
     /// packed_arithmetic.hpp.
     /// Also a length is assumed to be available through a call to length
     template<class Super>
@@ -146,8 +146,5 @@ namespace fifi
                 dest[i] = Super::packed_subtract(dest[i], v);
             }
         }
-
-
-
     };
 }

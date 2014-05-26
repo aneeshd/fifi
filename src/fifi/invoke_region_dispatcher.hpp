@@ -8,11 +8,11 @@
 namespace fifi
 {
     /// The invoke_region_dispatcher implements the different region
-    /// arithmetic functions. When called it will dispatch the call to
+    /// arithmetic functions. When called, it will dispatch the call to
     /// a stored function. To which specific function the call is
-    /// dispacted depends on the specific run-time platform i.e. what
-    /// type of hardware are we running on and what features does the
-    /// CPU support.
+    /// dispached depends on the specific run-time platform, i.e. what
+    /// type of hardware we are running on and what features are
+    /// supported by the CPU.
     ///
     /// The invoke_region_dispatcher will obtain the function pointers
     /// from the lower layers by invoking the dispatch_xxx

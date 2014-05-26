@@ -39,7 +39,7 @@ namespace fifi
     public:
 
         /// @copydoc layer::field_type
-        using field_type =  typename Super::field_type;
+        using field_type = typename Super::field_type;
 
         /// @copydoc layer::value_type
         using value_type = typename Super::value_type;
@@ -77,7 +77,7 @@ namespace fifi
         /// Helper struct for sak::optional_bind. sak::optinal_bind
         /// allows us to "attempt" to bind to a specific function in
         /// the Stack object. However if that function is not defined
-        /// by stack it will simply return an empty std::function
+        /// by the stack, it will simply return an empty std::function
         /// object.
         struct bind_add
         {

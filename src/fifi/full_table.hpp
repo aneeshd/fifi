@@ -27,7 +27,7 @@
 namespace fifi
 {
     /// The full look-up table stack. This stack does most
-    /// computations base on full look-up tables.
+    /// computations based on full look-up tables.
     template<class Field>
     class full_table : public
         region_divide_granularity<

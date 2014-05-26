@@ -10,16 +10,16 @@
 namespace fifi
 {
     /// The super_region_dispatcher layer will bind the region
-    /// arithmetic functions to Super's region arithmetic
+    /// arithmetic functions to the Super's region arithmetic
     /// functions. Typically this layer will be the last after a
     /// number of stack_region_dispatchers.
     ///
-    /// When used in this way the super_region_dispatcher serves as
-    /// the fallthrough / catch-all layer it will make sure that if
-    /// non of the optimized stacks in the stack_region_dispatcher
-    /// layers implements the call it will simply be forwarded to the
-    /// Super's region arithithmetics (which typically represent the
-    /// basic implementations e.g. non SIMD optimzed function).
+    /// When used in this way, the super_region_dispatcher serves as
+    /// the fallthrough / catch-all layer. It will make sure that if
+    /// none of the optimized stacks in the stack_region_dispatcher
+    /// layers implements the call, then it will simply be forwarded to
+    /// the Super's region arithmetics (which typically represent the
+    /// basic implementations e.g. non-SIMD optimized function).
     template<class Super>
     class super_region_dispatcher : public Super
     {
@@ -37,7 +37,6 @@ namespace fifi
         ///                                 uint32_t) const
         using call_region_subtract = std::function<
             void (value_type*, const value_type*, uint32_t)>;
-
 
         /// @copydoc layer::region_divide(value_type*, const value_type*,
         ///                               uint32_t) const
