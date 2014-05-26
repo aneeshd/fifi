@@ -98,7 +98,7 @@ namespace fifi
         };
 
         class dummy_stack_enabled :
-            public region_dispatcher_specialization<
+            public region_dispatcher_specialization_temp<
                        binary,
                        helper_region_info<
                            /*alignment=*/2U,
@@ -116,7 +116,7 @@ namespace fifi
         { };
 
         class dummy_stack_disabled :
-            public region_dispatcher_specialization<
+            public region_dispatcher_specialization_temp<
                        binary,
                        helper_region_info<
                            /*alignment=*/2U,

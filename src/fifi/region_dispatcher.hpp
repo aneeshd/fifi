@@ -20,8 +20,8 @@ namespace fifi
     /// by the region_dispatcher_specilization making the embedding
     /// nicer.
     template<class Stack, class Super>
-    class stack_region_dispatcher :
-        public region_dispatcher_specialization_v2<
+    class region_dispatcher :
+        public region_dispatcher_specialization<
             typename Super::field_type, Stack,
             typename Stack::field_type, Super>
     {
@@ -45,7 +45,7 @@ namespace fifi
         /// The OptimizedSuper typedef references the dispatcher
         /// e.g. SIMD layers directly this allows us to forward calls
         /// to the optimized stack
-        typedef stack_region_dispatcher<Stack, Super> OptimizedSuper;
+        typedef region_dispatcher<Stack, Super> OptimizedSuper;
     };
 
 
@@ -59,7 +59,7 @@ namespace fifi
     /// nicer.
     template<class Stack, class Super>
     class region_dispatcher_temp :
-        public region_dispatcher_specialization<
+        public region_dispatcher_specialization_temp<
             typename Super::field_type, Stack,
             typename Stack::field_type, Super>
     {

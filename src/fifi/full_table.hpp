@@ -32,10 +32,10 @@ namespace fifi
     class full_table : public
         region_divide_granularity<
         invoke_region_dispatcher<
-        stack_region_dispatcher<ssse3_binary4_full_table,
-        stack_region_dispatcher<ssse3_binary8_full_table,
-        stack_region_dispatcher<neon_binary4_full_table,
-        stack_region_dispatcher<neon_binary8_full_table,
+        region_dispatcher<ssse3_binary4_full_table,
+        region_dispatcher<ssse3_binary8_full_table,
+        region_dispatcher<neon_binary4_full_table,
+        region_dispatcher<neon_binary8_full_table,
         super_region_dispatcher<
         binary8_region_arithmetic_full_table<Field,
         region_arithmetic<

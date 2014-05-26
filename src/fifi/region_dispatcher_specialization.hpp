@@ -26,54 +26,59 @@
 namespace fifi
 {
 
-    namespace detail
-    {
-
-
-    }
-
     template<class Field, class Stack, class StackField, class Super>
-    class region_dispatcher_specialization_v2 : public Super
+    class region_dispatcher_specialization : public Super
     { };
 
     /// Specialization of the dispatcher which is enabled when the main
     /// stack and the dispatch stack have matching fields.
     template<class Field, class Stack, class Super>
-    class region_dispatcher_specialization_v2<Field, Stack, Field, Super> :
+    class region_dispatcher_specialization<Field, Stack, Field, Super> :
         public Super
     {
     public:
 
         /// @copydoc layer::field_type
-        typedef typename Super::field_type field_type;
+        using field_type =  typename Super::field_type;
 
         /// @copydoc layer::value_type
-        typedef typename Super::value_type value_type;
+        using value_type = typename Super::value_type;
 
+        /// @copydoc super_region_dispatcher_::call_region_add
         using call_region_add =
             typename Super::call_region_add;
 
+        /// @copydoc super_region_dispatcher_::call_region_subtract
         using call_region_subtract =
             typename Super::call_region_subtract;
 
+        /// @copydoc super_region_dispatcher_::call_region_divide
         using call_region_divide =
             typename Super::call_region_divide;
 
+        /// @copydoc super_region_dispatcher_::call_region_multiply
         using call_region_multiply =
             typename Super::call_region_multiply;
 
+        /// @copydoc super_region_dispatcher_::call_region_multiply_constant
         using call_region_multiply_constant =
             typename Super::call_region_multiply_constant;
 
+        /// @copydoc super_region_dispatcher_::call_region_multiply_add
         using call_region_multiply_add =
             typename Super::call_region_multiply_add;
 
+        /// @copydoc super_region_dispatcher_::call_region_multiply_subtract
         using call_region_multiply_subtract =
             typename Super::call_region_multiply_subtract;
 
     public:
 
-        /// Helper
+        /// Helper struct for sak::optional_bind. sak::optinal_bind
+        /// allows us to "attempt" to bind to a specific function in
+        /// the Stack object. However if that function is not defined
+        /// by stack it will simply return an empty std::function
+        /// object.
         struct bind_add
         {
             template<class T>
@@ -86,6 +91,7 @@ namespace fifi
             using result_type = call_region_add;
         };
 
+        /// @copydoc bind_add
         struct bind_subtract
         {
             template<class T>
@@ -98,6 +104,7 @@ namespace fifi
             using result_type = call_region_subtract;
         };
 
+        /// @copydoc bind_add
         struct bind_divide
         {
             template<class T>
@@ -110,6 +117,7 @@ namespace fifi
             using result_type = call_region_divide;
         };
 
+        /// @copydoc bind_add
         struct bind_multiply
         {
             template<class T>
@@ -122,6 +130,7 @@ namespace fifi
             using result_type = call_region_multiply;
         };
 
+        /// @copydoc bind_add
         struct bind_multiply_constant
         {
             template<class T>
@@ -134,6 +143,7 @@ namespace fifi
             using result_type = call_region_multiply_constant;
         };
 
+        /// @copydoc bind_add
         struct bind_multiply_add
         {
             template<class T>
@@ -146,6 +156,7 @@ namespace fifi
             using result_type = call_region_multiply_add;
         };
 
+        /// @copydoc bind_add
         struct bind_multiply_subtract
         {
             template<class T>
@@ -160,7 +171,8 @@ namespace fifi
 
     public:
 
-        call_region_add dispatch_region_add() const
+        call_region_add
+        dispatch_region_add() const
         {
             auto call = sak::optional_bind<bind_add>(&m_stack);
 
@@ -172,7 +184,8 @@ namespace fifi
             return Super::dispatch_region_add();
         }
 
-        call_region_subtract dispatch_region_subtract() const
+        call_region_subtract
+        dispatch_region_subtract() const
         {
             auto call = sak::optional_bind<bind_subtract>(&m_stack);
 
@@ -184,7 +197,8 @@ namespace fifi
             return Super::dispatch_region_subtract();
         }
 
-        call_region_divide dispatch_region_divide() const
+        call_region_divide
+        dispatch_region_divide() const
         {
             auto call = sak::optional_bind<bind_divide>(&m_stack);
 
@@ -196,7 +210,8 @@ namespace fifi
             return Super::dispatch_region_divide();
         }
 
-        call_region_multiply dispatch_region_multiply() const
+        call_region_multiply
+        dispatch_region_multiply() const
         {
             auto call = sak::optional_bind<bind_multiply>(&m_stack);
 
@@ -221,7 +236,8 @@ namespace fifi
             return Super::dispatch_region_multiply_constant();
         }
 
-        call_region_multiply_add dispatch_region_multiply_add() const
+        call_region_multiply_add
+        dispatch_region_multiply_add() const
         {
             auto call = sak::optional_bind<bind_multiply_add>(&m_stack);
 
@@ -314,13 +330,6 @@ namespace fifi
 
     };
 
-
-
-
-
-
-
-
     /// This class is typically not used directly in the finite field
     /// stacks. Instead use the convenience class region_dispatcher
     /// which "extracts" the template arguments needed by this layer
@@ -331,13 +340,13 @@ namespace fifi
     /// dispatch stack's field. See the specialization below which is
     /// enabled when the fields match.
     template<class Field, class Stack, class StackField, class Super>
-    class region_dispatcher_specialization : public Super
+    class region_dispatcher_specialization_temp : public Super
     { };
 
     /// Specialization of the dispatcher which is enabled when the main
     /// stack and the dispatch stack have matching fields.
     template<class Field, class Stack, class Super>
-    class region_dispatcher_specialization<Field, Stack, Field, Super> :
+    class region_dispatcher_specialization_temp<Field, Stack, Field, Super> :
         public Super
     {
     public:
@@ -351,7 +360,7 @@ namespace fifi
     public:
 
         /// Constructor
-        region_dispatcher_specialization()
+        region_dispatcher_specialization_temp()
         {
             bool enabled = m_stack.enabled();
 
