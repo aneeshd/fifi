@@ -7,42 +7,42 @@
 
 #include <fifi/binary.hpp>
 #include <fifi/region_dispatcher.hpp>
+
 #include "fifi_unit_test/helper_fall_through.hpp"
 #include "fifi_unit_test/helper_region_info.hpp"
 
-namespace fifi
+
+namespace
 {
-    // namespace
+    // template<bool Enabled, class Super>
+    // class dummy : public Super
     // {
-    //     template<bool Enabled, class Super>
-    //     class dummy : public Super
+    // public:
+
+    //     bool enabled() const
     //     {
-    //     public:
+    //         return Enabled;
+    //     }
+    // };
 
-    //         bool enabled() const
-    //         {
-    //             return Enabled;
-    //         }
-    //     };
-
-    //     class dummy_stack :
-    //         public region_dispatcher_temp<
-    //                helper_region_info<
-    //                    /*alignment=*/2U,
-    //                    /*max_alignment=*/20U,
-    //                    /*granularity=*/4U,
-    //                    /*max_granularity=*/40U,
-    //                dummy<true,
-    //                helper_fall_through<binary> > >,
-    //                helper_region_info<
-    //                    /*alignment=*/1U,
-    //                    /*max_alignment=*/10U,
-    //                    /*granularity=*/3U,
-    //                    /*max_granularity=*/30U,
-    //                helper_fall_through<binary> > >
-    //     { };
-    // }
+    // class dummy_stack :
+    //     public region_dispatcher_temp<
+    //            helper_region_info<
+    //                /*alignment=*/2U,
+    //                /*max_alignment=*/20U,
+    //                /*granularity=*/4U,
+    //                /*max_granularity=*/40U,
+    //            dummy<true,
+    //            helper_fall_through<binary> > >,
+    //            helper_region_info<
+    //                /*alignment=*/1U,
+    //                /*max_alignment=*/10U,
+    //                /*granularity=*/3U,
+    //                /*max_granularity=*/30U,
+    //            helper_fall_through<binary> > >
+    // { };
 }
+
 
 /// @todo re-enable these unit tests
 

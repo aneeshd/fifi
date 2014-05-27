@@ -36,7 +36,7 @@ namespace fifi
         region_dispatcher<ssse3_binary8_full_table,
         region_dispatcher<neon_binary4_full_table,
         region_dispatcher<neon_binary8_full_table,
-        super_region_dispatcher<
+        basic_region_dispatcher<
         binary8_region_arithmetic_full_table<Field,
         region_arithmetic<
         region_info<

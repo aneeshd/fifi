@@ -20,31 +20,7 @@ namespace fifi
     /// by the region_dispatcher_specilization making the embedding
     /// nicer.
     template<class Stack, class Super>
-    class region_dispatcher :
-        public region_dispatcher_specialization<
-            typename Super::field_type, Stack,
-            typename Stack::field_type, Super>
-    {
-        /// Helper struct which will typedef type to T::BasicSuper if T
-        /// has such a type otherwise we typedef type to T itself.
-        template<bool B, class T>
-        struct reuse_basic_super_if { typedef typename T::BasicSuper type; };
-
-        /// @copydoc reuse_basic_super_if
-        template<class T>
-        struct reuse_basic_super_if<false, T> { typedef T type; };
-
-    public:
-
-        /// The BasicSuper typedef ensures that we can "by-pass"
-        /// optimized e.g. SIMD layers. The BasicSuper typedef will always
-        /// reference the first layer after any number of dispatchers.
-        typedef typename reuse_basic_super_if<
-            has_basic_super<Super>::value, Super>::type BasicSuper;
-
-        /// The OptimizedSuper typedef references the dispatcher
-        /// e.g. SIMD layers directly this allows us to forward calls
-        /// to the optimized stack
-        typedef region_dispatcher<Stack, Super> OptimizedSuper;
-    };
+    using region_dispatcher = region_dispatcher_specialization<
+        typename Super::field_type, Stack,
+        typename Stack::field_type, Super>;
 }

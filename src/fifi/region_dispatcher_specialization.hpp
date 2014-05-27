@@ -74,6 +74,20 @@ namespace fifi
 
     public:
 
+        /// Define this layer as the OptimizedSuper. We use the
+        /// OptimizedSuper type to access the optimization layers. The
+        /// motivation for this is that the optimization layers might
+        /// have specific granularity requirements (the minimum amount
+        /// of data they process), and if these requirements are not
+        /// statisfied we have to use the basic region arithmetic
+        /// functions. The basic region dispatchers define the
+        /// BasicSuper type to allow a callee to by pass the
+        /// optimization layers.
+        using OptimizedSuper =
+            region_dispatcher_specialization<Field, Stack, Field, Super>;
+
+    public:
+
         /// Helper struct for sak::optional_bind. sak::optinal_bind
         /// allows us to "attempt" to bind to a specific function in
         /// the Stack object. However if that function is not defined

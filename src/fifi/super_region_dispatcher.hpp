@@ -21,7 +21,7 @@ namespace fifi
     /// the Super's region arithmetics (which typically represent the
     /// basic implementations e.g. non-SIMD optimized function).
     template<class Super>
-    class super_region_dispatcher : public Super
+    class basic_region_dispatcher : public Super
     {
     public:
 
@@ -64,6 +64,16 @@ namespace fifi
         ///                                          uint32_t) const
         using call_region_multiply_subtract = std::function<
             void (value_type*, const value_type*, value_type, uint32_t)>;
+
+    public:
+
+        /// Define this layer as the BasicSuper. We use the BasicSuper
+        /// type to "by-pass" the optimization layers. The motivation
+        /// for this is that the optimization layers might have large
+        /// granularity requirements (the minimum amount of data they
+        /// process), and if these requirements are not statisfied we
+        /// have to use the basic region arithmetic functions.
+        using BasicSuper = basic_region_dispatcher<Super>;
 
     public:
 
