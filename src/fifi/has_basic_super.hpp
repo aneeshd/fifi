@@ -10,7 +10,7 @@
 namespace fifi
 {
     /// Type trait helper for compile time detection of whether
-    /// a class defines a typedef called BasicSuper.
+    /// a class defines a typedef called basic_super_type.
     ///
     /// Example:
     ///
@@ -25,7 +25,7 @@ namespace fifi
         typedef uint8_t yes;
         typedef uint32_t no;
 
-        template <typename U> static yes check(typename U::BasicSuper*);
+        template <typename U> static yes check(typename U::basic_super_type*);
         template <typename U> static no  check(...);
 
     public:

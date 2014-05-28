@@ -3,24 +3,58 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <fifi/region_dispatcher_specialization.hpp>
+#include <fifi/region_dispatcher.hpp>
 #include <fifi/binary.hpp>
 
 #include <gtest/gtest.h>
 
 #include "fifi_unit_test/helper_region_info.hpp"
 
-namespace fifi
+// Put dummy layers and tests classes in an anonymous namespace
+// to avoid violations of ODF (one-definition-rule) in other
+// translation units
+namespace
 {
-    // namespace
-    // {
-    //     template<class Field, bool Enabled>
-    //     class dummy
-    //     {
-    //     public:
+    class dummy_stack
+    {
+    public:
+        using field_type = fifi::binary8;
+        using value_type = typename field_type::value_type;
+    };
 
-    //         typedef Field field_type;
-    //         typedef typename field_type::value_type value_type;
+    // Stack with different field than the dummy stack so it should
+    // trigger the empty region_dispatcher_specialization to be used.
+    class no_use_stack
+    {
+    public:
+        using field_type = fifi::binary;
+    };
+
+    // Stack with same field as the dummy stack so it will be enable the
+    // region_dispatcher_specialization
+    class use_stack
+    {
+    public:
+        using field_type = fifi::binary8;
+    };
+
+
+}
+
+TEST(region_dispatcher_specialization, api)
+{
+    fifi::region_dispatcher<no_use_stack, dummy_stack> stack;
+    (void)stack;
+}
+
+
+//     template<class Field, bool Enabled>
+//     class dummy
+//     {
+//     public:
+
+//         typedef Field field_type;
+//         typedef typename field_type::value_type value_type;
 
     //     public:
 
@@ -133,7 +167,7 @@ namespace fifi
     //                    dummy<binary, true>>>
     //     { };
     // }
-}
+// }
 
 /// @todo re-enable unit tests
 

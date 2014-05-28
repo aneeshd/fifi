@@ -25,7 +25,10 @@
 
 namespace fifi
 {
-
+    /// Fall-through case where the Field and StackField types are
+    /// different. This means that whatever optimizations are
+    /// implmented in the Stack does not apply here since they are for
+    /// a different finite field from that used in the main stack.
     template<class Field, class Stack, class StackField, class Super>
     class region_dispatcher_specialization : public Super
     { };
@@ -74,16 +77,16 @@ namespace fifi
 
     public:
 
-        /// Define this layer as the OptimizedSuper. We use the
-        /// OptimizedSuper type to access the optimization layers. The
-        /// motivation for this is that the optimization layers might
-        /// have specific granularity requirements (the minimum amount
-        /// of data they process), and if these requirements are not
-        /// statisfied we have to use the basic region arithmetic
-        /// functions. The basic region dispatchers define the
-        /// BasicSuper type to allow a callee to by pass the
-        /// optimization layers.
-        using OptimizedSuper =
+        /// Define this layer as the optimized_super_type. We use the
+        /// optimized_super_type type to access the optimization
+        /// layers. The motivation for this is that the optimization
+        /// layers might have specific granularity requirements (the
+        /// minimum amount of data they process), and if these
+        /// requirements are not statisfied we have to use the basic
+        /// region arithmetic functions. The basic region dispatchers
+        /// define the BasicSuper type to allow a callee to by pass
+        /// the optimization layers.
+        using optimized_super_type =
             region_dispatcher_specialization<Field, Stack, Field, Super>;
 
     public:

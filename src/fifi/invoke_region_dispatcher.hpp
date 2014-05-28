@@ -10,7 +10,7 @@ namespace fifi
     /// The invoke_region_dispatcher implements the different region
     /// arithmetic functions. When called, it will dispatch the call to
     /// a stored function. To which specific function the call is
-    /// dispached depends on the specific run-time platform, i.e. what
+    /// dispatched depends on the specific run-time platform, i.e. what
     /// type of hardware we are running on and what features are
     /// supported by the CPU.
     ///

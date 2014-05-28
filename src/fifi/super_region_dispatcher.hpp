@@ -15,7 +15,7 @@ namespace fifi
     /// number of stack_region_dispatchers.
     ///
     /// When used in this way, the super_region_dispatcher serves as
-    /// the fallthrough / catch-all layer. It will make sure that if
+    /// the fall-through / catch-all layer. It will make sure that if
     /// none of the optimized stacks in the stack_region_dispatcher
     /// layers implements the call, then it will simply be forwarded to
     /// the Super's region arithmetics (which typically represent the
@@ -73,7 +73,7 @@ namespace fifi
         /// granularity requirements (the minimum amount of data they
         /// process), and if these requirements are not statisfied we
         /// have to use the basic region arithmetic functions.
-        using BasicSuper = basic_region_dispatcher<Super>;
+        using basic_super_type = basic_region_dispatcher<Super>;
 
     public:
 
