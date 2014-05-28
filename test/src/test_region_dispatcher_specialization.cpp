@@ -19,7 +19,7 @@ namespace
     {
     public:
         using field_type = fifi::binary8;
-        using value_type = typename field_type::value_type;
+        using value_type = field_type::value_type;
     };
 
     // Stack with different field than the dummy stack so it should
