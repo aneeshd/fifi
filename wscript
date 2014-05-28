@@ -58,6 +58,11 @@ def options(opt):
         git_repository='github.com/steinwurf/platform.git',
         major_version=1))
 
+    bundle.add_dependency(opt, resolve.ResolveGitMajorVersion(
+        name='stub',
+        git_repository='github.com/steinwurf/stub.git',
+        major_version=1))
+
     opt.load('wurf_configure_output')
     opt.load('wurf_dependency_bundle')
     opt.load('wurf_tools')
@@ -82,6 +87,7 @@ def configure(conf):
         recurse_helper(conf, 'tables')
         recurse_helper(conf, 'cpuid')
         recurse_helper(conf, 'platform')
+        recurse_helper(conf, 'stub')
 
     set_simd_flags(conf)
 
@@ -130,6 +136,7 @@ def build(bld):
         recurse_helper(bld, 'tables')
         recurse_helper(bld, 'cpuid')
         recurse_helper(bld, 'platform')
+        recurse_helper(bld, 'stub')
 
         # Only build test and benchmarks when executed from the
         # top-level wscript i.e. not when included as a dependency

@@ -8,6 +8,8 @@
 
 #include <gtest/gtest.h>
 
+#include <stub/call.hpp>
+
 #include "fifi_unit_test/helper_region_info.hpp"
 
 // Put dummy layers and tests classes in an anonymous namespace
@@ -15,11 +17,79 @@
 // translation units
 namespace
 {
-    class dummy_stack
+    class dummy_super
     {
     public:
+
         using field_type = fifi::binary8;
         using value_type = field_type::value_type;
+
+        // Dummy function types required by the
+        // region_dispatcher_specialization
+        using call_region_add = std::function<void()>;
+        using call_region_subtract = std::function<void()>;
+        using call_region_divide = std::function<void()>;
+        using call_region_multiply = std::function<void()>;
+        using call_region_multiply_constant = std::function<void()>;
+        using call_region_multiply_add = std::function<void()>;
+        using call_region_multiply_subtract = std::function<void()>;
+
+    public:
+
+        dummy_super()
+        {
+            m_add.set_return(call_region_add());
+            m_subtract.set_return(call_region_subtract());
+            m_divide.set_return(call_region_divide());
+            m_multiply.set_return(call_region_multiply());
+            m_multiply_constant.set_return(call_region_multiply_constant());
+            m_multiply_add.set_return(call_region_multiply_add());
+            m_multiply_subtract.set_return(call_region_multiply_subtract());
+        }
+
+        call_region_add dispatch_region_add() const
+        {
+            return m_add();
+        }
+
+        call_region_subtract dispatch_region_subtract() const
+        {
+            return m_subtract();
+        }
+
+        call_region_divide dispatch_region_divide() const
+        {
+            return m_divide();
+        }
+
+        call_region_multiply dispatch_region_multiply() const
+        {
+            return m_multiply();
+        }
+
+        call_region_multiply_constant dispatch_region_multiply_constant() const
+        {
+            return m_multiply_constant();
+        }
+
+        call_region_multiply_add dispatch_region_multiply_add() const
+        {
+            return m_multiply_add();
+        }
+
+        call_region_multiply_subtract dispatch_region_multiply_subtract() const
+        {
+            return m_multiply_subtract();
+        }
+
+        stub::call<call_region_add()> m_add;
+        stub::call<call_region_subtract()> m_subtract;
+        stub::call<call_region_divide()> m_divide;
+        stub::call<call_region_multiply()> m_multiply;
+        stub::call<call_region_multiply_constant()> m_multiply_constant;
+        stub::call<call_region_multiply_add()> m_multiply_add;
+        stub::call<call_region_multiply_subtract()> m_multiply_subtract;
+
     };
 
     // Stack with different field than the dummy stack so it should
@@ -36,16 +106,98 @@ namespace
     {
     public:
         using field_type = fifi::binary8;
+
+        void region_add()
+        {
+            m_region_add();
+        }
+
+        void region_subtract()
+        {
+            m_region_subtract();
+        }
+
+        void region_divide()
+        {
+            m_region_divide();
+        }
+
+        void region_multiply()
+        {
+            m_region_multiply();
+        }
+
+        void region_multiply_constant()
+        {
+            m_region_multiply_constant();
+        }
+
+        void region_multiply_add()
+        {
+            m_region_multiply_add();
+        }
+
+        void region_multiply_subtract()
+        {
+            m_region_multiply_subtract();
+        }
+
+        bool enabled() const
+        {
+            return m_enabled;
+        }
+
+        stub::call<void()> m_region_add;
+        stub::call<void()> m_region_subtract;
+        stub::call<void()> m_region_divide;
+        stub::call<void()> m_region_multiply;
+        stub::call<void()> m_region_multiply_constant;
+        stub::call<void()> m_region_multiply_add;
+        stub::call<void()> m_region_multiply_subtract;
+
+        bool m_enabled = true;
     };
-
-
 }
 
-TEST(region_dispatcher_specialization, api)
+/// Check that the code compiles with a stack that does not provide
+/// the same field
+TEST(region_dispatcher_specialization, no_use)
 {
-    fifi::region_dispatcher<no_use_stack, dummy_stack> stack;
+    fifi::region_dispatcher<no_use_stack, dummy_super> stack;
     (void)stack;
 }
+
+///
+TEST(region_dispatcher_specilization, use)
+{
+    fifi::region_dispatcher<use_stack, dummy_super> stack;
+
+    auto add = stack.dispatch_region_add();
+    auto subtract = stack.dispatch_region_subtract();
+    auto divide = stack.dispatch_region_divide();
+    auto multiply = stack.dispatch_region_multiply();
+    auto multiply_constant = stack.dispatch_region_multiply_constant();
+    auto multiply_add = stack.dispatch_region_multiply_add();
+    auto multiply_subtract = stack.dispatch_region_multiply_subtract();
+
+    // Everything should have been redirected to the stack
+    stack.m_add.no_calls();
+    stack.m_subtract.no_calls();
+    stack.m_divide.no_calls();
+    stack.m_multiply.no_calls();
+    stack.m_multiply_constant.no_calls();
+    stack.m_multiply_add.no_calls();
+    stack.m_multiply_subtract.no_calls();
+
+    // add();
+    // subtract();
+    // divide();
+    // multiply();
+    // multiply_constant();
+    // multiply_add();
+    // multiply_subtract();
+}
+
 
 
 //     template<class Field, bool Enabled>

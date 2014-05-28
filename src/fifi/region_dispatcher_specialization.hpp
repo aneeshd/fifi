@@ -47,6 +47,9 @@ namespace fifi
         /// @copydoc layer::value_type
         using value_type = typename Super::value_type;
 
+        /// @todo these doc strings look wrong there is a _ too much
+        /// after dispatcher
+        ///
         /// @copydoc super_region_dispatcher_::call_region_add
         using call_region_add =
             typename Super::call_region_add;
