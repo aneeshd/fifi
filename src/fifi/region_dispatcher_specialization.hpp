@@ -103,7 +103,7 @@ namespace fifi
         struct bind_add
         {
             template<class T>
-            static auto bind(const T& t) ->
+            static auto bind(T& t) ->
                 decltype(sak::easy_bind(&T::region_add, &t))
             {
                 return sak::easy_bind(&T::region_add, &t);
@@ -116,7 +116,7 @@ namespace fifi
         struct bind_subtract
         {
             template<class T>
-            static auto bind(const T& t) ->
+            static auto bind(T& t) ->
                 decltype(sak::easy_bind(&T::region_subtract, &t))
             {
                 return sak::easy_bind(&T::region_subtract, &t);
@@ -129,7 +129,7 @@ namespace fifi
         struct bind_divide
         {
             template<class T>
-            static auto bind(const T& t) ->
+            static auto bind(T& t) ->
                 decltype(sak::easy_bind(&T::region_divide, &t))
             {
                 return sak::easy_bind(&T::region_divide, &t);
@@ -142,7 +142,7 @@ namespace fifi
         struct bind_multiply
         {
             template<class T>
-            static auto bind(const T& t) ->
+            static auto bind(T& t) ->
                 decltype(sak::easy_bind(&T::region_multiply, &t))
             {
                 return sak::easy_bind(&T::region_multiply, &t);
@@ -155,7 +155,7 @@ namespace fifi
         struct bind_multiply_constant
         {
             template<class T>
-            static auto bind(const T& t) ->
+            static auto bind(T& t) ->
                 decltype(sak::easy_bind(&T::region_multiply_constant, &t))
             {
                 return sak::easy_bind(&T::region_multiply_constant, &t);
@@ -168,7 +168,7 @@ namespace fifi
         struct bind_multiply_add
         {
             template<class T>
-            static auto bind(const T& t) ->
+            static auto bind(T& t) ->
                 decltype(sak::easy_bind(&T::region_multiply_add, &t))
             {
                 return sak::easy_bind(&T::region_multiply_add, &t);
@@ -181,7 +181,7 @@ namespace fifi
         struct bind_multiply_subtract
         {
             template<class T>
-            static auto bind(const T& t) ->
+            static auto bind(T& t) ->
                 decltype(sak::easy_bind(&T::region_multiply_subtract, &t))
             {
                 return sak::easy_bind(&T::region_multiply_subtract, &t);
