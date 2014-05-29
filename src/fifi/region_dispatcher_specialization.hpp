@@ -231,7 +231,7 @@ namespace fifi
         call_region_divide
         dispatch_region_divide() const
         {
-            auto call = sak::optional_bind<bind_divide>(&m_stack);
+            auto call = bind_divide_test(0);
 
             if (call && m_stack.enabled())
             {
@@ -358,7 +358,7 @@ namespace fifi
 
         template<class T = Stack>
         auto bind_multiply_test(int) const ->
-            decltype(std::declval<T>().region_multiply(0,0,0),
+            decltype(sak::easy_bind(&T::region_multiply, static_cast<T*>(0)),
                      call_region_multiply())
         {
             return sak::easy_bind(&T::region_multiply, &m_stack);
@@ -369,6 +369,21 @@ namespace fifi
             decltype(call_region_multiply())
         {
             return call_region_multiply();
+        }
+
+        template<class T = Stack>
+        auto bind_divide_test(int) const ->
+            decltype(sak::easy_bind(&T::region_divide, static_cast<T*>(0)),
+                     call_region_divide())
+        {
+            return sak::easy_bind(&T::region_divide, &m_stack);
+        }
+
+        template<class T = Stack>
+        auto bind_divide_test(char) const ->
+            decltype(call_region_divide())
+        {
+            return call_region_divide();
         }
 
 
