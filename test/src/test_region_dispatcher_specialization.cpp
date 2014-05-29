@@ -172,9 +172,9 @@ namespace
 
         using Super::m_stack;
 
-        decltype(Super::m_stack)& testing_stack()
+        auto testing_stack() -> decltype(m_stack)&
         {
-            return Super::m_stack;
+            return m_stack;
         }
     };
 }

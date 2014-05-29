@@ -104,7 +104,7 @@ namespace fifi
         {
             template<class T>
             static auto bind(const T* t) ->
-            decltype(declval<T>().region_add(0,0,0),
+            decltype(std::declval<T>().region_add(0,0,0),
                      sak::easy_bind(&T::region_add, t))
             {
                 return sak::easy_bind(&T::region_add, t);
@@ -118,7 +118,7 @@ namespace fifi
         {
             template<class T>
             static auto bind(const T* t) ->
-            decltype(declval<T>.region_subtract(0,0,0),
+                decltype(std::declval<T>().region_subtract(0,0,0),
                      sak::easy_bind(&T::region_subtract, t))
             {
                 return sak::easy_bind(&T::region_subtract, t);
@@ -132,7 +132,7 @@ namespace fifi
         {
             template<class T>
             static auto bind(const T* t) ->
-            decltype(declval<T>().region_divide(0,0,0),
+            decltype(std::declval<T>().region_divide(0,0,0),
                      sak::easy_bind(&T::region_divide, t))
             {
                 return sak::easy_bind(&T::region_divide, t);
@@ -146,7 +146,7 @@ namespace fifi
         {
             template<class T>
             static auto bind(const T* t) ->
-            decltype(declval<T>().region_multiply(0,0,0),
+            decltype(std::declval<T>().region_multiply(0,0,0),
                      sak::easy_bind(&T::region_multiply, t))
             {
                 return sak::easy_bind(&T::region_multiply, t);
@@ -160,7 +160,7 @@ namespace fifi
         {
             template<class T>
             static auto bind(const T* t) ->
-            decltype(declval<T>().region_multiply_constant(0,0,0),
+            decltype(std::declval<T>().region_multiply_constant(0,0,0),
                      sak::easy_bind(&T::region_multiply_constant, t))
             {
                 return sak::easy_bind(&T::region_multiply_constant, t);
@@ -174,7 +174,7 @@ namespace fifi
         {
             template<class T>
             static auto bind(const T* t) ->
-            decltype(declval<T>().region_multiply_add(0,0,0,0),
+            decltype(std::declval<T>().region_multiply_add(0,0,0,0),
                      sak::easy_bind(&T::region_multiply_add, t))
             {
                 return sak::easy_bind(&T::region_multiply_add, t);
@@ -188,7 +188,7 @@ namespace fifi
         {
             template<class T>
             static auto bind(const T* t) ->
-            decltype(declval<T>().region_multiply_subtract(0,0,0,0),
+            decltype(std::declval<T>().region_multiply_subtract(0,0,0,0),
                      sak::easy_bind(&T::region_multiply_subtract, t))
             {
                 return sak::easy_bind(&T::region_multiply_subtract, t);
@@ -244,7 +244,7 @@ namespace fifi
         call_region_multiply
         dispatch_region_multiply() const
         {
-            auto call = sak::optional_bind<bind_multiply>(&m_stack);
+            auto call = bind_multiply_test(0);
 
             if (call && m_stack.enabled())
             {
@@ -353,6 +353,24 @@ namespace fifi
         {
             return m_stack.enabled();
         }
+
+    protected:
+
+        template<class T = Stack>
+        auto bind_multiply_test(int) const ->
+            decltype(std::declval<T>().region_multiply(0,0,0),
+                     call_region_multiply())
+        {
+            return sak::easy_bind(&T::region_multiply, &m_stack);
+        }
+
+        template<class T = Stack>
+        auto bind_multiply_test(char) const ->
+            decltype(call_region_multiply())
+        {
+            return call_region_multiply();
+        }
+
 
     protected:
 
