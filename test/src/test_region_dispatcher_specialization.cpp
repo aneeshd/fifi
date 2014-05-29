@@ -82,13 +82,13 @@ namespace
             return m_multiply_subtract();
         }
 
-        stub::call<call_region_add()> m_add;
-        stub::call<call_region_subtract()> m_subtract;
-        stub::call<call_region_divide()> m_divide;
-        stub::call<call_region_multiply()> m_multiply;
-        stub::call<call_region_multiply_constant()> m_multiply_constant;
-        stub::call<call_region_multiply_add()> m_multiply_add;
-        stub::call<call_region_multiply_subtract()> m_multiply_subtract;
+        stub::call<call_region_add ()> m_add;
+        stub::call<call_region_subtract ()> m_subtract;
+        stub::call<call_region_divide ()> m_divide;
+        stub::call<call_region_multiply ()> m_multiply;
+        stub::call<call_region_multiply_constant ()> m_multiply_constant;
+        stub::call<call_region_multiply_add ()> m_multiply_add;
+        stub::call<call_region_multiply_subtract ()> m_multiply_subtract;
 
     };
 
@@ -107,39 +107,45 @@ namespace
     public:
         using field_type = fifi::binary8;
 
-        void region_add()
+    public:
+
+        use_stack()
+            : m_enabled(true)
+        { }
+
+        void region_add() const
         {
-            m_region_add();
+            m_add();
         }
 
-        void region_subtract()
+        void region_subtract() const
         {
-            m_region_subtract();
+            m_subtract();
         }
 
-        void region_divide()
+        void region_divide() const
         {
-            m_region_divide();
+            m_divide();
         }
 
-        void region_multiply()
+        void region_multiply() const
         {
-            m_region_multiply();
+            m_multiply();
         }
 
-        void region_multiply_constant()
+        void region_multiply_constant() const
         {
-            m_region_multiply_constant();
+            m_multiply_constant();
         }
 
-        void region_multiply_add()
+        void region_multiply_add() const
         {
-            m_region_multiply_add();
+            m_multiply_add();
         }
 
-        void region_multiply_subtract()
+        void region_multiply_subtract() const
         {
-            m_region_multiply_subtract();
+            m_multiply_subtract();
         }
 
         bool enabled() const
@@ -147,15 +153,29 @@ namespace
             return m_enabled;
         }
 
-        stub::call<void()> m_region_add;
-        stub::call<void()> m_region_subtract;
-        stub::call<void()> m_region_divide;
-        stub::call<void()> m_region_multiply;
-        stub::call<void()> m_region_multiply_constant;
-        stub::call<void()> m_region_multiply_add;
-        stub::call<void()> m_region_multiply_subtract;
+        stub::call<void()> m_add;
+        stub::call<void()> m_subtract;
+        stub::call<void()> m_divide;
+        stub::call<void()> m_multiply;
+        stub::call<void()> m_multiply_constant;
+        stub::call<void()> m_multiply_add;
+        stub::call<void()> m_multiply_subtract;
 
-        bool m_enabled = true;
+        bool m_enabled;
+    };
+
+    // Layer exposing the stack for testing purposes
+    template<class Super>
+    class expose_stack : public Super
+    {
+    public:
+
+        using Super::m_stack;
+
+        decltype(m_stack)& testing_stack()
+        {
+            return m_stack;
+        }
     };
 }
 
@@ -167,10 +187,11 @@ TEST(region_dispatcher_specialization, no_use)
     (void)stack;
 }
 
-///
-TEST(region_dispatcher_specilization, use)
+/// Use a stack that provides the same field, all region arithmetic
+/// functions and that
+TEST(region_dispatcher_specilization, use_enabled)
 {
-    fifi::region_dispatcher<use_stack, dummy_super> stack;
+    expose_stack<fifi::region_dispatcher<use_stack, dummy_super>> stack;
 
     auto add = stack.dispatch_region_add();
     auto subtract = stack.dispatch_region_subtract();
@@ -181,145 +202,62 @@ TEST(region_dispatcher_specilization, use)
     auto multiply_subtract = stack.dispatch_region_multiply_subtract();
 
     // Everything should have been redirected to the stack
-    stack.m_add.no_calls();
-    stack.m_subtract.no_calls();
-    stack.m_divide.no_calls();
-    stack.m_multiply.no_calls();
-    stack.m_multiply_constant.no_calls();
-    stack.m_multiply_add.no_calls();
-    stack.m_multiply_subtract.no_calls();
+    EXPECT_TRUE(stack.m_add.no_calls());
+    EXPECT_TRUE(stack.m_subtract.no_calls());
+    EXPECT_TRUE(stack.m_divide.no_calls());
+    EXPECT_TRUE(stack.m_multiply.no_calls());
+    EXPECT_TRUE(stack.m_multiply_constant.no_calls());
+    EXPECT_TRUE(stack.m_multiply_add.no_calls());
+    EXPECT_TRUE(stack.m_multiply_subtract.no_calls());
 
-    // add();
-    // subtract();
-    // divide();
-    // multiply();
-    // multiply_constant();
-    // multiply_add();
-    // multiply_subtract();
+    // Invoke the returned function objects and check that the right
+    // functions in the stack was called
+    add();
+    subtract();
+    divide();
+    multiply();
+    multiply_constant();
+    multiply_add();
+    multiply_subtract();
+
+    auto& s = stack.testing_stack();
+
+    EXPECT_TRUE(s.m_add.called_once_with());
+    EXPECT_TRUE(s.m_subtract.called_once_with());
+    EXPECT_TRUE(s.m_divide.called_once_with());
+    EXPECT_TRUE(s.m_multiply.called_once_with());
+    EXPECT_TRUE(s.m_multiply_constant.called_once_with());
+    EXPECT_TRUE(s.m_multiply_add.called_once_with());
+    EXPECT_TRUE(s.m_multiply_subtract.called_once_with());
 }
 
+/// Use a stack that provides the same field and all region arithmetic
+/// functions
+TEST(region_dispatcher_specilization, use_not_enabled)
+{
+    expose_stack<fifi::region_dispatcher<use_stack, dummy_super>> stack;
 
+    // Set enabled equal to false in the embedded stack
+    auto& s = stack.testing_stack();
+    s.m_enabled = false;
 
-//     template<class Field, bool Enabled>
-//     class dummy
-//     {
-//     public:
+    auto add = stack.dispatch_region_add();
+    auto subtract = stack.dispatch_region_subtract();
+    auto divide = stack.dispatch_region_divide();
+    auto multiply = stack.dispatch_region_multiply();
+    auto multiply_constant = stack.dispatch_region_multiply_constant();
+    auto multiply_add = stack.dispatch_region_multiply_add();
+    auto multiply_subtract = stack.dispatch_region_multiply_subtract();
 
-//         typedef Field field_type;
-//         typedef typename field_type::value_type value_type;
-
-    //     public:
-
-    //         void region_add(value_type* dest, const value_type* src,
-    //             uint32_t length) const
-    //         {
-    //             (void) dest;
-    //             (void) src;
-    //             (void) length;
-    //             EXPECT_TRUE(Enabled);
-    //         }
-
-    //         void region_subtract(value_type* dest, const value_type* src,
-    //             uint32_t length) const
-    //         {
-    //             (void) dest;
-    //             (void) src;
-    //             (void) length;
-    //             EXPECT_TRUE(Enabled);
-    //         }
-
-    //         void region_multiply(value_type* dest, const value_type* src,
-    //             uint32_t length) const
-    //         {
-    //             (void) dest;
-    //             (void) src;
-    //             (void) length;
-    //             EXPECT_TRUE(Enabled);
-    //         }
-
-    //         void region_divide(value_type* dest, const value_type* src,
-    //             uint32_t length) const
-    //         {
-    //             (void) dest;
-    //             (void) src;
-    //             (void) length;
-    //             EXPECT_TRUE(Enabled);
-    //         }
-
-    //         void region_multiply_constant(value_type* dest, value_type constant,
-    //             uint32_t length) const
-    //         {
-    //             (void) dest;
-    //             (void) constant;
-    //             (void) length;
-    //             EXPECT_TRUE(Enabled);
-    //         }
-
-    //         void region_multiply_add(value_type* dest, const value_type* src,
-    //                                  value_type constant,
-    //                                  uint32_t length) const
-    //         {
-    //             (void) dest;
-    //             (void) src;
-    //             (void) constant;
-    //             (void) length;
-    //             EXPECT_TRUE(Enabled);
-    //         }
-
-    //         void region_multiply_subtract(value_type* dest,
-    //             const value_type* src, value_type constant,
-    //             uint32_t length) const
-    //         {
-    //             (void) dest;
-    //             (void) src;
-    //             (void) constant;
-    //             (void) length;
-    //             EXPECT_TRUE(Enabled);
-    //         }
-
-    //         bool enabled() const
-    //         {
-    //             return Enabled;
-    //         }
-    //     };
-
-    //     class dummy_stack_enabled :
-    //         public region_dispatcher_specialization_temp<
-    //                    binary,
-    //                    helper_region_info<
-    //                        /*alignment=*/2U,
-    //                        /*max_alignment=*/20U,
-    //                        /*granularity=*/4U,
-    //                        /*max_granularity=*/40U,
-    //                    dummy<binary, true>>,
-    //                    binary,
-    //                    helper_region_info<
-    //                        /*alignment=*/1U,
-    //                        /*max_alignment=*/10U,
-    //                        /*granularity=*/3U,
-    //                        /*max_granularity=*/30U,
-    //                    dummy<binary, false>>>
-    //     { };
-
-    //     class dummy_stack_disabled :
-    //         public region_dispatcher_specialization_temp<
-    //                    binary,
-    //                    helper_region_info<
-    //                        /*alignment=*/2U,
-    //                        /*max_alignment=*/20U,
-    //                        /*granularity=*/4U,
-    //                        /*max_granularity=*/40U,
-    //                    dummy<binary, false>>,
-    //                    binary,
-    //                    helper_region_info<
-    //                        /*alignment=*/1U,
-    //                        /*max_alignment=*/10U,
-    //                        /*granularity=*/3U,
-    //                        /*max_granularity=*/30U,
-    //                    dummy<binary, true>>>
-    //     { };
-    // }
-// }
+    // Everything should to the Super
+    EXPECT_TRUE(stack.m_add.called_once_with());
+    EXPECT_TRUE(stack.m_subtract.called_once_with());
+    EXPECT_TRUE(stack.m_divide.called_once_with());
+    EXPECT_TRUE(stack.m_multiply.called_once_with());
+    EXPECT_TRUE(stack.m_multiply_constant.called_once_with());
+    EXPECT_TRUE(stack.m_multiply_add.called_once_with());
+    EXPECT_TRUE(stack.m_multiply_subtract.called_once_with());
+}
 
 /// @todo re-enable unit tests
 
