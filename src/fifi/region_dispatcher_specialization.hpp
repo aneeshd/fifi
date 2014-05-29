@@ -203,7 +203,7 @@ namespace fifi
         call_region_add
         dispatch_region_add() const
         {
-            auto call = sak::optional_bind<bind_add>(&m_stack);
+            auto call = bind_add_test(0);
 
             std::cout << "region add call = " << (bool)call << std::endl;
 
@@ -218,7 +218,7 @@ namespace fifi
         call_region_subtract
         dispatch_region_subtract() const
         {
-            auto call = sak::optional_bind<bind_subtract>(&m_stack);
+            auto call = bind_subtract_test(0);
 
             if (call && m_stack.enabled())
             {
@@ -257,7 +257,7 @@ namespace fifi
         call_region_multiply_constant
         dispatch_region_multiply_constant() const
         {
-            auto call = sak::optional_bind<bind_multiply_constant>(&m_stack);
+            auto call = bind_multiply_constant_test(0);
 
             if (call && m_stack.enabled())
             {
@@ -270,7 +270,7 @@ namespace fifi
         call_region_multiply_add
         dispatch_region_multiply_add() const
         {
-            auto call = sak::optional_bind<bind_multiply_add>(&m_stack);
+            auto call = bind_multiply_add_test(0);
 
             if (call && m_stack.enabled())
             {
@@ -283,7 +283,7 @@ namespace fifi
         call_region_multiply_subtract
         dispatch_region_multiply_subtract() const
         {
-            auto call = sak::optional_bind<bind_multiply_subtract>(&m_stack);
+            auto call = bind_multiply_subtract_test(0);
 
             if (call && m_stack.enabled())
             {
@@ -357,6 +357,36 @@ namespace fifi
     protected:
 
         template<class T = Stack>
+        auto bind_add_test(int) const ->
+            decltype(sak::easy_bind(&T::region_add, static_cast<T*>(0)),
+                     call_region_add())
+        {
+            return sak::easy_bind(&T::region_add, &m_stack);
+        }
+
+        template<class T = Stack>
+        auto bind_add_test(char) const ->
+            decltype(call_region_add())
+        {
+            return call_region_add();
+        }
+
+        template<class T = Stack>
+        auto bind_subtract_test(int) const ->
+            decltype(sak::easy_bind(&T::region_subtract, static_cast<T*>(0)),
+                     call_region_subtract())
+        {
+            return sak::easy_bind(&T::region_subtract, &m_stack);
+        }
+
+        template<class T = Stack>
+        auto bind_subtract_test(char) const ->
+            decltype(call_region_subtract())
+        {
+            return call_region_subtract();
+        }
+
+        template<class T = Stack>
         auto bind_multiply_test(int) const ->
             decltype(sak::easy_bind(&T::region_multiply, static_cast<T*>(0)),
                      call_region_multiply())
@@ -385,6 +415,53 @@ namespace fifi
         {
             return call_region_divide();
         }
+
+        template<class T = Stack>
+        auto bind_multiply_constant_test(int) const ->
+            decltype(sak::easy_bind(&T::region_multiply_constant, static_cast<T*>(0)),
+                     call_region_multiply_constant())
+        {
+            return sak::easy_bind(&T::region_multiply_constant, &m_stack);
+        }
+
+        template<class T = Stack>
+        auto bind_multiply_constant_test(char) const ->
+            decltype(call_region_multiply_constant())
+        {
+            return call_region_multiply_constant();
+        }
+
+        template<class T = Stack>
+        auto bind_multiply_add_test(int) const ->
+            decltype(sak::easy_bind(&T::region_multiply_add, static_cast<T*>(0)),
+                     call_region_multiply_add())
+        {
+            return sak::easy_bind(&T::region_multiply_add, &m_stack);
+        }
+
+        template<class T = Stack>
+        auto bind_multiply_add_test(char) const ->
+            decltype(call_region_multiply_add())
+        {
+            return call_region_multiply_add();
+        }
+
+        template<class T = Stack>
+        auto bind_multiply_subtract_test(int) const ->
+            decltype(sak::easy_bind(&T::region_multiply_subtract, static_cast<T*>(0)),
+                     call_region_multiply_subtract())
+        {
+            return sak::easy_bind(&T::region_multiply_subtract, &m_stack);
+        }
+
+        template<class T = Stack>
+        auto bind_multiply_subtract_test(char) const ->
+            decltype(call_region_multiply_subtract())
+        {
+            return call_region_multiply_subtract();
+        }
+
+
 
 
     protected:
