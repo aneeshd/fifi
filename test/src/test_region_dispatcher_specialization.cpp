@@ -167,6 +167,55 @@ namespace
         bool m_enabled;
     };
 
+    // Stack with same field as the dummy stack but where only some of
+    // the region functions are available
+    class use_partial_stack
+    {
+    public:
+        using field_type = fifi::binary8;
+
+    public:
+
+        use_partial_stack()
+            : m_enabled(true)
+        { }
+
+        void region_add(int,int,int) const
+        {
+            m_add();
+        }
+
+        void region_divide(int,int,int) const
+        {
+            m_divide();
+        }
+
+        void region_multiply_constant(int,int,int) const
+        {
+            m_multiply_constant();
+        }
+
+        void region_multiply_subtract(int,int,int,int) const
+        {
+            m_multiply_subtract();
+        }
+
+        bool enabled() const
+        {
+            return m_enabled;
+        }
+
+        stub::call<void()> m_add;
+        stub::call<void()> m_subtract;
+        stub::call<void()> m_divide;
+        stub::call<void()> m_multiply;
+        stub::call<void()> m_multiply_constant;
+        stub::call<void()> m_multiply_add;
+        stub::call<void()> m_multiply_subtract;
+
+        bool m_enabled;
+    };
+
     // Layer exposing the stack for testing purposes
     template<class Super>
     class expose_stack : public Super
@@ -239,6 +288,80 @@ TEST(region_dispatcher_specilization, use_enabled)
 TEST(region_dispatcher_specilization, use_not_enabled)
 {
     expose_stack<fifi::region_dispatcher<use_stack, dummy_super>> stack;
+
+    // Set enabled equal to false in the embedded stack
+    auto& s = stack.testing_stack();
+    s.m_enabled = false;
+
+    auto add = stack.dispatch_region_add();
+    auto subtract = stack.dispatch_region_subtract();
+    auto divide = stack.dispatch_region_divide();
+    auto multiply = stack.dispatch_region_multiply();
+    auto multiply_constant = stack.dispatch_region_multiply_constant();
+    auto multiply_add = stack.dispatch_region_multiply_add();
+    auto multiply_subtract = stack.dispatch_region_multiply_subtract();
+
+    // Everything should to the Super
+    EXPECT_TRUE(stack.m_add.called_once_with());
+    EXPECT_TRUE(stack.m_subtract.called_once_with());
+    EXPECT_TRUE(stack.m_divide.called_once_with());
+    EXPECT_TRUE(stack.m_multiply.called_once_with());
+    EXPECT_TRUE(stack.m_multiply_constant.called_once_with());
+    EXPECT_TRUE(stack.m_multiply_add.called_once_with());
+    EXPECT_TRUE(stack.m_multiply_subtract.called_once_with());
+}
+
+/// Use a stack that provides the same field, all region arithmetic
+/// functions and that
+TEST(region_dispatcher_specilization, use_partial_enabled)
+{
+    expose_stack<fifi::region_dispatcher<use_partial_stack, dummy_super>>
+        stack;
+
+    auto add = stack.dispatch_region_add();
+    auto subtract = stack.dispatch_region_subtract();
+    auto divide = stack.dispatch_region_divide();
+    auto multiply = stack.dispatch_region_multiply();
+    auto multiply_constant = stack.dispatch_region_multiply_constant();
+    auto multiply_add = stack.dispatch_region_multiply_add();
+    auto multiply_subtract = stack.dispatch_region_multiply_subtract();
+
+    // Check the correct calls were redirected
+    EXPECT_TRUE(stack.m_add.no_calls());
+    EXPECT_TRUE(stack.m_subtract.called_once_with());
+    EXPECT_TRUE(stack.m_divide.no_calls());
+    EXPECT_TRUE(stack.m_multiply.called_once_with());
+    EXPECT_TRUE(stack.m_multiply_constant.no_calls());
+    EXPECT_TRUE(stack.m_multiply_add.called_once_with());
+    EXPECT_TRUE(stack.m_multiply_subtract.no_calls());
+
+    // Invoke the returned function objects and check that the right
+    // functions in the stack was called
+    add(0,0,0);
+    // subtract(0,0,0);
+    divide(0,0,0);
+    // multiply(0,0,0);
+    multiply_constant(0,0,0);
+    // multiply_add(0,0,0,0);
+    multiply_subtract(0,0,0,0);
+
+    auto& s = stack.testing_stack();
+
+    EXPECT_TRUE(s.m_add.called_once_with());
+    // EXPECT_TRUE(s.m_subtract.called_once_with());
+    EXPECT_TRUE(s.m_divide.called_once_with());
+    // EXPECT_TRUE(s.m_multiply.called_once_with());
+    EXPECT_TRUE(s.m_multiply_constant.called_once_with());
+    // EXPECT_TRUE(s.m_multiply_add.called_once_with());
+    EXPECT_TRUE(s.m_multiply_subtract.called_once_with());
+}
+
+/// Use a stack that provides the same field and all region arithmetic
+/// functions
+TEST(region_dispatcher_specilization, use_partial_not_enabled)
+{
+    expose_stack<fifi::region_dispatcher<use_partial_stack, dummy_super>>
+        stack;
 
     // Set enabled equal to false in the embedded stack
     auto& s = stack.testing_stack();
