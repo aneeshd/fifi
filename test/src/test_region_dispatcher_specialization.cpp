@@ -26,13 +26,16 @@ namespace
 
         // Dummy function types required by the
         // region_dispatcher_specialization
-        using call_region_add = std::function<void()>;
+        using call_region_add = std::function<void(int,int,int)>;
         using call_region_subtract = std::function<void(int,int,int)>;
         using call_region_divide = std::function<void(int,int,int)>;
         using call_region_multiply = std::function<void(int, int, int)>;
-        using call_region_multiply_constant = std::function<void()>;
-        using call_region_multiply_add = std::function<void()>;
-        using call_region_multiply_subtract = std::function<void()>;
+        using call_region_multiply_constant = std::function<void(int,int,int)>;
+
+        using call_region_multiply_add = std::function<void(int,int,int,int)>;
+
+        using call_region_multiply_subtract =
+            std::function<void(int,int,int,int)>;
 
     public:
 
@@ -113,7 +116,7 @@ namespace
             : m_enabled(true)
         { }
 
-        void region_add() const
+        void region_add(int,int,int) const
         {
             m_add();
         }
@@ -133,17 +136,17 @@ namespace
             m_multiply();
         }
 
-        void region_multiply_constant() const
+        void region_multiply_constant(int,int,int) const
         {
             m_multiply_constant();
         }
 
-        void region_multiply_add() const
+        void region_multiply_add(int,int,int,int) const
         {
             m_multiply_add();
         }
 
-        void region_multiply_subtract() const
+        void region_multiply_subtract(int,int,int,int) const
         {
             m_multiply_subtract();
         }
@@ -212,13 +215,13 @@ TEST(region_dispatcher_specilization, use_enabled)
 
     // Invoke the returned function objects and check that the right
     // functions in the stack was called
-    add();
+    add(0,0,0);
     subtract(0,0,0);
     divide(0,0,0);
     multiply(0,0,0);
-    multiply_constant();
-    multiply_add();
-    multiply_subtract();
+    multiply_constant(0,0,0);
+    multiply_add(0,0,0,0);
+    multiply_subtract(0,0,0,0);
 
     auto& s = stack.testing_stack();
 

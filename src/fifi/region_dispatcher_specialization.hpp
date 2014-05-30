@@ -102,15 +102,15 @@ namespace fifi
         /// object.
         struct bind_add
         {
-            template<class T>
-            static auto bind(const T* t) ->
-            decltype(std::declval<T>().region_add(0,0,0),
-                     sak::easy_bind(&T::region_add, t))
-            {
-                return sak::easy_bind(&T::region_add, t);
-            }
-
             using result_type = call_region_add;
+
+            template<class T, class U = Stack>
+            static auto bind(T&& t) ->
+            decltype(std::declval<U>().region_add(0,0,0),
+                     result_type())
+            {
+                return sak::easy_bind(&U::region_add, std::forward<T>(t));
+            }
         };
 
         /// @copydoc bind_add
@@ -125,8 +125,6 @@ namespace fifi
             {
                 return sak::easy_bind(&U::region_subtract, std::forward<T>(t));
             }
-
-
         };
 
         /// @copydoc bind_add
@@ -160,43 +158,46 @@ namespace fifi
         /// @copydoc bind_add
         struct bind_multiply_constant
         {
-            template<class T>
-            static auto bind(const T* t) ->
-            decltype(std::declval<T>().region_multiply_constant(0,0,0),
-                     sak::easy_bind(&T::region_multiply_constant, t))
-            {
-                return sak::easy_bind(&T::region_multiply_constant, t);
-            }
-
             using result_type = call_region_multiply_constant;
+
+            template<class T, class U = Stack>
+            static auto bind(T&& t) ->
+            decltype(std::declval<U>().region_multiply_constant(0,0,0),
+                     result_type())
+            {
+                return sak::easy_bind(&U::region_multiply_constant,
+                                      std::forward<T>(t));
+            }
         };
 
         /// @copydoc bind_add
         struct bind_multiply_add
         {
-            template<class T>
-            static auto bind(const T* t) ->
-            decltype(std::declval<T>().region_multiply_add(0,0,0,0),
-                     sak::easy_bind(&T::region_multiply_add, t))
+            using result_type = call_region_multiply_add;
+
+            template<class T, class U = Stack>
+            static auto bind(T&& t) ->
+            decltype(std::declval<U>().region_multiply_add(0,0,0,0),
+                     result_type())
             {
-                return sak::easy_bind(&T::region_multiply_add, t);
+                return sak::easy_bind(&U::region_multiply_add,
+                                      std::forward<T>(t));
             }
 
-            using result_type = call_region_multiply_add;
         };
 
         /// @copydoc bind_add
         struct bind_multiply_subtract
         {
-            template<class T>
-            static auto bind(const T* t) ->
-            decltype(std::declval<T>().region_multiply_subtract(0,0,0,0),
-                     sak::easy_bind(&T::region_multiply_subtract, t))
-            {
-                return sak::easy_bind(&T::region_multiply_subtract, t);
-            }
-
             using result_type = call_region_multiply_subtract;
+
+            template<class T, class U = Stack>
+            static auto bind(T&& t) ->
+            decltype(std::declval<U>().region_multiply_subtract(0,0,0,0),
+                     result_type())
+            {
+                return sak::easy_bind(&U::region_multiply_subtract, t);
+            }
         };
 
     public:
@@ -205,7 +206,7 @@ namespace fifi
         call_region_add
         dispatch_region_add() const
         {
-            auto call = bind_add_test(0);
+            auto call = sak::optional_bind<bind_add>(&m_stack);
 
             std::cout << "region add call = " << (bool)call << std::endl;
 
@@ -259,7 +260,7 @@ namespace fifi
         call_region_multiply_constant
         dispatch_region_multiply_constant() const
         {
-            auto call = bind_multiply_constant_test(0);
+            auto call = sak::optional_bind<bind_multiply_constant>(&m_stack);
 
             if (call && m_stack.enabled())
             {
@@ -272,7 +273,7 @@ namespace fifi
         call_region_multiply_add
         dispatch_region_multiply_add() const
         {
-            auto call = bind_multiply_add_test(0);
+            auto call = sak::optional_bind<bind_multiply_add>(&m_stack);
 
             if (call && m_stack.enabled())
             {
@@ -285,7 +286,7 @@ namespace fifi
         call_region_multiply_subtract
         dispatch_region_multiply_subtract() const
         {
-            auto call = bind_multiply_subtract_test(0);
+            auto call = sak::optional_bind<bind_multiply_subtract>(&m_stack);
 
             if (call && m_stack.enabled())
             {
