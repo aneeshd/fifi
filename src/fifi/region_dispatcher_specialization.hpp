@@ -255,8 +255,7 @@ using remove_crap = typename remove_impl<T>::type;
         call_region_multiply
         dispatch_region_multiply() const
         {
-            auto call = sak::optional_bind<bind_multiply>(&m_stack);
-//bind_multiply_test(0);
+            auto call = bind_multiply_test_test();
 
             if (call && m_stack.enabled())
             {
@@ -398,6 +397,14 @@ using remove_crap = typename remove_impl<T>::type;
             return call_region_subtract();
         }
 
+
+        template<class T = Stack>
+        auto bind_multiply_test(char) const ->
+            decltype(call_region_multiply())
+        {
+            return call_region_multiply();
+        }
+
         template<class T = Stack>
         auto bind_multiply_test(int) const ->
             decltype(sak::easy_bind(&T::region_multiply, static_cast<T*>(0)),
@@ -406,11 +413,10 @@ using remove_crap = typename remove_impl<T>::type;
             return sak::easy_bind(&T::region_multiply, &m_stack);
         }
 
-        template<class T = Stack>
-        auto bind_multiply_test(char) const ->
-            decltype(call_region_multiply())
+        auto bind_multiply_test_test() const ->
+            decltype(this->bind_multiply_test(0))
         {
-            return call_region_multiply();
+            return bind_multiply_test(0);
         }
 
         template<class T = Stack>
