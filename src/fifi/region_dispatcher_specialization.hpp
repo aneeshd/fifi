@@ -208,8 +208,6 @@ namespace fifi
         {
             auto call = sak::optional_bind<bind_add>(&m_stack);
 
-            std::cout << "region add call = " << (bool)call << std::endl;
-
             if (call && m_stack.enabled())
             {
                 return call;

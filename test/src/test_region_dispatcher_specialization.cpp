@@ -85,6 +85,30 @@ namespace
             return m_multiply_subtract();
         }
 
+        uint32_t alignment() const
+        {
+            return m_alignment;
+        }
+
+        uint32_t max_alignment() const
+        {
+            return m_max_alignment;
+        }
+
+        uint32_t granularity() const
+        {
+            return m_granularity;
+        }
+
+        uint32_t max_granularity() const
+        {
+            return m_max_granularity;
+        }
+        uint32_t m_alignment;
+        uint32_t m_max_alignment;
+        uint32_t m_granularity;
+        uint32_t m_max_granularity;
+
         stub::call<call_region_add ()> m_add;
         stub::call<call_region_subtract ()> m_subtract;
         stub::call<call_region_divide ()> m_divide;
@@ -156,6 +180,32 @@ namespace
             return m_enabled;
         }
 
+        uint32_t alignment() const
+        {
+            return m_alignment;
+        }
+
+        uint32_t max_alignment() const
+        {
+            return m_max_alignment;
+        }
+
+        uint32_t granularity() const
+        {
+            return m_granularity;
+        }
+
+        uint32_t max_granularity() const
+        {
+            return m_max_granularity;
+        }
+
+        bool m_enabled;
+        uint32_t m_alignment;
+        uint32_t m_max_alignment;
+        uint32_t m_granularity;
+        uint32_t m_max_granularity;
+
         stub::call<void()> m_add;
         stub::call<void()> m_subtract;
         stub::call<void()> m_divide;
@@ -164,7 +214,6 @@ namespace
         stub::call<void()> m_multiply_add;
         stub::call<void()> m_multiply_subtract;
 
-        bool m_enabled;
     };
 
     // Stack with same field as the dummy stack but where only some of
@@ -389,67 +438,64 @@ TEST(region_dispatcher_specilization, use_partial_not_enabled)
 
 TEST(test_region_dispatcher_specialization, alignment)
 {
-//     fifi::dummy_stack_disabled disabled_stack;
-//     fifi::dummy_stack_enabled enabled_stack;
+    expose_stack<fifi::region_dispatcher<use_stack, dummy_super>> stack;
 
-//     EXPECT_EQ(disabled_stack.alignment(), 1U);
-//     EXPECT_EQ(enabled_stack.alignment(), 2U);
+    stack.m_alignment = 10U;
+
+    auto& s = stack.testing_stack();
+    s.m_alignment = 12U;
+    s.m_enabled = false;
+
+    EXPECT_EQ(stack.alignment(), 10U);
+
+    s.m_enabled = true;
+    EXPECT_EQ(stack.alignment(), 12U);
 }
 
 TEST(test_region_dispatcher_specialization, max_alignment)
 {
-    // fifi::dummy_stack_disabled disabled_stack;
-    // fifi::dummy_stack_enabled enabled_stack;
+    expose_stack<fifi::region_dispatcher<use_stack, dummy_super>> stack;
 
-    // EXPECT_EQ(disabled_stack.max_alignment(), 10U);
-    // EXPECT_EQ(enabled_stack.max_alignment(), 20U);
+    stack.m_max_alignment = 10U;
+
+    auto& s = stack.testing_stack();
+    s.m_max_alignment = 12U;
+    s.m_enabled = false;
+
+    EXPECT_EQ(stack.max_alignment(), 10U);
+
+    s.m_enabled = true;
+    EXPECT_EQ(stack.max_alignment(), 12U);
 }
 
 TEST(test_region_dispatcher_specialization, granularity)
 {
-    // fifi::dummy_stack_disabled disabled_stack;
-    // fifi::dummy_stack_enabled enabled_stack;
+    expose_stack<fifi::region_dispatcher<use_stack, dummy_super>> stack;
 
-    // EXPECT_EQ(disabled_stack.granularity(), 3U);
-    // EXPECT_EQ(enabled_stack.granularity(), 4U);
+    stack.m_granularity = 10U;
+
+    auto& s = stack.testing_stack();
+    s.m_granularity = 12U;
+    s.m_enabled = false;
+
+    EXPECT_EQ(stack.granularity(), 10U);
+
+    s.m_enabled = true;
+    EXPECT_EQ(stack.granularity(), 12U);
 }
 
 TEST(test_region_dispatcher_specialization, max_granularity)
 {
-    // fifi::dummy_stack_disabled disabled_stack;
-    // fifi::dummy_stack_enabled enabled_stack;
+    expose_stack<fifi::region_dispatcher<use_stack, dummy_super>> stack;
 
-    // EXPECT_EQ(disabled_stack.max_granularity(), 30U);
-    // EXPECT_EQ(enabled_stack.max_granularity(), 40U);
-}
+    stack.m_max_granularity = 10U;
 
-TEST(test_region_dispatcher_specialization, region_multiply_constant)
-{
-    // fifi::dummy_stack_enabled enabled_stack;
-    // fifi::dummy_stack_disabled disabled_stack;
+    auto& s = stack.testing_stack();
+    s.m_max_granularity = 12U;
+    s.m_enabled = false;
 
-    // uint32_t length = 1;
-    // std::vector<uint8_t> dest(length);
-    // std::vector<uint8_t> src(length);
-    // uint8_t constant = 255;
+    EXPECT_EQ(stack.max_granularity(), 10U);
 
-    // disabled_stack.region_add(dest.data(), src.data(), length);
-    // disabled_stack.region_subtract(dest.data(), src.data(), length);
-    // disabled_stack.region_multiply(dest.data(), src.data(), length);
-    // disabled_stack.region_divide(dest.data(), src.data(), length);
-    // disabled_stack.region_multiply_constant(dest.data(), constant, length);
-    // disabled_stack.region_multiply_add(
-    //     dest.data(), src.data(), constant, length);
-    // disabled_stack.region_multiply_subtract(
-    //     dest.data(), src.data(), constant, length);
-
-    // enabled_stack.region_add(dest.data(), src.data(), length);
-    // enabled_stack.region_subtract(dest.data(), src.data(), length);
-    // enabled_stack.region_multiply(dest.data(), src.data(), length);
-    // enabled_stack.region_divide(dest.data(), src.data(), length);
-    // enabled_stack.region_multiply_constant(dest.data(), constant, length);
-    // enabled_stack.region_multiply_add(
-    //     dest.data(), src.data(), constant, length);
-    // enabled_stack.region_multiply_subtract(
-    //     dest.data(), src.data(), constant, length);
+    s.m_enabled = true;
+    EXPECT_EQ(stack.max_granularity(), 12U);
 }
