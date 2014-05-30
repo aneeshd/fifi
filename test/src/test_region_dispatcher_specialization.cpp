@@ -28,7 +28,7 @@ namespace
         // region_dispatcher_specialization
         using call_region_add = std::function<void()>;
         using call_region_subtract = std::function<void()>;
-        using call_region_divide = std::function<void()>;
+        using call_region_divide = std::function<void(int,int,int)>;
         using call_region_multiply = std::function<void(int, int, int)>;
         using call_region_multiply_constant = std::function<void()>;
         using call_region_multiply_add = std::function<void()>;
@@ -123,7 +123,7 @@ namespace
             m_subtract();
         }
 
-        void region_divide() const
+        void region_divide(int,int,int) const
         {
             m_divide();
         }
@@ -214,7 +214,7 @@ TEST(region_dispatcher_specilization, use_enabled)
     // functions in the stack was called
     add();
     subtract();
-    divide();
+    divide(0,0,0);
     multiply(0,0,0);
     multiply_constant();
     multiply_add();

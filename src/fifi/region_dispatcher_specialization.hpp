@@ -130,32 +130,18 @@ namespace fifi
         /// @copydoc bind_add
         struct bind_divide
         {
-            template<class T>
-            static auto bind(const T* t) ->
-            decltype(std::declval<T>().region_divide(0,0,0),
-                     sak::easy_bind(&T::region_divide, t))
-            {
-                return sak::easy_bind(&T::region_divide, t);
-            }
-
             using result_type = call_region_divide;
+
+            template<class T, class U = Stack>
+            static auto bind(T&& t) ->
+                decltype(std::declval<U>().region_divide(0,0,0),
+                         result_type())
+            {
+                return sak::easy_bind(&U::region_divide, std::forward<T>(t));
+            }
         };
 
         /// @copydoc bind_add
-        // struct bind_multiply
-        // {
-        //     template<class T, class U = Stack>
-        //     static auto bind(T&& t) ->
-        //         decltype(std::declval<U>().region_multiply(0,0,0),
-        //                  call_region_multiply())
-        //     {
-        //         return sak::easy_bind(&U::region_multiply,
-        //                               std::forward<T>(t));
-        //     }
-
-        //     using result_type = call_region_multiply;
-        // };
-
         struct bind_multiply
         {
             using result_type = call_region_multiply;
@@ -165,8 +151,7 @@ namespace fifi
                 decltype(std::declval<U>().region_multiply(0,0,0),
                          result_type())
             {
-                return sak::easy_bind(&U::region_multiply,
-                                      std::forward<T>(t));
+                return sak::easy_bind(&U::region_multiply, std::forward<T>(t));
             }
         };
 
@@ -246,7 +231,7 @@ namespace fifi
         call_region_divide
         dispatch_region_divide() const
         {
-            auto call = bind_divide_test(0);
+            auto call = sak::optional_bind<bind_divide>(&m_stack);
 
             if (call && m_stack.enabled())
             {
@@ -259,7 +244,7 @@ namespace fifi
         call_region_multiply
         dispatch_region_multiply() const
         {
-            auto call = sak::optional_bind<bind_multiply>(&m_stack);//bind_multiply_test(0);
+            auto call = sak::optional_bind<bind_multiply>(&m_stack);
 
             if (call && m_stack.enabled())
             {
