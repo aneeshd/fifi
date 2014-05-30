@@ -158,16 +158,16 @@ namespace fifi
 
         struct bind_multiply
         {
+            using result_type = call_region_multiply;
+
             template<class T, class U = Stack>
             static auto bind(T&& t) ->
-                decltype(sak::easy_bind(&U::region_multiply,
-                                        std::forward<T>(t)))
+                decltype(std::declval<U>().region_multiply(0,0,0),
+                         result_type())
             {
                 return sak::easy_bind(&U::region_multiply,
                                       std::forward<T>(t));
             }
-
-            using result_type = call_region_multiply;
         };
 
         /// @copydoc bind_add
