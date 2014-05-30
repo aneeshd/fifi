@@ -157,7 +157,7 @@ using remove_crap = typename remove_impl<T>::type;
             template<class T>
             static auto bind(T&& t) ->
                 decltype(sak::easy_bind(&remove_crap<T>::region_multiply,
-                                        std::forward<T>(t)))
+                                        static_cast<remove_crap<T>*>(0)))
             {
                 return sak::easy_bind(&remove_crap<T>::region_multiply,
                                       std::forward<T>(t));
