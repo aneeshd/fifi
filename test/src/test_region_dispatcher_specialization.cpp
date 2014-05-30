@@ -387,21 +387,18 @@ TEST(region_dispatcher_specilization, use_partial_enabled)
     // Invoke the returned function objects and check that the right
     // functions in the stack was called
     add(0,0,0);
-    // subtract(0,0,0);
     divide(0,0,0);
-    // multiply(0,0,0);
     multiply_constant(0,0,0);
-    // multiply_add(0,0,0,0);
     multiply_subtract(0,0,0,0);
 
     auto& s = stack.testing_stack();
 
     EXPECT_TRUE(s.m_add.called_once_with());
-    // EXPECT_TRUE(s.m_subtract.called_once_with());
+    EXPECT_TRUE(s.m_subtract.no_calls());
     EXPECT_TRUE(s.m_divide.called_once_with());
-    // EXPECT_TRUE(s.m_multiply.called_once_with());
+    EXPECT_TRUE(s.m_multiply.no_calls());
     EXPECT_TRUE(s.m_multiply_constant.called_once_with());
-    // EXPECT_TRUE(s.m_multiply_add.called_once_with());
+    EXPECT_TRUE(s.m_multiply_add.no_calls());
     EXPECT_TRUE(s.m_multiply_subtract.called_once_with());
 }
 
@@ -433,8 +430,6 @@ TEST(region_dispatcher_specilization, use_partial_not_enabled)
     EXPECT_TRUE(stack.m_multiply_add.called_once_with());
     EXPECT_TRUE(stack.m_multiply_subtract.called_once_with());
 }
-
-/// @todo re-enable unit tests
 
 TEST(test_region_dispatcher_specialization, alignment)
 {

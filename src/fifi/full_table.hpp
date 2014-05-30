@@ -15,7 +15,7 @@
 #include "region_arithmetic.hpp"
 #include "region_dispatcher.hpp"
 #include "invoke_region_dispatcher.hpp"
-#include "super_region_dispatcher.hpp"
+#include "basic_region_dispatcher.hpp"
 #include "region_divide_granularity.hpp"
 #include "region_info.hpp"
 #include "simple_online_arithmetic.hpp"

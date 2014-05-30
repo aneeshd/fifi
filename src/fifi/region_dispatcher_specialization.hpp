@@ -48,34 +48,31 @@ namespace fifi
         /// @copydoc layer::value_type
         using value_type = typename Super::value_type;
 
-        /// @todo these doc strings look wrong there is a _ too much
-        /// after dispatcher
-        ///
-        /// @copydoc super_region_dispatcher_::call_region_add
+        /// @copydoc basic_region_dispatcher::call_region_add
         using call_region_add =
             typename Super::call_region_add;
 
-        /// @copydoc super_region_dispatcher_::call_region_subtract
+        /// @copydoc basic_region_dispatcher::call_region_subtract
         using call_region_subtract =
             typename Super::call_region_subtract;
 
-        /// @copydoc super_region_dispatcher_::call_region_divide
+        /// @copydoc basic_region_dispatcher::call_region_divide
         using call_region_divide =
             typename Super::call_region_divide;
 
-        /// @copydoc super_region_dispatcher_::call_region_multiply
+        /// @copydoc basic_region_dispatcher::call_region_multiply
         using call_region_multiply =
             typename Super::call_region_multiply;
 
-        /// @copydoc super_region_dispatcher_::call_region_multiply_constant
+        /// @copydoc basic_region_dispatcher::call_region_multiply_constant
         using call_region_multiply_constant =
             typename Super::call_region_multiply_constant;
 
-        /// @copydoc super_region_dispatcher_::call_region_multiply_add
+        /// @copydoc basic_region_dispatcher::call_region_multiply_add
         using call_region_multiply_add =
             typename Super::call_region_multiply_add;
 
-        /// @copydoc super_region_dispatcher_::call_region_multiply_subtract
+        /// @copydoc basic_region_dispatcher::call_region_multiply_subtract
         using call_region_multiply_subtract =
             typename Super::call_region_multiply_subtract;
 
