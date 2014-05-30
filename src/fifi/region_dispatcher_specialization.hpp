@@ -116,15 +116,17 @@ namespace fifi
         /// @copydoc bind_add
         struct bind_subtract
         {
-            template<class T>
-            static auto bind(const T* t) ->
-                decltype(std::declval<T>().region_subtract(0,0,0),
-                     sak::easy_bind(&T::region_subtract, t))
+            using result_type = call_region_subtract;
+
+            template<class T, class U = Stack>
+            static auto bind(T&& t) ->
+                decltype(std::declval<U>().region_subtract(0,0,0),
+                         result_type())
             {
-                return sak::easy_bind(&T::region_subtract, t);
+                return sak::easy_bind(&U::region_subtract, std::forward<T>(t));
             }
 
-            using result_type = call_region_subtract;
+
         };
 
         /// @copydoc bind_add
@@ -218,7 +220,7 @@ namespace fifi
         call_region_subtract
         dispatch_region_subtract() const
         {
-            auto call = bind_subtract_test(0);
+            auto call = sak::optional_bind<bind_subtract>(&m_stack);
 
             if (call && m_stack.enabled())
             {

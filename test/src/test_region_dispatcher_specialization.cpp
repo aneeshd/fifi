@@ -27,7 +27,7 @@ namespace
         // Dummy function types required by the
         // region_dispatcher_specialization
         using call_region_add = std::function<void()>;
-        using call_region_subtract = std::function<void()>;
+        using call_region_subtract = std::function<void(int,int,int)>;
         using call_region_divide = std::function<void(int,int,int)>;
         using call_region_multiply = std::function<void(int, int, int)>;
         using call_region_multiply_constant = std::function<void()>;
@@ -118,7 +118,7 @@ namespace
             m_add();
         }
 
-        void region_subtract() const
+        void region_subtract(int,int,int) const
         {
             m_subtract();
         }
@@ -213,7 +213,7 @@ TEST(region_dispatcher_specilization, use_enabled)
     // Invoke the returned function objects and check that the right
     // functions in the stack was called
     add();
-    subtract();
+    subtract(0,0,0);
     divide(0,0,0);
     multiply(0,0,0);
     multiply_constant();
