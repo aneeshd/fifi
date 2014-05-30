@@ -141,23 +141,27 @@ namespace fifi
             using result_type = call_region_divide;
         };
 
-        template<class T>
-        struct remove_impl
-        {
-            using no_ref = typename std::remove_reference<T>::type;
-            using type = typename std::remove_pointer<no_ref>::type;
-        };
-
-        template<class T>
-        using remove_crap = typename remove_impl<T>::type;
-
         /// @copydoc bind_add
+        // struct bind_multiply
+        // {
+        //     template<class T, class U = Stack>
+        //     static auto bind(T&& t) ->
+        //         decltype(std::declval<U>().region_multiply(0,0,0),
+        //                  call_region_multiply())
+        //     {
+        //         return sak::easy_bind(&U::region_multiply,
+        //                               std::forward<T>(t));
+        //     }
+
+        //     using result_type = call_region_multiply;
+        // };
+
         struct bind_multiply
         {
             template<class T, class U = Stack>
             static auto bind(T&& t) ->
-                decltype(std::declval<U>().region_multiply(0,0,0),
-                         call_region_multiply())
+                decltype(sak::easy_bind(&U::region_multiply,
+                                        std::forward<T>(t)))
             {
                 return sak::easy_bind(&U::region_multiply,
                                       std::forward<T>(t));
