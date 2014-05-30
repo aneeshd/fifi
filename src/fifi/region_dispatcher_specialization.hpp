@@ -142,22 +142,22 @@ namespace fifi
         };
 
         template<class T>
-struct remove_impl
-{
-    using no_ref = typename std::remove_reference<T>::type;
-    using type = typename std::remove_pointer<no_ref>::type;
-};
+        struct remove_impl
+        {
+            using no_ref = typename std::remove_reference<T>::type;
+            using type = typename std::remove_pointer<no_ref>::type;
+        };
 
-template<class T>
-using remove_crap = typename remove_impl<T>::type;
+        template<class T>
+        using remove_crap = typename remove_impl<T>::type;
 
         /// @copydoc bind_add
         struct bind_multiply
         {
             template<class T>
             static auto bind(T&& t) ->
-                decltype(sak::easy_bind(&remove_crap<T>::region_multiply,
-                                        static_cast<remove_crap<T>*>(0)))
+                decltype(std::declval<remove_crap<T>>().region_multiply(0,0,0),
+                         call_region_multiply())
             {
                 return sak::easy_bind(&remove_crap<T>::region_multiply,
                                       std::forward<T>(t));
@@ -255,7 +255,7 @@ using remove_crap = typename remove_impl<T>::type;
         call_region_multiply
         dispatch_region_multiply() const
         {
-            auto call = bind_multiply_test(0);
+            auto call = sak::optional_bind<bind_multiply>(&m_stack);//bind_multiply_test(0);
 
             if (call && m_stack.enabled())
             {
