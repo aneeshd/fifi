@@ -187,4 +187,36 @@ public:
     /// @return The maximum granularity requirement of the stack. By complying
     /// with this requirement the highest performance can be achieved.
     uint32_t max_granularity() const;
+
+    //------------------------------------------------------------------
+    // REGION DISPATCHER API
+    //------------------------------------------------------------------
+
+    /// @return A function bound to a layer::region_add() compatible
+    /// function
+    call_region_add dispatch_region_add() const;
+
+    /// @return A function bound to a layer::region_subtract()
+    /// compatible function
+    call_region_subtract dispatch_region_subtract() const;
+
+    /// @return A function bound to a layer::region_divide()
+    /// compatible function
+    call_region_divide dispatch_region_divide() const;
+
+    /// @return A function bound to a layer::region_multiply()
+    /// compatible function
+    call_region_multiply dispatch_region_multiply() const;
+
+    /// @return A function bound to a
+    /// layer::region_multiply_constant() compatible function
+    call_region_multiply_constant dispatch_region_multiply_constant() const;
+
+    /// @return A function bound to a layer::region_multiply_add()
+    /// compatible function
+    call_region_multiply_add dispatch_region_multiply_add() const;
+
+    /// @return A function bound to a
+    /// layer::region_multiply_subtract() compatible function
+    call_region_multiply_subtract dispatch_region_multiply_subtract() const;
 };

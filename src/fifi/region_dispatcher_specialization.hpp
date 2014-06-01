@@ -199,7 +199,7 @@ namespace fifi
 
     public:
 
-        /// @todo missing docs on these files
+        /// @copydoc layer::dispatch_region_add() const
         call_region_add
         dispatch_region_add() const
         {
@@ -213,6 +213,7 @@ namespace fifi
             return Super::dispatch_region_add();
         }
 
+        /// @copydoc layer::dispatch_region_subtract() const
         call_region_subtract
         dispatch_region_subtract() const
         {
@@ -226,6 +227,7 @@ namespace fifi
             return Super::dispatch_region_subtract();
         }
 
+        /// @copydoc layer::dispatch_region_divide() const
         call_region_divide
         dispatch_region_divide() const
         {
@@ -239,6 +241,7 @@ namespace fifi
             return Super::dispatch_region_divide();
         }
 
+        /// @copydoc layer::dispatch_region_multiply() const
         call_region_multiply
         dispatch_region_multiply() const
         {
@@ -252,6 +255,7 @@ namespace fifi
             return Super::dispatch_region_multiply();
         }
 
+        /// @copydoc layer::dispatch_region_multiply_constant() const
         call_region_multiply_constant
         dispatch_region_multiply_constant() const
         {
@@ -265,6 +269,7 @@ namespace fifi
             return Super::dispatch_region_multiply_constant();
         }
 
+        /// @copydoc layer::dispatch_region_multiply_add() const
         call_region_multiply_add
         dispatch_region_multiply_add() const
         {
@@ -278,6 +283,7 @@ namespace fifi
             return Super::dispatch_region_multiply_add();
         }
 
+        /// @copydoc layer::dispatch_region_multiply_subtract() const
         call_region_multiply_subtract
         dispatch_region_multiply_subtract() const
         {
@@ -356,6 +362,5 @@ namespace fifi
 
         /// The stack to use for dispatching
         Stack m_stack;
-
     };
 }
