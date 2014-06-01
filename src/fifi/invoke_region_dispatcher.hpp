@@ -5,6 +5,9 @@
 
 #pragma once
 
+#include <cstdint>
+#include <cassert>
+
 namespace fifi
 {
     /// The invoke_region_dispatcher implements the different region
