@@ -94,7 +94,7 @@ namespace
 
 /// Check that the code compiles with a stack that does not provide
 /// the same field
-TEST(basic_region_dispatcher, api)
+TEST(test_basic_region_dispatcher, api)
 {
     dummy_stack stack;
 

@@ -49,82 +49,48 @@ namespace
 
         call_region_add dispatch_region_add() const
         {
-            return std::bind(m_add, std::placeholders::_1,
+            return std::bind(std::cref(m_add), std::placeholders::_1,
                              std::placeholders::_2, std::placeholders::_3);
         }
 
         call_region_subtract dispatch_region_subtract() const
         {
-            return call_region_subtract();
+            return std::bind(std::cref(m_subtract), std::placeholders::_1,
+                             std::placeholders::_2, std::placeholders::_3);
         }
 
         call_region_divide dispatch_region_divide() const
         {
-            return call_region_divide();
+            return std::bind(std::cref(m_divide), std::placeholders::_1,
+                             std::placeholders::_2, std::placeholders::_3);
         }
 
         call_region_multiply dispatch_region_multiply() const
         {
-            return call_region_multiply();
+            return std::bind(std::cref(m_multiply), std::placeholders::_1,
+                             std::placeholders::_2, std::placeholders::_3);
         }
 
         call_region_multiply_constant dispatch_region_multiply_constant() const
         {
-            return call_region_multiply_constant();
+            return std::bind(std::cref(m_multiply_constant),
+                             std::placeholders::_1, std::placeholders::_2,
+                             std::placeholders::_3);
         }
 
         call_region_multiply_add dispatch_region_multiply_add() const
         {
-            return call_region_multiply_add();
+            return std::bind(std::cref(m_multiply_add), std::placeholders::_1,
+                             std::placeholders::_2, std::placeholders::_3,
+                             std::placeholders::_4);
         }
 
         call_region_multiply_subtract dispatch_region_multiply_subtract() const
         {
-            return call_region_multiply_subtract();
+            return std::bind(std::cref(m_multiply_subtract),
+                             std::placeholders::_1, std::placeholders::_2,
+                             std::placeholders::_3, std::placeholders::_4);
         }
-
-
-        // void region_add(value_type* dest, const value_type* src,
-        //                 uint32_t length) const
-        // {
-        //     m_add(dest,src,length);
-        // }
-
-        // void region_subtract(value_type* dest, const value_type* src,
-        //                      uint32_t length) const
-        // {
-        //     m_subtract(dest,src,length);
-        // }
-
-        // void region_divide(value_type* dest, const value_type* src,
-        //                    uint32_t length) const
-        // {
-        //     m_divide(dest,src,length);
-        // }
-
-        // void region_multiply(value_type* dest, const value_type* src,
-        //                      uint32_t length) const
-        // {
-        //     m_multiply(dest,src,length);
-        // }
-
-        // void region_multiply_constant(value_type* dest, value_type constant,
-        //                               uint32_t length) const
-        // {
-        //     m_multiply_constant(dest,constant,length);
-        // }
-
-        // void region_multiply_add(value_type* dest, const value_type* src,
-        //                          value_type constant, uint32_t length) const
-        // {
-        //     m_multiply_add(dest,src,constant,length);
-        // }
-
-        // void region_multiply_subtract(value_type* dest, const value_type* src,
-        //                               value_type constant,uint32_t length) const
-        // {
-        //     m_multiply_subtract(dest,src,constant,length);
-        // }
 
         stub::call<void (value_type*,const value_type*,uint32_t)>
             m_add;
@@ -154,36 +120,28 @@ namespace
 
 /// Check that the code compiles with a stack that does not provide
 /// the same field
-TEST(invoke_region_dispatcher, api)
+TEST(test_invoke_region_dispatcher, api)
 {
     dummy_stack stack;
 
-    // auto add = stack.dispatch_region_add();
-    // auto subtract = stack.dispatch_region_subtract();
-    // auto divide = stack.dispatch_region_divide();
-    // auto multiply = stack.dispatch_region_multiply();
-    // auto multiply_constant = stack.dispatch_region_multiply_constant();
-    // auto multiply_add = stack.dispatch_region_multiply_add();
-    // auto multiply_subtract = stack.dispatch_region_multiply_subtract();
+    stack.region_add(0,0,0);
+    EXPECT_TRUE(stack.m_add.called_once_with(0,0,0));
 
-    // add(0,0,0);
-    // EXPECT_TRUE(stack.m_add.called_once_with(0,0,0));
+    stack.region_subtract(0,0,1);
+    EXPECT_TRUE(stack.m_subtract.called_once_with(0,0,1));
 
-    // subtract(0,0,1);
-    // EXPECT_TRUE(stack.m_subtract.called_once_with(0,0,1));
+    stack.region_divide(0,0,2);
+    EXPECT_TRUE(stack.m_divide.called_once_with(0,0,2));
 
-    // divide(0,0,2);
-    // EXPECT_TRUE(stack.m_divide.called_once_with(0,0,2));
+    stack.region_multiply(0,0,3);
+    EXPECT_TRUE(stack.m_multiply.called_once_with(0,0,3));
 
-    // multiply(0,0,3);
-    // EXPECT_TRUE(stack.m_multiply.called_once_with(0,0,3));
+    stack.region_multiply_constant(0,1,3);
+    EXPECT_TRUE(stack.m_multiply_constant.called_once_with(0,1,3));
 
-    // multiply_constant(0,1,3);
-    // EXPECT_TRUE(stack.m_multiply_constant.called_once_with(0,1,3));
+    stack.region_multiply_add(0,0,1,3);
+    EXPECT_TRUE(stack.m_multiply_add.called_once_with(0,0,1,3));
 
-    // multiply_add(0,0,1,3);
-    // EXPECT_TRUE(stack.m_multiply_add.called_once_with(0,0,1,3));
-
-    // multiply_subtract(0,0,2,3);
-    // EXPECT_TRUE(stack.m_multiply_subtract.called_once_with(0,0,2,3));
+    stack.region_multiply_subtract(0,0,2,3);
+    EXPECT_TRUE(stack.m_multiply_subtract.called_once_with(0,0,2,3));
 }
