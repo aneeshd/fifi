@@ -66,32 +66,30 @@ namespace fifi
         {
             m_region_add =
                 Super::dispatch_region_add();
+            assert(m_region_add);
 
             m_region_subtract =
                 Super::dispatch_region_subtract();
+            assert(m_region_subtract);
 
             m_region_divide =
                 Super::dispatch_region_divide();
+            assert(m_region_divide);
 
             m_region_multiply =
                 Super::dispatch_region_multiply();
+            assert(m_region_multiply);
 
             m_region_multiply_constant =
                 Super::dispatch_region_multiply_constant();
+            assert(m_region_multiply_constant);
 
             m_region_multiply_add =
                 Super::dispatch_region_multiply_add();
+            assert(m_region_multiply_add);
 
             m_region_multiply_subtract =
                 Super::dispatch_region_multiply_subtract();
-
-            // Ensure that all functions are initialized
-            assert(m_region_add);
-            assert(m_region_subtract);
-            assert(m_region_divide);
-            assert(m_region_multiply);
-            assert(m_region_multiply_constant);
-            assert(m_region_multiply_add);
             assert(m_region_multiply_subtract);
         }
 
