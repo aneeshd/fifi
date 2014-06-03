@@ -20,10 +20,10 @@ namespace fifi
     public:
 
         /// Access to the "basic" layers in the stack
-        typedef typename Super::BasicSuper BasicSuper;
+        typedef typename Super::basic_super_type basic_super_type;
 
         /// Access to the "optimized" layers in the stack
-        typedef typename Super::OptimizedSuper OptimizedSuper;
+        typedef typename Super::optimized_super_type optimized_super_type;
 
         /// The field type
         typedef typename Super::field_type field_type;
@@ -35,12 +35,13 @@ namespace fifi
 
         region_divide_granularity()
         {
-            // The basic granularity needs to be one, i.e., without requirements
-            assert(BasicSuper::granularity() == 1U);
+            // The basic granularity needs to be one, i.e., without
+            // requirements
+            assert(basic_super_type::granularity() == 1U);
 
             // The granularity needs to be a power of two
-            assert((OptimizedSuper::granularity() &
-                   (OptimizedSuper::granularity() - 1)) == 0);
+            assert((optimized_super_type::granularity() &
+                   (optimized_super_type::granularity() - 1)) == 0);
         }
 
         /// @copydoc layer::region_add(value_type*, const value_type*,
@@ -61,7 +62,7 @@ namespace fifi
 
             if (tail > 0)
             {
-                BasicSuper::region_add(dest + optimized, src + optimized, tail);
+                basic_super_type::region_add(dest + optimized, src + optimized, tail);
             }
         }
 
@@ -83,7 +84,7 @@ namespace fifi
 
             if (tail > 0)
             {
-                BasicSuper::region_subtract(
+                basic_super_type::region_subtract(
                     dest + optimized, src + optimized, tail);
             }
         }
@@ -106,7 +107,7 @@ namespace fifi
 
             if (tail > 0)
             {
-                BasicSuper::region_multiply(
+                basic_super_type::region_multiply(
                     dest + optimized, src + optimized, tail);
             }
         }
@@ -129,7 +130,7 @@ namespace fifi
 
             if (tail > 0)
             {
-                BasicSuper::region_divide(
+                basic_super_type::region_divide(
                     dest + optimized, src + optimized, tail);
             }
         }
@@ -151,7 +152,7 @@ namespace fifi
 
             if (tail > 0)
             {
-                BasicSuper::region_multiply_constant(
+                basic_super_type::region_multiply_constant(
                     dest + optimized, constant, tail);
             }
         }
@@ -174,7 +175,7 @@ namespace fifi
 
             if (tail > 0)
             {
-                BasicSuper::region_multiply_add(
+                basic_super_type::region_multiply_add(
                     dest + optimized, src + optimized, constant, tail);
             }
         }
@@ -199,7 +200,7 @@ namespace fifi
 
             if (tail > 0)
             {
-                BasicSuper::region_multiply_subtract(
+                basic_super_type::region_multiply_subtract(
                     dest + optimized, src + optimized, constant, tail);
             }
         }
@@ -227,7 +228,7 @@ namespace fifi
         {
             assert(length > 0);
 
-            uint32_t granularity = OptimizedSuper::granularity();
+            uint32_t granularity = optimized_super_type::granularity();
             assert(granularity > 0);
 
             // The granularity mask is used instead of a modulo and subtraction

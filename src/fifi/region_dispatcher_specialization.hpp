@@ -10,6 +10,10 @@
 #include <cstdint>
 #include <functional>
 #include <type_traits>
+#include <iostream>
+
+#include <sak/easy_bind.hpp>
+#include <sak/optional_bind.hpp>
 
 #include "is_packed_constant.hpp"
 #include "has_region_add.hpp"
@@ -22,15 +26,10 @@
 
 namespace fifi
 {
-    /// This class is typically not used directly in the finite field
-    /// stacks. Instead use the convenience class region_dispatcher
-    /// which "extracts" the template arguments needed by this layer
-    /// from the dispatch stack.
-    ///
-    /// The generic version of the stack represents the fall through
-    /// in cases where the main stack's field is different from the
-    /// dispatch stack's field. See the specialization below which is
-    /// enabled when the fields match.
+    /// Fall-through case where the Field and StackField types are
+    /// different. This means that whatever optimizations are
+    /// implmented in the Stack does not apply here since they are for
+    /// a different finite field from that used in the main stack.
     template<class Field, class Stack, class StackField, class Super>
     class region_dispatcher_specialization : public Super
     { };
@@ -44,152 +43,258 @@ namespace fifi
     public:
 
         /// @copydoc layer::field_type
-        typedef typename Super::field_type field_type;
+        using field_type = typename Super::field_type;
 
         /// @copydoc layer::value_type
-        typedef typename Super::value_type value_type;
+        using value_type = typename Super::value_type;
+
+        /// @copydoc basic_region_dispatcher::call_region_add
+        using call_region_add =
+            typename Super::call_region_add;
+
+        /// @copydoc basic_region_dispatcher::call_region_subtract
+        using call_region_subtract =
+            typename Super::call_region_subtract;
+
+        /// @copydoc basic_region_dispatcher::call_region_divide
+        using call_region_divide =
+            typename Super::call_region_divide;
+
+        /// @copydoc basic_region_dispatcher::call_region_multiply
+        using call_region_multiply =
+            typename Super::call_region_multiply;
+
+        /// @copydoc basic_region_dispatcher::call_region_multiply_constant
+        using call_region_multiply_constant =
+            typename Super::call_region_multiply_constant;
+
+        /// @copydoc basic_region_dispatcher::call_region_multiply_add
+        using call_region_multiply_add =
+            typename Super::call_region_multiply_add;
+
+        /// @copydoc basic_region_dispatcher::call_region_multiply_subtract
+        using call_region_multiply_subtract =
+            typename Super::call_region_multiply_subtract;
 
     public:
 
-        /// Constructor
-        region_dispatcher_specialization()
+        /// Define this layer as the optimized_super_type. We use the
+        /// optimized_super_type type to access the optimization
+        /// layers. The motivation for this is that the optimization
+        /// layers might have specific granularity requirements (the
+        /// minimum amount of data they process), and if these
+        /// requirements are not statisfied we have to use the basic
+        /// region arithmetic functions. The basic region dispatchers
+        /// define the BasicSuper type to allow a callee to by pass
+        /// the optimization layers.
+        using optimized_super_type =
+            region_dispatcher_specialization<Field, Stack, Field, Super>;
+
+    public:
+
+        /// Helper struct for sak::optional_bind. sak::optinal_bind
+        /// allows us to "attempt" to bind to a specific function in
+        /// the Stack object. However if that function is not defined
+        /// by the stack, it will simply return an empty std::function
+        /// object.
+        struct bind_add
         {
-            bool enabled = m_stack.enabled();
+            using result_type = call_region_add;
 
-            // Region Add
-            if (enabled && has_region_add<Stack>::value)
+            template<class T, class U = Stack>
+            static auto bind(T&& t) ->
+            decltype(std::declval<U>().region_add(0,0,0),
+                     result_type())
             {
-                bind_region_add(&m_stack);
+                return sak::easy_bind(&U::region_add, std::forward<T>(t));
             }
-            else
+        };
+
+        /// @copydoc bind_add
+        struct bind_subtract
+        {
+            using result_type = call_region_subtract;
+
+            template<class T, class U = Stack>
+            static auto bind(T&& t) ->
+                decltype(std::declval<U>().region_subtract(0,0,0),
+                         result_type())
             {
-                bind_region_add((Super*)this);
+                return sak::easy_bind(&U::region_subtract, std::forward<T>(t));
+            }
+        };
+
+        /// @copydoc bind_add
+        struct bind_divide
+        {
+            using result_type = call_region_divide;
+
+            template<class T, class U = Stack>
+            static auto bind(T&& t) ->
+                decltype(std::declval<U>().region_divide(0,0,0),
+                         result_type())
+            {
+                return sak::easy_bind(&U::region_divide, std::forward<T>(t));
+            }
+        };
+
+        /// @copydoc bind_add
+        struct bind_multiply
+        {
+            using result_type = call_region_multiply;
+
+            template<class T, class U = Stack>
+            static auto bind(T&& t) ->
+                decltype(std::declval<U>().region_multiply(0,0,0),
+                         result_type())
+            {
+                return sak::easy_bind(&U::region_multiply, std::forward<T>(t));
+            }
+        };
+
+        /// @copydoc bind_add
+        struct bind_multiply_constant
+        {
+            using result_type = call_region_multiply_constant;
+
+            template<class T, class U = Stack>
+            static auto bind(T&& t) ->
+            decltype(std::declval<U>().region_multiply_constant(0,0,0),
+                     result_type())
+            {
+                return sak::easy_bind(&U::region_multiply_constant,
+                                      std::forward<T>(t));
+            }
+        };
+
+        /// @copydoc bind_add
+        struct bind_multiply_add
+        {
+            using result_type = call_region_multiply_add;
+
+            template<class T, class U = Stack>
+            static auto bind(T&& t) ->
+            decltype(std::declval<U>().region_multiply_add(0,0,0,0),
+                     result_type())
+            {
+                return sak::easy_bind(&U::region_multiply_add,
+                                      std::forward<T>(t));
             }
 
-            // Region Subtract
-            if (enabled && has_region_subtract<Stack>::value)
+        };
+
+        /// @copydoc bind_add
+        struct bind_multiply_subtract
+        {
+            using result_type = call_region_multiply_subtract;
+
+            template<class T, class U = Stack>
+            static auto bind(T&& t) ->
+            decltype(std::declval<U>().region_multiply_subtract(0,0,0,0),
+                     result_type())
             {
-                bind_region_subtract(&m_stack);
+                return sak::easy_bind(&U::region_multiply_subtract, t);
             }
-            else
+        };
+
+    public:
+
+        /// @copydoc layer::dispatch_region_add() const
+        call_region_add
+        dispatch_region_add() const
+        {
+            auto call = sak::optional_bind<bind_add>(&m_stack);
+
+            if (call && m_stack.enabled())
             {
-                bind_region_subtract((Super*)this);
+                return call;
             }
 
-            // Region Multiply
-            if (enabled && has_region_multiply<Stack>::value)
-            {
-                bind_region_multiply(&m_stack);
-            }
-            else
-            {
-                bind_region_multiply((Super*)this);
-            }
-
-            // Region Divide
-            if (enabled && has_region_divide<Stack>::value)
-            {
-                bind_region_divide(&m_stack);
-            }
-            else
-            {
-                bind_region_divide((Super*)this);
-            }
-
-            // Region Multiply Constant
-            if (enabled && has_region_multiply_constant<Stack>::value)
-            {
-                bind_region_multiply_constant(&m_stack);
-            }
-            else
-            {
-                bind_region_multiply_constant((Super*)this);
-            }
-
-            // Region Multiply Add
-            if (enabled && has_region_multiply_add<Stack>::value)
-            {
-                bind_region_multiply_add(&m_stack);
-            }
-            else
-            {
-                bind_region_multiply_add((Super*)this);
-            }
-
-            // Region Multiply Subtract
-            if (enabled && has_region_multiply_subtract<Stack>::value)
-            {
-                bind_region_multiply_subtract(&m_stack);
-            }
-            else
-            {
-                bind_region_multiply_subtract((Super*)this);
-            }
+            return Super::dispatch_region_add();
         }
 
-        /// @copydoc layer::region_add(value_type*, const value_type*,
-        ///                            uint32_t) const
-        void region_add(value_type* dest, const value_type* src,
-            uint32_t length) const
+        /// @copydoc layer::dispatch_region_subtract() const
+        call_region_subtract
+        dispatch_region_subtract() const
         {
-            assert(m_add);
-            m_add(dest, src, length);
+            auto call = sak::optional_bind<bind_subtract>(&m_stack);
+
+            if (call && m_stack.enabled())
+            {
+                return call;
+            }
+
+            return Super::dispatch_region_subtract();
         }
 
-        /// @copydoc layer::region_subtract(value_type*, const value_type*,
-        ///                                 uint32_t) const
-        void region_subtract(value_type* dest, const value_type* src,
-            uint32_t length) const
+        /// @copydoc layer::dispatch_region_divide() const
+        call_region_divide
+        dispatch_region_divide() const
         {
-            assert(m_subtract);
-            m_subtract(dest, src, length);
+            auto call = sak::optional_bind<bind_divide>(&m_stack);
+
+            if (call && m_stack.enabled())
+            {
+                return call;
+            }
+
+            return Super::dispatch_region_divide();
         }
 
-        /// @copydoc layer::region_multiply(value_type*, const value_type*,
-        ///                                 uint32_t) const
-        void region_multiply(value_type* dest, const value_type* src,
-            uint32_t length) const
+        /// @copydoc layer::dispatch_region_multiply() const
+        call_region_multiply
+        dispatch_region_multiply() const
         {
-            assert(m_multiply);
-            m_multiply(dest, src, length);
+            auto call = sak::optional_bind<bind_multiply>(&m_stack);
+
+            if (call && m_stack.enabled())
+            {
+                return call;
+            }
+
+            return Super::dispatch_region_multiply();
         }
 
-        /// @copydoc layer::region_divide(value_type*, const value_type*,
-        ///                               uint32_t) const
-        void region_divide(value_type* dest, const value_type* src,
-            uint32_t length) const
+        /// @copydoc layer::dispatch_region_multiply_constant() const
+        call_region_multiply_constant
+        dispatch_region_multiply_constant() const
         {
-            assert(m_divide);
-            m_divide(dest, src, length);
+            auto call = sak::optional_bind<bind_multiply_constant>(&m_stack);
+
+            if (call && m_stack.enabled())
+            {
+                return call;
+            }
+
+            return Super::dispatch_region_multiply_constant();
         }
 
-        /// @copydoc layer::region_multiply_constant(value_type*, value_type,
-        ///                                          uint32_t) const
-        void region_multiply_constant(
-            value_type* dest, value_type constant,
-            uint32_t length) const
+        /// @copydoc layer::dispatch_region_multiply_add() const
+        call_region_multiply_add
+        dispatch_region_multiply_add() const
         {
-            assert(m_multiply_constant);
-            m_multiply_constant(dest, constant, length);
+            auto call = sak::optional_bind<bind_multiply_add>(&m_stack);
+
+            if (call && m_stack.enabled())
+            {
+                return call;
+            }
+
+            return Super::dispatch_region_multiply_add();
         }
 
-        /// @copydoc layer::region_multiply_add(value_type*, const value_type*,
-        ///                                     value_type, uint32_t) const
-        void region_multiply_add(value_type* dest, const value_type* src,
-                          value_type constant, uint32_t length) const
+        /// @copydoc layer::dispatch_region_multiply_subtract() const
+        call_region_multiply_subtract
+        dispatch_region_multiply_subtract() const
         {
-            assert(m_multiply_add);
-            m_multiply_add(dest, src, constant, length);
-        }
+            auto call = sak::optional_bind<bind_multiply_subtract>(&m_stack);
 
-        /// @copydoc layer::region_multiply_subtract(value_type*,
-        ///                                          const value_type*,
-        ///                                          value_type, uint32_t) const
-        void region_multiply_subtract(value_type* dest, const value_type* src,
-                                value_type constant, uint32_t length) const
-        {
-            assert(m_multiply_subtract);
-            m_multiply_subtract(dest, src, constant, length);
+            if (call && m_stack.enabled())
+            {
+                return call;
+            }
+
+            return Super::dispatch_region_multiply_subtract();
         }
 
         /// @copydoc layer::alignment() const
@@ -253,256 +358,9 @@ namespace fifi
             return m_stack.enabled();
         }
 
-    private:
-
-        /// Helper function for binding to the chosen
-        /// layer::region_add(value_type*, const value_type*,
-        /// uint32_t). The function uses SFINA to only bind if the
-        /// chosen stack supports the operation.
-        ///
-        /// @param stack Pointer to the stack where the operation
-        /// should be bound
-        template
-        <
-            class T,
-            typename std::enable_if<
-                has_region_add<T>::value, uint8_t>::type = 0
-        >
-        void bind_region_add(const T* stack)
-        {
-            namespace sp = std::placeholders;
-            m_add = std::bind(&T::region_add, stack, sp::_1, sp::_2, sp::_3);
-        }
-
-        /// Helper function called if the chosen stack does not
-        /// support the desired operation. In this case, this function
-        /// will be instantiated ensuring that the code will
-        /// compile. To avoid asserting the calling code should use
-        /// the has_region_add<T>::value helper
-        ///
-        /// @param stack Pointer to the stack where the operation
-        /// should be bound
-        template
-        <
-            class T,
-            typename std::enable_if<
-                !has_region_add<T>::value, uint16_t>::type = 0
-        >
-        void bind_region_add(const T* stack)
-        {
-            // We do the assert here - to make sure that this call is
-            // not silently ignored in cases where the stack does not
-            // have the layer::region_add(value_type*, const
-            // value_type*, uint32_t) function. However, this assert
-            // can be avoided by using the has_region_add helper.
-            (void) stack;
-            assert(0);
-        }
-
-        /// @copydoc bind_region_add(const T*)
-        template
-        <
-            class T,
-            typename std::enable_if<
-                has_region_subtract<T>::value, uint8_t>::type = 0
-        >
-        void bind_region_subtract(const T* stack)
-        {
-            namespace sp = std::placeholders;
-            m_subtract = std::bind(
-                &T::region_subtract, stack, sp::_1, sp::_2, sp::_3);
-        }
-
-        /// @copydoc bind_region_add(const T*)
-        template
-        <
-            class T,
-            typename std::enable_if<
-                !has_region_subtract<T>::value, uint16_t>::type = 0
-        >
-        void bind_region_subtract(const T* stack)
-        {
-            // @see bind_region_add(T*)
-            (void) stack;
-            assert(0);
-        }
-
-        /// @copydoc bind_region_add(const T*)
-        template
-        <
-            class T,
-            typename std::enable_if<
-                has_region_multiply<T>::value, uint8_t>::type = 0
-        >
-        void bind_region_multiply(const T* stack)
-        {
-            namespace sp = std::placeholders;
-            m_multiply = std::bind(
-                &T::region_multiply, stack, sp::_1, sp::_2, sp::_3);
-        }
-
-        /// @copydoc bind_region_add(const T*)
-        template
-        <
-            class T,
-            typename std::enable_if<
-                !has_region_multiply<T>::value, uint16_t>::type = 0
-        >
-        void bind_region_multiply(const T* stack)
-        {
-            // @see bind_region_add(T*)
-            (void) stack;
-            assert(0);
-        }
-
-        /// @copydoc bind_region_add(const T*)
-        template
-        <
-            class T,
-            typename std::enable_if<
-                has_region_divide<T>::value, uint8_t>::type = 0
-        >
-        void bind_region_divide(const T* stack)
-        {
-            namespace sp = std::placeholders;
-            m_divide = std::bind(
-                &T::region_divide, stack, sp::_1, sp::_2, sp::_3);
-        }
-
-        /// @copydoc bind_region_add(const T*)
-        template
-        <
-            class T,
-            typename std::enable_if<
-                !has_region_divide<T>::value, uint16_t>::type = 0
-        >
-        void bind_region_divide(const T* stack)
-        {
-            // @see bind_region_add(T*)
-            (void) stack;
-            assert(0);
-        }
-
-        /// @copydoc bind_region_add(const T*)
-        template
-        <
-            class T,
-            typename std::enable_if<
-                has_region_multiply_constant<T>::value, uint8_t>::type = 0
-        >
-        void bind_region_multiply_constant(const T* stack)
-        {
-            namespace sp = std::placeholders;
-            m_multiply_constant = std::bind(
-                &T::region_multiply_constant, stack, sp::_1, sp::_2, sp::_3);
-        }
-
-        /// @copydoc bind_region_add(const T*)
-        template
-        <
-            class T,
-            typename std::enable_if<
-                !has_region_multiply_constant<T>::value, uint16_t>::type = 0
-        >
-        void bind_region_multiply_constant(const T* stack)
-        {
-            // @see bind_region_add(T*)
-            (void) stack;
-            assert(0);
-        }
-
-        /// @copydoc bind_region_add(const T*)
-        template
-        <
-            class T,
-            typename std::enable_if<
-                has_region_multiply_add<T>::value, uint8_t>::type = 0
-        >
-        void bind_region_multiply_add(const T* stack)
-        {
-            namespace sp = std::placeholders;
-            m_multiply_add = std::bind(
-                &T::region_multiply_add, stack, sp::_1, sp::_2, sp::_3, sp::_4);
-        }
-
-        /// @copydoc bind_region_add(const T*)
-        template
-        <
-            class T,
-            typename std::enable_if<
-                !has_region_multiply_add<T>::value, uint16_t>::type = 0
-        >
-        void bind_region_multiply_add(const T* stack)
-        {
-            // @see bind_region_add(T*)
-            (void) stack;
-            assert(0);
-        }
-
-        /// @copydoc bind_region_add(const T*)
-        template
-        <
-            class T,
-            typename std::enable_if<
-                has_region_multiply_subtract<T>::value, uint8_t>::type = 0
-        >
-        void bind_region_multiply_subtract(const T* stack)
-        {
-            namespace sp = std::placeholders;
-            m_multiply_subtract = std::bind(&T::region_multiply_subtract,
-                stack, sp::_1, sp::_2, sp::_3, sp::_4);
-        }
-
-        /// @copydoc bind_region_add(const T*)
-        template
-        <
-            class T,
-            typename std::enable_if<
-                !has_region_multiply_subtract<T>::value, uint16_t>::type = 0
-        >
-        void bind_region_multiply_subtract(const T* stack)
-        {
-            // @see bind_region_add(T*)
-            (void) stack;
-            assert(0);
-        }
-
     protected:
-
-        typedef std::function<void (value_type*, const value_type*, uint32_t)>
-            ptr_ptr_function;
-
-        typedef std::function<void (value_type*, value_type, uint32_t)>
-            ptr_const_function;
-
-        typedef std::function<
-            void (value_type*, const value_type*, value_type, uint32_t)>
-            ptr_ptr_const_function;
-
-    private:
 
         /// The stack to use for dispatching
         Stack m_stack;
-
-        /// Store the function to invoke when calling region_add
-        ptr_ptr_function m_add;
-
-        /// Store the function to invoke when calling region_subtract
-        ptr_ptr_function m_subtract;
-
-        /// Store the function to invoke when calling region_multiply
-        ptr_ptr_function m_multiply;
-
-        /// Store the function to invoke when calling region_divide
-        ptr_ptr_function m_divide;
-
-        /// Store the function to invoke when calling region_multiply_constant
-        ptr_const_function m_multiply_constant;
-
-        /// Store the function to invoke when calling region_multiply_add
-        ptr_ptr_const_function m_multiply_add;
-
-        /// Store the function to invoke when calling region_multiply_subtract
-        ptr_ptr_const_function m_multiply_subtract;
     };
 }

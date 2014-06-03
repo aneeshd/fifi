@@ -20,7 +20,7 @@ namespace fifi
 
         struct dummy_stack2
         {
-            typedef dummy_stack1 BasicSuper;
+            typedef dummy_stack1 basic_super_type;
         };
     }
 }
