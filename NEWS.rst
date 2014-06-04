@@ -6,6 +6,9 @@ of every change, see the Git log.
 
 Latest
 ------
+* Major: Updated the way optimization dispatching is done to only
+  happen once at run-time.
+* Major: Updated to sak version 11.x.y
 * Minor: Added NEON intrinsics for binary4 and binary8 to speed up arithmetics
   on recent ARM CPUs.
 * Minor: Update to waf 1.8.0-pre1
@@ -97,4 +100,3 @@ Latest
 * Bumped dependency version for boost to 1.1.2-boost_1_48_0
 * Bumped dependency version for sak to 1.1.1
 * Fixed win32 link and cxx flags
-

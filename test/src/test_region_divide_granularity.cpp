@@ -28,14 +28,14 @@ namespace fifi
         class dummy_typedef_basic_super : public Super
         {
         public:
-            typedef Super BasicSuper;
+            typedef Super basic_super_type;
         };
 
         template<class Super>
         class dummy_typedef_optimized_super : public Super
         {
         public:
-            typedef Super OptimizedSuper;
+            typedef Super optimized_super_type;
         };
 
         template<class Field, uint32_t Granularity>
@@ -68,8 +68,8 @@ namespace fifi
             typedef dummy_stack<field_type, Granularity> stack_type;
             typedef capture_calls<value_type> calls_type;
 
-            typedef typename stack_type::BasicSuper basic_super;
-            typedef typename stack_type::OptimizedSuper optimized_super;
+            typedef typename stack_type::basic_super_type basic_super;
+            typedef typename stack_type::optimized_super_type optimized_super;
 
             void run_test()
             {
@@ -240,8 +240,8 @@ TEST(test_region_divide_granularity, granularity)
     typedef fifi::dummy_stack<fifi::binary8, 16U> stack_type;
     stack_type stack;
 
-    stack_type::BasicSuper& basic = stack;
-    stack_type::OptimizedSuper& optimized = stack;
+    stack_type::basic_super_type& basic = stack;
+    stack_type::optimized_super_type& optimized = stack;
 
     EXPECT_EQ(1U, basic.granularity());
     EXPECT_EQ(16U, optimized.granularity());
@@ -254,8 +254,8 @@ TEST(test_region_divide_granularity, max_granularity)
     typedef fifi::dummy_stack<fifi::binary8, 16U> stack_type;
     stack_type stack;
 
-    stack_type::BasicSuper& basic = stack;
-    stack_type::OptimizedSuper& optimized = stack;
+    stack_type::basic_super_type& basic = stack;
+    stack_type::optimized_super_type& optimized = stack;
 
     EXPECT_EQ(1U, basic.max_granularity());
     EXPECT_EQ(16U, optimized.max_granularity());
