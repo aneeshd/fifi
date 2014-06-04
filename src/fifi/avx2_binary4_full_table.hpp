@@ -18,16 +18,15 @@ namespace fifi
     /// avx2_binary4_full_table
     ///
     /// Stack implementing AVX2 SIMD accelerated finite field
-    /// arithmetic. The following intrinsics are used available in the
-    /// following SIMD versions:
+    /// arithmetic. The following AVX2 intrinsics are used:
     ///
-    /// _mm_load_si128 (SSE2)
-    /// _mm_set1_epi8 (SSE2)
-    /// _mm_and_si128 (SSE2)
-    /// _mm_shuffle_epi8 (SSSE3)
-    /// _mm_srli_epi64 (SSE2)
-    /// _mm_xor_si128 (SSE2)
-    /// _mm_store_si128 (SSE2)
+    /// _mm256_loadu_si256
+    /// _mm256_set1_epi8
+    /// _mm256_and_si256
+    /// _mm256_shuffle_epi8
+    /// _mm256_srli_epi64
+    /// _mm256_xor_si256
+    /// _mm256_storeu_si256
     class avx2_binary4_full_table
     {
     public:
@@ -80,7 +79,7 @@ namespace fifi
         /// @copydoc layer::max_granularity() const
         uint32_t max_granularity() const;
 
-        /// @return true if the executable was built with SSSE3 binary4
+        /// @return true if the executable was built with AVX2 binary4
         ///         full table support
         bool enabled() const;
 

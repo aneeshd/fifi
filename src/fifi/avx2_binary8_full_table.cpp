@@ -54,7 +54,7 @@ namespace fifi
         assert(length > 0);
         assert((length % granularity()) == 0);
 
-        // We loop 16 bytes at-a-time so we calculate how many loops we need
+        // We loop 32 bytes at-a-time so we calculate how many loops we need
         uint32_t simd_size = length / granularity();
         assert(simd_size > 0);
 
@@ -62,7 +62,7 @@ namespace fifi
         __m256i* dest_ptr = (__m256i*)dest;
         for (uint32_t i = 0; i < simd_size; i++, src_ptr++, dest_ptr++)
         {
-            // Load the next 16-bytes of the destination and source buffers
+            // Load the next 32-bytes of the destination and source buffers
             __m256i ymm0 = _mm256_loadu_si256(dest_ptr);
             __m256i ymm1 = _mm256_loadu_si256(src_ptr);
             // Xor these values together
@@ -86,7 +86,7 @@ namespace fifi
         assert(length > 0);
         assert((length % granularity()) == 0);
 
-        // We loop 16 bytes at-a-time so we calculate how many loops we need
+        // We loop 32 bytes at-a-time so we calculate how many loops we need
         uint32_t simd_size = length / granularity();
         assert(simd_size > 0);
 
@@ -107,7 +107,7 @@ namespace fifi
         __m256i* dest_ptr = (__m256i*)dest;
         for (uint32_t i = 0; i < simd_size; i++, dest_ptr++)
         {
-            // Load the next 16-bytes of the destination buffer
+            // Load the next 32-bytes of the destination buffer
             __m256i ymm0 = _mm256_loadu_si256(dest_ptr);
             // Apply mask1 to get the low-half of the data
             __m256i l = _mm256_and_si256(ymm0, mask1);
@@ -134,7 +134,7 @@ namespace fifi
         assert(length > 0);
         assert((length % granularity()) == 0);
 
-        // We loop 16 bytes at-a-time so we calculate how many loops we need
+        // We loop 32 bytes at-a-time so we calculate how many loops we need
         uint32_t simd_size = length / granularity();
         assert(simd_size > 0);
 
@@ -158,7 +158,7 @@ namespace fifi
         {
             // Multiply the src with the constant
 
-            // Load the next 16-bytes of the source buffer
+            // Load the next 32-bytes of the source buffer
             __m256i ymm0 = _mm256_loadu_si256(src_ptr);
             // Apply mask1 to get the low-half of the data
             __m256i l = _mm256_and_si256(ymm0, mask1);
@@ -175,7 +175,7 @@ namespace fifi
 
             // Add this product to the dest
 
-            // Load the next 16-bytes of the destination buffer
+            // Load the next 32-bytes of the destination buffer
             __m256i ymm1 = _mm256_loadu_si256(dest_ptr);
             // Xor the multiplication result and the destination value
             ymm0 = _mm256_xor_si256(ymm0, ymm1);
