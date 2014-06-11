@@ -66,10 +66,10 @@ namespace fifi
         /// case division is simply implemented using multiplication
         /// with the inverse.
         /// @copydoc layer::divide(value_type, value_type) const
-        value_type divide(value_type numerator, value_type denominator) const
+        value_type divide(value_type a, value_type b) const
         {
-            value_type inverse = invert(denominator);
-            return multiply(numerator, inverse);
+            value_type inverse = invert(b);
+            return multiply(a, inverse);
         }
 
         /// Specialization for the (2^32 - 5) prime field. This

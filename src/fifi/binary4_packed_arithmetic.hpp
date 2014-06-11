@@ -61,14 +61,13 @@ namespace fifi
         }
 
         /// @copydoc layer::packed_divide(value_type, value_type) const
-        value_type packed_divide(value_type numerator,
-                                 value_type denominator) const
+        value_type packed_divide(value_type a, value_type b) const
         {
             value_type high = Super::divide(
-                numerator >> 4, denominator >> 4);
+                a >> 4, b >> 4);
 
             value_type low = Super::divide(
-                numerator & 0xf, denominator & 0xf);
+                a & 0xf, b & 0xf);
 
             return (high << 4) | low;
         }

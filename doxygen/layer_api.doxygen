@@ -6,7 +6,7 @@ public:
 
     /// @typedef field_type
     /// The finite field type used e.g. fifi::binary8 for the Finite
-    /// Field 2^8
+    /// Field 2^8.
     typedef fifi_finite_field field_type;
 
     /// @typedef value_type
@@ -17,152 +17,174 @@ public:
 
     /// @typedef order_type
     /// The data type used to hold the order of the field i.e. the
-    /// number of elements. E.g. binary8 uses uint32_t as the order_type
+    /// number of elements. E.g. binary8 uses uint32_t as the order_type.
     typedef field::order_type order_type;
 
     //------------------------------------------------------------------
     // BASE ARITHMETICS API
     //------------------------------------------------------------------
 
-    /// Get the addition of two field elements
-    /// @param a First operand to add
-    /// @param b Second operand to add
-    /// @return Addition result
+    /// Returns the sum of two field elements.
+    /// @param a The augend.
+    /// @param b The addend.
+    /// @return The sum of a and b.
     value_type add(value_type a, value_type b) const;
 
-    /// Get the subtraction of two field elements
-    /// @param a First operand to subtract from
-    /// @param b Second operand to subtract
-    /// @return Subtraction result
+    /// Returns the difference of two field elements.
+    /// @param a The minuend.
+    /// @param b The subtrahend.
+    /// @return The difference of a and b.
     value_type subtract(value_type a, value_type b) const;
 
-    /// Get the multiplication of two field elements
-    /// @param a First operand to multiply
-    /// @param b Second operand to multiply
-    /// @return Multiplication result
+    /// Returns the product of two field elements.
+    /// @param a The multiplicand.
+    /// @param b The multiplier.
+    /// @return The product of a and b.
     value_type multiply(value_type a, value_type b) const;
 
-    /// Get the division of two field elements
-    /// @param a Numerator
-    /// @param b Denominator
-    /// @return Division result
-    value_type divide(value_type numerator, value_type denominator) const;
+    /// Returns the quotient of two field elements.
+    /// @param a The numerator.
+    /// @param b The denominator.
+    /// @return The quotient of a and b.
+    value_type divide(value_type a, value_type b) const;
 
-    /// Get the inverse of a field element
-    /// @param a Element to invert
-    /// @return Inversion result
+    /// Returns inverse of a field element.
+    /// @param a Element to invert.
+    /// @return The inverse of the field element.
     value_type invert(value_type a) const;
 
     //------------------------------------------------------------------
     // PACKED ARITHMETICS API
     //------------------------------------------------------------------
 
-    /// Get the addition of two field elements when the data type might not
-    /// represents a field element, i.e. not using the whole bits of the type.
-    /// @param a First operand to add
-    /// @param b Second operand to add
-    /// @return Addition result
+    /// Returns the sum of two field elements. If the field's value type can
+    /// represent multiple elements it is assumed that multiple field elements
+    /// are stored in the operands, e.g., that 8 field elements are stored in a
+    /// byte-sized value type of a binary field.
+    /// @param a The augend(s).
+    /// @param b The addend(s).
+    /// @return The sum(s) of a and b.
     value_type packed_add(value_type a, value_type b) const;
 
-    /// Get the subtraction of two field elements when the data type might not
-    /// represents a field element, i.e. not using the whole bits of the type.
-    /// @param a First operand to subtract from
-    /// @param b Second operand to subtract
-    /// @return Subtraction result
+    /// Returns the difference of two field elements. If the field's value type
+    /// can represent multiple elements it is assumed that multiple field
+    /// elements are stored in the operands, e.g., that 8 field elements are
+    /// stored in a byte-sized value type of a binary field.
+    /// @param a The minuend(s).
+    /// @param b The subtrahend(s).
+    /// @return The difference(s) of a and b.
     value_type packed_subtract(value_type a, value_type b) const;
 
-    /// Get the multiplication of two field elements when the data type might
-    /// not represents a field element, i.e. not using the whole bits of the
-    /// type.
-    /// @param a First operand to multiply
-    /// @param b Second operand to multiply
-    /// @return Multiplication result
+    /// Returns the product of two field elements. If the field's value type can
+    /// represent multiple elements it is assumed that multiple field elements
+    /// are stored in the operands, e.g., that 8 field elements are stored in a
+    /// byte-sized value type of a binary field.
+    /// @param a The multiplicand(s).
+    /// @param b The multiplier(s).
+    /// @return The product(s) of a and b.
     value_type packed_multiply(value_type a, value_type b) const;
 
-    /// Get the division of two field elements when the data type might not
-    /// represents a field element, i.e. not using the whole bits of the type.
-    /// @param numerator First operand to divide
-    /// @param denominator Second operand to divide
-    /// @return Division result
-    value_type packed_divide(value_type numerator,
-                             value_type denominator) const;
+    /// Returns the quotient of two field elements. If the field's value type
+    /// can represent multiple elements it is assumed that multiple field
+    /// elements are stored in the operands, e.g., that 8 field elements are
+    /// stored in a byte-sized value type of a binary field.
+    /// @param a The numerator(s).
+    /// @param b The denominator(s).
+    /// @return The quotient(s) of a and b.
+    value_type packed_divide(value_type a, value_type b) const;
 
-    /// Get the inverse of a field element when the data type might not
-    /// represent a field element, i.e. not using the whole bits of the type.
-    /// @param a Element to invert
-    /// @return Inversion result
+    /// Returns inverse of a field element. If the field's value type
+    /// can represent multiple elements it is assumed that multiple field
+    /// elements are stored in the operand, e.g., that 8 field elements are
+    /// stored in a byte-sized value type of a binary field.
+    /// @param a Element(s) to invert.
+    /// @return The inverse of the field element(s).
     value_type packed_invert(value_type a) const;
 
     //------------------------------------------------------------------
     // REGION ARITHMETICS API
     //------------------------------------------------------------------
 
-    /// Get the addition of two memory regions composed of field elements
-    /// instead of field elements itself. It is assumed regions are "packed"
-    /// as mentioned in the packed arithmetics API
-    /// @param dest Pointer to value_type for the destination memory block
-    /// @param src Const pointer to value_type for the source memory block
-    /// @param length Length of the provided buffers
+    /// Adds two field element buffers. It is assumed that the buffers contains
+    /// "packed" values, i.e., that, if possible, multiple field elements are
+    /// stored in the same value type.
+    /// The operation is: dest = dest + src
+    /// @param dest The buffer containing the augends, and the destination for
+    /// the resulting sums.
+    /// @param src The buffer containing the addends.
+    /// @param length The length of the provided buffers.
     void region_add(value_type* dest, const value_type* src,
                     uint32_t length) const;
 
-    /// Get the subtract of two memory regions composed of field elements
-    /// instead of field elements itself. It is assumed regions are "packed"
-    /// as mentioned in the packed arithmetics API
-    /// @param dest Pointer to value_type for the destination memory block
-    /// @param src Const pointer to value_type for the source memory block
-    /// @param length Length of the provided buffers
+    /// Subtracts two field element buffers. It is assumed that the buffers
+    /// contains "packed" values, i.e., that, if possible, multiple field
+    /// elements are stored in the same value type.
+    /// The operation is: dest = dest - src
+    /// @param dest The buffer containing the minuends, and the destination for
+    /// the resulting differences.
+    /// @param src The buffer containing the subtrahend.
+    /// @param length The length of the provided buffers.
     void region_subtract(value_type* dest, const value_type* src,
                          uint32_t length) const;
 
 
-    /// Get the multiplication of two memory regions composed of field elements
-    /// instead of field elements itself. It is assumed regions are "packed"
-    /// as mentioned in the packed arithmetics API
-    /// @param dest Pointer to value_type for the destination memory block
-    /// @param src Const pointer to value_type for the source memory block
-    /// @param length Length of the provided buffers
+    /// Multiplies two field element buffers. It is assumed that the buffers
+    /// contains "packed" values, i.e., that, if possible, multiple field
+    /// elements are stored in the same value type.
+    /// The operation is: dest = dest * src
+    /// @param dest The buffer containing the multiplicands, and the destination
+    /// for the resulting products.
+    /// @param src The buffer containing the multipliers.
+    /// @param length The length of the provided buffers.
     void region_multiply(value_type* dest, const value_type* src,
                          uint32_t length) const;
 
 
-    /// Get the division of two memory regions composed of field elements
-    /// instead of field elements itself. It is assumed regions are "packed"
-    /// as mentioned in the packed arithmetics API
-    /// @param dest Pointer to value_type for the destination memory block
-    /// @param src Const pointer to value_type for the source memory block
-    /// @param length Length of the provided buffers
+    /// Divides two field element buffers. It is assumed that the buffers
+    /// contains "packed" values, i.e., that, if possible, multiple field
+    /// elements are stored in the same value type.
+    /// The operation is: dest = dest / src
+    /// @param dest The buffer containing the numerators, and the destination
+    /// for the resulting quotients.
+    /// @param src The buffer containing the denominators.
+    /// @param length The length of the provided buffers.
     void region_divide(value_type* dest, const value_type* src,
                        uint32_t length) const;
 
-    /// Get the multiplication of a memory region composed of field elements
-    /// instead of field elements itself. It is assumed regions are "packed"
-    /// as mentioned in the packed arithmetics API
-    /// @param dest Pointer to value_type for the destination memory block
-    /// @param constant Constant of type value_type to be multiplied on dest
-    /// @param length Length of the provided buffers
+    /// Multiplies a field element buffer with a constant. It is assumed that
+    /// the buffer contains "packed" values, i.e., that, if possible, multiple
+    /// field elements are stored in the same value type.
+    /// The operation is: dest = dest * constant
+    /// @param dest The buffer containing the multiplicands, and the destination
+    /// for the resulting products.
+    /// @param constant The constant multiplier.
+    /// @param length The length of the provided buffers.
     void region_multiply_constant(value_type* dest, value_type constant,
                                   uint32_t length) const;
 
-    /// Get the multiplication with a constant and addition of two memory
-    /// regions composed of field elements instead of field elements itself.
-    /// It is assumed regions are "packed" as mentioned in the packed
-    /// arithmetics API. The operation is: dest = dest + (constant * src)
-    /// @param dest Pointer to value_type for the destination memory block
-    /// @param src Const pointer to value_type for the source memory block
-    /// @param constant Constant of type value_type to be multiplied on src
-    /// @param length Length of the provided buffers
+    /// Multiplies a field element buffer with a constant, and afterwards adds
+    /// the product to a second buffer. It is assumed that the buffers contains
+    /// "packed" values, i.e., that, if possible, multiple field elements are
+    /// stored in the same value type.
+    /// The operation is: dest = dest + (constant * src)
+    /// @param dest The buffer containing the augends, and the destination for
+    /// the resulting sums.
+    /// @param src The buffer containing the multiplicands.
+    /// @param constant The constant multiplier.
+    /// @param length The length of the provided buffers.
     void region_multiply_add(value_type* dest, const value_type* src,
                              value_type constant, uint32_t length) const;
 
-    /// Get the multiplication with a constant and subtraction of two memory
-    /// regions composed of field elements instead of field elements itself.
-    /// It is assumed regions are "packed" as mentioned in the packed
-    /// arithmetics API. The operation is: dest = dest - (constant * src)
-    /// @param dest Pointer to value_type for the destination memory block
-    /// @param src Const pointer to value_type for the source memory block
-    /// @param constant Constant of type value_type to be multiplied on src
-    /// @param length Length of the provided buffers
+    /// Multiplies a field element buffer with a constant, and afterwards
+    /// subtracts the product from a second buffer. It is assumed that the
+    /// buffers contains "packed" values, i.e., that, if possible, multiple
+    /// field elements are stored in the same value type.
+    /// The operation is: dest = dest - (constant * src)
+    /// @param dest The buffer containing the minuends, and the destination for
+    /// the resulting differences.
+    /// @param src The buffer containing the multiplicands.
+    /// @param constant The constant multiplier.
+    /// @param length The length of the provided buffers.
     void region_multiply_subtract(value_type* dest, const value_type* src,
                                   value_type constant, uint32_t length) const;
 

@@ -88,18 +88,18 @@ namespace fifi
         }
 
         /// @copydoc layer::divide(value_type, value_type) const
-        value_type divide(value_type numerator, value_type denominator) const
+        value_type divide(value_type a, value_type b) const
         {
-            assert(is_valid_element<field_type>(numerator));
-            assert(is_valid_element<field_type>(denominator));
+            assert(is_valid_element<field_type>(a));
+            assert(is_valid_element<field_type>(b));
 
-            assert(denominator != 0);
+            assert(b != 0);
 
-            if (numerator == 0)
+            if (a == 0)
                 return 0;
 
-            value_type one = m_log[numerator];
-            value_type two = m_log[denominator];
+            value_type one = m_log[a];
+            value_type two = m_log[b];
 
             // Again we have to do a bit of trickery, since we do not
             // have a good way to handle negative numbers when
