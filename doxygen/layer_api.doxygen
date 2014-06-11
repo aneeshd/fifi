@@ -99,7 +99,7 @@ public:
     /// elements are stored in the operand, e.g., that 8 field elements are
     /// stored in a byte-sized value type of a binary field.
     /// @param a Element(s) to invert.
-    /// @return The inverse of the fieldelement(s).
+    /// @return The inverse of the field element(s).
     value_type packed_invert(value_type a) const;
 
     //------------------------------------------------------------------
