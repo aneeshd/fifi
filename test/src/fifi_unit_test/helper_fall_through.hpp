@@ -58,10 +58,9 @@ namespace fifi
             return r;
         }
 
-        value_type divide(value_type numerator,
-                          value_type denominator) const
+        value_type divide(value_type a, value_type b) const
         {
-            m_calls.call_divide(numerator, denominator);
+            m_calls.call_divide(a, b);
 
             auto r = m_constants.value();
             m_calls.return_divide(r);
@@ -109,10 +108,9 @@ namespace fifi
             return r;
         }
 
-        value_type packed_divide(value_type numerator,
-                                 value_type denominator) const
+        value_type packed_divide(value_type a, value_type b) const
         {
-            m_calls.call_packed_divide(numerator, denominator);
+            m_calls.call_packed_divide(a, b);
 
             auto r = m_constants.pack();
             m_calls.return_packed_divide(r);

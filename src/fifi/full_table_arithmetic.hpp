@@ -87,13 +87,13 @@ namespace fifi
         }
 
         /// @copydoc layer::divide(value_type, value_type) const
-        value_type divide(value_type numerator, value_type denominator) const
+        value_type divide(value_type a, value_type b) const
         {
-            assert(is_valid_element<field_type>(numerator));
-            assert(is_valid_element<field_type>(denominator));
+            assert(is_valid_element<field_type>(a));
+            assert(is_valid_element<field_type>(b));
 
             return m_division_table[
-                (numerator << field_type::degree) + denominator];
+                (a << field_type::degree) + b];
         }
 
         /// @copydoc layer::invert(value_type) const

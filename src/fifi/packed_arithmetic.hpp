@@ -57,10 +57,9 @@ namespace fifi
         }
 
         /// @copydoc layer::packed_divide(value_type, value_type) const
-        value_type packed_divide(value_type numerator,
-                                 value_type denominator) const
+        value_type packed_divide(value_type a, value_type b) const
         {
-            return Super::divide(numerator, denominator);
+            return Super::divide(a, b);
         }
 
         /// @copydoc layer::packed_invert(value_type) const

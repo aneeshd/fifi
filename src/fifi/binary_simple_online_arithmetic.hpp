@@ -48,13 +48,13 @@ namespace fifi
         }
 
         /// @copydoc layer::divide(value_type, value_type) const
-        value_type divide(value_type numerator, value_type denominator) const
+        value_type divide(value_type a, value_type b) const
         {
-            assert(is_valid_element<field_type>(numerator));
-            assert(is_valid_element<field_type>(denominator));
+            assert(is_valid_element<field_type>(a));
+            assert(is_valid_element<field_type>(b));
 
-            assert(denominator != 0);
-            return numerator & denominator;
+            assert(b != 0);
+            return a & b;
         }
 
         /// Zero has no inverse and one is its own inverse

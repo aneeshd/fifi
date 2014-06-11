@@ -53,15 +53,14 @@ namespace fifi
         }
 
         /// @copydoc layer::packed_divide(value_type, value_type) const
-        value_type packed_divide(value_type numerator,
-                                 value_type denominator) const
+        value_type packed_divide(value_type a, value_type b) const
         {
             // Division by zero is not allowed so the denominator must
             // be all ones
-            assert(denominator == std::numeric_limits<value_type>::max());
+            assert(b == std::numeric_limits<value_type>::max());
 
             // Since we can only divide by one the numerator will not change
-            return numerator;
+            return a;
         }
 
         /// @copydoc layer::packed_invert(value_type) const

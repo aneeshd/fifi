@@ -95,15 +95,15 @@ namespace fifi
         }
 
         /// @copydoc layer::divide(value_type, value_type) const
-        value_type divide(value_type numerator, value_type denominator) const
+        value_type divide(value_type a, value_type b) const
         {
             static_assert(!std::is_same<binary, field_type>::value,
                 "This member function does not support the binary field");
 
-            assert(is_valid_element<field_type>(numerator));
-            assert(is_valid_element<field_type>(denominator));
+            assert(is_valid_element<field_type>(a));
+            assert(is_valid_element<field_type>(b));
 
-            return multiply(invert(denominator), numerator);
+            return multiply(invert(b), a);
         }
 
         /// @copydoc layer::invert(value_type) const
